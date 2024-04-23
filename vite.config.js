@@ -1,3 +1,10 @@
+/*
+ * @Author: cc2049
+ * @Date: 2024-04-19 09:01:33
+ * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2024-04-22 17:20:50
+ * @Description: 简介
+ */
 
 import { defineConfig, loadEnv } from 'vite'
 import path from 'path'
@@ -39,13 +46,8 @@ export default defineConfig(({ mode, command }) => {
           rewrite: (p) => p.replace(/^\/dev-api/, '')
         },
         '/eos-api': {
-          // target: 'http://116.63.138.118:8078/',// WZC
-          // target: 'http://120.48.15.176/',// 接口监测
+          // target: ' http://116.63.138.118:8079/',// 4.0 测试地址 
           target: 'http://120.48.123.183',// 我找车 现场测试
-          // target: 'http://222.175.162.156:8083/',// 金德    TMS@2023123456!!
-          // target: 'http://8.130.143.184:9001/',// 众联
-          // target: 'http://121.37.86.183:8074/',// 通钢仓储
-          // target: 'http://116.63.138.118:8073/',// 仓储WMS
         },
         '/group1/M00': {
           target: 'http://120.48.123.183'
