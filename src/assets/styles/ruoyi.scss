@@ -43,6 +43,7 @@
 .mt20 {
 	margin-top: 20px;
 }
+
 .mr20 {
 	margin-right: 20px;
 }
@@ -278,4 +279,13 @@
 /* 表格右侧工具栏样式 */
 .top-right-btn {
 	margin-left: auto;
+}
+
+
+.disflex{
+	display: flex;
+	align-items: center;
+}
+.justify-sb{
+	justify-content: space-between;
 }
