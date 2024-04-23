@@ -1,12 +1,24 @@
 /*
  * @Author: cc2049
  * @Date: 2024-04-23 10:08:57
- * @LastEditors: 
- * @LastEditTime: 2024-04-23 10:08:58
+ * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2024-04-23 11:24:05
  * @Description: 简介
  */
 import request from '@/utils/request'
 import localforage from 'localforage'
+
+
+
+// 获取路由
+export const getRouters = () => {
+  return request({
+    url: '/sys/module/getMenuByRoleList',
+    data: {
+      BILLFROM: "0"
+    }
+  })
+}
 
 
 // 登录方法
@@ -40,7 +52,7 @@ export function getInfo() {
   return request({
     url: '/sys/user/getUserAccountInfo',
     method: 'post',
-    data:{}
+    data: { MODULEID: '', PAGEID: '', PARENTPAGE: '' }
   })
 }
 
@@ -101,7 +113,7 @@ export function sendSmsCode(data) {
       isToken: false
     },
     method: 'post',
-     data,
+    data,
     encry: false,
   })
 }
@@ -110,7 +122,7 @@ export function sendSmsCode(data) {
 export function forgotPwd(data) {
   return request({
     // url: 'user/forgotPwd',
-    url:'/auth/check/retrieve',
+    url: '/auth/check/retrieve',
     headers: {
       isToken: false
     },
@@ -125,13 +137,13 @@ export function forgotPwd(data) {
 
 // 重置密码表单配置
 export const FormConfig = [
-  { FIELD: "USERNAME", LABEL: "账号", COL: 24, CONTROLS: "ExTextBox", ISREQUIRE: 1, ISSHOW: 1, OTHER: "",ISDISABLED: 1 },
-  { FIELD: "NEWPASSWORD", LABEL: "新密码", COL: 24, CONTROLS: "ExPassword", ISREQUIRE: 1, ISSHOW: 1, OTHER: "",RULES:'Password'  },
-  { FIELD: "SUREPASSWORD", LABEL: "确认密码", COL: 24, CONTROLS: "ExPassword", ISREQUIRE: 1, ISSHOW: 1, OTHER: "" ,RULES:'Password' },
+  { FIELD: "USERNAME", LABEL: "账号", COL: 24, CONTROLS: "ExTextBox", ISREQUIRE: 1, ISSHOW: 1, OTHER: "", ISDISABLED: 1 },
+  { FIELD: "NEWPASSWORD", LABEL: "新密码", COL: 24, CONTROLS: "ExPassword", ISREQUIRE: 1, ISSHOW: 1, OTHER: "", RULES: 'Password' },
+  { FIELD: "SUREPASSWORD", LABEL: "确认密码", COL: 24, CONTROLS: "ExPassword", ISREQUIRE: 1, ISSHOW: 1, OTHER: "", RULES: 'Password' },
 ]
 
 // 重置密码表单配置
 export const ForgotPasswordConfig = [
   { FIELD: "PHONE", LABEL: "手机号", COL: 24, CONTROLS: "ExTextBox", ISREQUIRE: 1, ISSHOW: 1, OTHER: "", },
-  { FIELD: "CODE", LABEL: "验证码", COL: 24, CONTROLS: "ExTextBox", ISREQUIRE: 1, ISSHOW: 1, OTHER: "" , },
+  { FIELD: "CODE", LABEL: "验证码", COL: 24, CONTROLS: "ExTextBox", ISREQUIRE: 1, ISSHOW: 1, OTHER: "", },
 ]

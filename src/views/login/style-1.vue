@@ -2,7 +2,7 @@
  * @Author: cc2049
  * @Date: 2024-04-19 09:01:33
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-04-23 10:45:48
+ * @LastEditTime: 2024-04-23 12:00:43
  * @Description: 简介
 -->
 <template>
@@ -26,8 +26,7 @@ import useSettingsStore from "@/store/modules/settings";
 import useUserStore from "@/store/modules/user";
 const settingsStore = useSettingsStore();
 const userStore = useUserStore();
-// const systemConfig = computed(() => settingsStore.systemConfig);
-
+const router = useRouter();
 const props = defineProps({
   LoginConfig: {
     type: Object,
@@ -54,7 +53,7 @@ const getUserToken = () => {
     .login(data)
     .then(() => {
       // getUserThemeConfig();
-      router.push({ path: redirect.value || "/" });
+      router.push({ path: redirect.value || "/index" });
     })
     .catch((err) => {
       if (err.RESULT?.ENABLEVERIFICAT == 1) {

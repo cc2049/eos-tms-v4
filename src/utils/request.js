@@ -45,18 +45,18 @@ service.interceptors.request.use(config => {
     config.params = {};
     config.url = url;
   }
+  const axiosData = config.data;
   // 删除 EnumData & _getDICT
   if (config?.data?.EnumData) delete config.data.EnumData
   if (config?.data?._getDICT) delete config.data._getDICT
-
   // 加密 封装数据
   if (!encry) config.data = {
     APPID: "",
-    DATA: Array.isArray(config.data.data) ? config.data.data : config.data,
+    DATA: config.data && Array.isArray(config.data.data) ? config.data.data : config.data,
     KEY: "",
-    MODULEID: config.data.moduleId || config.data.MODULEID || '',
-    PAGEID: config.data.PAGEID || '',
-    PARENTPAGE: config.data.PARENTPAGE || '',
+    MODULEID: axiosData ? (config.data.MODULEID || '') : '',
+    PAGEID: axiosData ? (config.data.PAGEID || '') : '',
+    PARENTPAGE: axiosData ? (config.data.PARENTPAGE) || '' : '',
     VERSION: ""
   }
   if (config.url.includes('ISRSA=1')) {
