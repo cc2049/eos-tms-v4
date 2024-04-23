@@ -1,8 +1,8 @@
 /*
  * @Author: cc2049
  * @Date: 2024-04-19 09:01:33
- * @LastEditors: 
- * @LastEditTime: 2024-04-23 10:49:26
+ * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2024-04-23 15:28:28
  * @Description: 简介
  */
 import { login, logout, getInfo } from "@/api/login";
@@ -28,9 +28,9 @@ const useUserStore = defineStore("user", {
     // 登录
     login(userInfo) {
       const saveData =  {
-        PASSWORD: "ce00580d6b3d1e0d7b7b8ec5eab0bc89",
+        PASSWORD: md5(userInfo.PASSWORD),
         APASSWORD: "",
-        USERNAME: "admin",
+        USERNAME: userInfo.USERNAME,
         LOGINTYPE: "captcha",
         TYPE: "WEB",
         USERTYPE: "0",

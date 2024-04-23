@@ -2,7 +2,7 @@
  * @Author: cc2049
  * @Date: 2024-04-19 09:01:33
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-04-23 12:03:17
+ * @LastEditTime: 2024-04-23 15:28:37
  * @Description: 简介
 -->
 <template>
@@ -39,7 +39,7 @@ const LoginConfig = ref(null);
 const redirect = ref("");
 const getUserToken = () => {
   let data = {
-    PASSWORD: "ce00580d6b3d1e0d7b7b8ec5eab0bc89",
+    PASSWORD: "Aa@123456",
     APASSWORD: "",
     USERNAME: "admin",
     LOGINTYPE: "captcha",
@@ -51,7 +51,7 @@ const getUserToken = () => {
     .login(data)
     .then(() => {
       // getUserThemeConfig();
-      router.push({ path: redirect.value || "/index" });
+      router.push({ path: redirect.value || "/" });
     })
     .catch((err) => {
       if (err.RESULT?.ENABLEVERIFICAT == 1) {
