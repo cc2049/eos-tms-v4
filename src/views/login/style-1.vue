@@ -2,7 +2,7 @@
  * @Author: cc2049
  * @Date: 2024-04-19 09:01:33
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-04-23 12:00:43
+ * @LastEditTime: 2024-04-23 12:03:17
  * @Description: 简介
 -->
 <template>
@@ -33,8 +33,6 @@ const props = defineProps({
     default: {},
   },
 });
-
-const message = ref("Hello Vue TMS-V3!");
 
 import { axiosGet } from "#/common";
 const LoginConfig = ref(null);
