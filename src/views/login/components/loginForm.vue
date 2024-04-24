@@ -1,30 +1,50 @@
-<!-- 登录表单组件 -->
 <template>
-
+  <!-- 登录表单组件 -->
   <div class="loginForm">
     <div class="loginForm-header">
       <div class="loginForm-header-title">账号登录</div>
-      <el-button type="primary" text class="loginForm-forgetPassword">忘记密码</el-button>
+      <el-button type="primary" text class="loginForm-forgetPassword" @click="forgetPassword">忘记密码</el-button>
     </div>
     <el-form ref="loginRef" style="max-width: 600px" :model="loginForm" :rules="loginRules" label-width="auto"
       size="large" class="demo-loginForm" status-icon>
-      <el-form-item prop="username">
-        <el-input v-model="loginForm.username" type="text" auto-complete="off" placeholder="账号" class="inputDeep"
-          clearable>
-          <template #prefix>
-            <svg-icon icon-class="user" class="el-input__icon input-icon" />
-          </template>
-        </el-input>
-      </el-form-item>
-      <el-form-item prop="password">
-        <el-input v-model="loginForm.password" type="password" auto-complete="off" placeholder="密码" show-password
-          class="inputDeep" @keyup.enter="handleLogin">
-          <template #prefix>
-            <svg-icon icon-class="password" class="el-input__icon input-icon" />
-          </template>
-        </el-input>
-        <!-- <el-input v-model="loginForm.password" placeholder="请输入密码" /> -->
-      </el-form-item>
+
+      <template v-if="loginType == 'captcha'">
+        <el-form-item prop="username">
+          <el-input v-model="loginForm.username" type="text" auto-complete="off" placeholder="账号" class="inputDeep"
+            clearable>
+            <template #prefix>
+              <svg-icon icon-class="user" class="el-input__icon input-icon" />
+            </template>
+          </el-input>
+        </el-form-item>
+        <el-form-item prop="password">
+          <el-input v-model="loginForm.password" type="password" auto-complete="off" placeholder="密码" show-password
+            class="inputDeep" @keyup.enter="handleLogin">
+            <template #prefix>
+              <svg-icon icon-class="password" class="el-input__icon input-icon" />
+            </template>
+          </el-input>
+          <!-- <el-input v-model="loginForm.password" placeholder="请输入密码" /> -->
+        </el-form-item>
+      </template>
+      <template v-else>
+        <el-form-item prop="mobile">
+          <el-input v-model.number="loginForm.mobile" type="number" size="large" auto-complete="off" placeholder="手机号"
+            clearable class="inputDeep" :prefix-icon="Iphone">
+          </el-input>
+        </el-form-item>
+
+        <el-form-item prop="code">
+          <el-input v-model="loginForm.code" type="text" size="large" auto-complete="off" placeholder="验证码" clearable
+            :maxlength="11" :prefix-icon="Lock" class="input-with-select inputDeep">
+            <template #append>
+              <el-button @click="getTelCode" type="primary" :disabled="telCode != '获取验证码' ? true : false" link>
+                {{ telCode }}
+              </el-button>
+            </template>
+          </el-input>
+        </el-form-item>
+      </template>
     </el-form>
     <div class="loginForm-btn">
       <el-button type="primary" :loaging="loginBtnLogin" size="large" style="width: 100%;"
@@ -42,25 +62,34 @@
           <img class="codeimg" src="@/assets/images/login/3.png" alt="">
         </el-col>
       </el-row>
-      <el-button type="primary" text class="loginForm-forgetPassword">验证码登录</el-button>
+      <el-button type="primary" text class="loginForm-forgetPassword" @click="clickCut">{{ loginType == 'captcha' ?
+        '验证码登录'
+        :
+        '密码登录' }}</el-button>
     </div>
     <div class="disflex loginForm-clause">
-      <!-- <el-radio value="1" size="large"></el-radio> -->
-      <el-radio-group v-model="radio">
+      <!-- <el-radio-group v-model="radio">
         <el-radio :value="1"></el-radio>
       </el-radio-group>
-      <!-- <div class="disflex"> -->
       同意
       <span class="linkText pointer">《服务条款》</span>
       与
-      <span class="linkText pointer">《隐私条款》</span>
-      <!-- </div> -->
+      <span class="linkText pointer">《隐私条款》</span> -->
+      <el-icon color="#0c64eb">
+        <SuccessFilled />
+      </el-icon>
+      同意
+      <text class="text-blue" @click="showClause(1)">《服务条款》</text>
+      与
+      <text class="text-blue" @click="showClause(2)">《隐私条款》</text>
     </div>
   </div>
+
+  <!-- <ForgetPassword :isShow="forgetPasswordModel" @close="forgetPasswordModel = false" /> -->
+
 </template>
 
 <script setup>
-
 
 import Cookies from "js-cookie";
 import { handleThemeStyle } from "@/utils/theme";
@@ -75,10 +104,17 @@ import {
   sendSmsCode,
   forgotPwd,
 } from "@/api/login";
-// import { ref, computed, watch ,getCurrentInstance} from "vue"
-
-const { proxy } = getCurrentInstance();
-
+import {
+  HelpFilled,
+  Delete,
+  Edit,
+  Message,
+  Search,
+  Star,
+  Filter,
+  Iphone,
+  Lock,
+} from "@element-plus/icons-vue";
 
 // import { ComponentSize, FormInstance, FormRules } from 'element-plus'
 import useSettingsStore from "@/store/modules/settings";
@@ -92,11 +128,11 @@ const props = defineProps({
     default: {},
   },
 });
+const { proxy } = getCurrentInstance();
+const emit = defineEmits('clickForgetPassword')
 
 const radio = ref(null)
-const loginType = ref("admin");
-
-
+const loginType = ref("captcha");
 const loginForm = ref({
   username: "",
   password: "",
@@ -124,39 +160,28 @@ const loginRef = ref(null)
 const loginBtnLogin = ref(false)
 const codeUrl = ref("");
 
-
-
-//   const LoginConfig = ref(null);
 const redirect = ref("");
-// const getUserToken = () => {
-//   let data = {
-//     PASSWORD: "Aa@123456",
-//     APASSWORD: "",
-//     USERNAME: "admin",
-//     LOGINTYPE: "captcha",
-//     TYPE: "WEB",
-//     USERTYPE: "0",
-//   };
-//   // 调用action的登录方法
-//   userStore
-//     .login(data)
-//     .then(() => {
-//       // getUserThemeConfig();
-//       router.push({ path: redirect.value || "/" });
-//     })
-//     .catch((err) => {
-//       if (err.RESULT?.ENABLEVERIFICAT == 1) {
-//         captchaEnabled.value = true;
-//         getCode();
-//       }
-//     });
-// };
+
+const clickCut = () => {
+  loginType.value = loginType.value == 'captcha' ? 'sms_code' : 'captcha'
+  const loginForm = ref({
+    username: "",
+    password: "",
+    APASSWORD: "",
+    rememberMe: false,
+    code: "",
+    uuid: "",
+    mobile: "",
+    LOGINTYPE: loginType.value,
+  });
+
+}
 
 function handleLogin() {
   loginRules.code[0].required = true;
 
   loginForm.value.LOGINTYPE =
-    loginType.value == "admin" ? "captcha" : "sms_code";
+    loginType.value == "captcha" ? "captcha" : "sms_code";
 
   proxy.$refs.loginRef.validate((valid) => {
     if (valid) {
@@ -176,8 +201,8 @@ function handleLogin() {
         Cookies.remove("rememberMe");
       }
       // 调用action的登录方法
-      
-      
+
+
       userStore
         .login(loginForm.value)
         .then(() => {
@@ -249,6 +274,39 @@ const getUserThemeConfig = () => {
     }
   });
 };
+let countdown = 60;
+const telCode = ref("获取验证码");
+
+function getTelCode() {
+  loginRules.code[0].required = false;
+  if (countdown < 60) return;
+  proxy.$refs.loginRef.validate((valid) => {
+    if (valid) {
+      let data = { MOBILE: loginForm.value.mobile };
+      getNoteCode(data).then(() => {
+        //手机验证码60s倒计时
+        let timer = setInterval(() => {
+          countdown -= 1;
+          telCode.value = countdown + "S后重试";
+          if (countdown === 0) {
+            clearInterval(timer);
+            countdown = 60;
+            telCode.value = "获取验证码";
+          }
+        }, 1000);
+      });
+    }
+  });
+}
+
+const forgetPasswordModel = ref(false)
+const forgetPassword = () => {
+  // forgetPasswordModel.value = true
+  emit('clickForgetPassword')
+  
+}
+
+
 
 </script>
 
@@ -319,8 +377,14 @@ const getUserThemeConfig = () => {
     border-radius: 0;
   }
 
-  :deep(.el-input__prefix) {
-    height: 14px !important;
+  // :deep(.el-input__prefix) {
+  //   height: 14px !important;
+  // }
+
+  .input-icon {
+    height: 39px;
+    width: 14px;
+    margin-left: 0px;
   }
 
 }

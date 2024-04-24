@@ -10,16 +10,20 @@
     <el-button @click="getUserMenu">获取菜单</el-button>
     <el-button @click="getUserinfo">获取用户信息</el-button> -->
     <div class="login-loginForm">
-      <LoginForm />
+      <LoginForm @clickForgetPassword="forgetPassword" />
     </div>
 
 
   </div>
+  <ForgetPassword :isShow="forgetPasswordModel" @close="forgetPasswordModel = false" />
+  
 </template>
 
 <script setup>
 
 import LoginForm from "./components/loginForm.vue";
+import ForgetPassword from './components/forgetPassword.vue'
+
 
 // import loginPublic from "@/views/login/login-public.vue"
 import loginStyle01 from "@/views/login/style-1.vue";
@@ -61,6 +65,14 @@ const getUserToken = () => {
       }
     });
 };
+
+const forgetPasswordModel = ref(false)
+const forgetPassword = () => {
+  forgetPasswordModel.value = true
+}
+
+
+
 </script>
 
 
