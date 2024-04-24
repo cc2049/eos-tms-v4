@@ -1,8 +1,8 @@
 /*
  * @Author: cc2049
  * @Date: 2024-04-19 09:01:33
- * @LastEditors: 
- * @LastEditTime: 2024-04-19 11:57:28
+ * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2024-04-24 18:04:55
  * @Description: 简介
  */
 import { createApp } from 'vue'
@@ -30,6 +30,8 @@ import SvgIcon from '@/components/SvgIcon'
 import elementIcons from '@/components/SvgIcon/svgicon'
 
 import './permission' // permission control
+
+import { getAssetsFile } from "@/utils";
 
 import { useDict } from '@/utils/dict'
 import { parseTime, resetForm, addDateRange, handleTree, selectDictLabel, selectDictLabels } from '@/utils/ruoyi'
@@ -62,6 +64,8 @@ const app = createApp(App)
 // app.config.globalProperties.addDateRange = addDateRange
 // app.config.globalProperties.selectDictLabel = selectDictLabel
 // app.config.globalProperties.selectDictLabels = selectDictLabels
+
+app.config.globalProperties.getAssetsFile = getAssetsFile;
 
 // 全局组件挂载
 // app.component('DictTag', DictTag)

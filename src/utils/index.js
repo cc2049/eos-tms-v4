@@ -418,7 +418,7 @@ export function isNumberStr(str) {
 
 // 获取assets静态资源
 export function getAssetsFile(url) {
-  return new URL(`../assets/img/${url}`, import.meta.url).href;
+  return new URL(`../assets/images/${url}`, import.meta.url).href;
 }
 
 // 获取表单的初始化值
