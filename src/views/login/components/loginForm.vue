@@ -16,7 +16,7 @@
       </el-form-item>
     </el-form>
     <div class="loginForm-btn">
-      <el-button type="primary" size="large" style="width: 100%;">登录</el-button>
+      <el-button type="primary" size="large" style="width: 100%;" @click="getUserToken">登录</el-button>
     </div>
     <div class="disflex justify-sb codeimgDad">
       <el-row :gutter="20">
@@ -49,19 +49,20 @@
 
 <script setup>
 
-import { reactive, ref } from 'vue'
+
+
 // import { ComponentSize, FormInstance, FormRules } from 'element-plus'
-//   import useSettingsStore from "@/store/modules/settings";
-//   import useUserStore from "@/store/modules/user";
-//   const settingsStore = useSettingsStore();
-//   const userStore = useUserStore();
-//   const router = useRouter();
-//   const props = defineProps({
-//     LoginConfig: {
-//       type: Object,
-//       default: {},
-//     },
-//   });
+  import useSettingsStore from "@/store/modules/settings";
+  import useUserStore from "@/store/modules/user";
+  const settingsStore = useSettingsStore();
+  const userStore = useUserStore();
+  const router = useRouter();
+  const props = defineProps({
+    LoginConfig: {
+      type: Object,
+      default: {},
+    },
+  });
 
 //   import { axiosGet } from "#/common";
 const radio = ref(null)
@@ -72,30 +73,30 @@ const loginFormRef = ref(null)
 
 
 //   const LoginConfig = ref(null);
-//   const redirect = ref("");
-//   const getUserToken = () => {
-//     let data = {
-//       PASSWORD: "Aa@123456",
-//       APASSWORD: "",
-//       USERNAME: "admin",
-//       LOGINTYPE: "captcha",
-//       TYPE: "WEB",
-//       USERTYPE: "0",
-//     };
-//     // 调用action的登录方法
-//     userStore
-//       .login(data)
-//       .then(() => {
-//         // getUserThemeConfig();
-//         router.push({ path: redirect.value || "/" });
-//       })
-//       .catch((err) => {
-//         if (err.RESULT?.ENABLEVERIFICAT == 1) {
-//           captchaEnabled.value = true;
-//           getCode();
-//         }
-//       });
-//   };
+  const redirect = ref("");
+  const getUserToken = () => {
+    let data = {
+      PASSWORD: "Aa@123456",
+      APASSWORD: "",
+      USERNAME: "admin",
+      LOGINTYPE: "captcha",
+      TYPE: "WEB",
+      USERTYPE: "0",
+    };
+    // 调用action的登录方法
+    userStore
+      .login(data)
+      .then(() => {
+        // getUserThemeConfig();
+        router.push({ path: redirect.value || "/" });
+      })
+      .catch((err) => {
+        if (err.RESULT?.ENABLEVERIFICAT == 1) {
+          captchaEnabled.value = true;
+          getCode();
+        }
+      });
+  };
 </script>
 
 
