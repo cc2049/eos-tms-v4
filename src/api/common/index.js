@@ -19,3 +19,12 @@ export function axiosGet(url, data) {
         data: data,
     })
 }
+
+// 获取用户主题配置
+export function getUserConfig() {
+    return request({
+      url: "/sys/sysUserConfig/getInfo",
+      method: "post",
+      data: {}
+    })
+  }

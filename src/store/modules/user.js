@@ -28,9 +28,9 @@ const useUserStore = defineStore("user", {
     // 登录
     login(userInfo) {
       const saveData =  {
-        PASSWORD: md5(userInfo.PASSWORD),
+        PASSWORD: md5(userInfo.password || userInfo.PASSWORD),
         APASSWORD: "",
-        USERNAME: userInfo.USERNAME,
+        USERNAME: userInfo.username || userInfo.USERNAME,
         LOGINTYPE: "captcha",
         TYPE: "WEB",
         USERTYPE: "0",
