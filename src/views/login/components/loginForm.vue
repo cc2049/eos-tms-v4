@@ -93,7 +93,6 @@ const props = defineProps({
   },
 });
 
-//   import { axiosGet } from "#/common";
 const radio = ref(null)
 const loginType = ref("admin");
 
@@ -250,7 +249,6 @@ const getUserThemeConfig = () => {
     }
   });
 };
-
 
 </script>
 

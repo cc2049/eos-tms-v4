@@ -1,8 +1,8 @@
 /*
  * @Author: cc2049
  * @Date: 2024-04-19 09:01:33
- * @LastEditors: 
- * @LastEditTime: 2024-04-19 12:53:46
+ * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2024-04-24 12:06:47
  * @Description: 简介
  */
 import defaultSettings from '@/settings'
@@ -25,6 +25,7 @@ const useSettingsStore = defineStore(
       fixedHeader: storageSetting.fixedHeader === undefined ? fixedHeader : storageSetting.fixedHeader,
       sidebarLogo: storageSetting.sidebarLogo === undefined ? sidebarLogo : storageSetting.sidebarLogo,
       dynamicTitle: storageSetting.dynamicTitle === undefined ? dynamicTitle : storageSetting.dynamicTitle ,
+      menuStyle: storageSetting.menuStyle === undefined ? menuStyle : storageSetting.menuStyle, 
       globalConfig: {}
     }),
     actions: {
