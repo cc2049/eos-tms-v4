@@ -2,12 +2,11 @@
  * @Author: cc2049
  * @Date: 2024-04-19 11:32:18
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-04-24 18:16:17
+ * @LastEditTime: 2024-04-24 19:06:37
  * @Description: 简介
  */
 import request from '@/utils/request'
 
-<<<<<<< Updated upstream
 /*
 * 公共的查询数据接口
 * @param {String} url 接口地址
@@ -18,30 +17,10 @@ export function axiosGet(url, data) {
         url: url,
         data: data,
     })
-=======
-// 文件上传
-export const fileUploadApi = "/sys/file/upload"
-
-
-export function axiosGet(url,data) {
-  return request({
-    url: url,
-    method: "post",
-    data: data
-  })
->>>>>>> Stashed changes
 }
 
 // 获取用户主题配置
 export function getUserConfig() {
-<<<<<<< Updated upstream
-    return request({
-      url: "/sys/sysUserConfig/getInfo",
-      method: "post",
-      data: {}
-    })
-  }
-=======
   return request({
     url: "/sys/sysUserConfig/getInfo",
     method: "post",
@@ -129,4 +108,3 @@ export function setRole(data){
     data: data
   })
 }
->>>>>>> Stashed changes
