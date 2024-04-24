@@ -2,7 +2,7 @@
  * @Author: cc2049
  * @Date: 2024-04-23 10:08:57
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-04-23 11:24:05
+ * @LastEditTime: 2024-04-24 11:10:34
  * @Description: 简介
  */
 import request from '@/utils/request'
@@ -20,6 +20,25 @@ export const getRouters = () => {
   })
 }
 
+
+// 获取用户主题配置
+export function getUserConfig() {
+  return request({
+    url: "/sys/sysUserConfig/getInfo",
+    method: "post",
+    data: {}
+  })
+}
+
+
+// 保存用户主题配置
+export function saveUserConfig(data) {
+  return request({
+    url: "/sys/sysUserConfig/add",
+    method: "post",
+    data
+  })
+}
 
 // 登录方法
 export function login(data) {

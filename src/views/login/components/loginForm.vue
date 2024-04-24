@@ -48,10 +48,7 @@
 </template>
 
 <script setup>
-
-
-
-// import { ComponentSize, FormInstance, FormRules } from 'element-plus'
+  import { getUserConfig } from "#/login";
   import useSettingsStore from "@/store/modules/settings";
   import useUserStore from "@/store/modules/user";
   const settingsStore = useSettingsStore();
@@ -64,7 +61,6 @@
     },
   });
 
-//   import { axiosGet } from "#/common";
 const radio = ref(null)
 
 const loginForm = ref({})
@@ -87,7 +83,7 @@ const loginFormRef = ref(null)
     userStore
       .login(data)
       .then(() => {
-        // getUserThemeConfig();
+        getUserThemeConfig();
         router.push({ path: redirect.value || "/" });
       })
       .catch((err) => {
@@ -97,6 +93,37 @@ const loginFormRef = ref(null)
         }
       });
   };
+
+
+const getUserThemeConfig = () => {
+  getUserConfig().then((res) => {
+    try {
+      let {
+        topNav,
+        tagsView,
+        fixedHeader,
+        sidebarLogo,
+        dynamicTitle,
+        sideTheme,
+        menuStyle,
+        theme,
+      } = JSON.parse(res.RESULT);
+      localStorage.setItem("layout-setting", res.RESULT);
+      settingsStore.changeSetting({ key: "sideTheme", value: sideTheme });
+      settingsStore.changeSetting({ key: "theme", value: theme });
+      handleThemeStyle(theme);
+      settingsStore.changeSetting({ key: "topNav", value: topNav });
+      settingsStore.changeSetting({ key: "tagsView", value: tagsView });
+      settingsStore.changeSetting({ key: "fixedHeader", value: fixedHeader });
+      settingsStore.changeSetting({ key: "sidebarLogo", value: sidebarLogo });
+      settingsStore.changeSetting({ key: "dynamicTitle", value: dynamicTitle });
+      settingsStore.changeSetting({ key: "menuStyle", value: menuStyle });
+    } catch (error) {
+      console.log('解析个性化配置错误：', error);
+    }
+  });
+};
+
 </script>
 
 
