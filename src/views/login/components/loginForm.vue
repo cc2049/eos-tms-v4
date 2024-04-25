@@ -448,6 +448,10 @@ const showClause = (e) => {
   width: 250px !important;
 }
 
+:deep(.el-input-group__append, .el-input-group__prepend) {
+  background-color: transparent !important;
+  box-shadow: none !important;
+}
 
 // /* 在小屏幕上减小字体大小 */
 // @media (max-width: 1024px) {
