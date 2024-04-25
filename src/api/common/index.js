@@ -108,3 +108,11 @@ export function setRole(data){
     data: data
   })
 }
+// 获取服务条款和隐私条款
+export function getDataByType(data){
+  return request({
+    url: "/sys/notice/getDataByType" ,
+    method: "post",
+    data: data
+  })
+}

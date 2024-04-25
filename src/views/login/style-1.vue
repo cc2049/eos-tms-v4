@@ -2,8 +2,9 @@
 <template>
 
   <div class="login" :style="{
-  background: `url(${backImg}) no-repeat left`}">
- 
+    background: `url(${backImg}) no-repeat left `
+  }">
+
     <!-- <h1>登录模板001</h1>
 
     需要支持：banner图、是否支持短信验证码登录、是否需要APP图标
@@ -12,12 +13,23 @@
     <el-button @click="getUserMenu">获取菜单</el-button>
     <el-button @click="getUserinfo">获取用户信息</el-button> -->
     <div class="login-loginForm">
-      <LoginForm @clickForgetPassword="forgetPassword" :LoginConfigs />
+      <LoginForm @clickForgetPassword="forgetPassword" :LoginConfigs @clickShowClause="showClause" />
     </div>
 
 
   </div>
-  <ForgetPassword v-if="LoginConfigs.isResetPassword" :isShow="forgetPasswordModel" @close="forgetPasswordModel = false" />
+  <ForgetPassword v-if="LoginConfigs.isResetPassword" :isShow="forgetPasswordModel"
+    @close="forgetPasswordModel = false" />
+
+  <el-dialog v-model="showClauseModel" width="60%" height="60%">
+    <template #title>
+      <span class="modal-title">{{ showClauseContent.TITLE }}</span>
+    </template>
+    <div class="clauseText">
+      <div v-html="showClauseContent.CONTENT"></div>
+
+    </div>
+  </el-dialog>
 
 </template>
 
@@ -41,9 +53,9 @@ const props = defineProps({
   },
 });
 
-import { axiosGet } from "#/common";
+import { axiosGet, getDataByType } from "#/common";
 const LoginConfigs = computed(() => props.LoginConfig)
-const backImg = computed(() => 'http://116.63.138.118:8079/'+LoginConfigs.value.banner)
+const backImg = computed(() => 'http://116.63.138.118:8079/' + LoginConfigs.value.banner)
 
 const redirect = ref("");
 const getUserToken = () => {
@@ -75,6 +87,23 @@ const forgetPassword = () => {
   forgetPasswordModel.value = true
 }
 
+const showClauseModel = ref(false);
+const showClauseContent = ref({});
+const showClause = (e) => {
+  let VTYPE = 3;
+  if (e == 1) {
+    VTYPE = 3;
+  } else {
+    VTYPE = 4;
+  }
+  getDataByType({
+    VTYPE: VTYPE,
+  }).then((res) => {
+    showClauseModel.value = true;
+    showClauseContent.value = res.RESULT;
+  });
+};
+
 
 
 </script>
@@ -95,5 +124,19 @@ const forgetPassword = () => {
 
   }
 
+
+
+}
+
+.clauseText {
+  height: 500px;
+  overflow-y: auto;
+}
+
+
+@media (max-width: 1024px) {
+  .clauseText {
+    height: 300px;
+  }
 }
 </style>
