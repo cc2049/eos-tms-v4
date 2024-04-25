@@ -16,9 +16,12 @@
 
     <div class="right-menu">
       <template v-if="appStore.device !== 'mobile'">
-        <el-space>
-          <header-search id="header-search" class="right-menu-item" />
-          <el-icon>
+        <el-space size="large">
+          <!-- <header-search id="header-search" class="right-menu-item" /> -->
+          <el-icon color="#fff" :size="20">
+            <Icon icon="iconamoon:search"></Icon>
+          </el-icon>
+          <el-icon :size="20">
             <Icon icon="bi:bell"></Icon>
           </el-icon>
           <el-icon color="#fff" :size="20">
@@ -28,20 +31,87 @@
 
       </template>
       <div class="avatar-container">
-        <el-dropdown @command="handleCommand" class="right-menu-item hover-effect" trigger="click">
+        <el-dropdown @command="handleCommand" class="right-menu-item hover-effect" trigger="click" size="def">
           <div class="avatar-wrapper">
-            <img :src="avatarUrl" class="user-avatar" />
-            <el-icon><caret-bottom /></el-icon>
+            <avatar :avatar="avatarUrl" :name="username" />
+            <div class="user-wrap">
+              <div class="user-text">
+                {{ userInfo.VNAME || 'adminadmin' }}
+              </div>
+              <div class="user-role">
+                {{ userInfo.ROLENAME || '超级管理员' }}
+              </div>
+            </div>
+            <el-icon :size="18" color="#666">
+              <CaretBottom />
+            </el-icon>
           </div>
+
           <template #dropdown>
-            <el-dropdown-menu>
-              <router-link to="/user/profile">
-                <el-dropdown-item>个人中心</el-dropdown-item>
-              </router-link>
-              <el-dropdown-item command="setLayout" v-if="settingsStore.showSettings">
-                <span>布局设置</span>
+            <el-dropdown-menu style="width: 300px">
+              <div class="userinfo-wrap">
+                <span class="user-name">{{ userInfo.VNAME }}</span>
+                <router-link to="/user/profile">
+                  <el-button>编辑</el-button>
+                </router-link>
+              </div>
+
+              <el-dropdown-item command="setLayout">
+                <el-icon>
+                  <Setting />
+                </el-icon><span>界面设置</span>
               </el-dropdown-item>
+
+              <el-dropdown-item>
+                <el-popover placement="right" :width="200" trigger="hover">
+                  <template #reference>
+                    <div class="role-selcet">
+                      <el-icon>
+                        <Connection />
+                      </el-icon><span>切换角色</span>
+                    </div>
+                  </template>
+                  <template #default>
+                    <div class="role-wrap">
+                      <div class="role-item" v-for="item in RoleList" :key="item.BILLNO" @click="activeRoleEvent(item)">
+                        <el-avatar :size="25" :src="circleUrl" />
+                        <span class="role-name">
+                          {{ item.VNAME }}
+                        </span>
+                        <el-icon class="choose" v-if="
+                                item.ISDEFAULT == 1 ||
+                                activeRole.BILLNO == item.BILLNO
+                              ">
+                          <SuccessFilled />
+                        </el-icon>
+                      </div>
+                    </div>
+                  </template>
+                </el-popover>
+              </el-dropdown-item>
+
+              <router-link to="/PLAT_YW/versions/manual">
+                <el-dropdown-item>
+                  <el-icon>
+                    <Calendar />
+                  </el-icon>
+                  <span>更新日志</span>
+                </el-dropdown-item>
+              </router-link>
+
+              <router-link to="/PLAT_YW/help/wtzsk">
+                <el-dropdown-item>
+                  <el-icon>
+                    <Service />
+                  </el-icon>
+                  <span>帮助中心</span>
+                </el-dropdown-item>
+              </router-link>
+
               <el-dropdown-item divided command="logout">
+                <el-icon>
+                  <SwitchButton />
+                </el-icon>
                 <span>退出登录</span>
               </el-dropdown-item>
             </el-dropdown-menu>
@@ -71,7 +141,7 @@ const settingsStore = useSettingsStore();
 const { proxy } = getCurrentInstance();
 const logoUrl = proxy.getAssetsFile("logo.png");
 const avatarUrl = proxy.getAssetsFile("user.png");
-
+const userInfo = computed(() => userStore.userInfo);
 
 function toggleSideBar() {
   appStore.toggleSideBar();
@@ -209,7 +279,7 @@ function setLayout() {
 
       .avatar-wrapper {
         position: relative;
-        top: 4px;
+        top: 6px;
         .user-avatar {
           cursor: pointer;
           width: 24px;
@@ -226,6 +296,50 @@ function setLayout() {
         }
       }
     }
+  }
+}
+
+.avatar-wrapper {
+  height: 30px;
+  text-align: center;
+  overflow: hidden;
+  color: #fff;
+  display: flex;
+  img {
+    width: 100%;
+    height: 100%;
+  }
+  .user-wrap {
+    text-align: left;
+    margin-left: 10px;
+    color: #fff;
+  }
+  .user-text {
+    text-align: center;
+    font-size: 14px;
+    white-space: nowrap;
+    min-width: 40px;
+  }
+  .user-role {
+    padding: 2px 4px;
+    font-size: 8px;
+    font-weight: 500;
+    margin-top: 2px;
+    color: var(--el-color-primary);
+    background-color: var(--el-color-primary-light-9);
+  }
+}
+
+
+.userinfo-wrap {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 16px;
+  border-bottom: 1px solid #ddd;
+  margin-bottom: 10px;
+  .user-name {
+    font-size: 18px;
   }
 }
 </style>
