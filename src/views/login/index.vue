@@ -6,7 +6,7 @@
  * @Description: 简介
 -->
 <template>
-  <loginStyle01 :LoginConfig />
+  <loginStyle01 :LoginConfig  />
   <!-- <loginStyle01 v-if="LoginConfig.style==1" :LoginConfig /> -->
   <!-- <loginStyle02 v-if="LoginConfig.style==1" :LoginConfig /> -->
 

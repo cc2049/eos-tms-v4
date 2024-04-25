@@ -1,7 +1,9 @@
 <!-- 登录样式 1 -->
 <template>
 
-  <div class="login">
+  <div class="login" :style="{
+  background: `url(${backImg}) no-repeat left`}">
+ 
     <!-- <h1>登录模板001</h1>
 
     需要支持：banner图、是否支持短信验证码登录、是否需要APP图标
@@ -10,13 +12,13 @@
     <el-button @click="getUserMenu">获取菜单</el-button>
     <el-button @click="getUserinfo">获取用户信息</el-button> -->
     <div class="login-loginForm">
-      <LoginForm @clickForgetPassword="forgetPassword" />
+      <LoginForm @clickForgetPassword="forgetPassword" :LoginConfigs />
     </div>
 
 
   </div>
-  <ForgetPassword :isShow="forgetPasswordModel" @close="forgetPasswordModel = false" />
-  
+  <ForgetPassword v-if="LoginConfigs.isResetPassword" :isShow="forgetPasswordModel" @close="forgetPasswordModel = false" />
+
 </template>
 
 <script setup>
@@ -40,7 +42,9 @@ const props = defineProps({
 });
 
 import { axiosGet } from "#/common";
-const LoginConfig = ref(null);
+const LoginConfigs = computed(() => props.LoginConfig)
+const backImg = computed(() => 'http://116.63.138.118:8079/'+LoginConfigs.value.banner)
+
 const redirect = ref("");
 const getUserToken = () => {
   let data = {
@@ -78,8 +82,8 @@ const forgetPassword = () => {
 
 <style scoped lang="scss">
 .login {
-  background: url(@/assets/images/login/style1/background-img.png) no-repeat left !important;
-  background-size: cover !important;
+  // background: url(@/assets/images/login/style2/background-img.png) no-repeat left;
+  background-size: cover;
   width: 100vw;
   height: 100vh;
 
