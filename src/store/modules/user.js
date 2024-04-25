@@ -27,14 +27,36 @@ const useUserStore = defineStore("user", {
   actions: {
     // 登录
     login(userInfo) {
-      const saveData =  {
-        PASSWORD: md5(userInfo.password || userInfo.PASSWORD),
-        APASSWORD: "",
-        USERNAME: userInfo.username || userInfo.USERNAME,
-        LOGINTYPE: "captcha",
-        TYPE: "WEB",
-        USERTYPE: "0",
-      };
+      console.log("🚀 ~ login ~ userInfo:", userInfo)
+      let saveData = {}
+      // {
+      //   PASSWORD: md5(userInfo.password || userInfo.PASSWORD),
+      //   APASSWORD: "",
+      //   USERNAME: userInfo.username || userInfo.USERNAME,
+      //   LOGINTYPE: userInfo.LOGINTYPE || "captcha",
+      //   TYPE: "WEB",
+      //   USERTYPE: "0",
+      //   MOBILE:userInfo.mobile || ''
+      // };
+      if(userInfo.LOGINTYPE == 'captcha'){
+        saveData = {
+          PASSWORD: md5(userInfo.password || userInfo.PASSWORD),
+          APASSWORD: "",
+          USERNAME: userInfo.username || userInfo.USERNAME,
+          LOGINTYPE: "captcha",
+          TYPE: "WEB",
+          USERTYPE: "0",
+        };
+      }else{
+        saveData = {
+          LOGINTYPE: "sms_code",
+          TYPE: "WEB",
+          USERTYPE: "0",
+          MOBILE:userInfo.mobile || '',
+          CODE:userInfo.code
+        };
+
+      }
       return new Promise((resolve, reject) => {
         login(saveData)
           .then((res) => {

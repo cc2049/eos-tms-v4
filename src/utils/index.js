@@ -1,7 +1,7 @@
 import REG from "./reg.js";
 import useUserStore from "@/store/modules/user";
 import JSEncrypt from "jsencrypt";
-// import CryptoJS from "crypto-js";
+import CryptoJS from "crypto-js";
 import { useDict } from "./dict.js";
 
 /**

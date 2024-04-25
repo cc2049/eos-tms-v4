@@ -282,8 +282,19 @@ function getTelCode() {
   if (countdown < 60) return;
   proxy.$refs.loginRef.validate((valid) => {
     if (valid) {
-      let data = { MOBILE: loginForm.value.mobile };
-      getNoteCode(data).then(() => {
+      // let data = { MOBILE: loginForm.value.mobile };
+      const protData={
+            APPID:"",
+            DATA:{
+                MOBILE: loginForm.value.MOBILE
+            },
+            KEY:"",
+            MODELEID:"",
+            PAGEID:"",
+            PARENTPAGE:"",
+            VERSION:"",
+        }
+      getNoteCode(protData).then(() => {
         //手机验证码60s倒计时
         let timer = setInterval(() => {
           countdown -= 1;
