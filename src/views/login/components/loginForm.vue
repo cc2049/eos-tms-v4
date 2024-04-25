@@ -286,7 +286,7 @@ function getTelCode() {
       const protData={
             APPID:"",
             DATA:{
-                MOBILE: loginForm.value.MOBILE
+                MOBILE: loginForm.value.mobile
             },
             KEY:"",
             MODELEID:"",
