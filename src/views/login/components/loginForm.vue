@@ -52,20 +52,54 @@
     </div>
     <div class="disflex justify-sb codeimgDad">
       <el-row :gutter="20">
-        <el-col :span="8">
-          <img class="codeimg" src="@/assets/images/login/1.png" alt="">
+        <el-col :span="8" v-if="LoginConfig.isIosIcon == 1">
+          <el-popover placement="top-start" :width="280" trigger="hover">
+            <template #reference>
+              <div class="">
+                <div class="app-img">
+                  <img class="codeimg" src="@/assets/images/login/2.png" alt="">
+                </div>
+              </div>
+            </template>
+            <template #default>
+              <img class="QRCode" :src="'http://116.63.138.118:8079/' + LoginConfig.iosQRCode" alt="">
+            </template>
+          </el-popover>
         </el-col>
-        <el-col :span="8">
-          <img class="codeimg" src="@/assets/images/login/2.png" alt="">
+        <el-col :span="8" v-if="LoginConfig.isAndroidIcon == 1">
+          <el-popover placement="top-start" :width="280" trigger="hover">
+            <template #reference>
+              <div class="">
+                <div class="app-img">
+                  <img class="codeimg" src="@/assets/images/login/2.png" alt="">
+                </div>
+              </div>
+            </template>
+            <template #default>
+              <img class="QRCode" :src="'http://116.63.138.118:8079/' + LoginConfig.AndroidQRCode" alt="">
+            </template>
+          </el-popover>
         </el-col>
-        <el-col :span="8">
-          <img class="codeimg" src="@/assets/images/login/3.png" alt="">
+        <el-col :span="8" v-if="LoginConfig.isWxIcon == 1">
+          <el-popover placement="top-start" :width="280" trigger="hover">
+            <template #reference>
+              <div class="">
+                <div class="app-img">
+                  <img class="codeimg" src="@/assets/images/login/2.png" alt="">
+                </div>
+              </div>
+            </template>
+            <template #default>
+              <img class="QRCode" :src="'http://116.63.138.118:8079/' + LoginConfig.WxQRCode" alt="">
+            </template>
+          </el-popover>
         </el-col>
       </el-row>
-      <el-button type="primary" text class="loginForm-forgetPassword" @click="clickCut">{{ loginType == 'captcha' ?
-        '验证码登录'
-        :
-        '密码登录' }}</el-button>
+      <el-button v-if="LoginConfig.isSMS == 1" type="primary" text class="loginForm-forgetPassword" @click="clickCut">{{
+        loginType == 'captcha' ?
+          '验证码登录'
+          :
+          '密码登录' }}</el-button>
     </div>
     <div class="disflex loginForm-clause">
       <!-- <el-radio-group v-model="radio">
@@ -123,13 +157,15 @@ const settingsStore = useSettingsStore();
 const userStore = useUserStore();
 const router = useRouter();
 const props = defineProps({
-  LoginConfig: {
+  LoginConfigs: {
     type: Object,
     default: {},
   },
 });
+console.log(props.LoginConfigs)
 const { proxy } = getCurrentInstance();
 const emit = defineEmits('clickForgetPassword')
+const LoginConfig = computed(() => props.LoginConfigs)
 
 const radio = ref(null)
 const loginType = ref("captcha");
@@ -282,8 +318,19 @@ function getTelCode() {
   if (countdown < 60) return;
   proxy.$refs.loginRef.validate((valid) => {
     if (valid) {
-      let data = { MOBILE: loginForm.value.mobile };
-      getNoteCode(data).then(() => {
+      // let data = { MOBILE: loginForm.value.mobile };
+      const protData = {
+        APPID: "",
+        DATA: {
+          MOBILE: loginForm.value.mobile
+        },
+        KEY: "",
+        MODELEID: "",
+        PAGEID: "",
+        PARENTPAGE: "",
+        VERSION: "",
+      }
+      getNoteCode(protData).then(() => {
         //手机验证码60s倒计时
         let timer = setInterval(() => {
           countdown -= 1;
@@ -303,7 +350,7 @@ const forgetPasswordModel = ref(false)
 const forgetPassword = () => {
   // forgetPasswordModel.value = true
   emit('clickForgetPassword')
-  
+
 }
 
 
@@ -367,8 +414,8 @@ const forgetPassword = () => {
   }
 
   .codeimg {
-    width: 58px;
-    height: 58px;
+    width: 48px;
+    height: 48px;
   }
 
   :deep(.el-input__wrapper) {
@@ -387,5 +434,15 @@ const forgetPassword = () => {
     margin-left: 0px;
   }
 
+  .text-blue {
+    color: #0c64eb;
+    cursor: pointer;
+  }
+
+
+}
+
+.QRCode {
+  width: 250px !important;
 }
 </style>

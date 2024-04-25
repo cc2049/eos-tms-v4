@@ -139,8 +139,22 @@ let countdownProp = 60;
 function getTelCodeProp() {
     if (countdownProp < 60) return;
     if (countdownProp == 60 && forgotPasswordForm.value.MOBILE) {
-        let data = { MOBILE: forgotPasswordForm.value.MOBILE };
-        sendSmsCode(data)
+        // let data = { MOBILE: forgotPasswordForm.value.MOBILE };
+
+        const protData={
+            APPID:"",
+            DATA:{
+                MOBILE: forgotPasswordForm.value.MOBILE
+            },
+            KEY:"",
+            MODELEID:"",
+            PAGEID:"",
+            PARENTPAGE:"",
+            VERSION:"",
+        }
+
+
+        sendSmsCode(protData)
             .then(() => {
                 // 手机验证码60s倒计时
                 let timer = setInterval(() => {
@@ -167,8 +181,8 @@ function confirmForgotPassword() {
             let data = {
                 MOBILE: forgotPasswordForm.value.MOBILE,
                 CODE: forgotPasswordForm.value.CODE,
-                NEWPASSWORD: md5.hex_md5(forgotPasswordForm.value.NEWPASSWORD),
-                SUREPASSWORD: md5.hex_md5(forgotPasswordForm.value.SUREPASSWORD),
+                NEWPASSWORD: md5(forgotPasswordForm.value.NEWPASSWORD),
+                SUREPASSWORD: md5(forgotPasswordForm.value.SUREPASSWORD),
                 PID: aesJmEncrypt(forgotPasswordForm.value.NEWPASSWORD),
             };
             forgotPwd(data)
