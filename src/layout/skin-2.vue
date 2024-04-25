@@ -2,19 +2,11 @@
  * @Author: cc2049
  * @Date: 2024-04-24 12:47:48
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-04-24 12:47:51
- * @Description: 简介
--->
-<!--
- * @Author: cc2049
- * @Date: 2024-04-24 12:47:35
- * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-04-24 12:47:37
+ * @LastEditTime: 2024-04-25 11:19:28
  * @Description: 简介
 -->
 <template>
   <div :class="classObj" class="app-wrapper" :style="{ '--current-color': theme }">
-
     <div v-if="device === 'mobile' && sidebar.opened" class="drawer-bg" @click="handleClickOutside"/>
     <sidebar v-if="!sidebar.hide" class="sidebar-container" />
     <div :class="{ hasTagsView: needTagsView, sidebarHide: sidebar.hide }" class="main-container">

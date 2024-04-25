@@ -2,13 +2,13 @@
  * @Author: cc2049
  * @Date: 2024-04-19 09:01:33
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-04-24 18:04:55
+ * @LastEditTime: 2024-04-25 10:57:21
  * @Description: 简介
  */
 import { createApp } from 'vue'
 
 import Cookies from 'js-cookie'
-
+import { Icon } from '@iconify/vue';
 import ElementPlus from 'element-plus'
 import 'element-plus/dist/index.css'
 import locale from 'element-plus/es/locale/lang/zh-cn'
@@ -75,7 +75,7 @@ app.config.globalProperties.getAssetsFile = getAssetsFile;
 // app.component('ImageUpload', ImageUpload)
 // app.component('ImagePreview', ImagePreview)
 // app.component('RightToolbar', RightToolbar)
-// app.component('Editor', Editor)
+app.component('Icon', Icon)
 
 app.use(router)
 app.use(store)

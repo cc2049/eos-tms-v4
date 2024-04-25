@@ -2,7 +2,7 @@
   <div class="navbar skin-1-top">
     <div class="system-title">
       <div class="logo-wrap">
-        <img :src="avatarUrl" alt="" />
+        <img :src="logoUrl" alt="" />
       </div>
       <div class="system-name">
         {{ systemName || "易运帮" }}
@@ -16,11 +16,16 @@
 
     <div class="right-menu">
       <template v-if="appStore.device !== 'mobile'">
-        <header-search id="header-search" class="right-menu-item" />
-        <screenfull id="screenfull" class="right-menu-item hover-effect" />
-        <!-- <el-tooltip content="布局大小" effect="dark" placement="bottom">
-          <size-select id="size-select" class="right-menu-item hover-effect" />
-        </el-tooltip> -->
+        <el-space>
+          <header-search id="header-search" class="right-menu-item" />
+          <el-icon>
+            <Icon icon="bi:bell"></Icon>
+          </el-icon>
+          <el-icon color="#fff" :size="20">
+            <Icon icon="ant-design:question-circle-outlined"></Icon>
+          </el-icon>
+        </el-space>
+
       </template>
       <div class="avatar-container">
         <el-dropdown @command="handleCommand" class="right-menu-item hover-effect" trigger="click">
@@ -64,7 +69,9 @@ const appStore = useAppStore();
 const userStore = useUserStore();
 const settingsStore = useSettingsStore();
 const { proxy } = getCurrentInstance();
-const avatarUrl = proxy.getAssetsFile("logo.png");
+const logoUrl = proxy.getAssetsFile("logo.png");
+const avatarUrl = proxy.getAssetsFile("user.png");
+
 
 function toggleSideBar() {
   appStore.toggleSideBar();
@@ -172,7 +179,6 @@ function setLayout() {
   }
 
   .right-menu {
-    
     line-height: 48px;
     display: flex;
     align-items: center;
