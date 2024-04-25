@@ -2,7 +2,7 @@
  * @Author: cc2049
  * @Date: 2024-04-25 14:41:35
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-04-25 16:21:40
+ * @LastEditTime: 2024-04-25 16:51:31
  * @Description: 简介
 -->
 <template>
@@ -39,7 +39,7 @@
 
     <div class="mark" @click="showSidebarRight = false" v-if="showSidebarRight"></div>
 
-    <el-scrollbar :height="sidebarHeight" class="sidebar-right" :style="{ left: lenfMenuWidth + 'px' , width: sideBarRightWidth + 'px'}" v-if="showSidebarRight && subMenuList?.CHILDREN.length">
+    <el-scrollbar :height="sidebarHeight" class="sidebar-right" :style="{ left: lenfMenuWidth + 'px' , width: sideBarRightWidth + 'px'}" >
       <div class="my-sub-title">{{ subMenuList.NAME || '999' }}</div>
       <el-scrollbar :height="modalHeight">
         <div class="favorite" v-if="myStartMenu.length">
@@ -586,7 +586,11 @@ function handleSubMenu(data) {
 }
 
 // 新版菜单风格
-$new-menu-style-bgcolor: #ecf1ff;
+// $new-menu-style-bgcolor: #ecf1ff;
+
+// 金蝶云
+$new-menu-style-bgcolor: #fff;
+
 
 .sidebar-conetnt {
   position: relative;
@@ -596,7 +600,7 @@ $new-menu-style-bgcolor: #ecf1ff;
     position: absolute;
     top: 0;
     z-index: 1500;
-    background-color: #ecf1ff !important;
+    background-color: #fff !important;
     .my-sub-title {
       font-size: 20px;
       padding-bottom: 10px;
@@ -645,7 +649,6 @@ $new-menu-style-bgcolor: #ecf1ff;
         position: absolute;
         left: 60px;
         font-size: 16px;
-        font-weight: 600;
       }
 
       .my-sub {
@@ -693,7 +696,7 @@ $new-menu-style-bgcolor: #ecf1ff;
 }
 
 .el-menu--vertical .el-menu-item:hover {
-  background: $new-menu-style-bgcolor !important;
+  // background: $new-menu-style-bgcolor !important;
   color: var(--el-color-primary);
 }
 
@@ -702,7 +705,6 @@ $new-menu-style-bgcolor: #ecf1ff;
     border-radius: 6px;
   }
   .el-menu--vertical .el-menu-item:hover {
-    background: var(--el-color-primary) !important;
     color: #fff;
     border-radius: 6px;
   }
@@ -710,7 +712,9 @@ $new-menu-style-bgcolor: #ecf1ff;
 
 .el-menu-item.is-active {
   color: var(--el-color-primary);
-  background-color: #eaeeff !important;
+  background-color: #fff !important;
+  border-left: 4px solid var(--el-color-primary);
+  box-sizing: border-box;
 }
 
 .el-sub-menu .el-menu-item {

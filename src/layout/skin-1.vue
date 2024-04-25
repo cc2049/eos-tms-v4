@@ -2,7 +2,7 @@
  * @Author: cc2049
  * @Date: 2024-04-24 12:47:35
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-04-25 16:22:17
+ * @LastEditTime: 2024-04-25 16:35:11
  * @Description: 主题风格一 金蝶云
 -->
 <template>
@@ -10,7 +10,7 @@
     <div :class="{ hasTagsView: needTagsView, sidebarHide: sidebar.hide }" class="main-container skin-1-theme">
       <!-- <navbar @setLayout="setLayout" /> -->
       <TopMenu01 @setLayout="setLayout" @openNotice="openNotice" :noticeLength="10"></TopMenu01>
-      <div class="content">
+      <div class="app-wrapper-content">
         <div class="tags-view-jdy flex-box">
           <div class="tags-view-left">
             <span class="tags-left" @click="openAllMenu">
@@ -33,7 +33,7 @@
           </div>
         </div>
 
-        <div class="app-wrapper-content">
+        <div class="app-wrapper-content-main">
           <Sidebar v-if="showSidebar" @closeMenu="closeMenu" class="sidebar-container skin-1-sidebar" :showSidebar="showSidebar" />
           <app-main :topMenuHeight="topMenuHeight" />
           <settings ref="settingRef" />
@@ -94,7 +94,7 @@ const showSidebar = ref(false);
 function closeMenu() {
   showSidebar.value = false;
 }
-function openAllMenu(){
+function openAllMenu() {
   showSidebar.value = true;
 }
 </script>
@@ -200,12 +200,16 @@ function openAllMenu(){
   }
 }
 
-.app-wrapper-content{
+.app-wrapper-content {
   position: relative;
-  height: calc(100% - 78px);
-  .skin-1-sidebar{
+  height: calc(100% - 48px);
+  &-main {
+    background-color: #fafcff;
+    height: calc(100% - 30px);
+  }
+  .skin-1-sidebar {
     top: 78px !important;
-    background-color: #E9EAF3!important;
+    background-color: #e9eaf3 !important;
   }
 }
 </style>
