@@ -102,13 +102,6 @@
           '密码登录' }}</el-button>
     </div>
     <div class="disflex loginForm-clause">
-      <!-- <el-radio-group v-model="radio">
-        <el-radio :value="1"></el-radio>
-      </el-radio-group>
-      同意
-      <span class="linkText pointer">《服务条款》</span>
-      与
-      <span class="linkText pointer">《隐私条款》</span> -->
       <el-icon color="#0c64eb">
         <SuccessFilled />
       </el-icon>
@@ -119,7 +112,8 @@
     </div>
   </div>
 
-  <!-- <ForgetPassword :isShow="forgetPasswordModel" @close="forgetPasswordModel = false" /> -->
+
+
 
 </template>
 
@@ -129,6 +123,7 @@ import Cookies from "js-cookie";
 import { handleThemeStyle } from "@/utils/theme";
 import { getUserConfig } from "#/common";
 import { getFormValue, getFormRule, aesJmEncrypt } from "@/utils";
+
 import {
   getCodeImg,
   getNoteCode,
@@ -164,7 +159,7 @@ const props = defineProps({
 });
 console.log(props.LoginConfigs)
 const { proxy } = getCurrentInstance();
-const emit = defineEmits('clickForgetPassword')
+const emit = defineEmits('clickForgetPassword', "clickShowClause")
 const LoginConfig = computed(() => props.LoginConfigs)
 
 const radio = ref(null)
@@ -346,12 +341,19 @@ function getTelCode() {
   });
 }
 
-const forgetPasswordModel = ref(false)
 const forgetPassword = () => {
-  // forgetPasswordModel.value = true
   emit('clickForgetPassword')
 
 }
+
+const showClause = (e) => {
+  emit('clickShowClause', e)
+
+}
+
+
+
+
 
 
 
@@ -366,7 +368,7 @@ const forgetPassword = () => {
   background: #FEFEFE;
   box-shadow: 0px 0px 43px 0px rgba(74, 74, 74, 0.25);
   border-radius: 11px;
-  padding: 70px 50px;
+  padding: 60px 40px;
 
   &-header {
     display: flex;
@@ -444,5 +446,128 @@ const forgetPassword = () => {
 
 .QRCode {
   width: 250px !important;
+}
+
+:deep(.el-input-group__append, .el-input-group__prepend) {
+  background-color: transparent !important;
+  box-shadow: none !important;
+}
+
+// /* 在小屏幕上减小字体大小 */
+// @media (max-width: 1024px) {
+//   .loginForm {
+//     border-radius: 11px;
+//     padding: 30px 20px;
+//     &-header {
+//       display: flex;
+//       align-items: center;
+//       justify-content: space-between;
+//       margin-bottom: 20px;
+//       &-title {
+//         font-weight: 500;
+//         font-size: 22px;
+//         color: #131313;
+//         margin-right: 68px;
+//       }
+//     }
+//     &-forgetPassword {
+//       font-weight: 500;
+//       font-size: 14px;
+//       // color: #3370FF;
+//       color: $--color-primary;
+//     }
+//     &-btn {
+//       margin-top: 20px;
+//     }
+//     .linkText {
+//       color: $--color-primary;
+//     }
+//     &-clause {
+//       text-align: center;
+//       font-size: 14px;
+//       justify-content: center;
+//       margin-top: 20px;
+//       .el-radio {
+//         margin: 0;
+//       }
+//     }
+//     .codeimgDad {
+//       margin-top: 10px;
+//     }
+//     .codeimg {
+//       width: 30px;
+//       height: 30px;
+//     }
+//     .input-icon {
+//       height: 29px;
+//       width: 14px;
+//       margin-left: 0px;
+//     }
+//     .text-blue {
+//       color: #0c64eb;
+//       cursor: pointer;
+//     }
+//   }
+// }
+
+/* 在大屏幕上增加字体大小 */
+@media (max-width: 1200px) {
+  
+  .loginForm {
+    border-radius: 11px;
+    padding: 30px 20px;
+    &-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+      &-title {
+        font-weight: 500;
+        font-size: 22px;
+        color: #131313;
+        margin-right: 68px;
+      }
+    }
+    &-forgetPassword {
+      font-weight: 500;
+      font-size: 14px;
+      // color: #3370FF;
+      color: $--color-primary;
+    }
+    &-btn {
+      margin-top: 20px;
+    }
+    .linkText {
+      color: $--color-primary;
+    }
+    &-clause {
+      text-align: center;
+      font-size: 14px;
+      justify-content: center;
+      margin-top: 20px;
+      .el-radio {
+        margin: 0;
+      }
+    }
+    .codeimgDad {
+      margin-top: 10px;
+    }
+    .codeimg {
+      width: 30px;
+      height: 30px;
+    }
+    .input-icon {
+      height: 29px;
+      width: 14px;
+      margin-left: 0px;
+    }
+    .text-blue {
+      color: #0c64eb;
+      cursor: pointer;
+    }
+  }
+
+
+
 }
 </style>
