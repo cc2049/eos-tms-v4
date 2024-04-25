@@ -24,23 +24,33 @@
 
       <div class="setting-drawer-block-checbox">
 
-        <el-tooltip content="左侧菜单模式">
+        <el-tooltip content="顶部通栏左侧全展开菜单模式">
           <div class="layout-item" @click="setMenuStype('1')">
-            <div class="left left-right"></div>
+            <div class="menu-all"></div>
             <div class="dtg" v-if="menuStyle == '1'">
               <el-icon><Select /></el-icon>
             </div>
           </div>
         </el-tooltip>
 
-        <el-tooltip content="顶部通栏左侧全展开菜单模式">
+        <el-tooltip content="左侧菜单模式">
           <div class="layout-item" @click="setMenuStype('2')">
-            <div class="menu-all"></div>
+            <div class="left left-right"></div>
             <div class="dtg" v-if="menuStyle == '2'">
               <el-icon><Select /></el-icon>
             </div>
           </div>
         </el-tooltip>
+
+        <el-tooltip content="我找车">
+          <div class="layout-item" @click="setMenuStype('WZC')">
+            <div class="left left-right"></div>
+            <div class="dtg" v-if="menuStyle == 'WZC'">
+              <el-icon><Select /></el-icon>
+            </div>
+          </div>
+        </el-tooltip>
+
       </div>
       <el-divider />
       <div class="setting-drawer-title">
@@ -188,7 +198,7 @@ function saveSetting() {
   };
   saveUserConfig(layoutSetting)
     .then((res) => {
-      settingsStore.changeSetting({ key: "menuStyle", value:  menuStyle.value });
+      settingsStore.changeSetting({ key: "menuStyle", value: menuStyle.value });
       localStorage.setItem("layout-setting", JSON.stringify(layoutSetting));
       showSettings.value = false;
       proxy.$modal.msgSuccess("保存成功");

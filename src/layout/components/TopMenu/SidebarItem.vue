@@ -136,4 +136,9 @@ function hasTitle(title) {
   box-sizing: border-box;
   white-space: nowrap;
 }
+
+:deep(#app .sidebar-container){
+  width: 100% !important;
+}
+
 </style>

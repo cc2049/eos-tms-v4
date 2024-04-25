@@ -2,60 +2,52 @@
  * @Author: cc2049
  * @Date: 2024-04-24 12:47:35
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-04-25 10:29:51
+ * @LastEditTime: 2024-04-25 16:22:17
  * @Description: 主题风格一 金蝶云
 -->
 <template>
   <div class="app-wrapper " :style="{ '--current-color': theme }">
     <div :class="{ hasTagsView: needTagsView, sidebarHide: sidebar.hide }" class="main-container skin-1-theme">
-      <div>
-        <!-- <navbar @setLayout="setLayout" /> -->
-        <TopMenu01 @setLayout="setLayout" @openNotice="openNotice" :noticeLength="10"></TopMenu01>
-
-        <div class="content">
-          <div class="tags-view-jdy flex-box">
-
-            <div class="tags-view-left">
-              <span class="tags-left" @click="showSidebar = !showSidebar ">
-                <el-icon color="#abb6cd" :size="20">
-                  <HomeFilled />
-                </el-icon>
-                <el-icon color="#abb6cd" :size="20">
-                  <Menu />
-                </el-icon>
-              </span>
-              <div class="tags-content">
-                <TagsViewSkin1 />
-              </div>
-
-            </div>
-
-            <div class="tags-view-right">
-              <el-icon color="#abb6cd" :size="20" class="darrow-down">
-                <DArrowRight />
+      <!-- <navbar @setLayout="setLayout" /> -->
+      <TopMenu01 @setLayout="setLayout" @openNotice="openNotice" :noticeLength="10"></TopMenu01>
+      <div class="content">
+        <div class="tags-view-jdy flex-box">
+          <div class="tags-view-left">
+            <span class="tags-left" @click="openAllMenu">
+              <el-icon color="#abb6cd" :size="20">
+                <HomeFilled />
               </el-icon>
-
-              <screenfull id="screenfull" class="right-menu-item hover-effect" />
+              <el-icon color="#abb6cd" :size="20">
+                <Menu />
+              </el-icon>
+            </span>
+            <div class="tags-content">
+              <TagsViewSkin1 />
             </div>
           </div>
-
-          <div class="all-menu">
-            <Sidebar v-if="showSidebar" @closeMenu="closeMenu" class="sidebar-container" :showSidebar="showSidebar" />
-            <app-main :topMenuHeight="topMenuHeight" />
-            <settings ref="settingRef" />
-            <notice ref="noticeRef" @setUnReadData="setUnReadData" />
+          <div class="tags-view-right">
+            <el-icon color="#abb6cd" :size="20" class="darrow-down">
+              <DArrowRight />
+            </el-icon>
+            <screenfull id="screenfull" class="right-menu-item hover-effect" />
           </div>
         </div>
+
+        <div class="app-wrapper-content">
+          <Sidebar v-if="showSidebar" @closeMenu="closeMenu" class="sidebar-container skin-1-sidebar" :showSidebar="showSidebar" />
+          <app-main :topMenuHeight="topMenuHeight" />
+          <settings ref="settingRef" />
+          <notice ref="noticeRef" @setUnReadData="setUnReadData" />
+        </div>
+
       </div>
-      <app-main />
-      <settings ref="settingRef" />
     </div>
   </div>
 </template>
 
 <script setup>
 import { useWindowSize } from "@vueuse/core";
-import Sidebar from "./components/Sidebar/index.vue";
+import Sidebar from "./components/Sidebar/index-skin-1.vue";
 import { AppMain, Navbar, Settings } from "./components";
 import defaultSettings from "@/settings";
 import TopMenu01 from "./components/TopMenu/index-skin-1.vue";
@@ -97,6 +89,14 @@ function setLayout() {
 }
 
 const openNotice = () => {};
+
+const showSidebar = ref(false);
+function closeMenu() {
+  showSidebar.value = false;
+}
+function openAllMenu(){
+  showSidebar.value = true;
+}
 </script>
 
 <style lang="scss" scoped>
@@ -197,6 +197,15 @@ const openNotice = () => {};
     .darrow-down {
       transform: rotate(90deg);
     }
+  }
+}
+
+.app-wrapper-content{
+  position: relative;
+  height: calc(100% - 78px);
+  .skin-1-sidebar{
+    top: 78px !important;
+    background-color: #E9EAF3!important;
   }
 }
 </style>
