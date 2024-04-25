@@ -2,15 +2,50 @@
  * @Author: cc2049
  * @Date: 2024-04-24 12:47:35
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-04-24 14:25:51
+ * @LastEditTime: 2024-04-25 10:29:51
  * @Description: 主题风格一 金蝶云
 -->
 <template>
-  <div  class="app-wrapper skin-1-theme" :style="{ '--current-color': theme }">
-    <div :class="{ hasTagsView: needTagsView, sidebarHide: sidebar.hide }" class="main-container">
-      <div :class="{ 'fixed-header': fixedHeader }">
-        <navbar @setLayout="setLayout" />
-        <tags-view v-if="needTagsView" />
+  <div class="app-wrapper " :style="{ '--current-color': theme }">
+    <div :class="{ hasTagsView: needTagsView, sidebarHide: sidebar.hide }" class="main-container skin-1-theme">
+      <div>
+        <!-- <navbar @setLayout="setLayout" /> -->
+        <TopMenu01 @setLayout="setLayout" @openNotice="openNotice" :noticeLength="10"></TopMenu01>
+
+        <div class="content">
+          <div class="tags-view-jdy flex-box">
+
+            <div class="tags-view-left">
+              <span class="tags-left" @click="showSidebar = !showSidebar ">
+                <el-icon color="#abb6cd" :size="20">
+                  <HomeFilled />
+                </el-icon>
+                <el-icon color="#abb6cd" :size="20">
+                  <Menu />
+                </el-icon>
+              </span>
+              <div class="tags-content">
+                <TagsViewSkin1 />
+              </div>
+
+            </div>
+
+            <div class="tags-view-right">
+              <el-icon color="#abb6cd" :size="20" class="darrow-down">
+                <DArrowRight />
+              </el-icon>
+
+              <screenfull id="screenfull" class="right-menu-item hover-effect" />
+            </div>
+          </div>
+
+          <div class="all-menu">
+            <Sidebar v-if="showSidebar" @closeMenu="closeMenu" class="sidebar-container" :showSidebar="showSidebar" />
+            <app-main :topMenuHeight="topMenuHeight" />
+            <settings ref="settingRef" />
+            <notice ref="noticeRef" @setUnReadData="setUnReadData" />
+          </div>
+        </div>
       </div>
       <app-main />
       <settings ref="settingRef" />
@@ -19,52 +54,54 @@
 </template>
 
 <script setup>
-import { useWindowSize } from '@vueuse/core'
-import Sidebar from './components/Sidebar/index.vue'
-import { AppMain, Navbar, Settings, TagsView } from './components'
-import defaultSettings from '@/settings'
+import { useWindowSize } from "@vueuse/core";
+import Sidebar from "./components/Sidebar/index.vue";
+import { AppMain, Navbar, Settings } from "./components";
+import defaultSettings from "@/settings";
+import TopMenu01 from "./components/TopMenu/index-skin-1.vue";
+import Screenfull from "@/components/Screenfull";
 
-import useAppStore from '@/store/modules/app'
-import useSettingsStore from '@/store/modules/settings'
+import TagsViewSkin1 from "./components/TagsView/index-skin-1.vue";
 
-const settingsStore = useSettingsStore()
+import useAppStore from "@/store/modules/app";
+import useSettingsStore from "@/store/modules/settings";
+import { onMounted } from "vue";
+
+const settingsStore = useSettingsStore();
 const theme = computed(() => settingsStore.theme);
 const sideTheme = computed(() => settingsStore.sideTheme);
 const sidebar = computed(() => useAppStore().sidebar);
 const device = computed(() => useAppStore().device);
 const needTagsView = computed(() => settingsStore.tagsView);
 const fixedHeader = computed(() => settingsStore.fixedHeader);
-
 const menuStyle = computed(() => settingsStore.menuStyle);
-
-document.documentElement.style.setProperty('$base-sidebar-width', '0')
 
 const { width, height } = useWindowSize();
 const WIDTH = 992; // refer to Bootstrap's responsive design
 
 watchEffect(() => {
-  if (device.value === 'mobile' && sidebar.value.opened) {
-    useAppStore().closeSideBar({ withoutAnimation: false })
+  if (device.value === "mobile" && sidebar.value.opened) {
+    useAppStore().closeSideBar({ withoutAnimation: false });
   }
   if (width.value - 1 < WIDTH) {
-    useAppStore().toggleDevice('mobile')
-    useAppStore().closeSideBar({ withoutAnimation: true })
+    useAppStore().toggleDevice("mobile");
+    useAppStore().closeSideBar({ withoutAnimation: true });
   } else {
-    useAppStore().toggleDevice('desktop')
+    useAppStore().toggleDevice("desktop");
   }
-})
-
-
+});
 
 const settingRef = ref(null);
 function setLayout() {
   settingRef.value.openSetting();
 }
+
+const openNotice = () => {};
 </script>
 
 <style lang="scss" scoped>
-  @import "@/assets/styles/mixin.scss";
-  @import "@/assets/styles/variables.module.scss";
+@import "@/assets/styles/mixin.scss";
+@import "@/assets/styles/variables.module.scss";
 
 .app-wrapper {
   @include clearfix;
@@ -107,5 +144,59 @@ function setLayout() {
 
 .mobile .fixed-header {
   width: 100%;
+}
+
+// jdy 菜单风格
+.tags-view-jdy {
+  width: 100%;
+  padding: 0 20px;
+  background-color: #f5f7fb;
+  display: flex;
+  justify-content: space-between;
+  .tags-view-left {
+    display: flex;
+    width: calc(100% - 100px);
+    .tags-left {
+      .el-icon {
+        display: inline-block;
+        position: relative;
+        top: 4px;
+        margin-right: 10px;
+        cursor: pointer;
+        &:hover {
+          color: var(--el-color-primary);
+        }
+      }
+    }
+    .tags-content {
+      width: calc(100% - 80px);
+      background-color: rebeccapurple;
+    }
+  }
+  .tags-view-right {
+    display: flex;
+    width: 100px;
+    justify-content: space-around;
+    #screenfull {
+      color: #abb6cd;
+      line-height: 30px;
+      cursor: pointer;
+      &:hover {
+        color: var(--el-color-primary);
+      }
+    }
+    .el-icon {
+      cursor: pointer;
+      position: relative;
+      top: 6px;
+      &:hover {
+        color: var(--el-color-primary);
+      }
+    }
+
+    .darrow-down {
+      transform: rotate(90deg);
+    }
+  }
 }
 </style>
