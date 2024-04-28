@@ -8,9 +8,12 @@
 <template>
   <div>
     首页看板
+    <AdvanceQuery />
   </div>
 </template>
 
 <script setup>
+
+import AdvanceQuery from "@/components/advancedQuery/index"
 const message = ref('Hello Vue TMS-V3!')
 </script>
