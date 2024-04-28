@@ -1,130 +1,81 @@
+<!--
+ * @Author: cc2049
+ * @Date: 2024-04-23 11:33:59
+ * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2024-04-28 17:01:09
+ * @Description: 简介
+-->
 <template>
-  <div ref="listTableRef" style="width: 1280px; height: 400px"></div>
+
+  <div class="page-container">
+    <SingleTable ref="listTableRef" :config="allConfig" :data="records" />
+
+  </div>
+
 </template>
 
 <script setup>
-import { onMounted, ref } from "vue";
-import { ListTable } from "@visactor/vtable";
+import SingleTable from "./components/SingleTable/index.vue";
+import MultiTable from "./components/MultiTable/index.vue";
 
-const listTableRef = ref();
+import useTableConifg from "@/hooks/useTableConifg";
 
-const records = [
-  {
-    230517143221027: "CA-2018-156720",
-    230517143221030: "JM-15580",
-    230517143221032: "Bagged Rubber Bands",
-    230517143221023: "Office Supplies",
-    230517143221034: "Fasteners",
-    230517143221037: "West",
-    230517143221024: "Loveland",
-    230517143221029: "2018-12-30",
-    230517143221042: "3",
-    230517143221040: "3.024",
-    230517143221041: "-0.605",
-  },
-  {
-    230517143221027: "CA-2018-115427",
-    230517143221030: "EB-13975",
-    230517143221032: "GBC Binding covers",
-    230517143221023: "Office Supplies",
-    230517143221034: "Binders",
-    230517143221037: "West",
-    230517143221024: "Fairfield",
-    230517143221029: "2018-12-30",
-    230517143221042: "2",
-    230517143221040: "20.72",
-    230517143221041: "6.475",
-  },
-  {
-    230517143221027: "CA-2018-115427",
-    230517143221030: "EB-13975",
-    230517143221032: "Cardinal Slant-D Ring Binder, Heavy Gauge Vinyl",
-    230517143221023: "Office Supplies",
-    230517143221034: "Binders",
-    230517143221037: "West",
-    230517143221024: "Fairfield",
-    230517143221029: "2018-12-30",
-    230517143221042: "2",
-    230517143221040: "13.904",
-    230517143221041: "4.519",
-  },
-];
+import { axiosGet } from "#/common";
 
-const columns = [
-  {
-    field: "230517143221027",
-    title: "Order ID",
-    width: "auto",
-  },
-  {
-    field: "230517143221030",
-    title: "Customer ID",
-    width: "auto",
-  },
-  {
-    field: "230517143221032",
-    title: "Product Name",
-    width: "auto",
-  },
-  {
-    field: "230517143221023",
-    title: "Category",
-    width: "auto",
-  },
-  {
-    field: "230517143221034",
-    title: "Sub-Category",
-    width: "auto",
-  },
-  {
-    field: "230517143221037",
-    title: "Region",
-    width: "auto",
-  },
-  {
-    field: "230517143221024",
-    title: "City",
-    width: "auto",
-  },
-  {
-    field: "230517143221029",
-    title: "Order Date",
-    width: "auto",
-  },
-  {
-    field: "230517143221042",
-    title: "Quantity",
-    width: "auto",
-  },
-  {
-    field: "230517143221040",
-    title: "Sales",
-    width: "auto",
-  },
-  {
-    field: "230517143221041",
-    title: "Profit",
-    width: "auto",
-  },
-];
+/*
+ * 解析路由获取菜单id
+ */
+const router = useRouter();
+const routerParams = router.currentRoute.value.meta;
+const menuParams = ref({
+  MODULEID: routerParams.BILLNO || "MU221010650325",
+  PAGEID: routerParams.ACTION || "PG221010670930",
+});
 
-const option = {
-  records,
-  columns,
-  widthMode: "standard",
-  // theme:{
-  //   scrollStyle:{
-  //     barToSide:true
-  //   }
-  // }
+/*
+ * 根据菜单id 去获取页面配置
+ */
+const { allConfig, getConfig } = useTableConifg(menuParams.value);
+
+// hasTemplate.value = routerParams.ISTEMPLATE == "1";
+// hasTree.value = routerParams.COMP == "VTableZtree";
+
+// pageConfig.pageTitle = routerParams.title;
+// const pageTitle = ref(routerParams.title);
+
+const menuConfig = ref(null);
+const showPage = ref(false);
+
+const tableData = ref([]);
+
+getConfig().then((res) => {
+  menuConfig.value = res;
+  showPage.value = true;
+
+  let queryURL = menuConfig.value.pageConfig.queryUrl,
+    queryJSON = menuConfig.value.pageConfig.queryJson;
+  getTableData(queryURL, queryJSON);
+});
+
+const getTableData = (queryURL, queryJSON) => {
+  queryJSON.PAGESIZE = 50
+  axiosGet(queryURL, queryJSON).then((res) => {
+    console.log(res);
+    tableData.value = res.RESULT.RECORDS;
+  });
 };
 
-onMounted(() => {
-  const listTable = new ListTable(listTableRef.value, option);
+provide("menuConfig", menuConfig);
+provide("tableData", tableData);
 
-  listTable.on("click_cell", (params) => {
-    console.log(params);
-  });
-});
+
+onMounted(() => {});
 </script>
+
+<style lang="scss" scoped>
+.page-container {
+  padding: 0 20px;
+  position: relative;
+}
+</style>
 
