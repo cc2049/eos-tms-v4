@@ -2,13 +2,17 @@
  * @Author: cc2049
  * @Date: 2024-04-25 17:34:36
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-04-26 11:28:44
+ * @LastEditTime: 2024-04-28 16:40:29
  * @Description: 获取动态配置
  */
 
 import { getPageConfig } from '#/system/page.js'
 
-const useConifg = (menu) => {
+import { getQueryUrl  } from './utils'
+
+import { getFormValue, getFormRule, getShowCFG, setSuffix } from '@/utils'
+
+const useTableConifg = (menu) => {
     const allConfig = ref(null)
 
     const pageConfig = reactive({
@@ -20,6 +24,7 @@ const useConifg = (menu) => {
         topButton: [],
         initButton: [],
         queryUrl: null,
+        queryJson:{},
         hasSubTable: false,
         activeBtn: {},
         pageShow: true,
@@ -57,13 +62,13 @@ const useConifg = (menu) => {
         hasEmpty: false,
         height: 500,
         rowClassEval: "", // 行加背景色的条件
-        mergeCFG: null, // 表尾合计的配置  字段
+        mergeCFG: [], // 表尾合计的配置  字段
         mergeRowField: [], // 需要合并的字段
         treeID: null, // 树形表格 的可展开的节点id
         SelectType: null,
         tableButtons: ["ADD", "EDIT", "DELETE"],
         EtableRules: {},
-        cellHeight: storeSettings.value.rowHeight, // 单元格的行高
+        cellHeight: 40, // 单元格的行高
         isHeaderFilter: false, // 是否启用头部过滤
         headerConfig: [], // 配置的查询条件
         queryJson: {}, // 查询条件
@@ -74,9 +79,10 @@ const useConifg = (menu) => {
     });
 
     const getConfig = async () => {
-        const resData = await getPageConfig(menu)
+        const res = await getPageConfig(menu)
         const {
             QUERY,
+            COLUMNS,
             SUBTABLE,
             BUTTON,
             SLOTCFG,
@@ -88,10 +94,11 @@ const useConifg = (menu) => {
             MODALTYPE,
             ISSONTABLE,
             ISTBSELECT,
+            VDEF1,
             VDEF3,
             VDEF4,
             VMEMO,
-        } = resData.RESULT
+        } = res.RESULT
 
         /*
         * 修改当前主表的每页数据Arr  {'PAGESIZE':[100,200,300,500]}
@@ -108,10 +115,15 @@ const useConifg = (menu) => {
         // 设置页面配置
         pageConfig.initButton = BUTTON;
         pageConfig.isSonTable = ISSONTABLE == 1;
-        pageConfig.pageShow = res.RESULT.VDEF1 == "1"; // 控制列表是否展示分页功能
+        pageConfig.pageShow = VDEF1 == "1"; // 控制列表是否展示分页功能
         pageConfig.hasCustomQuery = VDEF3 == 1;
         pageConfig.batchTable = ISSONTABLE == 1; // 默认批量编辑
+        pageConfig.topButton = BUTTON
+        pageConfig.queryUrl = SLOTCFG ? SLOTCFG : getQueryUrl(BUTTON);
+        let initQueryJson = getFormValue(QUERY);
 
+        pageConfig.queryJson = Object.assign(initQueryJson, menu) 
+        
 
         // 设置表格配置
         tableCFG.autoWidth = ISADAPTION;
@@ -124,13 +136,21 @@ const useConifg = (menu) => {
             return i.SLOTCFG || i.FIELD;
         });
 
+        tableCFG.tableColumns = getShowCFG(COLUMNS); 
+        tableCFG.allColumns = COLUMNS
+
         
+        return  new Promise((resolve, reject) => {
+            let newConfig = {
+                pageConfig,
+                tableCFG
+            }
+            resolve(newConfig)
+        })
 
-
-        console.log(90, allConfig.value);
     }
-    getConfig()
+
     return { allConfig, getConfig }
 }
 
-export default useConifg
+export default useTableConifg

@@ -2,7 +2,7 @@
  * @Author: cc2049
  * @Date: 2024-04-19 09:01:33
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-04-25 10:57:21
+ * @LastEditTime: 2024-04-28 16:08:02
  * @Description: 简介
  */
 import { createApp } from 'vue'
@@ -53,6 +53,10 @@ import TreeSelect from '@/components/TreeSelect'
 // 字典标签组件
 import DictTag from '@/components/DictTag'
 
+
+import VXETable from 'vxe-table'
+import 'vxe-table/lib/style.css'
+
 const app = createApp(App)
 
 // 全局方法挂载
@@ -75,11 +79,16 @@ app.config.globalProperties.getAssetsFile = getAssetsFile;
 // app.component('ImageUpload', ImageUpload)
 // app.component('ImagePreview', ImagePreview)
 // app.component('RightToolbar', RightToolbar)
+
+
+
 app.component('Icon', Icon)
 
 app.use(router)
 app.use(store)
 app.use(plugins)
+app.use(VXETable)
+
 app.use(elementIcons)
 app.component('svg-icon', SvgIcon)
 
