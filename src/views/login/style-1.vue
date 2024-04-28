@@ -55,32 +55,10 @@ const props = defineProps({
 
 import { axiosGet, getDataByType } from "#/common";
 const LoginConfigs = computed(() => props.LoginConfig)
-const backImg = computed(() => 'http://116.63.138.118:8079/' + LoginConfigs.value.banner)
 
-const redirect = ref("");
-const getUserToken = () => {
-  let data = {
-    PASSWORD: "Aa@123456",
-    APASSWORD: "",
-    USERNAME: "admin",
-    LOGINTYPE: "captcha",
-    TYPE: "WEB",
-    USERTYPE: "0",
-  };
-  // 调用action的登录方法
-  userStore
-    .login(data)
-    .then(() => {
-      // getUserThemeConfig();
-      router.push({ path: redirect.value || "/" });
-    })
-    .catch((err) => {
-      if (err.RESULT?.ENABLEVERIFICAT == 1) {
-        captchaEnabled.value = true;
-        getCode();
-      }
-    });
-};
+const imgBaseUrl = computed(() => settingsStore.globalConfig.imgBaseUrl+'/');
+const backImg = computed(() => imgBaseUrl.value + LoginConfigs.value.banner)
+
 
 const forgetPasswordModel = ref(false)
 const forgetPassword = () => {

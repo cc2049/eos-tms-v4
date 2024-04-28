@@ -3,7 +3,7 @@
   <div class="loginForm">
     <div class="loginForm-header">
       <div class="loginForm-header-title">账号登录</div>
-      <el-button type="primary" text class="loginForm-forgetPassword" @click="forgetPassword">忘记密码</el-button>
+      <el-button type="primary" link class="loginForm-forgetPassword" @click="forgetPassword">忘记密码</el-button>
     </div>
     <el-form ref="loginRef" style="max-width: 600px" :model="loginForm" :rules="loginRules" label-width="auto"
       size="large" class="demo-loginForm" status-icon>
@@ -62,7 +62,7 @@
               </div>
             </template>
             <template #default>
-              <img class="QRCode" :src="'http://116.63.138.118:8079/' + LoginConfig.iosQRCode" alt="">
+              <img class="QRCode" :src="imgBaseUrl + LoginConfig.iosQRCode" alt="">
             </template>
           </el-popover>
         </el-col>
@@ -76,7 +76,7 @@
               </div>
             </template>
             <template #default>
-              <img class="QRCode" :src="'http://116.63.138.118:8079/' + LoginConfig.AndroidQRCode" alt="">
+              <img class="QRCode" :src="imgBaseUrl + LoginConfig.AndroidQRCode" alt="">
             </template>
           </el-popover>
         </el-col>
@@ -90,12 +90,12 @@
               </div>
             </template>
             <template #default>
-              <img class="QRCode" :src="'http://116.63.138.118:8079/' + LoginConfig.WxQRCode" alt="">
+              <img class="QRCode" :src="imgBaseUrl + LoginConfig.WxQRCode" alt="">
             </template>
           </el-popover>
         </el-col>
       </el-row>
-      <el-button v-if="LoginConfig.isSMS == 1" type="primary" text class="loginForm-forgetPassword" @click="clickCut">{{
+      <el-button v-if="LoginConfig.isSMS == 1" type="primary" link class="loginForm-forgetPassword" @click="clickCut">{{
         loginType == 'captcha' ?
           '验证码登录'
           :
@@ -160,6 +160,9 @@ const props = defineProps({
 console.log(props.LoginConfigs)
 const { proxy } = getCurrentInstance();
 const emit = defineEmits('clickForgetPassword', "clickShowClause")
+
+const imgBaseUrl = computed(() => settingsStore.globalConfig.imgBaseUrl + '/');
+
 const LoginConfig = computed(() => props.LoginConfigs)
 
 const radio = ref(null)
@@ -512,15 +515,17 @@ const showClause = (e) => {
 
 /* 在大屏幕上增加字体大小 */
 @media (max-width: 1200px) {
-  
+
   .loginForm {
     border-radius: 11px;
     padding: 30px 20px;
+
     &-header {
       display: flex;
       align-items: center;
       justify-content: space-between;
       margin-bottom: 20px;
+
       &-title {
         font-weight: 500;
         font-size: 22px;
@@ -528,39 +533,48 @@ const showClause = (e) => {
         margin-right: 68px;
       }
     }
+
     &-forgetPassword {
       font-weight: 500;
       font-size: 14px;
       // color: #3370FF;
       color: $--color-primary;
     }
+
     &-btn {
       margin-top: 20px;
     }
+
     .linkText {
       color: $--color-primary;
     }
+
     &-clause {
       text-align: center;
       font-size: 14px;
       justify-content: center;
       margin-top: 20px;
+
       .el-radio {
         margin: 0;
       }
     }
+
     .codeimgDad {
       margin-top: 10px;
     }
+
     .codeimg {
       width: 30px;
       height: 30px;
     }
+
     .input-icon {
       height: 29px;
       width: 14px;
       margin-left: 0px;
     }
+
     .text-blue {
       color: #0c64eb;
       cursor: pointer;
