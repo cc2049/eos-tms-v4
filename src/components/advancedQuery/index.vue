@@ -31,15 +31,33 @@
                                     <Icon icon="iconamoon:search"></Icon>
                                 </el-icon>
                             </el-button>
-                            <el-popover placement="bottom" :width="400" trigger="click">
+                            <el-popover placement="bottom" :width="600" trigger="click" :visible="visible">
                                 <template #reference>
-                                    <el-button>
+                                    <el-button @click="visible = true">
                                         <el-icon :size="20">
                                             <Icon icon="uil:setting"></Icon>
                                         </el-icon>
                                     </el-button>
                                 </template>
                                 <SettingFilter :filterConfig="filterConfig" :filterArr="filterArr" />
+                                <div class="disflex">
+                                    <el-select v-model="value" placeholder="请输入条件" 
+                                        :size="commonSize">
+                                        <el-option v-for="item in filterConfig.filterSeceletArr" :key="item"
+                                            :label="item" :value="item" />
+                                    </el-select>
+                                    <el-button type="primary" link class="ml5">
+                                        重置条件
+                                    </el-button>
+                                </div>
+
+                                <el-divider />
+                                <div class="tr">
+                                    <el-button @click="visible = false" size="mini">取消</el-button>
+                                    <el-button type="primary" @click="visible = false" size="mini">确定</el-button>
+                                </div>
+
+
                             </el-popover>
                             <el-button type="primary" link>
                                 保存
@@ -74,14 +92,14 @@ const clickRadio = (item, index) => {
 
 // 快捷过滤
 // const filterSeceletArr = ref(['单据编号','供应商','物料编码'])
-
+const value = ref(null)
 const filterConfig = ref({
     filterSeceletArr: ['单据编号', '供应商', '物料编码'],
     filterSeceletArr1: ['包含', '等于', '大于'],
 })
 
 const filterArr = ref([{}, {}])
-
+const visible = ref(false)
 
 
 </script>

@@ -14,6 +14,6 @@
 
 <script setup>
 
-import AdvanceQuery from "@/components/advancedQuery/index"
+import AdvanceQuery from "@/components/AdvancedQuery/index"
 const message = ref('Hello Vue TMS-V3!')
 </script>
