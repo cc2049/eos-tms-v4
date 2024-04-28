@@ -2,13 +2,13 @@
  * @Author: cc2049
  * @Date: 2024-04-25 17:34:36
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-04-28 16:40:29
+ * @LastEditTime: 2024-04-28 18:55:59
  * @Description: 获取动态配置
  */
 
 import { getPageConfig } from '#/system/page.js'
 
-import { getQueryUrl  } from './utils'
+import { getQueryUrl , resetColConfig  } from './utils'
 
 import { getFormValue, getFormRule, getShowCFG, setSuffix } from '@/utils'
 
@@ -139,11 +139,15 @@ const useTableConifg = (menu) => {
         tableCFG.tableColumns = getShowCFG(COLUMNS); 
         tableCFG.allColumns = COLUMNS
 
+        let newCFG = resetColConfig(COLUMNS)
+        let newtableCFG = Object.assign(tableCFG, newCFG)
+        console.log(999, newtableCFG);
+
         
         return  new Promise((resolve, reject) => {
             let newConfig = {
                 pageConfig,
-                tableCFG
+                tableCFG : newtableCFG
             }
             resolve(newConfig)
         })

@@ -69,30 +69,25 @@ export function addDateRange(params, dateRange, propName) {
 }
 
 // 回显数据字典
-export function selectDictLabel(datas, value) {
+export function selectDictLabel(datas, value, label = "LABEL", val = "VALUE") {
   if (value === undefined) {
     return "";
   }
   var actions = [];
   Object.keys(datas).some((key) => {
-    if (datas[key].value == ('' + value)) {
-      actions.push(datas[key].label);
+    if (datas[key][val] == ('' + value)) {
+      actions.push(datas[key][label]);
       return true;
     }
   })
-  if (actions.length === 0) {
-    actions.push(value);
-  }
+  if (actions.length === 0) actions.push(value);
   return actions.join('');
 }
 
 // 回显数据字典（字符串数组）
-export function selectDictLabels(datas, value, separator) {
-  if (value === undefined || value.length ===0) {
+export function selectDictLabels(datas, value, separator, label = "LABEL", vals = "VALUE") {
+  if (value === undefined) {
     return "";
-  }
-  if (Array.isArray(value)) {
-    value = value.join(",");
   }
   var actions = [];
   var currentSeparator = undefined === separator ? "," : separator;
@@ -100,8 +95,8 @@ export function selectDictLabels(datas, value, separator) {
   Object.keys(value.split(currentSeparator)).some((val) => {
     var match = false;
     Object.keys(datas).some((key) => {
-      if (datas[key].value == ('' + temp[val])) {
-        actions.push(datas[key].label + currentSeparator);
+      if (datas[key][vals] == ('' + temp[val])) {
+        actions.push(datas[key][label] + currentSeparator);
         match = true;
       }
     })
@@ -241,6 +236,12 @@ export function getNormalPath(p) {
 }
 
 // 验证是否为blob格式
-export function blobValidate(data) {
-  return data.type !== 'application/json'
+export async function blobValidate(data) {
+  try {
+    const text = await data.text();
+    JSON.parse(text);
+    return false;
+  } catch (error) {
+    return true;
+  }
 }

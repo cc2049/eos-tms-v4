@@ -2,40 +2,50 @@
  * @Author: cc2049
  * @Date: 2024-04-28 15:12:29
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-04-28 15:12:41
+ * @LastEditTime: 2024-04-28 19:13:05
  * @Description: 简介
 -->
 
 <template>
-  <div class="fixed-top-button">
-    <template v-for="(itemBtn,indexBtn) in topButton" :key="itemBtn.BILLNO">
-
-      <div class="buttom-item"  @click="handelEvent(itemBtn)"   :title="itemBtn.BTNTITLE " v-if=" setShowBtn(itemBtn) ">
-        {{ itemBtn.VNAME }}
-      </div>
-
-      <el-dropdown v-else-if="itemBtn.CHILDREN?.length" style="margin: 0 6px" @command="handelEvent" size="large">
-        <div class="buttom-item " >
-           {{ itemBtn.VNAME }}
-          <el-icon class="el-icon--right">
-            <arrow-down />
-          </el-icon>
+  <div class="top-button">
+    <div class="fixed-top-button">
+      <template v-for="(itemBtn,indexBtn) in topButton" :key="itemBtn.BILLNO">
+        <div class="buttom-item" @click="handelEvent(itemBtn)" :title="itemBtn.BTNTITLE " v-if=" setShowBtn(itemBtn) ">
+          {{ itemBtn.VNAME }}
         </div>
+        <el-dropdown v-else-if="itemBtn.CHILDREN?.length" style="margin: 0 6px" @command="handelEvent" size="large">
+          <div class="buttom-item ">
+            {{ itemBtn.VNAME }}
+            <el-icon class="el-icon--right">
+              <arrow-down />
+            </el-icon>
+          </div>
 
-        <template #dropdown>
-          <el-dropdown-menu>
-            <template v-for="itemBtnS in itemBtn.CHILDREN" :key="itemBtnS.BILLNO">
-              <el-dropdown-item :disabled="getButtonStatus(itemBtnS)" :command="itemBtnS" v-if=" setShowBtn(itemBtnS)">
-                {{ itemBtnS.VNAME }}
-              </el-dropdown-item>
-            </template>
+          <template #dropdown>
+            <el-dropdown-menu>
+              <template v-for="itemBtnS in itemBtn.CHILDREN" :key="itemBtnS.BILLNO">
+                <el-dropdown-item :disabled="getButtonStatus(itemBtnS)" :command="itemBtnS" v-if=" setShowBtn(itemBtnS)">
+                  {{ itemBtnS.VNAME }}
+                </el-dropdown-item>
+              </template>
 
-          </el-dropdown-menu>
-        </template>
-      </el-dropdown>
-    </template>
+            </el-dropdown-menu>
+          </template>
+        </el-dropdown>
+      </template>
 
+    </div>
+
+    <div class="top-button-right">
+       <el-icon color="#949eb5" :size="20">
+        <Icon icon="tabler:bulb-filled"></Icon>
+      </el-icon>
+      <el-icon color="#2a4bff" :size="20">
+        <Icon icon="ant-design:setting-outlined"></Icon>
+      </el-icon>
+    </div>
   </div>
+
 </template>
 
 <script setup name="Button">
@@ -147,24 +157,39 @@ function evilFn(row, fn) {
 <style lang="scss" scoped>
 .fixed-top-button {
   display: flex;
-  height: 46px;
-  line-height: 46px;
-  background: #fff;
-  box-shadow: 0px 3px 7px 0px rgba(17, 50, 130, 0.09);
-  .buttom-item{
+
+  .buttom-item {
     padding: 0 12px;
     font-size: 14px;
     cursor: pointer;
     line-height: 48px;
     color: #515967;
-    &:hover{
+    &:hover {
       color: var(--el-color-primary);
       background-color: #cfddff;
     }
   }
 }
 
-.font-16{
+.top-button {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  background-color: white;
+  height: 46px;
+  line-height: 46px;
+  background: #fff;
+  box-shadow: 0px 3px 7px 0px rgba(17, 50, 130, 0.09);
+  &-right{
+    cursor: pointer;
+    .el-icon{
+      margin-right: 20px;
+      margin-top: 4px;
+    }
+  }
+}
+
+.font-16 {
   font-size: 16px;
 }
 </style>

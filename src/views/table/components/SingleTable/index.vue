@@ -2,7 +2,7 @@
  * @Author: cc2049
  * @Date: 2024-04-28 13:10:44
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-04-28 17:52:41
+ * @LastEditTime: 2024-04-28 18:31:00
  * @Description: 简介
 -->
 <template>
@@ -11,7 +11,7 @@
     <TopButton :topButton="menuConfig?.pageConfig?.topButton" :currentData="currentData" @handelEvent="handelEvent" />
 
     <div class="custom-query" ref="AdvancedQuery">
-      {{  tableHight }}
+      <AdvanceQuery />
     </div>
 
     <Vxtable ref="VxtableRef" class="bg-white" :tableCFG="menuConfig?.tableCFG" :tableData="tableData" @change="tableChange" @dragRow="dragTableRow" @queryEvent="queryEvent">
@@ -31,6 +31,8 @@
 <script setup>
 import Vxtable from "@/components/Vxtable";
 import TopButton from "@/components/TopButton";
+import AdvanceQuery from "@/components/AdvancedQuery/index";
+import { watch } from "vue";
 
 const menuConfig = inject("menuConfig");
 const tableData = inject("tableData");
@@ -58,9 +60,8 @@ const pagerLayouts = ref([
 ]);
 const ListPageSize = ref([10, 20, 30, 50, 100, 500, 1000]);
 
-
 const tableHight = computed(() => {
-  return window.innerHeight - 160 - (AdvancedQuery.value?.clientHeight) ;
+  return window.innerHeight - 160 - AdvancedQuery.value?.clientHeight;
 });
 
 const tableChange = ({ checked, row }) => {
@@ -75,20 +76,24 @@ const dragTableRow = ({ row, $rowIndex }) => {
   console.log(row, $rowIndex);
 };
 
-setTimeout(() => {
-  menuConfig.value.tableCFG.height = tableHight.value
-  console.log(999,  AdvancedQuery.value.clientHeight );
-}, 1000);
+watch(
+  () => AdvancedQuery.value,
+  (value) => {
+    if (value) {
+      menuConfig.value.tableCFG.height = tableHight.value;
+    }
+  },
+  {
+    immediate: true,
+  }
+);
 
 onMounted(() => {});
 </script>
 
 
 <style lang="scss" scoped>
-.custom-query {
-  height: 100px;
-}
-.vxe-page-wrap{
+.vxe-page-wrap {
   background-color: #fafcff;
 }
 </style>

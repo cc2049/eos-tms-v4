@@ -2,7 +2,7 @@
  * @Author: cc2049
  * @Date: 2024-04-26 14:17:26
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-04-28 16:28:12
+ * @LastEditTime: 2024-04-28 18:53:56
  * @Description: 简介
  */
 
@@ -11,6 +11,8 @@ export const resetColConfig = (COLUMNS) => {
   // 重新整理列表配置
   let tableCFG = {
     hasSeq: true,
+    hasCheck: false,
+    SelectType: '',
     expandID: "",
     cellHeight: 40,
     cellWidth: 0,
@@ -20,6 +22,7 @@ export const resetColConfig = (COLUMNS) => {
     rowBgEval: "",
     showColumns: [],
   };
+  let columnWidth = 0 ;
 
   COLUMNS.forEach((el) => {
     el.title = el.LABEL;
@@ -99,12 +102,10 @@ export const resetColConfig = (COLUMNS) => {
       el.CONTROLS != "ExTableTools" &&
       el.SELECTEDFLAG == 1
     ) {
-      showColumns.push(el);
+      tableCFG.showColumns.push(el);
     }
 
-    // 如果配置了唯一，说明是要进行合并的 字段
-    tableCFG.mergeRowField = mergeRowField;
-    tableCFG.mergeCFG = mergeCFG;
+    tableCFG.columnWidth = columnWidth
   });
 
   return tableCFG

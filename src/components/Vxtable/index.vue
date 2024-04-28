@@ -188,11 +188,10 @@
 
               <!-- 枚举转译 -->
               <template v-else-if="config.VTYPE == 'exNum'">
-                <el-tag class="ml-2" v-if="config.SLOT == 'tags' && row[config.FIELD]" :type="dict2name(config.OTHER, row[config.FIELD]).color" effect="dark">
+                <!-- <el-tag class="ml-2" v-if="config.SLOT == 'tags' && row[config.FIELD]" :type="dict2name(config.OTHER, row[config.FIELD]).color" effect="dark">
                   {{ setArrToDictLabel(config.OTHER, row[config.FIELD]) }}
                 </el-tag>
                 <el-switch v-else-if="config.SLOT == 'switch'" v-model="row[config.FIELD]" disabled inline-prompt active-value="1" inactive-value="0" active-text="是" inactive-text="否" />
-                <!-- 插槽内的状态节点 -->
                 <div class="disflex" v-else-if="config.SLOT == 'statusNode'">
                   <div class="img-circle mr5 dots" :style="{
                     backgroundColor: setStatusNodes(
@@ -208,6 +207,10 @@
                   }}</span>
                 </div>
                 <span v-else>
+                  {{ setArrToDictLabel(config.OTHER, row[config.FIELD]) }}
+                </span> -->
+
+                 <span>
                   {{ setArrToDictLabel(config.OTHER, row[config.FIELD]) }}
                 </span>
               </template>
