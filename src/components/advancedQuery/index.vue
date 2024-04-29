@@ -25,7 +25,7 @@
                         </el-row> -->
                     </el-col>
                     <el-col :xs="8" :sm="6">
-                        <div class="disflex">
+                        <div class="disflex advancedQuery-rightBtn">
                             <el-button type="primary">
                                 <el-icon color="#fff" :size="20">
                                     <Icon icon="iconamoon:search"></Icon>
@@ -40,17 +40,23 @@
                                     </el-button>
                                 </template>
                                 <SettingFilter :filterConfig="filterConfig" :filterArr="filterArr" />
-                                <div class="disflex">
-                                    <el-select v-model="value" placeholder="请输入条件" 
-                                        :size="commonSize">
-                                        <el-option v-for="item in filterConfig.filterSeceletArr" :key="item"
-                                            :label="item" :value="item" />
-                                    </el-select>
-                                    <el-button type="primary" link class="ml5">
-                                        重置条件
-                                    </el-button>
-                                </div>
 
+                                <!-- <el-row :gutter="10">
+                                    <el-col :span="6">
+                                        <el-select v-model="value" placeholder="请输入条件" :size="commonSize">
+                                            <el-option v-for="item in filterConfig.filterSeceletArr" :key="item"
+                                                :label="item" :value="item" />
+                                        </el-select>
+                                    </el-col>
+                                    <el-col :span="6">
+                                        <el-button type="primary" link class="ml5">
+                                            重置条件
+                                        </el-button>
+
+                                    </el-col>
+                                    <el-col :span="12">
+                                    </el-col>
+                                </el-row> -->
                                 <el-divider />
                                 <div class="tr">
                                     <el-button @click="visible = false" size="mini">取消</el-button>
@@ -123,12 +129,13 @@ const visible = ref(false)
             border-color: $--color-primary;
         }
     }
-    &-alone{
+
+    &-alone {
         margin-bottom: 20px;
 
-        :deep(.el-button){
+        :deep(.el-button) {
             height: 26px !important;
-            line-height: 26px !important;
+            line-height: 26px;
         }
 
 
@@ -143,9 +150,69 @@ const visible = ref(false)
     }
 
 
+    &-rightBtn {
+
+
+        :deep(.el-button) {
+            padding: 0 4px !important;
+
+            // :deep(.el-icon){
+            .el-icon {
+                font-size: 16px !important;
+            }
+        }
+    }
 
 
 
+}
 
+:deep(.el-select) {
+    height: 26px !important;
+    line-height: 26px !important;
+}
+
+:deep(.el-input) {
+    height: 26px !important;
+    line-height: 26px !important;
+}
+
+:deep(.el-input__wrapper) {
+    box-shadow: none;
+    border: 1px solid #949eb5;
+    border-radius: 2px;
+}
+
+:deep(.el-input__inner) {
+    color: #12151a;
+}
+
+:deep(.el-input__inner::placeholder) {
+    color: #767476;
+}
+:deep(.el-input__suffix){
+    color: #acafb4 ;
+}
+
+
+:deep(.firstSelect) {
+    .el-input__wrapper {
+        padding: 1px 1px 1px 6px;
+    }
+
+    .el-input__suffix-inner {
+        background-color: #f7f7f7;
+        border-left: 1px solid #d1d4da;
+    }
+
+    .el-input__suffix-inner:hover {
+        background-color: #c1c7d3;
+        .el-select__icon{
+            color: #757689;
+        }
+    }
+    .el-input__suffix-inner>:first-child{
+        margin: 5px;
+    }
 }
 </style>
