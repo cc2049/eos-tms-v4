@@ -16,7 +16,21 @@
                 </el-icon>
             </div>
         </div>
+        <el-row :gutter="20">
+            <el-col :span="6">
+                <el-select v-model="value" placeholder="请输入条件" :size="commonSize">
+                    <el-option v-for="item in filterConfig.filterSeceletArr" :key="item" :label="item" :value="item" />
+                </el-select>
+            </el-col>
+            <el-col :span="6">
+                <el-button type="primary" link class="ml5">
+                    重置条件
+                </el-button>
 
+            </el-col>
+            <el-col :span="12">
+            </el-col>
+        </el-row>
 
 
 
@@ -43,19 +57,19 @@ const props = defineProps({
 </script>
 
 <style scoped lang="scss">
-.settingFilter{
-    .aloneFilter{
+.settingFilter {
+    .aloneFilter {
         margin-bottom: 10px;
     }
-    .delIcon{
+
+    .delIcon {
         cursor: pointer;
         margin-left: 10px;
     }
-    .delIcon:hover{
+
+    .delIcon:hover {
         color: #ef878b;
     }
 
 }
-
-
 </style>

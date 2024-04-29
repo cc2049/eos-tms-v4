@@ -6,15 +6,15 @@
 -->
 <template>
     <div class="advancedQuery">
-        <div class="disflex ">
+        <div class="disflex advancedQuery-alone">
             <div class="advancedQuery-title">我的方案</div>
             <div class="currentRadio" :class="chooseRadioVal == item ? 'active' : ''" v-for="(item, index) in radioList"
                 :key="index" @click="clickRadio(item, index)"> {{ item }}</div>
         </div>
-        <div class="disflex ">
+        <div class="disflex advancedQuery-alone">
             <div class="advancedQuery-title">快捷过滤</div>
             <div style="width: calc(100% - 100px)">
-                <el-row :gutter="10">
+                <el-row :gutter="20">
                     <el-col :xs="16" :sm="18">
                         <FiltrationCom :filterConfig="filterConfig" :filterArr="filterArr" />
 
@@ -25,7 +25,7 @@
                         </el-row> -->
                     </el-col>
                     <el-col :xs="8" :sm="6">
-                        <div class="disflex">
+                        <div class="disflex advancedQuery-rightBtn">
                             <el-button type="primary">
                                 <el-icon color="#fff" :size="20">
                                     <Icon icon="iconamoon:search"></Icon>
@@ -40,17 +40,23 @@
                                     </el-button>
                                 </template>
                                 <SettingFilter :filterConfig="filterConfig" :filterArr="filterArr" />
-                                <div class="disflex">
-                                    <el-select v-model="value" placeholder="请输入条件" 
-                                        :size="commonSize">
-                                        <el-option v-for="item in filterConfig.filterSeceletArr" :key="item"
-                                            :label="item" :value="item" />
-                                    </el-select>
-                                    <el-button type="primary" link class="ml5">
-                                        重置条件
-                                    </el-button>
-                                </div>
 
+                                <!-- <el-row :gutter="10">
+                                    <el-col :span="6">
+                                        <el-select v-model="value" placeholder="请输入条件" :size="commonSize">
+                                            <el-option v-for="item in filterConfig.filterSeceletArr" :key="item"
+                                                :label="item" :value="item" />
+                                        </el-select>
+                                    </el-col>
+                                    <el-col :span="6">
+                                        <el-button type="primary" link class="ml5">
+                                            重置条件
+                                        </el-button>
+
+                                    </el-col>
+                                    <el-col :span="12">
+                                    </el-col>
+                                </el-row> -->
                                 <el-divider />
                                 <div class="tr">
                                     <el-button @click="visible = false" size="mini">取消</el-button>
@@ -113,7 +119,7 @@ const visible = ref(false)
     .currentRadio {
         border: 1px solid #A1BACB;
         margin-right: 10px;
-        padding: 2px 6px;
+        padding: 4px 6px;
         color: #5c7390;
         border-radius: 2px;
         cursor: pointer;
@@ -124,16 +130,89 @@ const visible = ref(false)
         }
     }
 
+    &-alone {
+        margin-bottom: 20px;
+
+        :deep(.el-button) {
+            height: 26px !important;
+            line-height: 26px;
+        }
+
+
+
+
+    }
+
     &-title {
         color: #515967;
         font-weight: bold;
-        margin: 15px;
+        margin-right: 15px;
+    }
+
+
+    &-rightBtn {
+
+
+        :deep(.el-button) {
+            padding: 0 4px !important;
+
+            // :deep(.el-icon){
+            .el-icon {
+                font-size: 16px !important;
+            }
+        }
     }
 
 
 
+}
+
+:deep(.el-select) {
+    height: 26px !important;
+    line-height: 26px !important;
+}
+
+:deep(.el-input) {
+    height: 26px !important;
+    line-height: 26px !important;
+}
+
+:deep(.el-input__wrapper) {
+    box-shadow: none;
+    border: 1px solid #949eb5;
+    border-radius: 2px;
+}
+
+:deep(.el-input__inner) {
+    color: #12151a;
+}
+
+:deep(.el-input__inner::placeholder) {
+    color: #767476;
+}
+:deep(.el-input__suffix){
+    color: #acafb4 ;
+}
 
 
+:deep(.firstSelect) {
+    .el-input__wrapper {
+        padding: 1px 1px 1px 6px;
+    }
 
+    .el-input__suffix-inner {
+        background-color: #f7f7f7;
+        border-left: 1px solid #d1d4da;
+    }
+
+    .el-input__suffix-inner:hover {
+        background-color: #c1c7d3;
+        .el-select__icon{
+            color: #757689;
+        }
+    }
+    .el-input__suffix-inner>:first-child{
+        margin: 5px;
+    }
 }
 </style>
