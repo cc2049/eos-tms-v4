@@ -6,15 +6,15 @@
 -->
 <template>
     <div class="advancedQuery">
-        <div class="disflex ">
+        <div class="disflex advancedQuery-alone">
             <div class="advancedQuery-title">我的方案</div>
             <div class="currentRadio" :class="chooseRadioVal == item ? 'active' : ''" v-for="(item, index) in radioList"
                 :key="index" @click="clickRadio(item, index)"> {{ item }}</div>
         </div>
-        <div class="disflex ">
+        <div class="disflex advancedQuery-alone">
             <div class="advancedQuery-title">快捷过滤</div>
             <div style="width: calc(100% - 100px)">
-                <el-row :gutter="10">
+                <el-row :gutter="20">
                     <el-col :xs="16" :sm="18">
                         <FiltrationCom :filterConfig="filterConfig" :filterArr="filterArr" />
 
@@ -113,7 +113,7 @@ const visible = ref(false)
     .currentRadio {
         border: 1px solid #A1BACB;
         margin-right: 10px;
-        padding: 2px 6px;
+        padding: 4px 6px;
         color: #5c7390;
         border-radius: 2px;
         cursor: pointer;
@@ -123,11 +123,23 @@ const visible = ref(false)
             border-color: $--color-primary;
         }
     }
+    &-alone{
+        margin-bottom: 20px;
+
+        :deep(.el-button){
+            height: 26px !important;
+            line-height: 26px !important;
+        }
+
+
+
+
+    }
 
     &-title {
         color: #515967;
         font-weight: bold;
-        margin: 15px;
+        margin-right: 15px;
     }
 
 

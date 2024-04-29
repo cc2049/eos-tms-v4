@@ -6,7 +6,7 @@
 -->
 <template>
     <div class="filtrationCom">
-        <el-row :gutter="10" >
+        <el-row :gutter="20" >
             <el-col :sm="12" :xl="8" v-for="(item, index) in filterArr" :key="index">
                 <FilterForm :filterConfig="filterConfig" />
             </el-col>
