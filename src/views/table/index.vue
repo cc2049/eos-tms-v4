@@ -2,13 +2,13 @@
  * @Author: cc2049
  * @Date: 2024-04-23 11:33:59
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-04-28 17:01:09
+ * @LastEditTime: 2024-04-29 15:55:17
  * @Description: 简介
 -->
 <template>
 
   <div class="page-container">
-    <SingleTable ref="listTableRef" :config="allConfig" :data="records" />
+    <SingleTable ref="listTableRef" :config="allConfig"  />
 
   </div>
 
@@ -52,18 +52,10 @@ getConfig().then((res) => {
   menuConfig.value = res;
   showPage.value = true;
 
-  let queryURL = menuConfig.value.pageConfig.queryUrl,
-    queryJSON = menuConfig.value.pageConfig.queryJson;
-  getTableData(queryURL, queryJSON);
+  
 });
 
-const getTableData = (queryURL, queryJSON) => {
-  queryJSON.PAGESIZE = 50
-  axiosGet(queryURL, queryJSON).then((res) => {
-    console.log(res);
-    tableData.value = res.RESULT.RECORDS;
-  });
-};
+
 
 provide("menuConfig", menuConfig);
 provide("tableData", tableData);

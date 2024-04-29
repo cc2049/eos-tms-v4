@@ -2,7 +2,7 @@
  * @Author: cc2049
  * @Date: 2024-04-28 15:12:29
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-04-28 19:13:05
+ * @LastEditTime: 2024-04-29 15:45:24
  * @Description: 简介
 -->
 
@@ -37,12 +37,18 @@
     </div>
 
     <div class="top-button-right">
-       <el-icon color="#949eb5" :size="20">
-        <Icon icon="tabler:bulb-filled"></Icon>
-      </el-icon>
-      <el-icon color="#2a4bff" :size="20">
-        <Icon icon="ant-design:setting-outlined"></Icon>
-      </el-icon>
+      <div class="tool-wrap">
+        <el-icon color="#949eb5" :size="20">
+          <Icon icon="tabler:bulb-filled"></Icon>
+        </el-icon>
+      </div>
+
+      <div class="tool-wrap">
+        <el-icon color="#2a4bff" :size="20">
+          <Icon icon="ant-design:setting-outlined"></Icon>
+        </el-icon>
+      </div>
+
     </div>
   </div>
 
@@ -180,12 +186,20 @@ function evilFn(row, fn) {
   line-height: 46px;
   background: #fff;
   box-shadow: 0px 3px 7px 0px rgba(17, 50, 130, 0.09);
-  &-right{
+  &-right {
     cursor: pointer;
-    .el-icon{
-      margin-right: 20px;
-      margin-top: 4px;
+    display: flex;
+    .tool-wrap {
+      height: 46px;
+      padding: 0 12px;
+      line-height: 46px;
+      &:hover {
+        color: var(--el-color-primary);
+        background-color: #cfddff;
+      }
     }
+
+    
   }
 }
 

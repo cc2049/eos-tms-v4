@@ -2,7 +2,7 @@
  * @Author: cc2049
  * @Date: 2024-04-25 17:34:36
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-04-28 18:55:59
+ * @LastEditTime: 2024-04-29 18:18:21
  * @Description: 获取动态配置
  */
 
@@ -103,15 +103,14 @@ const useTableConifg = (menu) => {
         /*
         * 修改当前主表的每页数据Arr  {'PAGESIZE':[100,200,300,500]}
         */
+        tableCFG.pagerConfig.pageSize = PAGESIZE
         if (VMEMO && VMEMO.includes("PAGESIZE")) {
             try {
-                tableCFG.pagerConfig.pageSize = PAGESIZE
                 tableCFG.pagerConfig.pageSizes = JSON.parse(VMEMO).PAGESIZE
             } catch (error) {
                 console.error('设置分页：每页大小选项列表', error)
             }
         }
-
         // 设置页面配置
         pageConfig.initButton = BUTTON;
         pageConfig.isSonTable = ISSONTABLE == 1;
@@ -122,6 +121,8 @@ const useTableConifg = (menu) => {
         pageConfig.queryUrl = SLOTCFG ? SLOTCFG : getQueryUrl(BUTTON);
         let initQueryJson = getFormValue(QUERY);
 
+        
+
         pageConfig.queryJson = Object.assign(initQueryJson, menu) 
         
 
@@ -131,17 +132,13 @@ const useTableConifg = (menu) => {
         tableCFG.headerConfig = QUERY;
         tableCFG.tableStyle = TABLESTYLE || 0;
         tableCFG.defaultStyle = MODALTYPE || 0;
-        // 支持列头筛选的查询条件 ID
-        tableCFG.filterFileid = QUERY.map((i) => {
-            return i.SLOTCFG || i.FIELD;
-        });
+       
 
         tableCFG.tableColumns = getShowCFG(COLUMNS); 
         tableCFG.allColumns = COLUMNS
 
-        let newCFG = resetColConfig(COLUMNS)
+        let newCFG = resetColConfig(COLUMNS,  tableCFG.isHeaderFilter , QUERY)
         let newtableCFG = Object.assign(tableCFG, newCFG)
-        console.log(999, newtableCFG);
 
         
         return  new Promise((resolve, reject) => {

@@ -94,3 +94,19 @@
 .el-dropdown .el-dropdown-link{
   color: var(--el-color-primary) !important;
 }
+
+.brand-color, .bg-brand{
+  color: $--color-primary;
+}
+
+.danger-color, .bg-danger{
+  color: $--color-danger;
+}
+
+.waring-color, .bg-waring{
+  color: $--color-warning;
+}
+
+.success-color, .bg-success{
+  color: $--color-success;
+}

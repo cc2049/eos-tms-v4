@@ -2,12 +2,15 @@
  * @Author: cc2049
  * @Date: 2024-04-26 14:17:26
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-04-28 18:53:56
+ * @LastEditTime: 2024-04-29 18:13:32
  * @Description: 简介
+ * params: COLUMNS 列配置
+ * params: isHeaderFilter 是否启用列头筛选
+ * params: QUERY 查询条件
  */
 
 
-export const resetColConfig = (COLUMNS) => {
+export const resetColConfig = (COLUMNS, isHeaderFilter, QUERY) => {
   // 重新整理列表配置
   let tableCFG = {
     hasSeq: true,
@@ -22,10 +25,16 @@ export const resetColConfig = (COLUMNS) => {
     rowBgEval: "",
     showColumns: [],
   };
-  let columnWidth = 0 ;
+  let columnWidth = 0;
+
+  // 支持列头筛选的查询条件 ID
+  let filterFileid = QUERY.map((i) => {
+    return i.SLOTCFG || i.FIELD;
+  });
 
   COLUMNS.forEach((el) => {
     el.title = el.LABEL;
+    el.filterCfg = null
     if (el.VTYPE == 0) {
       el.VTYPE = "";
     }
@@ -88,12 +97,12 @@ export const resetColConfig = (COLUMNS) => {
       tableCFG.mergeRowField.push(el.FIELD);
     }
     //  开启表头筛选功能，把查询条件添加到表头筛选配置中
-    //   if (tableCFG.isHeaderFilter && filterFileid.includes(el.FIELD)) {
-    //     let TabColFilterCfg = QUERY.filter(
-    //       (iQ) => iQ.FIELD == el.FIELD || (iQ.SLOTCFG && iQ.SLOTCFG == el.FIELD)
-    //     );
-    //     TabColFilterCfg.length ? (el.filterCfg = TabColFilterCfg[0]) : "";
-    //   }
+    if (isHeaderFilter && filterFileid.includes(el.FIELD)) {
+      let TabColFilterCfg = QUERY.filter(
+        (iQ) => iQ.FIELD == el.FIELD || (iQ.SLOTCFG && iQ.SLOTCFG == el.FIELD)
+      );
+      TabColFilterCfg.length ? (el.filterCfg = TabColFilterCfg[0]) : "";
+    }
 
     if (
       el.ISSHOW == 1 &&
