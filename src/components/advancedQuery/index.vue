@@ -17,7 +17,7 @@
                 <el-row :gutter="20">
                     <el-col :xs="16" :sm="18">
                         <FiltrationCom :filterConfig="filterConfig" :filterArr="filterArr"
-                            :defaultFilterArr="defaultFilterArr" />
+                            :defaultFilterArr="defaultFilterArr"/>
 
                         <!-- <el-row :gutter="10">
                             <el-col :xs="12" :sm="8">
@@ -92,6 +92,7 @@
 import FiltrationCom from "./components/filtrationCom"
 import SettingFilter from "./components/settingFilter"
 
+
 // 我的方案
 const chooseRadioVal = ref('默认方案')
 const radioList = ref(['默认方案', '我的未完成订单', '今天', '本周', '本月'])
@@ -108,18 +109,48 @@ const filterConfig = ref({
         {
             value: '1',
             label: '单据编号',
-            type: ''
+            CONTROLS: '',
+            FIELD:'danjubianhao'
         },
         {
             value: '2',
             label: '供应商',
-            type: ''
+            CONTROLS: 'ExSelectModal',
+            FIELD:'gongyingshang'
         },
         {
             value: '3',
             label: '物料编码',
-            type: ''
+            CONTROLS: '',
+            FIELD:'wuliaobianma',
+            CONTROLS: 'ExSelect',
         },
+        {
+            value: '4',
+            label: '日期',
+            CONTROLS: 'ExDate',
+            FIELD:'riqi'
+
+        },
+        {
+            value: '5',
+            label: '日期区间',
+            CONTROLS: 'ExDateRange',
+            FIELD:'riqiqujian'
+        },
+        {
+            value: '6',
+            label: '日期时间选择',
+            CONTROLS: 'ExDateTime',
+            FIELD:'riqiqujianxuanze'
+        },
+        {
+            value: '7',
+            label: '日期时间区间',
+            CONTROLS: 'ExDateTimeRange',
+            FIELD:'riqishijianqujian'
+        },
+
     ],
     filterSeceletArr1: ['包含', '等于', '大于'],
 })
@@ -223,6 +254,7 @@ const delFilterArr = (index) => {
     box-shadow: none;
     border: 1px solid #949eb5;
     border-radius: 2px;
+    height: 26px;
 }
 
 :deep(.el-input__inner) {
