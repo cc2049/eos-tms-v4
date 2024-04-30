@@ -11,12 +11,13 @@
             <div class="currentRadio" :class="chooseRadioVal == item ? 'active' : ''" v-for="(item, index) in radioList"
                 :key="index" @click="clickRadio(item, index)"> {{ item }}</div>
         </div>
-        <div class="disflex advancedQuery-alone">
+        <div class="disflex advancedQuery-alone mb10">
             <div class="advancedQuery-title">快捷过滤</div>
             <div style="width: calc(100% - 100px)">
                 <el-row :gutter="20">
                     <el-col :xs="16" :sm="18">
-                        <FiltrationCom :filterConfig="filterConfig" :filterArr="filterArr" />
+                        <FiltrationCom :filterConfig="filterConfig" :filterArr="filterArr"
+                            :defaultFilterArr="defaultFilterArr"/>
 
                         <!-- <el-row :gutter="10">
                             <el-col :xs="12" :sm="8">
@@ -39,7 +40,9 @@
                                         </el-icon>
                                     </el-button>
                                 </template>
-                                <SettingFilter :filterConfig="filterConfig" :filterArr="filterArr" />
+                                <SettingFilter :filterConfig="filterConfig" :filterArr="filterArr"
+                                    :defaultFilterArr="defaultFilterArr" @changeCondition="changeCondition"
+                                    @resetCondition="resetCondition" @delFilterArr="delFilterArr" />
 
                                 <!-- <el-row :gutter="10">
                                     <el-col :span="6">
@@ -89,6 +92,7 @@
 import FiltrationCom from "./components/filtrationCom"
 import SettingFilter from "./components/settingFilter"
 
+
 // 我的方案
 const chooseRadioVal = ref('默认方案')
 const radioList = ref(['默认方案', '我的未完成订单', '今天', '本周', '本月'])
@@ -100,13 +104,81 @@ const clickRadio = (item, index) => {
 // const filterSeceletArr = ref(['单据编号','供应商','物料编码'])
 const value = ref(null)
 const filterConfig = ref({
-    filterSeceletArr: ['单据编号', '供应商', '物料编码'],
+    // filterSeceletArr: ['单据编号', '供应商', '物料编码'],
+    filterSeceletArr: [
+        {
+            value: '1',
+            label: '单据编号',
+            CONTROLS: '',
+            FIELD:'danjubianhao'
+        },
+        {
+            value: '2',
+            label: '供应商',
+            CONTROLS: 'ExSelectModal',
+            FIELD:'gongyingshang'
+        },
+        {
+            value: '3',
+            label: '物料编码',
+            CONTROLS: '',
+            FIELD:'wuliaobianma',
+            CONTROLS: 'ExSelect',
+        },
+        {
+            value: '4',
+            label: '日期',
+            CONTROLS: 'ExDate',
+            FIELD:'riqi'
+
+        },
+        {
+            value: '5',
+            label: '日期区间',
+            CONTROLS: 'ExDateRange',
+            FIELD:'riqiqujian'
+        },
+        {
+            value: '6',
+            label: '日期时间选择',
+            CONTROLS: 'ExDateTime',
+            FIELD:'riqiqujianxuanze'
+        },
+        {
+            value: '7',
+            label: '日期时间区间',
+            CONTROLS: 'ExDateTimeRange',
+            FIELD:'riqishijianqujian'
+        },
+
+    ],
     filterSeceletArr1: ['包含', '等于', '大于'],
 })
 
-const filterArr = ref([{}, {}])
-const visible = ref(false)
+const filterArr = ref([])
+const defaultFilterArr = ref([{
+    value: '1',
+    label: '单据编号',
+    type: ''
+},])
 
+onMounted(() => {
+    filterArr.value = JSON.parse(JSON.stringify(defaultFilterArr.value))
+})
+
+
+
+const visible = ref(false)
+const changeCondition = (e) => {
+    filterArr.value.push(e)
+}
+const resetCondition = () => {
+    filterArr.value = JSON.parse(JSON.stringify(defaultFilterArr.value))
+}
+const delFilterArr = (index) => {
+    filterArr.value.splice(index, 1)
+
+}
 
 </script>
 
@@ -114,6 +186,7 @@ const visible = ref(false)
 @import "@/assets/styles/variables.module.scss";
 
 .advancedQuery {
+    padding-top: 20px;
     font-size: 12px;
 
     .currentRadio {
@@ -181,6 +254,7 @@ const visible = ref(false)
     box-shadow: none;
     border: 1px solid #949eb5;
     border-radius: 2px;
+    height: 26px;
 }
 
 :deep(.el-input__inner) {
@@ -190,8 +264,9 @@ const visible = ref(false)
 :deep(.el-input__inner::placeholder) {
     color: #767476;
 }
-:deep(.el-input__suffix){
-    color: #acafb4 ;
+
+:deep(.el-input__suffix) {
+    color: #acafb4;
 }
 
 
@@ -207,11 +282,13 @@ const visible = ref(false)
 
     .el-input__suffix-inner:hover {
         background-color: #c1c7d3;
-        .el-select__icon{
+
+        .el-select__icon {
             color: #757689;
         }
     }
-    .el-input__suffix-inner>:first-child{
+
+    .el-input__suffix-inner>:first-child {
         margin: 5px;
     }
 }

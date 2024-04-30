@@ -6,9 +6,9 @@
 -->
 <template>
     <div class="filtrationCom">
-        <el-row :gutter="20" >
-            <el-col :sm="12" :xl="8" v-for="(item, index) in filterArr" :key="index">
-                <FilterForm :filterConfig="filterConfig" />
+        <el-row :gutter="20">
+            <el-col :xs="24" :sm="12" :xl="8" v-for="(item, index) in filterArr" :key="index" class="mb10">
+                <FilterForm :filterConfig="filterConfig" :filterVal="item" v-model:formData="queryFormData"  />
             </el-col>
         </el-row>
     </div>
@@ -16,6 +16,8 @@
 
 <script setup>
 import FilterForm from "./filterForm"
+import { getFormValue, GetDateAfter, evilFn, formatDate, deepClone } from "@/utils";
+
 
 
 const props = defineProps({
@@ -26,10 +28,13 @@ const props = defineProps({
     filterArr: {
         type: Array,
         default: [],
-    }
+    },
+  
 });
-
-console.log(props.filterConfig)
+const queryFormData=ref({})
+onMounted(() => {
+    queryFormData.value = getFormValue(props.filterConfig.filterSeceletArr)
+})
 
 
 </script>
