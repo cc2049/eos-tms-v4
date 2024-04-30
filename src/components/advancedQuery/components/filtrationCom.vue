@@ -6,9 +6,9 @@
 -->
 <template>
     <div class="filtrationCom">
-        <el-row :gutter="20" >
-            <el-col :sm="12" :xl="8" v-for="(item, index) in filterArr" :key="index">
-                <FilterForm :filterConfig="filterConfig" />
+        <el-row :gutter="20"  >
+            <el-col :xs="24" :sm="12" :xl="8" v-for="(item, index) in filterArr" :key="index" class="mb10">
+                <FilterForm :filterConfig="filterConfig" :filterVal="item" />
             </el-col>
         </el-row>
     </div>
@@ -29,7 +29,6 @@ const props = defineProps({
     }
 });
 
-console.log(props.filterConfig)
 
 
 </script>
