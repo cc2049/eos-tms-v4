@@ -2,16 +2,52 @@
  * @Author: cc2049
  * @Date: 2024-02-20 09:00:04
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-04-29 18:32:44
+ * @LastEditTime: 2024-04-30 15:13:16
  * @Description: 简介
 -->
 
 <template>
-  <div class="custom-head">
+  <div class="custom-head" @contextmenu.prevent="fnResourcesRightClick($event, column)">
 
-    <span class="font-size-12" @click="handleSort(column)">
+    <span class="font-size-12 custom-head-title" @click="handleSort(column)">
       {{ column.title || '' }}
+      <el-icon :size="20" class="sort-icon" v-if=" column.field == sortCFG.sortBy ">
+        <CaretBottom v-if=" sortCFG.sort == 'desc' " />
+        <CaretTop v-else />
+      </el-icon>
     </span>
+
+    <div class="right-menu" v-show="showRightMenu && sortCFG.activeID == column.field" @click.stop.prevent="rightClick(column)" extmenu.stop.prevent>
+      <div class="right-manu-item">
+        <el-icon :size="20">
+          <CaretTop />
+        </el-icon>
+        <span>
+          列显示隐藏
+        </span>
+        <el-icon :size="20" >
+          <CaretTop />
+        </el-icon>
+      </div>
+      <div class="right-manu-item">
+        <el-icon :size="20" >
+          <CaretTop />
+        </el-icon>
+        <span>
+          冻结列
+        </span>
+      </div>
+
+       <div class="right-manu-item">
+        <el-icon :size="20" class="sort-icon">
+          <CaretTop />
+        </el-icon>
+        <span>
+          取消冻结列
+        </span>
+      </div>
+
+    </div>
 
     <el-popover placement="bottom" :width="config.WIDTH" trigger="click" v-if="config.filterCfg">
 
@@ -77,9 +113,10 @@ const props = defineProps({
     type: Object,
     default: () => {},
   },
+  sortCFG: {},
 });
 
-const emit = defineEmits(["filterEvent", "handleSortEvent"]);
+const emit = defineEmits(["filterEvent", "handleSortEvent", "rightClick"]);
 const { proxy } = getCurrentInstance();
 
 const filterEvent = () => {
@@ -233,6 +270,29 @@ function ConvertData(obj) {
   return data;
 }
 
+const showRightMenu = ref(false);
+
+/*
+        右键点击资源
+        event ==> 事件对象
+        item  ==> 资源数据
+    */
+function fnResourcesRightClick(event, item) {
+  // 获取top、left 最大允许像素
+  let nScreenWidth = document.documentElement.clientWidth - 98;
+  let nScreenHeight = document.documentElement.clientHeight - 54;
+  console.log(event, item);
+  showRightMenu.value = true;
+  let eventData = {
+    type: "openRight",
+    column: item,
+  };
+  emit("rightClick", eventData);
+  document.addEventListener("click", () => {
+    showRightMenu.value = false;
+  });
+}
+
 // 推断日期组件类型
 const mapDateType = computed((config, isRange = false) => {
   return (config, isRange) => {
@@ -272,19 +332,41 @@ const mapDateType = computed((config, isRange = false) => {
 
 .custom-head {
   width: 100%;
-  background-color: aquamarine;
   display: flex;
   position: relative;
   cursor: pointer;
+  text-align: center;
+  &-title {
+    width: calc(100% - 10px);
+    .sort-icon {
+      position: absolute;
+      color: #333;
+    }
+  }
 
   .filter-icon {
     position: absolute;
-    right: 10px;
+    top: 2px;
+    right: -10px;
     display: none;
   }
 
   &:hover .filter-icon {
     display: block;
+  }
+  &:hover .sort-icon {
+    color: var(--el-color-primary);
+  }
+
+  .right-menu {
+    position: fixed;
+    z-index: 1000;
+    width: 160px;
+    height: 100px;
+    background-color: #f0f3fa;
+    &-item{
+      text-align: left;
+    }
   }
 }
 

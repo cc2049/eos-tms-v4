@@ -53,7 +53,7 @@
           <vxe-column :field="config.FIELD" :align="config.ALIGN" :width="setColWidth(config)" :title=" setColTitle(config)  " :fixed="config.ISFIXED=='left'?'left':null" :height="30" :resizable="true" :key="i" :tree-node=" tableCFG.treeID?.treenodeId == config.FIELD "
             :visible="setTableColShow(config)" :sortable="config.ISSORT == 1">
             <template #header="{ column }">
-              <Header :column="column" :config="config" :tableCFG="tableCFG" @filterEvent="filterEvent" @handleSortEvent="headerCellClickEvent" />
+              <Header :column="column" :config="config" :sortCFG :tableCFG="tableCFG" @filterEvent="filterEvent" @handleSortEvent="headerCellClickEvent" @rightClick="rightClickEvent" />
             </template>
 
             <template #default="{ row }">
@@ -514,6 +514,7 @@ const setTableColShow = computed((config) => {
 const sortCFG = reactive({
   sortBy: "",
   sort: "",
+  activeID:""
 });
 
 function refreshColumn() {
@@ -891,16 +892,12 @@ function sortChange({ property, order }) {
 
 // 获取枚举的图标
 function getNumIcon(url){
-  console.log(777, url);
   return proxy.getAssetsFile(url)
 }
 
+
 // 自定义服务端排序
-function headerCellClickEvent(val) {
-  let column = val 
-  // let { column } = val;
-  // let isHeaderFilter = props.tableCFG.isHeaderFilter;
-  // if (isHeaderFilter) return;
+function headerCellClickEvent(column) {
   if (
     column.type == "seq" ||
     column.type == "checkbox" ||
@@ -923,6 +920,15 @@ function headerCellClickEvent(val) {
   };
   if (order != null) {
     proxy.$emit("change", giveParentData);
+  }
+}
+
+
+// 表头的右键
+
+function rightClickEvent(data){
+  if(data.type=='openRight'){
+    sortCFG.activeID = data.column.field
   }
 }
 
