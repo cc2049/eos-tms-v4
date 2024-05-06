@@ -2,7 +2,7 @@
  * @Author: cc2049
  * @Date: 2024-04-23 11:33:59
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-04-29 15:55:17
+ * @LastEditTime: 2024-05-06 12:08:41
  * @Description: 简介
 -->
 <template>
@@ -58,6 +58,7 @@ getConfig().then((res) => {
 
 
 provide("menuConfig", menuConfig);
+provide("menuID", menuParams);
 provide("tableData", tableData);
 
 

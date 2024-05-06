@@ -72,3 +72,9 @@ $vxe-primary-color: #1761FF !important;
   infoColor: $--color-info;
   warningColor: $--color-warning;
 }
+
+// 声明全局 CSS 变量
+:root {
+  
+  --border-color-jdy: #ceced2;
+}

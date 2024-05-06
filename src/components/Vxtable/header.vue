@@ -2,7 +2,7 @@
  * @Author: cc2049
  * @Date: 2024-02-20 09:00:04
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-04-30 18:01:11
+ * @LastEditTime: 2024-05-06 19:28:20
  * @Description: 简介
 -->
 
@@ -18,29 +18,42 @@
     </span>
 
     <div class="right-menu" v-show="showRightMenu && sortCFG.activeID == column.field" @click.stop.prevent="rightClick(column)" extmenu.stop.prevent>
-      <div class="right-menu-item">
-        <el-icon :size="20">
-          <CaretTop />
-        </el-icon>
-        <span>
-          列显示隐藏
-        </span>
-        <el-icon :size="20" >
-          <CaretTop />
-        </el-icon>
+      <div class="right-menu-item bottom">
+
+        <el-popover placement="right" :width="126" trigger="click">
+          <template #reference>
+            <div>
+              <el-icon :size="16" color="#606875">
+                <Icon icon="ic:round-view-column" />
+              </el-icon>
+              <span>
+                列显示隐藏
+              </span>
+              <el-icon :size="12" color="#606875" class="arrow-icon">
+                <ArrowRightBold />
+              </el-icon>
+            </div>
+
+          </template>
+
+          <vxe-checkbox-group v-model="checkList" class="column-list" style="display: flex;flex-direction: column;junt-content: flex-start;">
+            <vxe-checkbox style="margin-left:0;margin-bottom:10px" :content="itemCol.LABEL" :label="itemCol.FIELD" :key="itemCol.BILLNO" v-for="itemCol in tableCFG.tableColumns" />
+          </vxe-checkbox-group>
+        </el-popover>
+
       </div>
       <div class="right-menu-item">
-        <el-icon :size="20" >
-          <CaretTop />
+        <el-icon :size="16" color="#606875">
+          <Icon icon="mdi:lock" />
         </el-icon>
         <span>
           冻结列
         </span>
       </div>
 
-       <div class="right-menu-item">
-        <el-icon :size="20" class="sort-icon">
-          <CaretTop />
+      <div class="right-menu-item">
+        <el-icon :size="16" color="#606875">
+          <Icon icon="mdi:unlocked-variant" />
         </el-icon>
         <span>
           取消冻结列
@@ -100,6 +113,10 @@
 </template>
 
 <script setup>
+import { inject } from "vue";
+
+import { axiosGet } from "#/common";
+
 const props = defineProps({
   column: {
     type: Object,
@@ -118,6 +135,10 @@ const props = defineProps({
 
 const emit = defineEmits(["filterEvent", "handleSortEvent", "rightClick"]);
 const { proxy } = getCurrentInstance();
+
+const checkList = ref([]);
+
+const menuID = inject("menuID");
 
 const filterEvent = () => {
   emit("filterEvent");
@@ -281,7 +302,13 @@ function fnResourcesRightClick(event, item) {
   // 获取top、left 最大允许像素
   let nScreenWidth = document.documentElement.clientWidth - 98;
   let nScreenHeight = document.documentElement.clientHeight - 54;
-  console.log(event, item);
+  // console.log(event, item);
+  checkList.value = props.tableCFG.tableColumns
+    .filter((el) => el.SELECTEDFLAG == 1)
+    .map((i) => i.FIELD);
+
+  console.log(checkList.value);
+
   showRightMenu.value = true;
   let eventData = {
     type: "openRight",
@@ -317,6 +344,50 @@ const mapDateType = computed((config, isRange = false) => {
     return { type, format };
   };
 });
+
+const templateList = ref([]);
+const selectTemp = ref("");
+function getTemplate() {
+  axiosGet("/sys/selectConfig/getList", menuID.value).then((res) => {
+    let { TEMPLIST } = res.RESULT;
+    templateList.value = TEMPLIST;
+    let idArr = TEMPLIST.filter((i) => i.ISDETAULT == 1);
+    selectTemp.value = idArr.length ? idArr[0].VALUE : null;
+    getColumnsList(res.RESULT);
+  });
+}
+
+function getColumnsList(data) {
+  let { TEMPLIST, ENGNAMESINFO, CHANAMESINFO, CHINASHOWINFO, NOTSHOWINFO } =
+    data;
+  // 设置已选模板的状态
+  let showColIDArr = ENGNAMESINFO?.split(","),
+    showColNameArr = CHANAMESINFO?.split(","),
+    noShowColIDArr = NOTSHOWINFO ? NOTSHOWINFO?.split(",") : [],
+    noShowColNameArr = CHINASHOWINFO?.split(",");
+
+  let newArr = [];
+  if (!showColIDArr?.length) return;
+  showColIDArr.forEach((item, index) => {
+    let newItem = {
+      LABEL: showColNameArr[index],
+      FIELD: item,
+      SELECTEDFLAG: 1,
+    };
+    newArr.push(newItem);
+  });
+  if (noShowColIDArr.length) {
+    noShowColIDArr.forEach((item, index) => {
+      let newItem = {
+        LABEL: noShowColNameArr[index],
+        FIELD: item,
+        SELECTEDFLAG: 0,
+      };
+      newArr.push(newItem);
+    });
+  }
+  tableColumns.value = newArr;
+}
 </script>
 
 <style lang="scss">
@@ -329,7 +400,7 @@ const mapDateType = computed((config, isRange = false) => {
 .custom-sort:hover {
   color: #333;
 }
-
+$border-color-jdy: #ceced2;
 .custom-head {
   width: 100%;
   display: flex;
@@ -364,15 +435,32 @@ const mapDateType = computed((config, isRange = false) => {
     width: 160px;
     height: 100px;
     background-color: #f0f3fa;
-    &-item{
+    border: 1px solid var(--border-color-jdy);
+
+    .bottom {
+      border-bottom: 1px solid var(--border-color-jdy);
+    }
+
+    &-item {
       text-align: left;
       display: flex;
-      justify-content: space-between;
+      align-items: center;
       padding: 0 10px;
       height: 30px;
       line-height: 30px;
-      &:hover{
-        background-color: #e9e9e9;
+      &:hover {
+        background-color: var(--el-color-primary-light-8);
+      }
+      .el-icon {
+        margin-right: 10px;
+      }
+      .el-icon {
+        margin-right: 10px;
+      }
+      .arrow-icon {
+        position: absolute;
+        right: 0;
+        top: 8px;
       }
     }
   }
@@ -381,5 +469,9 @@ const mapDateType = computed((config, isRange = false) => {
 .font-size-12 {
   font-size: 12px;
   color: #333;
+}
+
+:deep(.vxe-checkbox+.vxe-checkbox) {
+ margin-left: none;
 }
 </style>

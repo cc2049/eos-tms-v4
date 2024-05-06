@@ -2,7 +2,7 @@
  * @Author: cc2049
  * @Date: 2024-04-28 13:10:44
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-04-29 17:48:32
+ * @LastEditTime: 2024-05-06 09:21:35
  * @Description: 简介
 -->
 <template>
@@ -61,7 +61,7 @@ const pagerLayouts = ref([
 const ListPageSize = ref([10, 20, 30, 50, 100, 500, 1000]);
 
 const tableHight = computed(() => {
-  return window.innerHeight - 160 - AdvancedQuery.value?.clientHeight;
+  return window.innerHeight - 190 - AdvancedQuery.value?.clientHeight;
 });
 
 // 表格内部的多选事件，顶部筛选排序事件, 超链接事件
@@ -154,11 +154,9 @@ const dragTableRow = ({ row, $rowIndex }) => {
 
 const getTableData = () => {
   console.log(888, queryJSON.value);
-
   queryJSON.value.PAGENUM = pageInfo.currentPage;
   queryJSON.value.SORTNAME = pageInfo.sortName;
   queryJSON.value.REVERSE = pageInfo.sortOrder;
-
   axiosGet(queryURL.value, queryJSON.value).then((res) => {
     const { RECORDS, TOTAL } = res.RESULT;
     tableData.value = RECORDS;
