@@ -7,7 +7,8 @@
 
 ```bash
 # 克隆项目  724797236@qq.com   piplns@163.com
-git https://github.com/cc2049/eos-tms-v4.git
+[git] (https://github.com/cc2049/eos-tms-v4.git)
+[SVN](https://47.94.202.228:8443/21.TMS_ITEM/99.TMS4/06.WEBPC)
 
 # 进入项目目录
 cd EOS-TMS-V4

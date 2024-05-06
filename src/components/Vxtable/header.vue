@@ -2,7 +2,7 @@
  * @Author: cc2049
  * @Date: 2024-02-20 09:00:04
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-04-30 15:13:16
+ * @LastEditTime: 2024-04-30 18:01:11
  * @Description: 简介
 -->
 
@@ -18,7 +18,7 @@
     </span>
 
     <div class="right-menu" v-show="showRightMenu && sortCFG.activeID == column.field" @click.stop.prevent="rightClick(column)" extmenu.stop.prevent>
-      <div class="right-manu-item">
+      <div class="right-menu-item">
         <el-icon :size="20">
           <CaretTop />
         </el-icon>
@@ -29,7 +29,7 @@
           <CaretTop />
         </el-icon>
       </div>
-      <div class="right-manu-item">
+      <div class="right-menu-item">
         <el-icon :size="20" >
           <CaretTop />
         </el-icon>
@@ -38,7 +38,7 @@
         </span>
       </div>
 
-       <div class="right-manu-item">
+       <div class="right-menu-item">
         <el-icon :size="20" class="sort-icon">
           <CaretTop />
         </el-icon>
@@ -366,6 +366,14 @@ const mapDateType = computed((config, isRange = false) => {
     background-color: #f0f3fa;
     &-item{
       text-align: left;
+      display: flex;
+      justify-content: space-between;
+      padding: 0 10px;
+      height: 30px;
+      line-height: 30px;
+      &:hover{
+        background-color: #e9e9e9;
+      }
     }
   }
 }
