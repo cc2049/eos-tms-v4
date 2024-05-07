@@ -6,7 +6,7 @@
 -->
 <template>
     <div class="advancedQuery">
-        <div class="disflex advancedQuery-alone">
+        <div class="disflex advancedQuery-alone mb20">
             <div class="advancedQuery-title">我的方案</div>
             <div class="currentRadio" :class="chooseRadioVal == item ? 'active' : ''" v-for="(item, index) in radioList"
                 :key="index" @click="clickRadio(item, index)"> {{ item }}</div>
@@ -17,7 +17,7 @@
                 <el-row :gutter="20">
                     <el-col :xs="16" :sm="18">
                         <FiltrationCom :filterConfig="filterConfig" :filterArr="filterArr"
-                            :defaultFilterArr="defaultFilterArr"/>
+                            :defaultFilterArr="defaultFilterArr"  @changeFilter="changeFilter" />
 
                         <!-- <el-row :gutter="10">
                             <el-col :xs="12" :sm="8">
@@ -65,21 +65,15 @@
                                     <el-button @click="visible = false" size="mini">取消</el-button>
                                     <el-button type="primary" @click="visible = false" size="mini">确定</el-button>
                                 </div>
-
-
                             </el-popover>
-                            <el-button type="primary" link>
+                            <div class="ml10 mr10 btnStyle">保存</div>
+                            <div class="btnStyle">重置</div>
+                            <!-- <el-button type="primary" link>
                                 保存
                             </el-button>
                             <el-button type="primary" link>
                                 重置
-                            </el-button>
-                            <!-- <el-icon color="" :size="20">
-                                <Icon icon="codicon:fold-down"></Icon>
-                            </el-icon>
-                            <el-icon color="" :size="20">
-                                <Icon icon="codicon:fold-up"></Icon>
-                            </el-icon> -->
+                            </el-button> -->
                         </div>
                     </el-col>
                 </el-row>
@@ -110,45 +104,45 @@ const filterConfig = ref({
             value: '1',
             label: '单据编号',
             CONTROLS: '',
-            FIELD:'danjubianhao'
+            FIELD: 'danjubianhao'
         },
         {
             value: '2',
             label: '供应商',
             CONTROLS: 'ExSelectModal',
-            FIELD:'gongyingshang'
+            FIELD: 'gongyingshang'
         },
         {
             value: '3',
             label: '物料编码',
             CONTROLS: '',
-            FIELD:'wuliaobianma',
+            FIELD: 'wuliaobianma',
             CONTROLS: 'ExSelect',
         },
         {
             value: '4',
             label: '日期',
             CONTROLS: 'ExDate',
-            FIELD:'riqi'
+            FIELD: 'riqi'
 
         },
         {
             value: '5',
             label: '日期区间',
             CONTROLS: 'ExDateRange',
-            FIELD:'riqiqujian'
+            FIELD: 'riqiqujian'
         },
         {
             value: '6',
             label: '日期时间选择',
             CONTROLS: 'ExDateTime',
-            FIELD:'riqiqujianxuanze'
+            FIELD: 'riqiqujianxuanze'
         },
         {
             value: '7',
             label: '日期时间区间',
             CONTROLS: 'ExDateTimeRange',
-            FIELD:'riqishijianqujian'
+            FIELD: 'riqishijianqujian'
         },
 
     ],
@@ -166,7 +160,9 @@ onMounted(() => {
     filterArr.value = JSON.parse(JSON.stringify(defaultFilterArr.value))
 })
 
-
+const changeFilter=(val,item,index) => {
+    filterArr.value[index] = JSON.parse(JSON.stringify(val))
+}
 
 const visible = ref(false)
 const changeCondition = (e) => {
@@ -204,7 +200,7 @@ const delFilterArr = (index) => {
     }
 
     &-alone {
-        margin-bottom: 20px;
+        // margin-bottom: 10px;
 
         :deep(.el-button) {
             height: 26px !important;
@@ -236,7 +232,11 @@ const delFilterArr = (index) => {
         }
     }
 
-
+    .btnStyle {
+        color: $--color-primary;
+        cursor: pointer;
+        font-size: 14px;
+    }
 
 }
 
