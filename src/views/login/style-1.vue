@@ -12,7 +12,7 @@
     <el-button @click="getUserToken">登录获取token</el-button>
     <el-button @click="getUserMenu">获取菜单</el-button>
     <el-button @click="getUserinfo">获取用户信息</el-button> -->
-    <div class="login-loginForm">
+    <div class="login-loginForm" :style="styleType == 2?'right:250px':''">
       <LoginForm @clickForgetPassword="forgetPassword" :LoginConfigs @clickShowClause="showClause" />
     </div>
 
@@ -55,9 +55,12 @@ const props = defineProps({
 
 import { axiosGet, getDataByType } from "#/common";
 const LoginConfigs = computed(() => props.LoginConfig)
+console.log("🚀 ~ LoginConfigs:", LoginConfigs)
 
 const imgBaseUrl = computed(() => settingsStore.globalConfig.imgBaseUrl+'/');
 const backImg = computed(() => imgBaseUrl.value + LoginConfigs.value.banner)
+const styleType = computed(() => LoginConfigs.value.style)
+console.log("🚀 ~ styleType:", styleType)
 
 
 const forgetPasswordModel = ref(false)
