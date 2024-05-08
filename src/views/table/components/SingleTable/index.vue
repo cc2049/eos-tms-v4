@@ -2,7 +2,7 @@
  * @Author: cc2049
  * @Date: 2024-04-28 13:10:44
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-05-06 09:21:35
+ * @LastEditTime: 2024-05-08 10:13:11
  * @Description: 简介
 -->
 <template>
@@ -32,9 +32,20 @@
 import Vxtable from "@/components/Vxtable";
 import TopButton from "@/components/TopButton";
 import AdvanceQuery from "@/components/AdvancedQuery/index";
-import { axiosGet } from "#/common";
 
-const menuConfig = inject("menuConfig");
+import useTableConifg from "@/hooks/useTableConifg";
+
+import { axiosGet } from "#/common";
+import { watch } from "vue";
+
+const props = defineProps({
+  menuID: {
+    type: [String, Object],
+    default: "",
+  },
+});
+
+const menuConfig = ref(null);
 const tableData = ref([]);
 
 const currentData = ref([]);
@@ -144,7 +155,7 @@ function tableChange(data) {
 function handlePageChange({ currentPage, pageSize }) {
   pageInfo.currentPage = currentPage;
   pageInfo.pageSize = pageSize;
-  queryJSON.value.PAGESIZE = pageSize
+  queryJSON.value.PAGESIZE = pageSize;
   getTableData();
 }
 
@@ -167,22 +178,29 @@ const getTableData = () => {
 const queryURL = ref(null);
 const queryJSON = ref(null);
 
+const { allConfig, getConfig } = useTableConifg(props.menuID);
+
 watch(
-  () => menuConfig.value,
+  () => props.menuID,
   (value) => {
     if (value) {
-      queryURL.value = menuConfig.value.pageConfig.queryUrl;
-      queryJSON.value = menuConfig.value.pageConfig.queryJson;
-      let getConfigPager = menuConfig.value.tableCFG.pagerConfig;
-      pageInfo.pageSize = getConfigPager.pageSize
-      queryJSON.value.PAGESIZE = getConfigPager.pageSize || pageInfo.pageSize;
-      getTableData();
+      getConfig().then((res) => {
+        menuConfig.value = res;
+        queryURL.value = menuConfig.value.pageConfig.queryUrl;
+        queryJSON.value = menuConfig.value.pageConfig.queryJson;
+        let getConfigPager = menuConfig.value.tableCFG.pagerConfig;
+        pageInfo.pageSize = getConfigPager.pageSize || 10;
+        queryJSON.value.PAGESIZE = getConfigPager.pageSize || pageInfo.pageSize;
+        getTableData();
+      });
     }
   },
   {
     immediate: true,
   }
 );
+
+
 
 watch(
   () => AdvancedQuery.value,

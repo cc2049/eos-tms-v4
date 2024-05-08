@@ -2,14 +2,13 @@
  * @Author: cc2049
  * @Date: 2024-04-23 11:33:59
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-05-06 12:08:41
+ * @LastEditTime: 2024-05-08 09:50:40
  * @Description: 简介
 -->
 <template>
 
   <div class="page-container">
-    <SingleTable ref="listTableRef" :config="allConfig"  />
-
+    <SingleTable ref="listTableRef" :menuID="menuParams"   />
   </div>
 
 </template>
@@ -46,8 +45,6 @@ const { allConfig, getConfig } = useTableConifg(menuParams.value);
 const menuConfig = ref(null);
 const showPage = ref(false);
 
-const tableData = ref([]);
-
 getConfig().then((res) => {
   menuConfig.value = res;
   showPage.value = true;
@@ -59,8 +56,6 @@ getConfig().then((res) => {
 
 provide("menuConfig", menuConfig);
 provide("menuID", menuParams);
-provide("tableData", tableData);
-
 
 onMounted(() => {});
 </script>
