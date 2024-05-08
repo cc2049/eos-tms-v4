@@ -9,8 +9,8 @@
         <el-row :gutter="10">
             <el-col :span="6" class="firstSelect">
                 <el-select v-model="selectvalue" placeholder="请选择" style="width: 100%" :size="commonSize" @change="changeFilter">
-                    <el-option v-for="item in filterSeceletArrs" :key="item.value" :label="item.label"
-                        :value="item.value" />
+                    <el-option v-for="item in filterSeceletArrs" :key="item.BILLNO" :label="item.LABEL"
+                        :value="item.BILLNO" />
                 </el-select>
             </el-col>
             <el-col :span="6">
@@ -161,7 +161,7 @@ const changeFilter=(e) => {
 }
 
 watch(() => props.filterVal, value => {
-    selectvalue.value = value.value
+    selectvalue.value = value.BILLNO
 }, { immediate: true })
 
 

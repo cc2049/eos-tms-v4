@@ -7,7 +7,7 @@
 <template>
     <div class="filtrationCom">
         <el-row :gutter="20">
-            <el-col :xs="24" :sm="12" :xl="8" v-for="(item, index) in filterArr" :key="index">
+            <el-col :xs="24" :sm="12" :xl="8" v-for="(item, index) in filterArr" :key="index" class="mb10">
                 <FilterForm :filterConfig="filterConfig" :filterVal="item" v-model:formData="queryFormData"
                     @changeFilter="val=>changeFilter(val,item,index)" />
             </el-col>
