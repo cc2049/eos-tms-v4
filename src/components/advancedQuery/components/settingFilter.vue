@@ -19,8 +19,8 @@
         <el-row :gutter="20">
             <el-col :span="6">
                 <el-select v-model="conditionValue" placeholder="请输入条件" :size="commonSize" @change="changeCondition">
-                    <el-option v-for="item in filterConfig.filterSeceletArr" :key="item.value" :label="item.label"
-                        :value="item.value" />
+                    <el-option v-for="item in filterConfig.filterSeceletArr" :key="item.BILLNO" :label="item.LABEL"
+                        :value="item.BILLNO" />
                 </el-select>
             </el-col>
             <el-col :span="6">

@@ -11,13 +11,13 @@
             <div class="currentRadio" :class="chooseRadioVal == item ? 'active' : ''" v-for="(item, index) in radioList"
                 :key="index" @click="clickRadio(item, index)"> {{ item }}</div>
         </div>
-        <div class="disflex advancedQuery-alone mb10">
+        <div class="disflex advancedQuery-alone ">
             <div class="advancedQuery-title">快捷过滤</div>
             <div style="width: calc(100% - 100px)">
                 <el-row :gutter="20">
                     <el-col :xs="16" :sm="18">
                         <FiltrationCom :filterConfig="filterConfig" :filterArr="filterArr"
-                            :defaultFilterArr="defaultFilterArr"  @changeFilter="changeFilter" />
+                            :defaultFilterArr="defaultFilterArr" @changeFilter="changeFilter" />
 
                         <!-- <el-row :gutter="10">
                             <el-col :xs="12" :sm="8">
@@ -86,6 +86,15 @@
 import FiltrationCom from "./components/filtrationCom"
 import SettingFilter from "./components/settingFilter"
 
+const props = defineProps({
+    queryConfig: {
+        type: Array,
+        default: [],
+    },
+});
+// const showFormConfig = computed(() => {
+//   return props.queryConfig.filter((el) => el.ISSHOW != 0);
+// });
 
 // 我的方案
 const chooseRadioVal = ref('默认方案')
@@ -100,67 +109,81 @@ const value = ref(null)
 const filterConfig = ref({
     // filterSeceletArr: ['单据编号', '供应商', '物料编码'],
     filterSeceletArr: [
-        {
-            value: '1',
-            label: '单据编号',
-            CONTROLS: '',
-            FIELD: 'danjubianhao'
-        },
-        {
-            value: '2',
-            label: '供应商',
-            CONTROLS: 'ExSelectModal',
-            FIELD: 'gongyingshang'
-        },
-        {
-            value: '3',
-            label: '物料编码',
-            CONTROLS: '',
-            FIELD: 'wuliaobianma',
-            CONTROLS: 'ExSelect',
-        },
-        {
-            value: '4',
-            label: '日期',
-            CONTROLS: 'ExDate',
-            FIELD: 'riqi'
+        // {
+        //     value: '1',
+        //     label: '单据编号',
+        //     CONTROLS: '',
+        //     FIELD: 'danjubianhao'
+        // },
+        // {
+        //     value: '2',
+        //     label: '供应商',
+        //     CONTROLS: 'ExSelectModal',
+        //     FIELD: 'gongyingshang'
+        // },
+        // {
+        //     value: '3',
+        //     label: '物料编码',
+        //     CONTROLS: '',
+        //     FIELD: 'wuliaobianma',
+        //     CONTROLS: 'ExSelect',
+        // },
+        // {
+        //     value: '4',
+        //     label: '日期',
+        //     CONTROLS: 'ExDate',
+        //     FIELD: 'riqi'
 
-        },
-        {
-            value: '5',
-            label: '日期区间',
-            CONTROLS: 'ExDateRange',
-            FIELD: 'riqiqujian'
-        },
-        {
-            value: '6',
-            label: '日期时间选择',
-            CONTROLS: 'ExDateTime',
-            FIELD: 'riqiqujianxuanze'
-        },
-        {
-            value: '7',
-            label: '日期时间区间',
-            CONTROLS: 'ExDateTimeRange',
-            FIELD: 'riqishijianqujian'
-        },
+        // },
+        // {
+        //     value: '5',
+        //     label: '日期区间',
+        //     CONTROLS: 'ExDateRange',
+        //     FIELD: 'riqiqujian'
+        // },
+        // {
+        //     value: '6',
+        //     label: '日期时间选择',
+        //     CONTROLS: 'ExDateTime',
+        //     FIELD: 'riqiqujianxuanze'
+        // },
+        // {
+        //     value: '7',
+        //     label: '日期时间区间',
+        //     CONTROLS: 'ExDateTimeRange',
+        //     FIELD: 'riqishijianqujian'
+        // },
 
     ],
     filterSeceletArr1: ['包含', '等于', '大于'],
 })
 
+
+
+
+
 const filterArr = ref([])
-const defaultFilterArr = ref([{
-    value: '1',
-    label: '单据编号',
-    type: ''
-},])
+const defaultFilterArr = ref([
+    //     {
+    //     value: '1',
+    //     label: '单据编号',
+    //     type: ''
+    // },
+])
+
+watch(() => props.queryConfig, value => {
+    filterConfig.value.filterSeceletArr = props.queryConfig.filter((el) => el.ISSHOW != 0)
+    defaultFilterArr.value = JSON.parse(JSON.stringify(filterConfig.value.filterSeceletArr))
+    filterArr.value = JSON.parse(JSON.stringify(defaultFilterArr.value))
+
+}, { immediate: true })
+
 
 onMounted(() => {
-    filterArr.value = JSON.parse(JSON.stringify(defaultFilterArr.value))
+    // filterArr.value = JSON.parse(JSON.stringify(defaultFilterArr.value))
 })
 
-const changeFilter=(val,item,index) => {
+const changeFilter = (val, item, index) => {
     filterArr.value[index] = JSON.parse(JSON.stringify(val))
 }
 
@@ -206,8 +229,6 @@ const delFilterArr = (index) => {
             height: 26px !important;
             line-height: 26px;
         }
-
-
 
 
     }
