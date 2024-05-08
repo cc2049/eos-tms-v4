@@ -8,7 +8,8 @@
     <div class="filterForm">
         <el-row :gutter="10">
             <el-col :span="6" class="firstSelect">
-                <el-select v-model="selectvalue" placeholder="请选择" style="width: 100%" :size="commonSize" @change="changeFilter">
+                <el-select v-model="selectvalue" placeholder="请选择" style="width: 100%" :size="commonSize"
+                    @change="changeFilter">
                     <el-option v-for="item in filterSeceletArrs" :key="item.BILLNO" :label="item.LABEL"
                         :value="item.BILLNO" />
                 </el-select>
@@ -47,26 +48,42 @@
                 </template>
                 <template v-else-if="currentConfig.CONTROLS == 'ExSelectModal'">
                     <el-popover placement="bottom" :width="600" trigger="click" :visible="inputVisible" :popper-style="{
-                        padding:0
-                    }">
+            padding: 0
+        }">
                         <template #reference>
                             <el-input v-model="formData[currentConfig.FIELD]" style="width: 100%" placeholder="请输入"
-                                @input="ExSelectModalInput" />
+                                @input="val => ExSelectModalInput(val, currentConfig)" />
                         </template>
-                        <div class="disflex ExSelectModal-header" v-for="(item, index) in tableData" :key="index">
+
+                        <div class="disflex ExSelectModal-header">
                             <div class="ExSelectModal-left">
-                                <div v-if="index == 0">代码</div>
-                                <el-input v-else-if="index == 1" v-model="leftInputVal" style="width: 100%"
-                                    placeholder="过滤条件" />
-                                <div v-else>{{ item.label }}</div>
+                                <div>代码</div>
+                                <el-input style="width: 100%" placeholder="过滤条件" />
                             </div>
                             <div class="ExSelectModal-right">
-                                <div v-if="index == 0">名称</div>
-                                <el-input v-else-if="index == 1" v-model="rightInputVal" style="width: 100%"
-                                    placeholder="过滤条件" />
-                                <div v-else>{{ item.label }}</div>
+                                <div>名称</div>
+                                <el-input style="width: 100%" placeholder="过滤条件" />
                             </div>
                         </div>
+                        <ul v-infinite-scroll="loadExSelectModalTable" class="infinite-list"
+                            style="overflow: auto;height: 200px;">
+                            <li class="disflex ExSelectModal-header" v-for="(item, index) in tableData" :key="index">
+                                <div class="ExSelectModal-left">
+                                    <div>{{ item.BILLNO }}</div>
+                                </div>
+                                <div class="ExSelectModal-right">
+                                    <div>{{ item.VNAME }}</div>
+                                </div>
+                            </li>
+                        </ul>
+                        <!-- <div class="disflex ExSelectModal-header" v-for="(item, index) in tableData" :key="index">
+                            <div class="ExSelectModal-left">
+                                <div>{{ item.BILLNO }}</div>
+                            </div>
+                            <div class="ExSelectModal-right">
+                                <div>{{ item.VNAME }}</div>
+                            </div>
+                        </div> -->
                         <div class="disflex justify-sb ExSelectModal-footer">
                             <div>
                                 <el-select v-model="selectvalue2" placeholder="" style="width: 100px" class="mr10"
@@ -121,7 +138,9 @@
 
 <script setup>
 import { watch } from 'vue';
-const emit = defineEmits(["update:formData","changeFilter"]);
+import { getPageConfig, getTableData } from "@/api/system/page";
+
+const emit = defineEmits(["update:formData", "changeFilter"]);
 
 const props = defineProps({
     filterConfig: {
@@ -154,7 +173,7 @@ const rightInputVal = ref(null)
 
 const tableData = ref([{}, {}, { label: '222' }])
 
-const changeFilter=(e) => {
+const changeFilter = (e) => {
     let newArr = filterSeceletArrs.value.filter(ele => ele.value == e)
     emit('changeFilter', newArr[0] || {})
 
@@ -172,13 +191,187 @@ const mapEnumData = () => {
     EnumData.value = { ...rowData.EnumData, ...rowData._getDICT };
 };
 
+const modalConfig = ref({})
 const inputVisible = ref(false)
-const ExSelectModalInput = (e) => {
+const ExSelectModalInput = (e, config) => {
     if (e) {
+        tableData.value = []
+
+        let { LABEL, SLOTCFG, OTHER } = config;
+        if (SLOTCFG == "") return console.error("Error: 配置错误");
+        let ids = SLOTCFG.split(",");
+        if (ids.length < 2) return console.error("Error: 配置错误");
+        let { url, data, importantData } = ParseOtherConfig(OTHER);
+        console.log("🚀 ~ ExSelectModalInput ~ data, importantData:", url, data, importantData)
+
+        let MODULEID = ids[0]
+        let PAGEID = ids[1]
+        let portData = {
+            ...data,
+            MODULEID,
+            PAGEID
+        }
+
+        modalConfig.value = {
+            // PAGEID,
+            // MODULEID,
+            portData,
+            url
+        }
+
+        queryData(url, portData)
+
+        // getTableData(url, portData).then(res => {
+        //     console.log("🚀 ~ getTableData ~ res:", res)
+        //     // SelectModalList.value = res.RECORDS
+        //     const { RECORDS, SIZE, TOTAL, CURRENT, PAGES } = res.RESULT
+        //     tableData.value = RECORDS
+        // }).finally(() => {
+        //     // let index = DropdownRefIndex.value.findIndex(el => el == FIELD)
+        //     // DropdownRef?.value[index]?.togglePanel()
+        // })
+
+
+
+        // getPageConfig({ MODULEID, PAGEID }).then(({ RESULT }) => {
+        //     console.log("🚀 ~ getPageConfig ~ RESULT:", RESULT)
+        //     // SelectTableConfig.value = RESULT;
+        //     // ExSelectModalConfig.tableColumns = RESULT.COLUMNS.filter(el => el.ISSHOW == "1");
+        //     // getSelectTableData(config, rowIndex);
+        // }).catch((err) => {
+
+        // });
+
+
+
+
+
+
+
+
         inputVisible.value = true
     }
 }
+const PAGENUM = ref(0)
+const loadExSelectModalTable = () => {
 
+    let portData = {
+        ...modalConfig.value.portData,
+        PAGENUM: PAGENUM.value++
+    }
+    queryData(modalConfig.value.url, portData)
+}
+
+const queryData = (url, portData) => {
+    getTableData(url, portData).then(res => {
+        console.log("🚀 ~ getTableData ~ res:", res)
+        // SelectModalList.value = res.RECORDS
+        const { RECORDS, SIZE, TOTAL, CURRENT, PAGES } = res.RESULT
+        if (tableData.value.length == 0) {
+            tableData.value = RECORDS
+        } else {
+            tableData.value.push(...RECORDS)
+
+        }
+    }).finally(() => {
+        // let index = DropdownRefIndex.value.findIndex(el => el == FIELD)
+        // DropdownRef?.value[index]?.togglePanel()
+    })
+}
+
+const SelectValueTo = ref([]);
+
+// 解析 Other 配置
+function ParseOtherConfig(config) {
+    if (!config) {
+        SelectValueTo.value = []
+        return { url: "", data: {}, importantData: {} };
+    }
+    try {
+        let newConfig = JSON.parse(config)[0]
+        if (newConfig.setvalue && JSON.stringify(newConfig.setvalue) != '{}') {
+            let arr = []
+            for (const key in newConfig.setvalue) {
+                arr.push({ k: key, v: newConfig.setvalue[key] })
+            }
+            SelectValueTo.value = arr
+        }
+        return { url: newConfig.url, data: newConfig?.params, importantData: newConfig?.importantData }
+    } catch (error) {
+        if (config.indexOf("/") == '0') {
+            let paramsArr = config.split("?"),
+                url = "",
+                setQueryParam = {},
+                queryJson = {},
+                setImportantParam = {},
+                importantData = {};
+
+
+            console.log(paramsArr)
+
+            if (paramsArr.length == 0) {
+                url = config;
+                SelectValueTo.value = [];
+            } else if (paramsArr.length > 0) {
+                url = paramsArr[0];
+                if (paramsArr.length > 1) {
+                    let { obj, importantObj } = GetUrlParams("a?" + paramsArr[1], "obj");
+                    queryJson = obj
+                    importantData = importantObj
+                }
+                if (paramsArr.length > 2) {
+                    let { obj, importantObj } = GetUrlParams("a?" + paramsArr[2], "obj");
+                    setQueryParam = obj
+                    setImportantParam = importantObj
+                    queryJson = { ...queryJson, ...ConvertData(setQueryParam) }
+                    importantData = { ...importantData, ...ConvertData(setImportantParam) }
+                }
+                paramsArr[3] ? SelectValueTo.value = GetUrlParams("a?" + paramsArr[3], "arr") : []
+            }
+            return { url, data: queryJson, importantData };
+        } else {
+            console.error("配置解析错误!", error);
+        }
+    }
+}
+/** 转换数据 */
+function ConvertData(obj) {
+    let data = {}
+    for (let ii in obj) {
+        let valueKey = obj[ii]
+        if (valueKey.includes("M$")) {
+            valueKey = calcHasMSKey(valueKey)
+            data[ii] = props.mainFormData[valueKey] || "";
+        } else if (valueKey.includes("S$")) {
+            valueKey = calcHasMSKey(valueKey)
+            data[ii] = props.formData[valueKey] || "";
+        } else {
+            data[ii] = props.formData[valueKey] || "";
+        }
+    }
+    return data
+}
+
+// 获取url 后面的参数
+function GetUrlParams(url, backType) {
+    let reg = /([^&?=]+)=([^&?=]+)/g,
+        obj = {},
+        importantObj = {},
+        arr = [];
+    url.replace(reg, function () {
+        if (arguments[1].includes("!")) {
+            let key = arguments[1].substr(1); //删除第一个字符
+            importantObj[key] = arguments[2];
+        } else {
+            obj[arguments[1]] = arguments[2];
+        }
+        let objs = {};
+        objs.k = arguments[1];
+        objs.v = arguments[2];
+        arr.push(objs);
+    });
+    return backType == "obj" ? { obj, importantObj } : arr;
+}
 
 
 </script>
@@ -190,6 +383,7 @@ const ExSelectModalInput = (e) => {
     &-header {
         padding: 6px;
     }
+
     &-header:first-child {
         background-color: #eff3f7;
         padding: 10px 15px;
@@ -208,9 +402,7 @@ const ExSelectModalInput = (e) => {
     }
 }
 
-.ExSelectModalPopver{
-
-}
+.ExSelectModalPopver {}
 
 
 :deep(.el-select) {
@@ -229,10 +421,11 @@ const ExSelectModalInput = (e) => {
 }
 
 
-:deep(.el-popover){
+:deep(.el-popover) {
     padding: 0 !important;
 }
-:deep(.el-popper.is-light){
+
+:deep(.el-popper.is-light) {
     padding: 0 !important;
 }
 </style>
