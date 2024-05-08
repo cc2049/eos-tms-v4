@@ -7,8 +7,9 @@
 <template>
     <div class="filtrationCom">
         <el-row :gutter="20">
-            <el-col :xs="24" :sm="12" :xl="8" v-for="(item, index) in filterArr" :key="index" class="mb10">
-                <FilterForm :filterConfig="filterConfig" :filterVal="item" v-model:formData="queryFormData"  />
+            <el-col :xs="24" :sm="12" :xl="8" v-for="(item, index) in filterArr" :key="index">
+                <FilterForm :filterConfig="filterConfig" :filterVal="item" v-model:formData="queryFormData"
+                    @changeFilter="val=>changeFilter(val,item,index)" />
             </el-col>
         </el-row>
     </div>
@@ -18,6 +19,7 @@
 import FilterForm from "./filterForm"
 import { getFormValue, GetDateAfter, evilFn, formatDate, deepClone } from "@/utils";
 
+const emit = defineEmits(["changeFilter"]);
 
 
 const props = defineProps({
@@ -29,12 +31,18 @@ const props = defineProps({
         type: Array,
         default: [],
     },
-  
+
 });
-const queryFormData=ref({})
+const queryFormData = ref({})
+
+
 onMounted(() => {
     queryFormData.value = getFormValue(props.filterConfig.filterSeceletArr)
 })
+
+const changeFilter = (val,item,index) => {
+    emit("changeFilter",val,item,index)
+}
 
 
 </script>

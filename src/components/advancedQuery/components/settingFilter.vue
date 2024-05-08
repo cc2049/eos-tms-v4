@@ -9,7 +9,7 @@
 
         <div v-for="(item, index) in filterArr" :key="index" class="aloneFilter mb10">
             <div class="disflex ">
-                <FilterForm :filterConfig="filterConfig" :filterVal="item"   />
+                <FilterForm :filterConfig="filterConfig" :filterVal="item" />
 
                 <el-icon color="#b9c9fb" :size="20" class="delIcon" @click="delFilterArr(item,index)">
                     <Icon icon="zondicons:minus-solid"></Icon>
