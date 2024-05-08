@@ -2,7 +2,7 @@
  * @Author: cc2049
  * @Date: 2024-04-25 17:34:36
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-04-29 18:18:21
+ * @LastEditTime: 2024-05-08 15:05:29
  * @Description: 获取动态配置
  */
 
@@ -25,6 +25,8 @@ const useTableConifg = (menu) => {
         initButton: [],
         queryUrl: null,
         queryJson:{},
+        queryConfig: null,
+
         hasSubTable: false,
         activeBtn: {},
         pageShow: true,
@@ -70,7 +72,6 @@ const useTableConifg = (menu) => {
         EtableRules: {},
         cellHeight: 40, // 单元格的行高
         isHeaderFilter: false, // 是否启用头部过滤
-        headerConfig: [], // 配置的查询条件
         queryJson: {}, // 查询条件
         pagerConfig: {
             pageSize: 10,
@@ -113,6 +114,7 @@ const useTableConifg = (menu) => {
         }
         // 设置页面配置
         pageConfig.initButton = BUTTON;
+        pageConfig.queryConfig = QUERY;
         pageConfig.isSonTable = ISSONTABLE == 1;
         pageConfig.pageShow = VDEF1 == "1"; // 控制列表是否展示分页功能
         pageConfig.hasCustomQuery = VDEF3 == 1;
@@ -129,7 +131,6 @@ const useTableConifg = (menu) => {
         // 设置表格配置
         tableCFG.autoWidth = ISADAPTION;
         tableCFG.isHeaderFilter = ISTBSELECT == 1;
-        tableCFG.headerConfig = QUERY;
         tableCFG.tableStyle = TABLESTYLE || 0;
         tableCFG.defaultStyle = MODALTYPE || 0;
        

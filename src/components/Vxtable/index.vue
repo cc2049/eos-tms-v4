@@ -1,9 +1,10 @@
 <template>
   <div class="val_table bg-white">
     <!-- checkStrictly:  !tableCFG.treeID?true:false  控制多选框是否级联 -->
-<!-- @header-cell-click="headerCellClickEvent" @header-cell-dblclick="headerCellClickEvent" -->
+    <!-- @header-cell-click="headerCellClickEvent" @header-cell-dblclick="headerCellClickEvent" -->
 
-    <vxe-table resizable round show-overflow ref="xTable" :edit-rules="validRules" size="mini" highlight-hover-row header-row-class-name="bg-blue" width="100%" :show-footer="tableCFG.mergeCFG && tableCFG.mergeCFG.length"  border :loading="tableCFG.loading" :height=" showMoreQuery? tableCFG.height-50 : tableCFG.height  " class="mytable-scrollbar mytable-footer" :column-config="{ isCurrent: false, isHover: true }" :row-config="{
+    <vxe-table resizable round show-overflow ref="xTable" :edit-rules="validRules" size="mini" highlight-hover-row header-row-class-name="bg-blue" width="100%" :show-footer="tableCFG.mergeCFG && tableCFG.mergeCFG.length" border :loading="tableCFG.loading"
+      :height=" showMoreQuery? tableCFG.height-50 : tableCFG.height  " class="mytable-scrollbar mytable-footer" :column-config="{ isCurrent: false, isHover: true }" :row-config="{
         isCurrent: true,
         isHover: true,
         height:  34 ,
@@ -15,27 +16,32 @@
         !tableCFG.SelectType || tableCFG.SelectType != 'radio'
           ? { highlight: true   }
           : null
-      " :sort-config="{ showIcon: false }" :footer-method="footerMethod" :expand-config="{ labelField: tableCFG.expandID }" :tree-config="{transform: tableCFG.treeID?.transform ==1 ? true :false , rowField: tableCFG.treeID?.rowField , parentField: tableCFG.treeID?.parentField }" :row-class-name="rowClassName"  @toggle-row-expand="toggleExpandChangeEvent" @sort-change="sortChange" @radio-change="radioChangeEvent" @checkbox-change="checkboxChange" @checkbox-all="checkboxChange" @custom="toolbarCustomEvent" @cell-click="rowClick" @cell-dblclick="
+      " :sort-config="{ showIcon: false }" :footer-method="footerMethod" :expand-config="{ labelField: tableCFG.expandID }" :tree-config="{transform: tableCFG.treeID?.transform ==1 ? true :false , rowField: tableCFG.treeID?.rowField , parentField: tableCFG.treeID?.parentField }"
+      :row-class-name="rowClassName" @toggle-row-expand="toggleExpandChangeEvent" @sort-change="sortChange" @radio-change="radioChangeEvent" @checkbox-change="checkboxChange" @checkbox-all="checkboxChange" @custom="toolbarCustomEvent" @cell-click="rowClick" @cell-dblclick="
         (e) => {
           openDetail(e.row);
         }
       " :table-props="{borderColor:'red' }">
-      <vxe-column field="name" title=" " width="40" type="seq" align="center" v-if="tableCFG.hasSeq" fixed="left">
-      </vxe-column>
 
-      <vxe-column width="50" field="drag" align="center" v-if="tableCFG.hasDragRow" fixed="left">
+      <!-- <vxe-column width="50" field="drag" align="center" v-if="tableCFG.hasDragRow" fixed="left">
         <template #default>
           <div class="drag-btn">
             <i class="vxe-icon-sort"></i>
           </div>
         </template>
-      </vxe-column>
-
-      <vxe-column v-if="tableCFG?.SelectType == 'checkbox'" type="checkbox" align="center" width="40" fixed="left"></vxe-column>
-
+      </vxe-column> -->
+    
       <template v-for="(config, indexC) in tableCFG.tableColumns" :key="indexC">
-        <template v-if="config.VTYPE == 'radio'">
-          <vxe-column type="radio" align="center" width="40"></vxe-column>
+
+        <vxe-column field="name" title=" " width="40" type="seq" align="center" v-if="config.VTYPE == 'seq'" fixed="left">
+        </vxe-column>
+
+        <template v-else-if="config.VTYPE == 'radio'" >
+          <vxe-column type="radio" align="center" width="40" fixed="left"></vxe-column>
+        </template>
+
+        <template v-else-if="config.VTYPE == 'checkbox'">
+          <vxe-column type="checkbox" align="center" width="40" fixed="left"></vxe-column>
         </template>
 
         <template v-else-if="config.VTYPE == 'expand'">
@@ -210,14 +216,14 @@
                   {{ setArrToDictLabel(config.OTHER, row[config.FIELD]) }}
                 </span> -->
 
-                 <span>
+                <span>
                   {{ setArrToDictLabel(config.OTHER, row[config.FIELD]) }}
                 </span>
               </template>
 
               <template v-else-if="config.VTYPE == 'ExSelectIcon'">
                 <img :src="  getNumIcon( setArrToDictLabel(config.OTHER, row[config.FIELD]) )" alt="" srcset="" class="exnum-icon">
-              </template>  
+              </template>
               <template v-else-if="
                 config.CONTROLS == 'ExSelectSearch' ||
                 config.CONTROLS == 'ExSelectMutiple' ||
@@ -433,11 +439,7 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
-  // 表头赛选时控件配置
-  headerConfig: {
-    type: Array,
-    default: [],
-  },
+ 
   // queryJson: {
   //   type: Object,
   //   default: {},
@@ -514,7 +516,7 @@ const setTableColShow = computed((config) => {
 const sortCFG = reactive({
   sortBy: "",
   sort: "",
-  activeID:""
+  activeID: "",
 });
 
 function refreshColumn() {
@@ -891,10 +893,9 @@ function sortChange({ property, order }) {
 }
 
 // 获取枚举的图标
-function getNumIcon(url){
-  return proxy.getAssetsFile(url)
+function getNumIcon(url) {
+  return proxy.getAssetsFile(url);
 }
-
 
 // 自定义服务端排序
 function headerCellClickEvent(column) {
@@ -923,12 +924,11 @@ function headerCellClickEvent(column) {
   }
 }
 
-
 // 表头的右键
 
-function rightClickEvent(data){
-  if(data.type=='openRight'){
-    sortCFG.activeID = data.column.field
+function rightClickEvent(data) {
+  if (data.type == "openRight") {
+    sortCFG.activeID = data.column.field;
   }
 }
 
@@ -1481,7 +1481,7 @@ defineExpose({
 :deep(.vxe-cell) {
   margin-top: -2px;
   color: #313338;
-  font-family: 'Microsoft YaHei' ;
+  font-family: "Microsoft YaHei";
   font-size: 13px;
 }
 

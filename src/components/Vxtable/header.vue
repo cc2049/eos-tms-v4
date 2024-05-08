@@ -10,7 +10,7 @@
   <div class="custom-head" @contextmenu.prevent="fnResourcesRightClick($event, column)">
 
     <span class="font-size-12 custom-head-title" @click="handleSort(column)">
-      {{ column.title || '' }}
+      {{ column.title || '' }} 
       <el-icon :size="20" class="sort-icon" v-if=" column.field == sortCFG.sortBy ">
         <CaretBottom v-if=" sortCFG.sort == 'desc' " />
         <CaretTop v-else />

@@ -2,7 +2,7 @@
  * @Author: cc2049
  * @Date: 2024-04-26 14:17:26
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-04-29 18:13:32
+ * @LastEditTime: 2024-05-08 11:46:14
  * @Description: 简介
  * params: COLUMNS 列配置
  * params: isHeaderFilter 是否启用列头筛选
@@ -104,15 +104,15 @@ export const resetColConfig = (COLUMNS, isHeaderFilter, QUERY) => {
       TabColFilterCfg.length ? (el.filterCfg = TabColFilterCfg[0]) : "";
     }
 
-    if (
-      el.ISSHOW == 1 &&
-      el.VTYPE != "seq" &&
-      el.VTYPE != "checkbox" &&
-      el.CONTROLS != "ExTableTools" &&
-      el.SELECTEDFLAG == 1
-    ) {
-      tableCFG.showColumns.push(el);
-    }
+    // if (
+    //   el.ISSHOW == 1 &&
+    //   el.VTYPE != "seq" &&
+    //   el.VTYPE != "checkbox" &&
+    //   el.CONTROLS != "ExTableTools" &&
+    //   el.SELECTEDFLAG == 1
+    // ) {
+    //   tableCFG.showColumns.push(el);
+    // }
 
     tableCFG.columnWidth = columnWidth
   });

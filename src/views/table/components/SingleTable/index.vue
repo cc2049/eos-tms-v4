@@ -2,7 +2,7 @@
  * @Author: cc2049
  * @Date: 2024-04-28 13:10:44
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-05-08 10:13:11
+ * @LastEditTime: 2024-05-08 15:02:38
  * @Description: 简介
 -->
 <template>
@@ -11,19 +11,26 @@
     <TopButton :topButton="menuConfig?.pageConfig?.topButton" :currentData="currentData" @handelEvent="handelEvent" />
 
     <div class="custom-query" ref="AdvancedQuery">
-      <AdvanceQuery />
+      <AdvanceQuery :queryConfig="menuConfig?.pageConfig?.queryConfig" />
     </div>
 
-    <Vxtable ref="VxtableRef" class="bg-white" :tableCFG="menuConfig?.tableCFG" :tableData="tableData" @change="tableChange" @dragRow="dragTableRow" @queryEvent="queryEvent">
-    </Vxtable>
+    <div class="tree-left">
 
-    <vxe-pager size="mini" class-name="vxe-page-wrap " :page-size="pageInfo.pageSize" :page-sizes="ListPageSize" :current-page="pageInfo.currentPage" :total="pageInfo.totalResult" :layouts="pagerLayouts" @page-change="handlePageChange">
-      <template #left>
-        <div class="check-acount">
-          已选 <span class="waring-color"> {{ currentData.length }} </span> 行
-        </div>
-      </template>
-    </vxe-pager>
+    </div>
+
+    <div class="single-table-wrap">
+
+      <Vxtable ref="VxtableRef" class="bg-white" :tableCFG="menuConfig?.tableCFG" :tableData="tableData" @change="tableChange" @dragRow="dragTableRow" @queryEvent="queryEvent">
+      </Vxtable>
+      <vxe-pager size="mini" class-name="vxe-page-wrap " :page-size="pageInfo.pageSize" :page-sizes="ListPageSize" :current-page="pageInfo.currentPage" :total="pageInfo.totalResult" :layouts="pagerLayouts" @page-change="handlePageChange">
+        <template #left>
+          <div class="check-acount">
+            已选 <span class="waring-color"> {{ currentData.length }} </span> 行
+          </div>
+        </template>
+      </vxe-pager>
+    </div>
+
   </template>
 
 </template>
@@ -72,7 +79,7 @@ const pagerLayouts = ref([
 const ListPageSize = ref([10, 20, 30, 50, 100, 500, 1000]);
 
 const tableHight = computed(() => {
-  return window.innerHeight - 190 - AdvancedQuery.value?.clientHeight;
+  return window.innerHeight - 180 - AdvancedQuery.value?.clientHeight;
 });
 
 // 表格内部的多选事件，顶部筛选排序事件, 超链接事件
@@ -164,7 +171,6 @@ const dragTableRow = ({ row, $rowIndex }) => {
 };
 
 const getTableData = () => {
-  console.log(888, queryJSON.value);
   queryJSON.value.PAGENUM = pageInfo.currentPage;
   queryJSON.value.SORTNAME = pageInfo.sortName;
   queryJSON.value.REVERSE = pageInfo.sortOrder;
@@ -191,6 +197,7 @@ watch(
         let getConfigPager = menuConfig.value.tableCFG.pagerConfig;
         pageInfo.pageSize = getConfigPager.pageSize || 10;
         queryJSON.value.PAGESIZE = getConfigPager.pageSize || pageInfo.pageSize;
+        console.log(888, menuConfig.value);
         getTableData();
       });
     }
@@ -200,12 +207,11 @@ watch(
   }
 );
 
-
-
 watch(
   () => AdvancedQuery.value,
   (value) => {
     if (value) {
+      console.log(AdvancedQuery.value?.clientHeight);
       menuConfig.value.tableCFG.height = tableHight.value;
     }
   },

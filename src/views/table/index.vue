@@ -2,7 +2,7 @@
  * @Author: cc2049
  * @Date: 2024-04-23 11:33:59
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-05-08 09:50:40
+ * @LastEditTime: 2024-05-08 12:02:35
  * @Description: 简介
 -->
 <template>
@@ -17,10 +17,6 @@
 import SingleTable from "./components/SingleTable/index.vue";
 import MultiTable from "./components/MultiTable/index.vue";
 
-import useTableConifg from "@/hooks/useTableConifg";
-
-import { axiosGet } from "#/common";
-
 /*
  * 解析路由获取菜单id
  */
@@ -31,10 +27,7 @@ const menuParams = ref({
   PAGEID: routerParams.ACTION || "PG221010670930",
 });
 
-/*
- * 根据菜单id 去获取页面配置
- */
-const { allConfig, getConfig } = useTableConifg(menuParams.value);
+
 
 // hasTemplate.value = routerParams.ISTEMPLATE == "1";
 // hasTree.value = routerParams.COMP == "VTableZtree";
@@ -42,19 +35,7 @@ const { allConfig, getConfig } = useTableConifg(menuParams.value);
 // pageConfig.pageTitle = routerParams.title;
 // const pageTitle = ref(routerParams.title);
 
-const menuConfig = ref(null);
-const showPage = ref(false);
 
-getConfig().then((res) => {
-  menuConfig.value = res;
-  showPage.value = true;
-
-  
-});
-
-
-
-provide("menuConfig", menuConfig);
 provide("menuID", menuParams);
 
 onMounted(() => {});
