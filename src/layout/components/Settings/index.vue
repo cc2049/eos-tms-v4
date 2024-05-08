@@ -218,7 +218,7 @@ function openSetting() {
 }
 
 const themeLits = reactive([
-  { name: "蓝色", type: "theme-blue", color: "#0C64EB" },
+  { name: "蓝色", type: "theme-blue", color: "#0055ff" },
   { name: "红色", type: "theme-red", color: "#E52d27" },
   { name: "黄色", type: "theme-yellow", color: "#E65C00" },
   { name: "绿色", type: "theme-green", color: "#11998E" },

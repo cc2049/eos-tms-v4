@@ -29,13 +29,6 @@ const menuParams = ref({
 
 
 
-// hasTemplate.value = routerParams.ISTEMPLATE == "1";
-// hasTree.value = routerParams.COMP == "VTableZtree";
-
-// pageConfig.pageTitle = routerParams.title;
-// const pageTitle = ref(routerParams.title);
-
-
 provide("menuID", menuParams);
 
 onMounted(() => {});

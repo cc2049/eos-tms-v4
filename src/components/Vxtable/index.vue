@@ -285,7 +285,7 @@
       </vxe-column>
 
       <template #empty>
-        <el-empty description="没有更多数据了！" :image-size="100" v-if="tableCFG.hasEmpty" />
+        <el-empty  :image="emptyImg" description="很抱歉，暂时没有相关数据~" :image-size="200"  />
       </template>
     </vxe-table>
 
@@ -453,6 +453,9 @@ const clickGrade = (row, config) => {
 };
 
 const xTable = ref(null);
+
+const emptyImg = proxy.getAssetsFile('icon_task_NoData.png')
+
 const settimgProgress = computed((config) => {
   return (config) => {
     try {

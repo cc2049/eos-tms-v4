@@ -2,13 +2,13 @@
  * @Author: cc2049
  * @Date: 2024-04-25 17:34:36
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-05-08 15:05:29
+ * @LastEditTime: 2024-05-08 15:34:03
  * @Description: 获取动态配置
  */
 
 import { getPageConfig } from '#/system/page.js'
 
-import { getQueryUrl , resetColConfig  } from './utils'
+import { getQueryUrl, resetColConfig } from './utils'
 
 import { getFormValue, getFormRule, getShowCFG, setSuffix } from '@/utils'
 
@@ -24,7 +24,7 @@ const useTableConifg = (menu) => {
         topButton: [],
         initButton: [],
         queryUrl: null,
-        queryJson:{},
+        queryJson: {},
         queryConfig: null,
 
         hasSubTable: false,
@@ -56,7 +56,7 @@ const useTableConifg = (menu) => {
         hasDragRow: false, // 是否支持 拖拽
         tableStyle: 0, // 表格风格  默认普通表格 ，  1是
         defaultStyle: 0,
-        filterFileid:[] , // 支持列头筛选的 字段
+        filterFileid: [], // 支持列头筛选的 字段
         toolsConfig: [],
         expandID: "",
         loading: false,
@@ -121,31 +121,31 @@ const useTableConifg = (menu) => {
         pageConfig.batchTable = ISSONTABLE == 1; // 默认批量编辑
         pageConfig.topButton = BUTTON
         pageConfig.queryUrl = SLOTCFG ? SLOTCFG : getQueryUrl(BUTTON);
+        pageConfig.treeQueryUrl = getQueryUrl(BUTTON, "tree") || '';
+
         let initQueryJson = getFormValue(QUERY);
-
-        
-
-        pageConfig.queryJson = Object.assign(initQueryJson, menu) 
-        
-
+        if (pageConfig.treeQueryUrl) {
+            pageConfig.hasTree = true;
+        }
+        pageConfig.queryJson = Object.assign(initQueryJson, menu)
         // 设置表格配置
         tableCFG.autoWidth = ISADAPTION;
         tableCFG.isHeaderFilter = ISTBSELECT == 1;
         tableCFG.tableStyle = TABLESTYLE || 0;
         tableCFG.defaultStyle = MODALTYPE || 0;
-       
 
-        tableCFG.tableColumns = getShowCFG(COLUMNS); 
+
+        tableCFG.tableColumns = getShowCFG(COLUMNS);
         tableCFG.allColumns = COLUMNS
 
-        let newCFG = resetColConfig(COLUMNS,  tableCFG.isHeaderFilter , QUERY)
+        let newCFG = resetColConfig(COLUMNS, tableCFG.isHeaderFilter, QUERY)
         let newtableCFG = Object.assign(tableCFG, newCFG)
 
-        
-        return  new Promise((resolve, reject) => {
+
+        return new Promise((resolve, reject) => {
             let newConfig = {
                 pageConfig,
-                tableCFG : newtableCFG
+                tableCFG: newtableCFG
             }
             resolve(newConfig)
         })
