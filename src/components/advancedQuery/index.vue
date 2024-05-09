@@ -14,18 +14,11 @@
         <div class="disflex advancedQuery-alone ">
             <div class="advancedQuery-title">快捷过滤</div>
             <div style="width: calc(100% - 100px)">
-                <el-row :gutter="20">
-                    <el-col :xs="16" :sm="18">
-                        <FiltrationCom :filterConfig="filterConfig" :filterArr="filterArr"
-                            :defaultFilterArr="defaultFilterArr" @changeFilter="changeFilter" />
-
-                        <!-- <el-row :gutter="10">
-                            <el-col :xs="12" :sm="8">
-                                <FiltrationCom :filterConfig="filterConfig" :filterArr="filterArr" />
-                            </el-col>
-                        </el-row> -->
-                    </el-col>
-                    <el-col :xs="8" :sm="6">
+                <div class="oneLine">
+                    <FiltrationCom :filterConfig="filterConfig" :filterArr="filterArr"
+                        :style="{ height: FiltrationComHeight }" :defaultFilterArr="defaultFilterArr"
+                        @changeFilter="changeFilter" />
+                    <div class="oneLine-right">
                         <div class="disflex advancedQuery-rightBtn">
                             <el-button type="primary">
                                 <el-icon color="#fff" :size="20">
@@ -43,23 +36,6 @@
                                 <SettingFilter :filterConfig="filterConfig" :filterArr="filterArr"
                                     :defaultFilterArr="defaultFilterArr" @changeCondition="changeCondition"
                                     @resetCondition="resetCondition" @delFilterArr="delFilterArr" />
-
-                                <!-- <el-row :gutter="10">
-                                    <el-col :span="6">
-                                        <el-select v-model="value" placeholder="请输入条件" :size="commonSize">
-                                            <el-option v-for="item in filterConfig.filterSeceletArr" :key="item"
-                                                :label="item" :value="item" />
-                                        </el-select>
-                                    </el-col>
-                                    <el-col :span="6">
-                                        <el-button type="primary" link class="ml5">
-                                            重置条件
-                                        </el-button>
-
-                                    </el-col>
-                                    <el-col :span="12">
-                                    </el-col>
-                                </el-row> -->
                                 <el-divider />
                                 <div class="tr">
                                     <el-button @click="visible = false" size="mini">取消</el-button>
@@ -68,15 +44,20 @@
                             </el-popover>
                             <div class="ml10 mr10 btnStyle">保存</div>
                             <div class="btnStyle">重置</div>
-                            <!-- <el-button type="primary" link>
-                                保存
-                            </el-button>
-                            <el-button type="primary" link>
-                                重置
-                            </el-button> -->
+                            <template v-if="filterArr.length > 2">
+                                <el-icon color="#0055ff" :size="15" class="ml10 cp" @click="foldOUnfold(1)"
+                                    v-if="FiltrationComHeight == 'auto'">
+                                    <Icon icon="codicon:fold-up"></Icon>
+                                </el-icon>
+                                <el-icon color="#0055ff" :size="15" class="ml10 cp" @click="foldOUnfold(0)" v-else>
+                                    <Icon icon="codicon:fold-down"></Icon>
+                                </el-icon>
+
+                            </template>
                         </div>
-                    </el-col>
-                </el-row>
+                    </div>
+                </div>
+
             </div>
         </div>
     </div>
@@ -85,6 +66,7 @@
 <script setup>
 import FiltrationCom from "./components/filtrationCom"
 import SettingFilter from "./components/settingFilter"
+const emit = defineEmits('delFilterArr','foldOUnfold')
 
 const props = defineProps({
     queryConfig: {
@@ -183,6 +165,18 @@ onMounted(() => {
     // filterArr.value = JSON.parse(JSON.stringify(defaultFilterArr.value))
 })
 
+// 折叠和展示
+const FiltrationComHeight = ref('34px')
+const foldOUnfold = (e) => {
+    if (e) {
+        FiltrationComHeight.value = '34px'
+    } else {
+        FiltrationComHeight.value = 'auto'
+    }
+    emit('foldOUnfold')
+}
+
+
 const changeFilter = (val, item, index) => {
     filterArr.value[index] = JSON.parse(JSON.stringify(val))
 }
@@ -194,9 +188,10 @@ const changeCondition = (e) => {
 const resetCondition = () => {
     filterArr.value = JSON.parse(JSON.stringify(defaultFilterArr.value))
 }
+// 删除
 const delFilterArr = (index) => {
     filterArr.value.splice(index, 1)
-
+    emit('delFilterArr', index)
 }
 
 </script>
@@ -257,6 +252,16 @@ const delFilterArr = (index) => {
         color: $--color-primary;
         cursor: pointer;
         font-size: 14px;
+    }
+
+    .oneLine {
+        display: flex;
+
+        &-right {
+            // width: 200px;
+            flex-shrink: 0;
+            // margin-left: 20px
+        }
     }
 
 }
