@@ -19,8 +19,8 @@
                         :style="{ height: FiltrationComHeight,maxWidth:windowWidth>1473?'1040px':'520px'}" :defaultFilterArr="defaultFilterArr"
                         @changeFilter="changeFilter" /> -->
                 <FiltrationCom :filterConfig="filterConfig" :filterArr="filterArr" class="oneLine-left"
-                    :style="{ height: FiltrationComHeight, maxWidth: binSize + 'px' }" :defaultFilterArr="defaultFilterArr"
-                    @changeFilter="changeFilter" />
+                    :style="{ height: FiltrationComHeight, maxWidth: binSize + 'px' }"
+                    :defaultFilterArr="defaultFilterArr" @changeFilter="changeFilter" />
                 <div class="advancedQuery-rightBtn">
                     <el-button type="primary">
                         <el-icon color="#fff" :size="20">
@@ -282,7 +282,7 @@ const delFilterArr = (index) => {
     height: 26px !important;
     line-height: 26px !important;
     min-height: auto;
-    // border-color: #949eb5 !important;
     box-shadow: 0 0 0 1px #949eb5 inset;
+    border-radius: 2px !important;
 }
 </style>
