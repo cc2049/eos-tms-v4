@@ -431,5 +431,7 @@ function GetUrlParams(url, backType) {
 :deep(.el-select__wrapper){
     height: 26px !important;
     line-height: 26px !important;
+    min-height: auto;
+
 }
 </style>
