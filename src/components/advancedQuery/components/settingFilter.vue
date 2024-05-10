@@ -92,8 +92,6 @@ const delFilterArr = (item, index) => {
     }
 
     .delIcon {
-        // cursor: pointer;
-        // margin-left: 10px;
     }
 
     .delIcon:hover {

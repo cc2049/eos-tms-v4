@@ -10,7 +10,7 @@
       <div class="advancedQuery-title">我的方案</div>
       <div class="currentRadio" :class="chooseRadioVal == item ? 'active' : ''" v-for="(item, index) in radioList" :key="index" @click="clickRadio(item, index)"> {{ item }}</div>
     </div>
-    <div class="disflex advancedQuery-alone ">
+    <div class=" advancedQuery-alone ">
       <div class="advancedQuery-title">快捷过滤</div>
       <!-- <div style="width: calc(100% - 100px)"> -->
       <div class="oneLine">
@@ -18,7 +18,7 @@
                         :style="{ height: FiltrationComHeight,maxWidth:windowWidth>1473?'1040px':'520px'}" :defaultFilterArr="defaultFilterArr"
                         @changeFilter="changeFilter" /> -->
         <FiltrationCom :filterConfig="filterConfig" :filterArr="filterArr" class="oneLine-left" :style="{ height: FiltrationComHeight,maxWidth:binSize+'px'}" :defaultFilterArr="defaultFilterArr" @changeFilter="changeFilter" />
-        <div class="disflex advancedQuery-rightBtn">
+        <div class="advancedQuery-rightBtn">
           <el-button type="primary">
             <el-icon color="#fff" :size="20">
               <Icon icon="iconamoon:search"></Icon>
@@ -42,10 +42,10 @@
           <div class="ml10 mr10 btnStyle">保存</div>
           <div class="btnStyle">重置</div>
           <template v-if="filterArr.length > 2">
-            <el-icon color="#0055ff" :size="15" class="ml10 cp" @click="foldOUnfold(1)" v-if="FiltrationComHeight == 'auto'">
+            <el-icon color="#0055ff" :size="15" class="ml10 cp foldOUnfoldIcon" @click="foldOUnfold(1)" v-if="FiltrationComHeight == 'auto'">
               <Icon icon="codicon:fold-up"></Icon>
             </el-icon>
-            <el-icon color="#0055ff" :size="15" class="ml10 cp" @click="foldOUnfold(0)" v-else>
+            <el-icon color="#0055ff" :size="15" class="ml10 cp foldOUnfoldIcon" @click="foldOUnfold(0)" v-else>
               <Icon icon="codicon:fold-down"></Icon>
             </el-icon>
 
@@ -61,7 +61,6 @@
 <script setup>
 import FiltrationCom from "./components/filtrationCom";
 import SettingFilter from "./components/settingFilter";
-// const emit = defineEmits('delFilterArr', 'foldOUnfold')
 const emit = defineEmits("updateHeight");
 
 const props = defineProps({
@@ -70,9 +69,6 @@ const props = defineProps({
     default: [],
   },
 });
-// const windowWidth = computed(() => {
-//   return document.documentElement.clientWidth //实时屏
-// });
 
 const binSize = computed(() => {
   const windowWidth = document.documentElement.clientWidth;
@@ -93,62 +89,12 @@ const clickRadio = (item, index) => {
 const value = ref(null);
 const filterConfig = ref({
   // filterSeceletArr: ['单据编号', '供应商', '物料编码'],
-  filterSeceletArr: [
-    // {
-    //     value: '1',
-    //     label: '单据编号',
-    //     CONTROLS: '',
-    //     FIELD: 'danjubianhao'
-    // },
-    // {
-    //     value: '2',
-    //     label: '供应商',
-    //     CONTROLS: 'ExSelectModal',
-    //     FIELD: 'gongyingshang'
-    // },
-    // {
-    //     value: '3',
-    //     label: '物料编码',
-    //     CONTROLS: '',
-    //     FIELD: 'wuliaobianma',
-    //     CONTROLS: 'ExSelect',
-    // },
-    // {
-    //     value: '4',
-    //     label: '日期',
-    //     CONTROLS: 'ExDate',
-    //     FIELD: 'riqi'
-    // },
-    // {
-    //     value: '5',
-    //     label: '日期区间',
-    //     CONTROLS: 'ExDateRange',
-    //     FIELD: 'riqiqujian'
-    // },
-    // {
-    //     value: '6',
-    //     label: '日期时间选择',
-    //     CONTROLS: 'ExDateTime',
-    //     FIELD: 'riqiqujianxuanze'
-    // },
-    // {
-    //     value: '7',
-    //     label: '日期时间区间',
-    //     CONTROLS: 'ExDateTimeRange',
-    //     FIELD: 'riqishijianqujian'
-    // },
-  ],
+  filterSeceletArr: [],
   filterSeceletArr1: ["包含", "等于", "大于"],
 });
 
 const filterArr = ref([]);
-const defaultFilterArr = ref([
-  //     {
-  //     value: '1',
-  //     label: '单据编号',
-  //     type: ''
-  // },
-]);
+const defaultFilterArr = ref([]);
 
 watch(
   () => props.queryConfig,
@@ -165,7 +111,6 @@ watch(
 );
 
 onMounted(() => {
-  // filterArr.value = JSON.parse(JSON.stringify(defaultFilterArr.value))
 });
 
 // 折叠和展示
@@ -220,8 +165,7 @@ const delFilterArr = (index) => {
   }
 
   &-alone {
-    // margin-bottom: 10px;
-
+    display: flex;
     :deep(.el-button) {
       height: 26px !important;
       line-height: 26px;
@@ -233,13 +177,16 @@ const delFilterArr = (index) => {
     font-weight: bold;
     margin-right: 15px;
     flex-shrink: 0;
+    line-height: 26px;
   }
 
   &-rightBtn {
+    line-height: 26px;
+
+    display: flex;
     :deep(.el-button) {
       padding: 0 4px !important;
 
-      // :deep(.el-icon){
       .el-icon {
         font-size: 16px !important;
       }
@@ -260,11 +207,12 @@ const delFilterArr = (index) => {
     }
 
     &-right {
-      // width: 200px;
       flex-shrink: 0;
-      // margin-left: 20px;
       flex-grow: 1;
     }
+  }
+  .foldOUnfoldIcon{
+    margin: 6px 0 0 10px ;
   }
 }
 

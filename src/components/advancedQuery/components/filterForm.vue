@@ -219,33 +219,6 @@ const ExSelectModalInput = (e, config) => {
 
         queryData(url, portData)
 
-        // getTableData(url, portData).then(res => {
-        //     console.log("🚀 ~ getTableData ~ res:", res)
-        //     // SelectModalList.value = res.RECORDS
-        //     const { RECORDS, SIZE, TOTAL, CURRENT, PAGES } = res.RESULT
-        //     tableData.value = RECORDS
-        // }).finally(() => {
-        //     // let index = DropdownRefIndex.value.findIndex(el => el == FIELD)
-        //     // DropdownRef?.value[index]?.togglePanel()
-        // })
-
-
-
-        // getPageConfig({ MODULEID, PAGEID }).then(({ RESULT }) => {
-        //     console.log("🚀 ~ getPageConfig ~ RESULT:", RESULT)
-        //     // SelectTableConfig.value = RESULT;
-        //     // ExSelectModalConfig.tableColumns = RESULT.COLUMNS.filter(el => el.ISSHOW == "1");
-        //     // getSelectTableData(config, rowIndex);
-        // }).catch((err) => {
-
-        // });
-
-
-
-
-
-
-
 
         inputVisible.value = true
     }
@@ -263,7 +236,6 @@ const loadExSelectModalTable = () => {
 const queryData = (url, portData) => {
     getTableData(url, portData).then(res => {
         console.log("🚀 ~ getTableData ~ res:", res)
-        // SelectModalList.value = res.RECORDS
         const { RECORDS, SIZE, TOTAL, CURRENT, PAGES } = res.RESULT
         if (tableData.value.length == 0) {
             tableData.value = RECORDS
@@ -272,8 +244,6 @@ const queryData = (url, portData) => {
 
         }
     }).finally(() => {
-        // let index = DropdownRefIndex.value.findIndex(el => el == FIELD)
-        // DropdownRef?.value[index]?.togglePanel()
     })
 }
 
