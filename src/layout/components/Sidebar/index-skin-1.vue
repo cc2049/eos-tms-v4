@@ -2,7 +2,7 @@
  * @Author: cc2049
  * @Date: 2024-04-25 14:41:35
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-04-25 16:51:31
+ * @LastEditTime: 2024-05-09 12:47:23
  * @Description: 简介
 -->
 <template>
@@ -39,7 +39,7 @@
 
     <div class="mark" @click="showSidebarRight = false" v-if="showSidebarRight"></div>
 
-    <el-scrollbar :height="sidebarHeight" class="sidebar-right" :style="{ left: lenfMenuWidth + 'px' , width: sideBarRightWidth + 'px'}" >
+    <el-scrollbar :height="sidebarHeight" class="sidebar-right" :style="{ left: lenfMenuWidth + 'px' , width: sideBarRightWidth + 'px'}">
       <div class="my-sub-title">{{ subMenuList.NAME || '999' }}</div>
       <el-scrollbar :height="modalHeight">
         <div class="favorite" v-if="myStartMenu.length">
@@ -56,7 +56,7 @@
           </div>
         </div>
 
-        <div class="eos-menu" >
+        <div class="eos-menu">
           <div class="eos-menu-content" v-for="eitem in allMenu" :key="eitem.id">
             <div class="eosmenu-col" :style="{ width: sideBarWidth + 'px' }" v-for="item in eitem.list" :key="item.BILLNO">
               <template v-if="item.CHILDREN.length > 0">
@@ -247,7 +247,7 @@ const changeMenu = (data) => {
   }, 0);
 };
 const closeMenu = () => {
-  $emit('closeMenu')
+  $emit("closeMenu");
 };
 
 function handleSelect(key, menu) {
@@ -591,7 +591,6 @@ function handleSubMenu(data) {
 // 金蝶云
 $new-menu-style-bgcolor: #fff;
 
-
 .sidebar-conetnt {
   position: relative;
   .sidebar-right {
@@ -713,8 +712,7 @@ $new-menu-style-bgcolor: #fff;
 .el-menu-item.is-active {
   color: var(--el-color-primary);
   background-color: #fff !important;
-  border-left: 4px solid var(--el-color-primary);
-  box-sizing: border-box;
+  box-shadow: inset 4px 0 0 0 var(--el-color-primary);
 }
 
 .el-sub-menu .el-menu-item {

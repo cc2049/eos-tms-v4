@@ -2,17 +2,17 @@
  * @Author: cc2049
  * @Date: 2024-04-28 13:10:44
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-05-08 18:22:57
+ * @LastEditTime: 2024-05-09 11:33:35
  * @Description: 简介
 -->
 <template v-if="pageConfig">
   <TopButton :topButton="pageConfig?.topButton" :currentData="currentData" @handelEvent="handelEvent" />
-
   <div class="custom-query" ref="AdvancedQuery">
-    <AdvanceQuery :queryConfig="pageConfig?.queryConfig" />
+    <AdvanceQuery :queryConfig="pageConfig?.queryConfig"  />
   </div>
 
   <div class="table-content">
+    <!-- 左侧树模块 -->
     <template v-if="pageConfig?.hasTree">
       <div class="tree-wrap" v-show="showZtree">
         <Ztree :treeData :height="tableCFG.height - 50 " :defaultExpandedKeys="defaultExpandedKeys" @treeClick="treeClick" />
@@ -30,9 +30,8 @@
         </div>
       </div>
     </template>
-
+    <!-- 表格主体 -->
     <div class="table-wrap" :class="pageConfig?.hasTree && showZtree ? 'has-tree-table' :'' " v-if="tableCFG">
-
       <Vxtable ref="VxtableRef" class="bg-white" :tableCFG="tableCFG" :tableData="tableData" @change="tableChange" @dragRow="dragTableRow" @queryEvent="queryEvent">
       </Vxtable>
       <vxe-pager size="mini" class-name="vxe-page-wrap " :page-size="pageInfo.pageSize" :page-sizes="ListPageSize" :current-page="pageInfo.currentPage" :total="pageInfo.totalResult" :layouts="pagerLayouts" @page-change="handlePageChange">
@@ -52,11 +51,10 @@ import Vxtable from "@/components/Vxtable";
 import TopButton from "@/components/TopButton";
 import AdvanceQuery from "@/components/AdvancedQuery/index";
 import Ztree from "./../Ztree";
-
 import useTableConifg from "@/hooks/useTableConifg";
-
 import { axiosGet } from "#/common";
 import { getUrlParams } from "@/utils";
+import { watchEffect } from "vue";
 
 const props = defineProps({
   menuID: {
@@ -95,9 +93,21 @@ const pagerLayouts = ref([
 ]);
 const ListPageSize = ref([10, 20, 30, 50, 100, 500, 1000]);
 
-const tableHight = computed(() => {
-  return window.innerHeight - 180 - AdvancedQuery.value?.clientHeight;
-});
+
+// cra、c1、c2 都能监听到，推荐写法
+watch(
+  () => AdvancedQuery.value?.clientHeight,
+  (newValue, oldValue) => {
+    console.log("函数形式+深度监听" , newValue, oldValue);
+  },
+  { deep: true }
+);
+
+watchEffect(()=>{
+    console.log("函数形式+深度监听22" , AdvancedQuery.value?.clientHeight);
+
+})
+
 
 const handleSplitbar = () => {
   showZtree.value = !showZtree.value;
@@ -204,18 +214,14 @@ const getTableData = () => {
   queryJSON.value.SORTNAME = pageInfo.sortName;
   queryJSON.value.REVERSE = pageInfo.sortOrder;
   axiosGet(queryURL.value, queryJSON.value).then((res) => {
-
     if (Array.isArray(res.RESULT)) {
       tableData.value = res.RESULT;
       pageInfo.totalResult = res.RESULT.length;
-
     } else {
       const { RECORDS, TOTAL } = res.RESULT;
       tableData.value = RECORDS;
       pageInfo.totalResult = TOTAL;
     }
-
-    console.log(  tableData.value );
   });
 };
 
@@ -250,15 +256,15 @@ watch(
       getConfig().then((res) => {
         tableCFG.value = res.tableCFG;
         pageConfig.value = res.pageConfig;
-
         queryURL.value = pageConfig.value.queryUrl;
         queryJSON.value = pageConfig.value.queryJson;
         let getConfigPager = tableCFG.value.pagerConfig;
         pageInfo.pageSize = getConfigPager.pageSize || 10;
         queryJSON.value.PAGESIZE = getConfigPager.pageSize || pageInfo.pageSize;
-
-        tableCFG.value.height = tableHight.value;
-        console.log(888, tableCFG.value.height);
+        nextTick(() => {
+          tableCFG.value.height =
+            window.innerHeight - 160 - AdvancedQuery.value?.clientHeight;
+        });
         if (pageConfig.value.hasTree) {
           getTreeData();
         } else {
@@ -272,17 +278,10 @@ watch(
   }
 );
 
-// watch(
-//   () => AdvancedQuery.value,
-//   (value) => {
-//     if (value) {
-//       tableCFG.value.height = tableHight.value;
-//     }
-//   },
-//   {
-//     immediate: true,
-//   }
-// );
+/*
+ * 重新设置相关高度
+ */
+function resetHeight() {}
 
 onMounted(() => {});
 </script>

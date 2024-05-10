@@ -2,7 +2,7 @@
  * @Author: cc2049
  * @Date: 2024-02-20 09:00:04
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-05-06 19:28:20
+ * @LastEditTime: 2024-05-09 12:49:34
  * @Description: 简介
 -->
 
@@ -20,7 +20,7 @@
     <div class="right-menu" v-show="showRightMenu && sortCFG.activeID == column.field" @click.stop.prevent="rightClick(column)" extmenu.stop.prevent>
       <div class="right-menu-item bottom">
 
-        <el-popover placement="right" :width="126" trigger="click">
+        <el-popover placement="right" :width="126" >
           <template #reference>
             <div>
               <el-icon :size="16" color="#606875">
