@@ -2,13 +2,13 @@
  * @Author: cc2049
  * @Date: 2024-04-28 13:10:44
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-05-09 11:33:35
+ * @LastEditTime: 2024-05-10 16:00:31
  * @Description: 简介
 -->
 <template v-if="pageConfig">
   <TopButton :topButton="pageConfig?.topButton" :currentData="currentData" @handelEvent="handelEvent" />
   <div class="custom-query" ref="AdvancedQuery">
-    <AdvanceQuery :queryConfig="pageConfig?.queryConfig"  />
+    <AdvanceQuery :queryConfig="pageConfig?.queryConfig" @updateHeight="queryHeight" />
   </div>
 
   <div class="table-content">
@@ -92,22 +92,6 @@ const pagerLayouts = ref([
   "Total",
 ]);
 const ListPageSize = ref([10, 20, 30, 50, 100, 500, 1000]);
-
-
-// cra、c1、c2 都能监听到，推荐写法
-watch(
-  () => AdvancedQuery.value?.clientHeight,
-  (newValue, oldValue) => {
-    console.log("函数形式+深度监听" , newValue, oldValue);
-  },
-  { deep: true }
-);
-
-watchEffect(()=>{
-    console.log("函数形式+深度监听22" , AdvancedQuery.value?.clientHeight);
-
-})
-
 
 const handleSplitbar = () => {
   showZtree.value = !showZtree.value;
@@ -282,6 +266,12 @@ watch(
  * 重新设置相关高度
  */
 function resetHeight() {}
+
+function queryHeight() {
+  console.log(123, AdvancedQuery.value?.clientHeight);
+  tableCFG.value.height =
+    window.innerHeight - 160 - AdvancedQuery.value?.clientHeight;
+}
 
 onMounted(() => {});
 </script>

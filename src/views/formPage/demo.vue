@@ -1,5 +1,13 @@
+<!--
+ * @Author: cc2049
+ * @Date: 2024-05-10 15:24:57
+ * @LastEditors: 
+ * @LastEditTime: 2024-05-10 15:31:36
+ * @Description: 简介
+-->
 <template>
-  <eos-form v-model="formData" :config="formConfig" :detail="detailMod" />
+  <!-- <eos-form v-model="formData" :config="formConfig" :detail="detailMod" /> -->
+  <div class="test-for"></div>
 </template>
 
 <script setup>

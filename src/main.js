@@ -13,8 +13,8 @@ import ElementPlus from 'element-plus'
 import 'element-plus/dist/index.css'
 import locale from 'element-plus/es/locale/lang/zh-cn'
 
-import eosForm from "@eosine/form"
-import '@eosine/form/dist/style.css'
+// import eosForm from "@eosine/form"
+// import '@eosine/form/dist/style.css'
 
 import '@/assets/styles/index.scss' // global css
 import request from '@/utils/request'
@@ -105,16 +105,17 @@ app.use(ElementPlus, {
   // 支持 large、default、small
   size: Cookies.get('size') || 'default'
 })
-app.use(eosForm, {
-  getData: request,
-  getConfig: request,
-  uploadUrl: "/eos-api/sys/file/upload",
-  uploadHeaders: {
-    Authorization: "Bearer " + getToken()
-  },
-  uploadData: {
-    BILLFROM: "0"
-  }
-})
+
+// app.use(eosForm, {
+//   getData: request,
+//   getConfig: request,
+//   uploadUrl: "/eos-api/sys/file/upload",
+//   uploadHeaders: {
+//     Authorization: "Bearer " + getToken()
+//   },
+//   uploadData: {
+//     BILLFROM: "0"
+//   }
+// })
 
 app.mount('#app')

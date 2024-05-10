@@ -12,12 +12,14 @@
     </div>
     <div class="disflex advancedQuery-alone ">
       <div class="advancedQuery-title">快捷过滤</div>
-      <!-- <div style="width: calc(100% - 100px)"> -->
       <div class="oneLine">
-        <!-- <FiltrationCom :filterConfig="filterConfig" :filterArr="filterArr"  class="oneLine-left"
-                        :style="{ height: FiltrationComHeight,maxWidth:windowWidth>1473?'1040px':'520px'}" :defaultFilterArr="defaultFilterArr"
-                        @changeFilter="changeFilter" /> -->
-        <FiltrationCom :filterConfig="filterConfig" :filterArr="filterArr" class="oneLine-left" :style="{ height: FiltrationComHeight,maxWidth:binSize+'px'}" :defaultFilterArr="defaultFilterArr" @changeFilter="changeFilter" />
+        <!-- <FiltrationCom :filterConfig="filterConfig" :filterArr="filterArr" :style="{ height: FiltrationComHeight }" :defaultFilterArr="defaultFilterArr" @changeFilter="changeFilter" /> -->
+        <div class="filter-wrap" :class=" queryNum.length > 1 ? 'filter-more' : '' ">
+            <template v-for="itemF in queryNum" :key="itemF">
+                <el-input style="width: 100px;" />
+            </template>
+            
+        </div>
         <div class="disflex advancedQuery-rightBtn">
           <el-button type="primary">
             <el-icon color="#fff" :size="20">
@@ -52,8 +54,6 @@
           </template>
         </div>
       </div>
-
-      <!-- </div> -->
     </div>
   </div>
 </template>
@@ -61,8 +61,7 @@
 <script setup>
 import FiltrationCom from "./components/filtrationCom";
 import SettingFilter from "./components/settingFilter";
-// const emit = defineEmits('delFilterArr', 'foldOUnfold')
-const emit = defineEmits("updateHeight");
+const emit = defineEmits("delFilterArr", "foldOUnfold");
 
 const props = defineProps({
   queryConfig: {
@@ -70,16 +69,12 @@ const props = defineProps({
     default: [],
   },
 });
-// const windowWidth = computed(() => {
-//   return document.documentElement.clientWidth //实时屏
-// });
 
-const binSize = computed(() => {
-  const windowWidth = document.documentElement.clientWidth;
-  let val = (windowWidth - 20 - 20 - 50 - 165) / 520;
-  let newVal = Math.floor(val);
-  return 520 * newVal;
-});
+const queryNum = ref([1,2,3,4] )
+
+// const showFormConfig = computed(() => {
+//   return props.queryConfig.filter((el) => el.ISSHOW != 0);
+// });
 
 // 我的方案
 const chooseRadioVal = ref("默认方案");
@@ -169,14 +164,14 @@ onMounted(() => {
 });
 
 // 折叠和展示
-const FiltrationComHeight = ref("26px");
+const FiltrationComHeight = ref("34px");
 const foldOUnfold = (e) => {
   if (e) {
-    FiltrationComHeight.value = "26px";
+    FiltrationComHeight.value = "34px";
   } else {
     FiltrationComHeight.value = "auto";
   }
-  emit("updateHeight");
+  emit("foldOUnfold");
 };
 
 const changeFilter = (val, item, index) => {
@@ -193,7 +188,7 @@ const resetCondition = () => {
 // 删除
 const delFilterArr = (index) => {
   filterArr.value.splice(index, 1);
-  emit("updateHeight", index);
+  emit("delFilterArr", index);
 };
 </script>
 
@@ -202,7 +197,6 @@ const delFilterArr = (index) => {
 
 .advancedQuery {
   padding-top: 20px;
-  padding-bottom: 10px;
   font-size: 12px;
 
   .currentRadio {
@@ -232,7 +226,6 @@ const delFilterArr = (index) => {
     color: #515967;
     font-weight: bold;
     margin-right: 15px;
-    flex-shrink: 0;
   }
 
   &-rightBtn {
@@ -255,15 +248,10 @@ const delFilterArr = (index) => {
   .oneLine {
     display: flex;
 
-    &-left {
-      max-width: 1040px;
-    }
-
     &-right {
       // width: 200px;
       flex-shrink: 0;
-      // margin-left: 20px;
-      flex-grow: 1;
+      // margin-left: 20px
     }
   }
 }
@@ -320,9 +308,10 @@ const delFilterArr = (index) => {
   }
 }
 
-:deep(.el-select__wrapper) {
-  height: 26px !important;
-  line-height: 26px !important;
-  min-height: auto;
+
+.filter-more{
+    display: flex;
+    width: 220px;
+    flex-wrap: wrap;
 }
 </style>
