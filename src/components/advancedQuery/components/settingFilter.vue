@@ -21,22 +21,25 @@
                 </div>
             </div>
         </div>
-        <el-row :gutter="20">
-            <el-col :span="6">
-                <el-select v-model="conditionValue" placeholder="请输入条件" :size="commonSize" @change="changeCondition">
-                    <el-option v-for="item in filterConfig.filterSeceletArr" :key="item.BILLNO" :label="item.LABEL"
-                        :value="item.BILLNO" />
-                </el-select>
-            </el-col>
-            <el-col :span="6">
-                <el-button type="primary" link class="ml5" @click="resetCondition">
-                    重置条件
-                </el-button>
+        <div class="disflex">
+            <!-- <el-row :gutter="20">
+            <el-col :span="6"> -->
+            <el-select v-model="conditionValue" style="width: 120px" placeholder="请输入条件" :size="commonSize"
+                @change="changeCondition">
+                <el-option v-for="item in filterConfig.filterSeceletArr" :key="item.BILLNO" :label="item.LABEL"
+                    :value="item.BILLNO" />
+            </el-select>
+            <!-- </el-col> -->
+            <!-- <el-col :span="6"> -->
+            <el-button type="primary" link class="ml5" @click="resetCondition">
+                重置条件
+            </el-button>
 
-            </el-col>
-            <el-col :span="12">
-            </el-col>
-        </el-row>
+            <!-- </el-col> -->
+            <!-- <el-col :span="12">
+            </el-col> -->
+            <!-- </el-row> -->
+        </div>
 
 
 
@@ -91,8 +94,7 @@ const delFilterArr = (item, index) => {
         margin-bottom: 10px;
     }
 
-    .delIcon {
-    }
+    .delIcon {}
 
     .delIcon:hover {
         color: #ef878b;
