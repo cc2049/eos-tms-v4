@@ -282,7 +282,7 @@ const delFilterArr = (index) => {
     height: 26px !important;
     line-height: 26px !important;
     min-height: auto;
-    border-color: #949eb5;
+    border-color: #949eb5 !important;
 
 }
 </style>
