@@ -1,8 +1,8 @@
 /*
  * @Author: cc2049
  * @Date: 2024-04-19 09:01:33
- * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-04-28 16:08:02
+ * @LastEditors: piplns piplns@163.com
+ * @LastEditTime: 2024-05-09 14:42:21
  * @Description: 简介
  */
 import { createApp } from 'vue'
@@ -13,7 +13,12 @@ import ElementPlus from 'element-plus'
 import 'element-plus/dist/index.css'
 import locale from 'element-plus/es/locale/lang/zh-cn'
 
+import eosForm from "@eosine/form"
+import '@eosine/form/dist/style.css'
+
 import '@/assets/styles/index.scss' // global css
+import request from '@/utils/request'
+import { getToken } from '@/utils/auth'
 
 import App from './App'
 import store from './store'
@@ -99,6 +104,17 @@ app.use(ElementPlus, {
   locale: locale,
   // 支持 large、default、small
   size: Cookies.get('size') || 'default'
+})
+app.use(eosForm, {
+  getData: request,
+  getConfig: request,
+  uploadUrl: "/eos-api/sys/file/upload",
+  uploadHeaders: {
+    Authorization: "Bearer " + getToken()
+  },
+  uploadData: {
+    BILLFROM: "0"
+  }
 })
 
 app.mount('#app')

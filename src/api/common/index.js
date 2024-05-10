@@ -1,11 +1,14 @@
 /*
  * @Author: cc2049
  * @Date: 2024-04-19 11:32:18
- * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-04-24 19:06:37
+ * @LastEditors: piplns piplns@163.com
+ * @LastEditTime: 2024-05-09 14:37:06
  * @Description: 简介
  */
 import request from '@/utils/request'
+
+// 文件上传
+export const fileUploadApi = "/sys/file/upload"
 
 /*
 * 公共的查询数据接口
