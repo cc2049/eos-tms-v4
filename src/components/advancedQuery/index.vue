@@ -69,7 +69,9 @@
 <script setup>
 import FiltrationCom from "./components/filtrationCom"
 import SettingFilter from "./components/settingFilter"
-const emit = defineEmits('delFilterArr', 'foldOUnfold')
+// const emit = defineEmits('delFilterArr', 'foldOUnfold')
+const emit = defineEmits('updateHeight')
+
 
 const props = defineProps({
     queryConfig: {
@@ -185,7 +187,7 @@ const foldOUnfold = (e) => {
     } else {
         FiltrationComHeight.value = 'auto'
     }
-    emit('foldOUnfold')
+    emit('updateHeight')
 }
 
 
@@ -203,7 +205,7 @@ const resetCondition = () => {
 // 删除
 const delFilterArr = (index) => {
     filterArr.value.splice(index, 1)
-    emit('delFilterArr', index)
+    emit('updateHeight', index)
 }
 
 </script>
