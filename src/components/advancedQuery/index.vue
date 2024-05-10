@@ -13,10 +13,13 @@
         </div>
         <div class="disflex advancedQuery-alone ">
             <div class="advancedQuery-title">快捷过滤</div>
-            <div style="width: calc(100% - 100px)">
+            <!-- <div style="width: calc(100% - 100px)"> -->
                 <div class="oneLine">
-                    <FiltrationCom :filterConfig="filterConfig" :filterArr="filterArr"
-                        :style="{ height: FiltrationComHeight }" :defaultFilterArr="defaultFilterArr"
+                    <!-- <FiltrationCom :filterConfig="filterConfig" :filterArr="filterArr"  class="oneLine-left"
+                        :style="{ height: FiltrationComHeight,maxWidth:windowWidth>1473?'1040px':'520px'}" :defaultFilterArr="defaultFilterArr"
+                        @changeFilter="changeFilter" /> -->
+                    <FiltrationCom :filterConfig="filterConfig" :filterArr="filterArr"  class="oneLine-left"
+                        :style="{ height: FiltrationComHeight,maxWidth:binSize+'px'}" :defaultFilterArr="defaultFilterArr"
                         @changeFilter="changeFilter" />
                     <div class="oneLine-right">
                         <div class="disflex advancedQuery-rightBtn">
@@ -58,7 +61,7 @@
                     </div>
                 </div>
 
-            </div>
+            <!-- </div> -->
         </div>
     </div>
 </template>
@@ -74,9 +77,18 @@ const props = defineProps({
         default: [],
     },
 });
-// const showFormConfig = computed(() => {
-//   return props.queryConfig.filter((el) => el.ISSHOW != 0);
+// const windowWidth = computed(() => {
+//   return document.documentElement.clientWidth //实时屏
 // });
+
+const binSize = computed(() => {
+    const windowWidth = document.documentElement.clientWidth
+    let val = (windowWidth-20-20-50-165)/520
+    let newVal = Math.floor(val)
+    return 520 * newVal
+
+});
+
 
 // 我的方案
 const chooseRadioVal = ref('默认方案')
@@ -233,6 +245,7 @@ const delFilterArr = (index) => {
         color: #515967;
         font-weight: bold;
         margin-right: 15px;
+        flex-shrink: 0;
     }
 
 
@@ -258,10 +271,15 @@ const delFilterArr = (index) => {
     .oneLine {
         display: flex;
 
+        &-left{
+            max-width: 1040px;
+        }
+
         &-right {
             // width: 200px;
             flex-shrink: 0;
-            // margin-left: 20px
+            // margin-left: 20px;
+            flex-grow: 1;
         }
     }
 

@@ -5,17 +5,18 @@
  * filtrationCom.vue
 -->
 <template>
-    <div class="filtrationCom">
-        <div class="oneLine">
+    <!-- <div class="filtrationCom"> -->
+    <div class="">
+        <!-- <div class="oneLine"> -->
             <!-- <el-row :gutter="20" > -->
-            <div class="oneLine-left">
+            <!-- <div class="oneLine-left"> -->
                 <div v-for="(item, index) in filterArr" :key="index" class="mb10 oneLine-left-alone">
                     <!-- <el-col :xs="24" :sm="12" :xl="8" v-for="(item, index) in filterArr" :key="index" class="mb10"> -->
                     <FilterForm :filterConfig="filterConfig" :filterVal="item" v-model:formData="queryFormData"
                         @changeFilter="val => changeFilter(val, item, index)" />
                     <!-- </el-col> -->
                 </div>
-            </div>
+            <!-- </div> -->
 
             <!-- </el-row> -->
             <!-- <div class="oneLine-right">
@@ -45,7 +46,7 @@
 <div class="btnStyle">重置</div>
 </div>
 </div> -->
-        </div>
+        <!-- </div> -->
 
 
     </div>
@@ -107,19 +108,20 @@ watch(() => props.filterArr, value => {
 </script>
 
 <style scoped lang="scss">
-.filtrationCom {
+// .filtrationCom {
     .oneLine {
         // display: flex;
 
 
         &-left {
-            display: inline-block;
+            // display: inline-block;
             // float: left;
             // display: flex;
             // flex-wrap: wrap;
             &-alone {
                 width: 500px;
                 float: left;
+                // display: inline-block;
 
                 // min-width: 300px;
                 // max-width: 400px;
@@ -138,5 +140,5 @@ watch(() => props.filterArr, value => {
 
 
 
-}
+// }
 </style>
