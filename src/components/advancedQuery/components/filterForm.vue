@@ -403,6 +403,6 @@ function GetUrlParams(url, backType) {
     height: 26px !important;
     line-height: 26px !important;
     min-height: auto;
-
+    border-color: #949eb5;
 }
 </style>
