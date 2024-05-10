@@ -66,7 +66,7 @@
 <script setup>
 import FiltrationCom from "./components/filtrationCom"
 import SettingFilter from "./components/settingFilter"
-const emit = defineEmits('delFilterArr','foldOUnfold')
+const emit = defineEmits('delFilterArr', 'foldOUnfold')
 
 const props = defineProps({
     queryConfig: {
@@ -317,5 +317,10 @@ const delFilterArr = (index) => {
     .el-input__suffix-inner>:first-child {
         margin: 5px;
     }
+}
+
+:deep(.el-select__wrapper) {
+    height: 26px !important;
+    line-height: 26px !important;
 }
 </style>

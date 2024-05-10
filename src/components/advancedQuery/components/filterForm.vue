@@ -428,4 +428,8 @@ function GetUrlParams(url, backType) {
 :deep(.el-popper.is-light) {
     padding: 0 !important;
 }
+:deep(.el-select__wrapper){
+    height: 26px !important;
+    line-height: 26px !important;
+}
 </style>
