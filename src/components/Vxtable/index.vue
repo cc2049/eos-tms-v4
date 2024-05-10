@@ -3,8 +3,8 @@
     <!-- checkStrictly:  !tableCFG.treeID?true:false  控制多选框是否级联 -->
     <!-- @header-cell-click="headerCellClickEvent" @header-cell-dblclick="headerCellClickEvent" -->
 
-    <vxe-table resizable round show-overflow ref="xTable" :edit-rules="validRules" size="mini" highlight-hover-row header-row-class-name="bg-blue" width="100%" :show-footer="tableCFG.mergeCFG && tableCFG.mergeCFG.length" border :loading="tableCFG.loading"
-      :height=" showMoreQuery? tableCFG.height-50 : tableCFG.height  " class="mytable-scrollbar mytable-footer" :column-config="{ isCurrent: false, isHover: true }" :row-config="{
+    <vxe-table class="mytable-scrollbar mytable-footer" resizable round show-overflow ref="xTable" :edit-rules="validRules" size="mini" highlight-hover-row header-row-class-name="bg-blue" width="100%" :show-footer="tableCFG.mergeCFG && tableCFG.mergeCFG.length" border :loading="tableCFG.loading"
+      :cell-class-name="cellClassName" :height=" showMoreQuery? tableCFG.height-50 : tableCFG.height  " :column-config="{ isCurrent: false, isHover: true }" :row-config="{
         isCurrent: true,
         isHover: true,
         height:  34 ,
@@ -30,13 +30,13 @@
           </div>
         </template>
       </vxe-column> -->
-    
+
       <template v-for="(config, indexC) in tableCFG.tableColumns" :key="indexC">
 
         <vxe-column field="name" title=" " width="40" type="seq" align="center" v-if="config.VTYPE == 'seq'" fixed="left">
         </vxe-column>
 
-        <template v-else-if="config.VTYPE == 'radio'" >
+        <template v-else-if="config.VTYPE == 'radio'">
           <vxe-column type="radio" align="center" width="40" fixed="left"></vxe-column>
         </template>
 
@@ -285,7 +285,7 @@
       </vxe-column>
 
       <template #empty>
-        <el-empty  :image="emptyImg" description="很抱歉，暂时没有相关数据~" :image-size="200"  />
+        <el-empty :image="emptyImg" description="很抱歉，暂时没有相关数据~" :image-size="200" />
       </template>
     </vxe-table>
 
@@ -387,7 +387,14 @@ const qrcodrOpen = ref(false);
 
 const rowHeight = ref(40);
 
-const test001 = ref("");
+const selectRow = ref();
+const selectColumn = ref();
+const cellClassName = ({ row, column }) => {
+  if (row === selectRow.value && column === selectColumn.value) {
+    return "cell-active";
+  }
+  return null;
+};
 
 const emit = defineEmits(["dragRow", "queryEvent"]);
 const props = defineProps({
@@ -439,7 +446,7 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
- 
+
   // queryJson: {
   //   type: Object,
   //   default: {},
@@ -454,7 +461,7 @@ const clickGrade = (row, config) => {
 
 const xTable = ref(null);
 
-const emptyImg = proxy.getAssetsFile('icon_task_NoData.png')
+const emptyImg = proxy.getAssetsFile("icon_task_NoData.png");
 
 const settimgProgress = computed((config) => {
   return (config) => {
@@ -800,7 +807,9 @@ function openDrawer() {
 //  行点击事件触发单选功能
 const rowClickIndex = ref(null);
 
-function rowClick({ row, triggerCheckbox, rowIndex }) {
+function rowClick({ row, column, triggerCheckbox, rowIndex }) {
+  selectRow.value = row;
+  selectColumn.value = column;
   if (props.tableCFG.treeID?.transform) {
     return;
   }
@@ -1470,6 +1479,10 @@ defineExpose({
     .vxe-table--render-default .vxe-body--row.row--radio
   ) {
   background-color: rgb(224, 232, 255) !important;
+}
+
+:deep(.mytable-scrollbar .vxe-body--row .cell-active) {
+  box-shadow: inset 0 0 0 2px var(--vxe-primary-color);
 }
 /* // 移除vxtable  可编辑表格的 编辑图标 */
 .vxe-header--column .vxe-cell--edit-icon {
