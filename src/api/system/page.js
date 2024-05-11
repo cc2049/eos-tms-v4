@@ -2,7 +2,7 @@
  * @Author: cc2049
  * @Date: 2024-04-25 17:39:07
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-04-25 17:39:10
+ * @LastEditTime: 2024-05-10 17:58:26
  * @Description: 获取菜单配置相关
  */
 
@@ -20,6 +20,8 @@ let PageCache = null; // 是否开启本地数据库缓存
 export async function getPageConfig(data) {
   let localKey = data.MODULEID + data.PAGEID
   PageCache = Cookies.get('PageCache') || null
+  console.log('PageCache', PageCache);
+
   try {
     const localData = await localforage.getItem(localKey);
     let configData = null;
@@ -31,8 +33,7 @@ export async function getPageConfig(data) {
         method: "post",
         data: data,
       })
-      PageCache==1 ? localforage.setItem(localKey, configData) : null
-      console.log('PageCache', typeof PageCache);
+      PageCache == 1 ? localforage.setItem(localKey, configData) : null
     }
 
     return new Promise((resolve, reject) => {

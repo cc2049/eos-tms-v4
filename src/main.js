@@ -1,8 +1,8 @@
 /*
  * @Author: cc2049
  * @Date: 2024-04-19 09:01:33
- * @LastEditors: piplns piplns@163.com
- * @LastEditTime: 2024-05-09 14:42:21
+ * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2024-05-10 17:02:39
  * @Description: 简介
  */
 import { createApp } from 'vue'
@@ -13,8 +13,8 @@ import ElementPlus from 'element-plus'
 import 'element-plus/dist/index.css'
 import locale from 'element-plus/es/locale/lang/zh-cn'
 
-// import eosForm from "@eosine/form"
-// import '@eosine/form/dist/style.css'
+import eosForm from "@eosine/form"
+import '@eosine/form/dist/style.css'
 
 import '@/assets/styles/index.scss' // global css
 import request from '@/utils/request'

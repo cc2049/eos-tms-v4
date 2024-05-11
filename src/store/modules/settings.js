@@ -1,6 +1,13 @@
 /*
  * @Author: cc2049
  * @Date: 2024-04-19 09:01:33
+ * @LastEditors: 
+ * @LastEditTime: 2024-05-10 17:06:33
+ * @Description: 简介
+ */
+/*
+ * @Author: cc2049
+ * @Date: 2024-04-19 09:01:33
  * @LastEditors: Please set LastEditors
  * @LastEditTime: 2024-04-24 12:06:47
  * @Description: 简介
@@ -8,7 +15,7 @@
 import defaultSettings from '@/settings'
 import { useDynamicTitle } from '@/utils/dynamicTitle'
 
-const { sideTheme, showSettings, topNav, tagsView, fixedHeader, sidebarLogo, dynamicTitle } = defaultSettings
+const { sideTheme, showSettings, topNav, tagsView, fixedHeader, sidebarLogo, dynamicTitle , menuStyle } = defaultSettings
 
 const storageSetting = JSON.parse(localStorage.getItem('layout-setting')) || ''
 

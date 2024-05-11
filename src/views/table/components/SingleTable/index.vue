@@ -2,7 +2,7 @@
  * @Author: cc2049
  * @Date: 2024-04-28 13:10:44
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-05-10 16:00:31
+ * @LastEditTime: 2024-05-10 18:00:39
  * @Description: 简介
 -->
 <template v-if="pageConfig">
@@ -159,18 +159,6 @@ function tableChange(data) {
   if (data.clicktype == "clinkBTN") {
     handelEvent({ data: data.linkCFG, row: data.data });
   }
-  if (
-    routerParams.COMP == "VTableSub" ||
-    pageConfig.hasSubTable ||
-    tableCFG.expandID
-  ) {
-    if (data.checked) {
-      getSUBTBData(
-        tableData.value[data.rowIndex].BILLNO ||
-          tableData.value[data.rowIndex].PK_CLASS
-      );
-    }
-  }
 }
 
 function treeClick(data) {
@@ -268,9 +256,10 @@ watch(
 function resetHeight() {}
 
 function queryHeight() {
-  console.log(123, AdvancedQuery.value?.clientHeight);
-  tableCFG.value.height =
-    window.innerHeight - 160 - AdvancedQuery.value?.clientHeight;
+  nextTick(() => {
+    tableCFG.value.height =
+      window.innerHeight - 160 - AdvancedQuery.value?.clientHeight;
+  });
 }
 
 onMounted(() => {});
