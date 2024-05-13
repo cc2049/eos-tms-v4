@@ -2,11 +2,11 @@
  * @Author: cc2049
  * @Date: 2024-04-28 13:10:44
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-05-10 18:00:39
+ * @LastEditTime: 2024-05-13 19:20:24
  * @Description: 简介
 -->
 <template v-if="pageConfig">
-  <TopButton :topButton="pageConfig?.topButton" :currentData="currentData" @handelEvent="handelEvent" />
+  <TopButton :topButton="pageConfig?.topButton" :currentData="currentData" @handelEvent="handelEvent" @reloadTableData="reloadTableData" />
   <div class="custom-query" ref="AdvancedQuery">
     <AdvanceQuery :queryConfig="pageConfig?.queryConfig" @updateHeight="queryHeight" />
   </div>
@@ -161,6 +161,12 @@ function tableChange(data) {
   }
 }
 
+function reloadTableData() {
+  pageInfo.currentPage = 1;
+  queryJSON.value.PAGENUM = 1;
+  getTableData();
+}
+
 function treeClick(data) {
   console.log(data);
   pageInfo.currentPage = 1;
@@ -186,6 +192,7 @@ const getTableData = () => {
   queryJSON.value.SORTNAME = pageInfo.sortName;
   queryJSON.value.REVERSE = pageInfo.sortOrder;
   axiosGet(queryURL.value, queryJSON.value).then((res) => {
+     currentData.value = null;
     if (Array.isArray(res.RESULT)) {
       tableData.value = res.RESULT;
       pageInfo.totalResult = res.RESULT.length;
