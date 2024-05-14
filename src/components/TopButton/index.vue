@@ -2,13 +2,22 @@
  * @Author: cc2049
  * @Date: 2024-04-28 15:12:29
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-05-13 19:22:06
+ * @LastEditTime: 2024-05-14 12:54:27
  * @Description: 简介
 -->
 
 <template>
   <div class="top-button">
     <div class="fixed-top-button">
+      <div class="flex-box">
+        <div class="buttom-item" @click="handelEvent()" >
+          过滤
+        </div>
+        <div class="buttom-item" @click="handelEvent()"  >
+          刷新
+        </div>
+      </div>
+
       <template v-for="(itemBtn) in topButton" :key="itemBtn.BILLNO">
         <div class="buttom-item" @click="handelEvent(itemBtn)" :title="itemBtn.BTNTITLE " v-if="setShowBtn(itemBtn) ">
           {{ itemBtn.VNAME }}
@@ -69,13 +78,9 @@ const props = defineProps({
 });
 
 const MenuID = inject("menuID");
-
-console.log(777, MenuID);
-
 // console.log('topButton', props.topButton );
-
 const { proxy } = getCurrentInstance();
-const emit = defineEmits(["handelEvent" , "reloadTableData"]);
+const emit = defineEmits(["handelEvent", "reloadTableData"]);
 
 // 设置是否显示按钮
 
@@ -127,7 +132,7 @@ function handelEvent(data) {
     //  选中数据并提交
     let dataChoose = props.currentData;
 
-    if( !dataChoose || !dataChoose.length){
+    if (!dataChoose || !dataChoose.length) {
       return proxy.$message.warning("请先选择数据再操作");
     }
 
@@ -371,7 +376,7 @@ function submitEvent(URL, sdata) {
         message: MESSAGE,
         type: "success",
       });
-      emit("reloadTableData")
+      emit("reloadTableData");
     }
   });
 }

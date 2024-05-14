@@ -2,14 +2,14 @@
  * @Author: cc2049
  * @Date: 2024-02-20 09:00:04
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-05-09 12:49:34
+ * @LastEditTime: 2024-05-14 13:09:19
  * @Description: 简介
 -->
 
 <template>
   <div class="custom-head" @contextmenu.prevent="fnResourcesRightClick($event, column)">
 
-    <span class="font-size-12 custom-head-title" @click="handleSort(column)">
+    <span class="custom-head-title" @click="handleSort(column)">
       {{ column.title || '' }} 
       <el-icon :size="20" class="sort-icon" v-if=" column.field == sortCFG.sortBy ">
         <CaretBottom v-if=" sortCFG.sort == 'desc' " />
@@ -466,7 +466,7 @@ $border-color-jdy: #ceced2;
   }
 }
 
-.font-size-12 {
+.custom-head-title {
   font-size: 12px;
   color: #333;
 }

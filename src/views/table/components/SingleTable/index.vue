@@ -2,7 +2,7 @@
  * @Author: cc2049
  * @Date: 2024-04-28 13:10:44
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-05-13 19:20:24
+ * @LastEditTime: 2024-05-14 10:24:21
  * @Description: 简介
 -->
 <template v-if="pageConfig">
@@ -168,10 +168,10 @@ function reloadTableData() {
 }
 
 function treeClick(data) {
-  console.log(data);
   pageInfo.currentPage = 1;
   queryJSON.value.PAGENUM = 1;
-  queryJSON.value.PK_PARENT = data.BILLNO;
+  queryJSON.value.PK_PARENT = data.VALUE;
+  queryJSON.value.PK_CLASS = data.VALUE;
   getTableData();
 }
 

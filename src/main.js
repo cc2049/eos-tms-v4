@@ -2,7 +2,7 @@
  * @Author: cc2049
  * @Date: 2024-04-19 09:01:33
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-05-11 15:19:39
+ * @LastEditTime: 2024-05-14 13:01:38
  * @Description: 简介
  */
 import { createApp } from 'vue'
@@ -33,6 +33,9 @@ import { download } from '@/utils/request'
 import 'virtual:svg-icons-register'
 import SvgIcon from '@/components/SvgIcon'
 import elementIcons from '@/components/SvgIcon/svgicon'
+
+// uno.css
+import 'virtual:uno.css'
 
 import './permission' // permission control
 

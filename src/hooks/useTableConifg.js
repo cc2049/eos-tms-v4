@@ -2,7 +2,7 @@
  * @Author: cc2049
  * @Date: 2024-04-25 17:34:36
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-05-08 15:34:03
+ * @LastEditTime: 2024-05-14 10:01:32
  * @Description: 获取动态配置
  */
 
@@ -19,6 +19,7 @@ const useTableConifg = (menu) => {
         hasTree: false, // 是否存在左侧树型结构
         treeExpand: true, // 是否展开树
         defaultExpandedKeys: [], // 默认展开的树节点
+        treeButton: [],
         tableData: [],
         totalData: null,
         topButton: [],
@@ -26,7 +27,6 @@ const useTableConifg = (menu) => {
         queryUrl: null,
         queryJson: {},
         queryConfig: null,
-
         hasSubTable: false,
         activeBtn: {},
         pageShow: true,
@@ -119,7 +119,10 @@ const useTableConifg = (menu) => {
         pageConfig.pageShow = VDEF1 == "1"; // 控制列表是否展示分页功能
         pageConfig.hasCustomQuery = VDEF3 == 1;
         pageConfig.batchTable = ISSONTABLE == 1; // 默认批量编辑
-        pageConfig.topButton = BUTTON
+        pageConfig.topButton = BUTTON.filter(item => item.VTYPE != 20 );
+        pageConfig.treeButton = BUTTON.filter(item => item.VTYPE == 20 );
+
+        
         pageConfig.queryUrl = SLOTCFG ? SLOTCFG : getQueryUrl(BUTTON);
         pageConfig.treeQueryUrl = getQueryUrl(BUTTON, "tree") || '';
 
