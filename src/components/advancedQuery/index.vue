@@ -121,10 +121,10 @@ onMounted(() => {
 });
 
 // 折叠和展示
-const FiltrationComHeight = ref("26px");
+const FiltrationComHeight = ref("36px");
 const foldOUnfold = (e) => {
     if (e) {
-        FiltrationComHeight.value = "26px";
+        FiltrationComHeight.value = "36px";
     } else {
         FiltrationComHeight.value = "auto";
     }
@@ -154,7 +154,7 @@ const delFilterArr = (index) => {
 
 .advancedQuery {
     padding-top: 20px;
-    padding-bottom: 10px;
+    // padding-bottom: 10px;
     font-size: 12px;
 
     .currentRadio {
