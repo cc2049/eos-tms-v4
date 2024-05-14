@@ -213,6 +213,7 @@ const delFilterArr = (index) => {
 
         &-left {
             max-width: 1040px;
+            overflow: hidden;
         }
 
         &-right {
