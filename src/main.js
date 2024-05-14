@@ -2,7 +2,7 @@
  * @Author: cc2049
  * @Date: 2024-04-19 09:01:33
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-05-10 17:02:39
+ * @LastEditTime: 2024-05-11 15:19:39
  * @Description: 简介
  */
 import { createApp } from 'vue'
@@ -106,16 +106,16 @@ app.use(ElementPlus, {
   size: Cookies.get('size') || 'default'
 })
 
-// app.use(eosForm, {
-//   getData: request,
-//   getConfig: request,
-//   uploadUrl: "/eos-api/sys/file/upload",
-//   uploadHeaders: {
-//     Authorization: "Bearer " + getToken()
-//   },
-//   uploadData: {
-//     BILLFROM: "0"
-//   }
-// })
+app.use(eosForm, {
+  getData: request,
+  getConfig: request,
+  uploadUrl: "/eos-api/sys/file/upload",
+  uploadHeaders: {
+    Authorization: "Bearer " + getToken()
+  },
+  uploadData: {
+    BILLFROM: "0"
+  }
+})
 
 app.mount('#app')

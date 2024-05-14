@@ -2,7 +2,7 @@
  * @Author: cc2049
  * @Date: 2024-04-28 15:12:29
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-05-10 18:11:04
+ * @LastEditTime: 2024-05-13 19:22:06
  * @Description: 简介
 -->
 
@@ -10,7 +10,7 @@
   <div class="top-button">
     <div class="fixed-top-button">
       <template v-for="(itemBtn) in topButton" :key="itemBtn.BILLNO">
-        <div class="buttom-item" @click="handelEvent(itemBtn)" :title="itemBtn.BTNTITLE " v-if=" setShowBtn(itemBtn) ">
+        <div class="buttom-item" @click="handelEvent(itemBtn)" :title="itemBtn.BTNTITLE " v-if="setShowBtn(itemBtn) ">
           {{ itemBtn.VNAME }}
         </div>
         <el-dropdown v-else-if="itemBtn.CHILDREN?.length" style="margin: 0 6px" @command="handelEvent" size="large">
@@ -24,11 +24,10 @@
           <template #dropdown>
             <el-dropdown-menu>
               <template v-for="itemBtnS in itemBtn.CHILDREN" :key="itemBtnS.BILLNO">
-                <el-dropdown-item :disabled="getButtonStatus(itemBtnS)" :command="itemBtnS" v-if=" setShowBtn(itemBtnS)">
+                <el-dropdown-item :command="itemBtnS" v-if=" setShowBtn(itemBtnS)">
                   {{ itemBtnS.VNAME }}
                 </el-dropdown-item>
               </template>
-
             </el-dropdown-menu>
           </template>
         </el-dropdown>
@@ -55,6 +54,10 @@
 </template>
 
 <script setup name="Button">
+import { ElMessageBox } from "element-plus";
+import { axiosGet } from "#/common";
+import { inject } from "vue";
+
 const props = defineProps({
   topButton: {
     type: Array,
@@ -65,58 +68,14 @@ const props = defineProps({
   treeNode: {},
 });
 
+const MenuID = inject("menuID");
+
+console.log(777, MenuID);
+
 // console.log('topButton', props.topButton );
 
 const { proxy } = getCurrentInstance();
-const emit = defineEmits(["handelEvent"]);
-
-const getButtonStatus = computed(() => (item) => {
-  //计算属性传递参数
-  let { ISCHOOSE: tnt, SCRNCONDITION: data } = item;
-  data = data || "";
-  //  tnt 指是否需要选择数据   data 按钮禁用条件
-  let DATA = props.currentData.length ? props.currentData[0] : null,
-    TREEDATA = props.treeNode || {},
-    b = props.currentData.length == 1, // 只选中一条数据
-    c = props.currentData.length > 0; // 选中了多条数据
-
-  if (!data && (!tnt || tnt == 0)) {
-    // 不需要选中数据的时候
-    return false;
-  } else if (tnt == 2 && c) {
-    // 多选成立
-    if (data && checkDataSetBtn(data)) {
-      return true;
-    }
-    return false;
-  } else if (tnt == 1) {
-    // 单选成立时
-    if (!b) return true;
-    if (DATA && checkDataSetBtn(data)) {
-      return true;
-    }
-    return false;
-  } else if (data && !tnt) {
-    return eval(data);
-  } else {
-    return true;
-  }
-});
-
-// 按钮是多选按钮，对多条数据进行判断条件是否成立
-function checkDataSetBtn(tj) {
-  for (let i = 0, TNTlength = props.currentData.length; i < TNTlength; i++) {
-    try {
-      let DATA = props.currentData[i];
-      if (eval(tj)) {
-        return true;
-      }
-    } catch (e) {
-      return false;
-    }
-  }
-  return false;
-}
+const emit = defineEmits(["handelEvent" , "reloadTableData"]);
 
 // 设置是否显示按钮
 
@@ -144,22 +103,17 @@ const setShowBtn = (btn) => {
   }
 };
 
-
 // proxy.$emit("handelEvent", { data, row: null });
 
 // 表格的顶部按钮操作
-function handelEvent( data ) {
-  console.log("handelEvent", btn );
-  let selectRecords = props.currentData
+function handelEvent(data) {
+  console.log("handelEvent", data);
+  let selectRecords = props.currentData;
   // 如果弹窗大小的值存在就进行设置弹窗大小  VTYPE =2  7  是开弹窗
   if (data.RATIO) {
     let WWHH =
       data.RATIO != 1 ? data.RATIO.split("*") : data.PAGEPATH.split("*");
-    pageConfig.modalW = WWHH[0];
-    pageConfig.modalH = WWHH[1];
   } else {
-    pageConfig.modalW = "70%";
-    pageConfig.modalH = "60%";
   }
 
   // 打开弹窗
@@ -169,17 +123,14 @@ function handelEvent( data ) {
     data.VTYPE == 1 ||
     data.VTYPE == 27
   ) {
-    
-    
   } else if (data.VTYPE == 3) {
     //  选中数据并提交
-    let dataChoose = null;
-    dataChoose = currentData.value;
-    if (data.ISCHOOSE == 1) {
-      dataChoose = currentData.value[0];
-    } else if (data.ISCHOOSE == 2) {
-      dataChoose = currentData.value;
+    let dataChoose = props.currentData;
+
+    if( !dataChoose || !dataChoose.length){
+      return proxy.$message.warning("请先选择数据再操作");
     }
+
     if (data.ISTWOSURE == 1) {
       needConfirm(data, dataChoose);
     } else {
@@ -377,7 +328,7 @@ function handelEvent( data ) {
 
 // 二次确认事件
 function needConfirm(data, selectRecords) {
-  ElMessageBox.confirm(`您确定要将该单据${data.VNAME}吗?`, "确认提示", {
+  ElMessageBox.confirm(`您确定要执行${data.VNAME}吗?`, "确认提示", {
     confirmButtonText: "确定",
     cancelButtonText: "取消",
     type: "warning",
@@ -389,15 +340,15 @@ function needConfirm(data, selectRecords) {
 // 执行按钮提交前的数据格式校验
 function submitByBtn(btn, data) {
   let params = btn.ACTIONADDRESS.includes("?")
-    ? getUrlParams(btn.ACTIONADDRESS)
-    : {},
+      ? getUrlParams(btn.ACTIONADDRESS)
+      : {},
     sdata = null;
   if (btn.ACTION == "DELETE" || btn.ISCHOOSE == 2) {
     let arr = [];
     if (btn.VTYPE == 20) {
       arr.push(treeNode.value.VALUE);
     } else {
-      arr = currentData.value.map((i) => {
+      arr = props.currentData.map((i) => {
         return i.BILLNO;
       });
     }
@@ -405,12 +356,24 @@ function submitByBtn(btn, data) {
   } else {
     sdata = { ...data, ...params };
   }
+  sdata.MODULEID = btn.PK_MODULE;
+  sdata.PAGEID = btn.PK_PAGE;
+
   submitEvent(btn.ACTIONADDRESS, sdata);
 }
 
 // 数据提交
 function submitEvent(URL, sdata) {
-  
+  axiosGet(URL, sdata).then((res) => {
+    let { MESSAGE, SUCCESS } = res;
+    if (SUCCESS) {
+      proxy.$message({
+        message: MESSAGE,
+        type: "success",
+      });
+      emit("reloadTableData")
+    }
+  });
 }
 
 function evilFn(row, fn) {
@@ -463,8 +426,6 @@ function evilFn(row, fn) {
         background-color: #cfddff;
       }
     }
-
-    
   }
 }
 
