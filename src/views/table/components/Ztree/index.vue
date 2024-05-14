@@ -2,7 +2,7 @@
  * @Author: cc2049
  * @Date: 2024-05-08 14:49:22
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-05-08 18:08:46
+ * @LastEditTime: 2024-05-14 09:27:21
  * @Description: 简介
 -->
     
@@ -36,7 +36,7 @@
               :default-expanded-keys="defaultExpandedKeys"
               :filter-node-method="filterNode" ref="treeRef" highlight-current @node-click="handleNodeClick">
       <template #default="{ data }">
-        <TextOverflow :content="` ${data.VNAME}`" />
+        <TextOverflow :content="` ${data.LABEL}`" />
       </template>
     </el-tree>
   </el-scrollbar>
