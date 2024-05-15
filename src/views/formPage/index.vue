@@ -2,7 +2,7 @@
  * @Author: cc2049
  * @Date: 2024-04-23 11:35:41
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-05-15 16:43:41
+ * @LastEditTime: 2024-05-15 19:10:08
  * @Description: 简介
 -->
 
@@ -34,15 +34,19 @@ import { getPageConfig } from "#/system/page.js";
 import { getFormValue } from "@/utils";
 import { axiosGet } from "#/common";
 
-import  useVxModal  from "@/hooks/useVxModal"
-
-const { modalVisible , modalTitle , tiggerModal } = useVxModal()
+const emit = defineEmits(["closeModal"]);
 
 const props = defineProps({
   menuID: {
     type: [String, Object],
     default: "",
   },
+  isGetDetail: {
+    type: Boolean,
+    default: false,
+  },
+  currentData: {},
+  activeBtn: {},
 });
 
 const { proxy } = getCurrentInstance();
@@ -58,11 +62,15 @@ watch(
   (value) => {
     if (value) {
       getPageConfig(props.menuID).then((res) => {
-        const { COLUMNS, VDEF2, BUTTON } = res.RESULT;
-        topButton.value = BUTTON;
+        const { COLUMNS, VDEF2, BUTTON, SLOTCFG } = res.RESULT;
+        topButton.value = resetButton(BUTTON);
         formConfig.value = COLUMNS;
         formData.value = getFormValue(COLUMNS);
         labelWidth.value = VDEF2 || "100px";
+        console.log("activeBtn", props.activeBtn);
+        if (props.isGetDetail) {
+          getDetail(SLOTCFG);
+        }
         nextTick(() => {});
       });
     }
@@ -71,6 +79,26 @@ watch(
     immediate: true,
   }
 );
+
+function resetButton(arr) {
+  if (arr.length) {
+    return arr;
+  }
+  let copyBtn = JSON.parse(JSON.stringify(props.activeBtn));
+  try {
+    let customCF = JSON.parse(copyBtn.PAGEPATH);
+    copyBtn.VNAME = customCF.sName;
+  } catch (error) {}
+
+  let newBtn = [copyBtn];
+  return newBtn;
+}
+
+function getDetail(URL) {
+  if (URL == "CurrentData") {
+    formData.value = Object.assign(formData.value, props.currentData[0]);
+  }
+}
 
 function handleBtnEvent(btn) {
   let URL = btn.ACTIONADDRESS;
@@ -92,7 +120,7 @@ function submitEvent(URL, sdata) {
     let { MESSAGE, SUCCESS } = res;
     if (SUCCESS) {
       proxy.$modal.msgSuccess(MESSAGE);
-      closeModal()
+      emit("closeModal");
     }
   });
 }

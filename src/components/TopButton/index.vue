@@ -2,7 +2,7 @@
  * @Author: cc2049
  * @Date: 2024-04-28 15:12:29
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-05-15 16:50:57
+ * @LastEditTime: 2024-05-15 18:54:52
  * @Description: 简介
 -->
 
@@ -65,11 +65,11 @@
     <!-- 公共弹窗表单模块 -->
     <vxe-modal destroy-on-close v-model="modalConfig.modalVisible" :width="modalConfig.modalW" :height="modalConfig.modalH" id="formModal" resize storage transfer show-zoom @close="closeModal">
       <template #title>
-        <span class="modal-title"> {{ modalConfig.pageTitle  }} {{ modalVisible }}
+        <span class="modal-title"> {{ modalConfig.pageTitle  }}
         </span>
       </template>
       <template #default>
-        <FormPage :menuID="formID" @closeModal="closeModal" />
+        <FormPage :menuID="formID" @closeModal="closeModal" :isGetDetail :currentData :activeBtn />
       </template>
     </vxe-modal>
 
@@ -104,8 +104,6 @@
       </template>
     </vxe-modal>
 
-
-
   </div>
 
 </template>
@@ -119,11 +117,10 @@ import { getFormValue, getFormRule } from "@/utils";
 
 import FormPage from "@/views/formPage/index.vue";
 
-import { getMENUBENTree, RoleDetail  } from "#/system/role";
-import { getAuthRoles} from "#/system/user";
+import { getMENUBENTree, RoleDetail } from "#/system/role";
+import { getAuthRoles } from "#/system/user";
 
 const route = useRoute();
-
 
 const props = defineProps({
   topButton: {
@@ -133,12 +130,12 @@ const props = defineProps({
     type: Array,
   },
   treeNode: {},
-  sourceType:{ // 1: 表格 2: 表单
+  sourceType: {
+    // 1: 表格 2: 表单
     type: [String, Number],
-    default: 1
-  }
+    default: 1,
+  },
 });
-
 
 // 用户授权===============================================================
 const data = reactive({
@@ -155,9 +152,9 @@ const data = reactive({
     PK_DEPT: undefined,
   },
   BILLSTATUS: [
-    { "LABEL": "正常", "VALUE": "1", "COLOR": "primary" },
-    { "LABEL": "停用", "VALUE": "0", "COLOR": "danger" },
-    { "LABEL": "锁定", "VALUE": "2", "COLOR": "danger" }
+    { LABEL: "正常", VALUE: "1", COLOR: "primary" },
+    { LABEL: "停用", VALUE: "0", COLOR: "danger" },
+    { LABEL: "锁定", VALUE: "2", COLOR: "danger" },
   ],
   rules: {},
   TreeProps: {
@@ -165,18 +162,26 @@ const data = reactive({
     children: "CHILDREN",
     disabled: (data) => {
       let { VALUE } = data;
-      return roleData.value.includes(VALUE)
+      return roleData.value.includes(VALUE);
     },
   },
 });
 const roleData = ref([]);
-const { queryParams, baseForm, form, formConfig, BILLSTATUS, AllMenuTree, rules, TreeProps } = toRefs(data);
+const {
+  queryParams,
+  baseForm,
+  form,
+  formConfig,
+  BILLSTATUS,
+  AllMenuTree,
+  rules,
+  TreeProps,
+} = toRefs(data);
 // 菜单权限相关
 const menuRef = ref();
 const menuExpand = ref(false);
 const menuNodeAll = ref(false);
 const menuFandZ = ref(true);
-
 
 // 弹窗
 const pageConfig = reactive({
@@ -185,12 +190,41 @@ const pageConfig = reactive({
   modalH: "50%",
   modelTitle: "",
 });
+
+const isGetDetail = ref(false);
+const activeBtn = ref(null)
+function closeModal() {
+  modalConfig.modalVisible = false;
+}
+
 // 初始化 用户授权 表单store
 const initPERMISSForm = () => {
   let config = [
-    { FIELD: "VNAME", LABEL: "用户", COL: 24, CONTROLS: "ExReadCard", ISREQUIRE: 1, ISSHOW: 1, OTHER: "" },
-    { FIELD: "ROLENAME", LABEL: "角色", COL: 24, CONTROLS: "ExReadCard", ISREQUIRE: 1, ISSHOW: 1, OTHER: "" },
-    { FIELD: "MENULIST", LABEL: "菜单权限", COL: 24, CONTROLS: "slot", ISSHOW: 1 }
+    {
+      FIELD: "VNAME",
+      LABEL: "用户",
+      COL: 24,
+      CONTROLS: "ExReadCard",
+      ISREQUIRE: 1,
+      ISSHOW: 1,
+      OTHER: "",
+    },
+    {
+      FIELD: "ROLENAME",
+      LABEL: "角色",
+      COL: 24,
+      CONTROLS: "ExReadCard",
+      ISREQUIRE: 1,
+      ISSHOW: 1,
+      OTHER: "",
+    },
+    {
+      FIELD: "MENULIST",
+      LABEL: "菜单权限",
+      COL: 24,
+      CONTROLS: "slot",
+      ISSHOW: 1,
+    },
   ];
   formConfig.value = config;
   let formData = getFormValue(config);
@@ -211,9 +245,9 @@ function handleCheckedTreeExpand(value) {
 const handlePermiss = (row) => {
   // formType.value = "permiss";
   let { BILLNO, PK_ROLE } = row;
-  
+
   getMENUBENTree({
-    BILLFROM: '0',
+    BILLFROM: "0",
   }).then((res) => {
     AllMenuTree.value = res.RESULT;
     initPERMISSForm();
@@ -222,13 +256,13 @@ const handlePermiss = (row) => {
       BILLNO: PK_ROLE,
     }).then((res) => {
       roleData.value = [...res.RESULT.MENU, ...res.RESULT.BTN];
-      console.log(BILLNO)
+      console.log(BILLNO);
       getAuthRoles({ BILLNO }).then((res) => {
         pageConfig.modelTitle = "用户授权";
         let selectMenu = [...roleData.value];
         pageConfig.modalVisible = true;
         if (res.RESULT) {
-          selectMenu = [...selectMenu, ...res.RESULT.MENU, ...res.RESULT.BTN]
+          selectMenu = [...selectMenu, ...res.RESULT.MENU, ...res.RESULT.BTN];
         }
         nextTick(() => {
           menuExpand.value = true;
@@ -241,7 +275,6 @@ const handlePermiss = (row) => {
     });
   });
 };
-
 
 // ===============================================================
 
@@ -300,9 +333,11 @@ function leftHandleEvent(type) {
 function handleEvent(data) {
   console.log("handelEvent", data);
   let selectRecords = props.currentData;
+
+  activeBtn.value = data
   // 表单中的按钮事件直接调
-  if(props.sourceType ==2 ){
-    return emit('handleBtnEvent', data)
+  if (props.sourceType == 2) {
+    return emit("handleBtnEvent", data);
   }
 
   // 如果弹窗大小的值存在就进行设置弹窗大小  VTYPE =2  7  是开弹窗
@@ -319,14 +354,18 @@ function handleEvent(data) {
     data.VTYPE == 1 ||
     data.VTYPE == 27
   ) {
-
-    tiggerModal()
-
+    if (data.ACTION == "EDIT") {
+      if ( !props.currentData.length) {
+        return proxy.$message.warning("请先选择数据再操作");
+      }
+      isGetDetail.value = true;
+    }
+    modalConfig.modalVisible = true;
     formID.value = {
       MODULEID: data.PK_MODULE,
       PAGEID: data.PK_PAGE,
     };
-    console.log(123, modalConfig);
+
   } else if (data.VTYPE == 3) {
     //  选中数据并提交
     let dataChoose = props.currentData;
@@ -375,30 +414,29 @@ function handleEvent(data) {
   } else if (data.VTYPE == 15) {
     // 文件路径下载
     downFilesByUrl(data);
-  }else if (data.VTYPE == 21) { 
-    console.log(selectRecords)
+  } else if (data.VTYPE == 21) {
+    console.log(selectRecords);
     switch (data.BTNTITLE) {
-        case 'userAuthorization':   // 用户授权
-          handlePermiss(selectRecords[0])
-            break
-        case 'userOrgScope':   // 用户组织授权
-            // emit('update', 'hour', cycleTotal.value, 'hour')
-            break
-        // case 3:
-        //     emit('update', 'hour', averageTotal.value, 'hour')
-        //     break
-        // case 4:
-        //     if (checkboxList.value.length === 0) {
-        //         checkboxList.value.push(checkCopy.value[0])
-        //     } else {
-        //         checkCopy.value = checkboxList.value
-        //     }
-        //     emit('update', 'hour', checkboxString.value, 'hour')
-        //     break
+      case "userAuthorization": // 用户授权
+        handlePermiss(selectRecords[0]);
+        break;
+      case "userOrgScope": // 用户组织授权
+        // emit('update', 'hour', cycleTotal.value, 'hour')
+        break;
+      // case 3:
+      //     emit('update', 'hour', averageTotal.value, 'hour')
+      //     break
+      // case 4:
+      //     if (checkboxList.value.length === 0) {
+      //         checkboxList.value.push(checkCopy.value[0])
+      //     } else {
+      //         checkCopy.value = checkboxList.value
+      //     }
+      //     emit('update', 'hour', checkboxString.value, 'hour')
+      //     break
     }
-    //     
+    //
   }
-
 }
 
 // 二次确认事件
@@ -430,11 +468,11 @@ function submitByBtn(btn, data) {
     sdata = { data: arr };
   } else {
     // sdata = { ...data, ...params };
-    sdata = { 
-      CHOOSEDATA:Array.isArray(data)?data:[data],
+    sdata = {
+      CHOOSEDATA: Array.isArray(data) ? data : [data],
       // ...data,
-      ...params 
-    };    
+      ...params,
+    };
   }
   sdata.MODULEID = btn.PK_MODULE;
   sdata.PAGEID = btn.PK_PAGE;
@@ -512,6 +550,4 @@ function evilFn(row, fn) {
 .font-16 {
   font-size: 16px;
 }
-
-
 </style>
