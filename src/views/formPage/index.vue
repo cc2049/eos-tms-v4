@@ -2,15 +2,15 @@
  * @Author: cc2049
  * @Date: 2024-04-23 11:35:41
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-05-15 09:28:07
+ * @LastEditTime: 2024-05-15 11:42:36
  * @Description: 简介
 -->
 
 <template>
   <div class="form-container">
-    <TopButton :topButton="topButton" sourceType="2" @handelEvent="handelEvent" @reloadTableData="reloadTableData" />
+    <TopButton :topButton="topButton" sourceType="2" @handleBtnEvent="handleBtnEvent" @reloadTableData="reloadTableData" />
     <div class="mt20 p-10 ">
-      <eos-form v-model="formData" :config="formConfig" :detail="detail" >
+      <eos-form ref="eosFormRef" v-model="formData" :config="formConfig" :detail="detail" >
         <template #subTable="{ config }" v-if="tableConfig.length > 0">
           <div class="formTable" :style="`margin-left:-${labelWidth}`">
             <SubTableCom :ref="config.FIELD+'Ref'" :key="config.FIELD" :detail="detail || config.ISDISABLED == '1'" :title="config.LABEL" :config="comConfig(config)" v-model:data="formData[config.FIELD]" v-model:mainFormData="formData" :othConfig="othConfig" @EtbaleLinkChange="EtbaleLinkChange"
@@ -39,7 +39,7 @@ const props = defineProps({
     default: "",
   },
 });
-
+const eosFormRef = ref(null)
 const topButton = ref([]);
 const formConfig = ref([]);
 const formData = ref({});
@@ -67,6 +67,22 @@ watch(
     immediate: true,
   }
 );
+
+
+function handleBtnEvent(data){
+  console.log(eosFormRef.value);
+  eosFormRef.value.validate((valid) => {
+    console.log(123, valid,  formData.value);
+    if (valid) {
+      console.log(123, formData.value);
+    }
+  });
+}
+
+function reloadTableData(data) {
+  console.log(data);
+}
+
 </script>
 
 <style lang="scss" scoped>

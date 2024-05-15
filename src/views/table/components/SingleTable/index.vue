@@ -6,7 +6,7 @@
  * @Description: 简介
 -->
 <template v-if="pageConfig">
-  <TopButton :topButton="pageConfig?.topButton" :currentData="currentData" @handelEvent="handelEvent" @reloadTableData="reloadTableData" />
+  <TopButton :topButton="pageConfig?.topButton" :currentData="currentData" @handleBtnEvent="handelEvent" @reloadTableData="reloadTableData" />
   <div class="custom-query" ref="AdvancedQuery">
     <AdvanceQuery :queryConfig="pageConfig?.queryConfig" @updateHeight="queryHeight" />
   </div>

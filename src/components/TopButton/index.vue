@@ -2,7 +2,7 @@
  * @Author: cc2049
  * @Date: 2024-04-28 15:12:29
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-05-15 08:54:41
+ * @LastEditTime: 2024-05-15 11:42:01
  * @Description: 简介
 -->
 
@@ -102,7 +102,7 @@ const MenuID = inject("menuID");
 const formID = ref(null);
 // console.log('topButton', props.topButton );
 const { proxy } = getCurrentInstance();
-const emit = defineEmits(["handelEvent", "reloadTableData"]);
+const emit = defineEmits(["handleBtnEvent", "reloadTableData"]);
 
 const modalConfig = reactive({
   modalVisible: false,
@@ -154,6 +154,11 @@ function leftHandleEvent(type) {
 function handleEvent(data) {
   console.log("handelEvent", data);
   let selectRecords = props.currentData;
+  // 表单中的按钮事件直接调
+  if(props.sourceType ==2 ){
+    return emit('handleBtnEvent', data)
+  }
+
   // 如果弹窗大小的值存在就进行设置弹窗大小  VTYPE =2  7  是开弹窗
   if (data.RATIO) {
     let WWHH =
