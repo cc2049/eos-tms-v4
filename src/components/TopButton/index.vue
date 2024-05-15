@@ -80,7 +80,7 @@
       </template>
       <template #default>
         <el-row :gutter="10">
-          <Form ref="formRef" v-model:formData="form" labelWidth="100px" :formConfig="formConfig" :rules="rules" >
+          <!-- <Form ref="formRef" v-model:formData="form" labelWidth="100px" :formConfig="formConfig" :rules="rules" >
             <template #MENULIST>
               <div class="menuSelect">
                 <el-checkbox v-model="menuExpand" @change="handleCheckedTreeExpand($event)">展开/折叠</el-checkbox>
@@ -96,7 +96,7 @@
                   </el-select>
                 </div>
               </template>
-          </Form>
+          </Form> -->
         </el-row>
       </template>
       <template #footer>
@@ -185,7 +185,7 @@ const pageConfig = reactive({
   modalH: "50%",
   modelTitle: "",
 });
-// 初始化 用户授权 表单
+// 初始化 用户授权 表单store
 const initPERMISSForm = () => {
   let config = [
     { FIELD: "VNAME", LABEL: "用户", COL: 24, CONTROLS: "ExReadCard", ISREQUIRE: 1, ISSHOW: 1, OTHER: "" },
@@ -203,9 +203,9 @@ const initPERMISSForm = () => {
 /** 树权限（展开/折叠）*/
 function handleCheckedTreeExpand(value) {
   let treeList = AllMenuTree.value;
-  for (let i = 0; i < treeList.length; i++) {
-    menuRef.value.store.nodesMap[treeList[i].VALUE].expanded = value;
-  }
+  // for (let i = 0; i < treeList.length; i++) {
+  //   menuRef.value.store.nodesMap[treeList[i].VALUE].expanded = value;
+  // }
 }
 
 const handlePermiss = (row) => {
@@ -233,9 +233,9 @@ const handlePermiss = (row) => {
         nextTick(() => {
           menuExpand.value = true;
           handleCheckedTreeExpand(true);
-          selectMenu.forEach((v) => {
-            menuRef.value.setChecked(v, true, false);
-          });
+          // selectMenu.forEach((v) => {
+          //   menuRef.value.setChecked(v, true, false);
+          // });
         });
       });
     });
