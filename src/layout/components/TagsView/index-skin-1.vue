@@ -2,7 +2,7 @@
  * @Author: cc2049
  * @Date: 2024-04-24 18:52:34
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-04-24 18:52:36
+ * @LastEditTime: 2024-05-15 15:21:02
  * @Description: 简介
 -->
 <!--
@@ -260,7 +260,7 @@ function handleScroll() {
 .tags-view-container {
   height: 30px;
   background: #f5f7fb;
-  border-bottom: 1px solid #d8dce5;
+  // border-bottom: 1px solid #d8dce5;
   position: relative;
   .tags-view-wrapper {
     .tags-view-item {

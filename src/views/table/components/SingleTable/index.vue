@@ -2,7 +2,7 @@
  * @Author: cc2049
  * @Date: 2024-04-28 13:10:44
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-05-14 18:21:07
+ * @LastEditTime: 2024-05-15 14:39:11
  * @Description: 简介
 -->
 <template v-if="pageConfig">
@@ -32,7 +32,7 @@
     </template>
     <!-- 表格主体 -->
     <div class="table-wrap" :class="pageConfig?.hasTree && showZtree ? 'has-tree-table' :'' " v-if="tableCFG">
-      <Vxtable ref="VxtableRef" class="bg-white" :tableCFG="tableCFG" :tableData="tableData" @change="tableChange" @dragRow="dragTableRow" @queryEvent="queryEvent">
+      <Vxtable ref="VxtableRef" class="bg-white" :tableCFG="tableCFG" :tableData="tableData" @change="tableChange" @dragRow="dragTableRow" @queryEvent="queryEvent" @resetConfig="resetConfig">
       </Vxtable>
       <vxe-pager size="mini" class-name="vxe-page-wrap " :page-size="pageInfo.pageSize" :page-sizes="ListPageSize" :current-page="pageInfo.currentPage" :total="pageInfo.totalResult" :layouts="pagerLayouts" @page-change="handlePageChange">
         <template #left>
@@ -62,6 +62,8 @@ const props = defineProps({
     default: "",
   },
 });
+
+const VxtableRef = ref(null);
 
 const pageConfig = ref(null);
 const tableCFG = ref(null);
@@ -188,13 +190,13 @@ const dragTableRow = ({ row, $rowIndex }) => {
 };
 
 const getTableData = () => {
-  tableCFG.value.loading = true
+  tableCFG.value.loading = true;
   queryJSON.value.PAGENUM = pageInfo.currentPage;
   queryJSON.value.SORTNAME = pageInfo.sortName;
   queryJSON.value.REVERSE = pageInfo.sortOrder;
   axiosGet(queryURL.value, queryJSON.value).then((res) => {
-     currentData.value = [];
-      tableCFG.value.loading = false
+    currentData.value = [];
+    tableCFG.value.loading = false;
 
     if (Array.isArray(res.RESULT)) {
       tableData.value = res.RESULT;
@@ -270,6 +272,18 @@ function queryHeight() {
     tableCFG.value.height =
       window.innerHeight - 160 - AdvancedQuery.value?.clientHeight;
   });
+}
+
+function resetConfig(data) {
+  // let index = tableCFG.value.tableColumns.findIndex((i) => i.FIELD == data.id);
+  // tableCFG.value.tableColumns[index] = data.isShow
+
+  // let newTableCol = JSON.parse(JSON.stringify(tableCFG.value.tableColumns)) ;
+  // tableCFG.value.tableColumns = [];
+  // tableCFG.value.tableColumns = newTableCol;
+
+  // VxtableRef.value.refreshColumn();
+  console.log("resetConfig", tableCFG.value.tableColumns);
 }
 
 onMounted(() => {});

@@ -2,7 +2,7 @@
  * @Author: cc2049
  * @Date: 2024-02-20 09:00:04
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-05-14 13:09:19
+ * @LastEditTime: 2024-05-15 15:15:11
  * @Description: 简介
 -->
 
@@ -10,7 +10,7 @@
   <div class="custom-head" @contextmenu.prevent="fnResourcesRightClick($event, column)">
 
     <span class="custom-head-title" @click="handleSort(column)">
-      {{ column.title || '' }} 
+      {{ column.title || '' }}
       <el-icon :size="20" class="sort-icon" v-if=" column.field == sortCFG.sortBy ">
         <CaretBottom v-if=" sortCFG.sort == 'desc' " />
         <CaretTop v-else />
@@ -20,7 +20,7 @@
     <div class="right-menu" v-show="showRightMenu && sortCFG.activeID == column.field" @click.stop.prevent="rightClick(column)" extmenu.stop.prevent>
       <div class="right-menu-item bottom">
 
-        <el-popover placement="right" :width="126" >
+        <el-popover placement="right" :width="126">
           <template #reference>
             <div>
               <el-icon :size="16" color="#606875">
@@ -36,7 +36,7 @@
 
           </template>
 
-          <vxe-checkbox-group v-model="checkList" class="column-list" style="display: flex;flex-direction: column;junt-content: flex-start;">
+          <vxe-checkbox-group v-model="checkList" class="column-list" @change="checkboxChange" style="display: flex;flex-direction: column;junt-content: flex-start;">
             <vxe-checkbox style="margin-left:0;margin-bottom:10px" :content="itemCol.LABEL" :label="itemCol.FIELD" :key="itemCol.BILLNO" v-for="itemCol in tableCFG.tableColumns" />
           </vxe-checkbox-group>
         </el-popover>
@@ -133,7 +133,12 @@ const props = defineProps({
   sortCFG: {},
 });
 
-const emit = defineEmits(["filterEvent", "handleSortEvent", "rightClick"]);
+const emit = defineEmits([
+  "filterEvent",
+  "handleSortEvent",
+  "rightClick",
+  "setColShowEvent",
+]);
 const { proxy } = getCurrentInstance();
 
 const checkList = ref([]);
@@ -307,8 +312,6 @@ function fnResourcesRightClick(event, item) {
     .filter((el) => el.SELECTEDFLAG == 1)
     .map((i) => i.FIELD);
 
-  console.log(checkList.value);
-
   showRightMenu.value = true;
   let eventData = {
     type: "openRight",
@@ -387,6 +390,11 @@ function getColumnsList(data) {
     });
   }
   tableColumns.value = newArr;
+}
+
+function checkboxChange(e) {
+  let data = { id: e.label, isShow: e.value ? "1" : "0" };
+  emit("setColShowEvent", data);
 }
 </script>
 
@@ -471,7 +479,7 @@ $border-color-jdy: #ceced2;
   color: #333;
 }
 
-:deep(.vxe-checkbox+.vxe-checkbox) {
- margin-left: none;
+:deep(.vxe-checkbox + .vxe-checkbox) {
+  margin-left: none;
 }
 </style>

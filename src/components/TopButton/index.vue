@@ -2,7 +2,7 @@
  * @Author: cc2049
  * @Date: 2024-04-28 15:12:29
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-05-15 11:42:01
+ * @LastEditTime: 2024-05-15 16:47:36
  * @Description: 简介
 -->
 
@@ -65,11 +65,11 @@
     <!-- 公共弹窗表单模块 -->
     <vxe-modal destroy-on-close v-model="modalConfig.modalVisible" :width="modalConfig.modalW" :height="modalConfig.modalH" id="formModal" resize storage transfer show-zoom @close="closeModal">
       <template #title>
-        <span class="modal-title"> {{ modalConfig.pageTitle  }}
+        <span class="modal-title"> {{ modalConfig.pageTitle  }} {{ modalVisible }}
         </span>
       </template>
       <template #default>
-        <FormPage :menuID="formID" />
+        <FormPage :menuID="formID" @closeModal="closeModal" />
       </template>
     </vxe-modal>
   </div>
@@ -83,6 +83,9 @@ import { inject, reactive } from "vue";
 import { getUrlParams } from "@/utils";
 
 import FormPage from "@/views/formPage/index.vue";
+
+import  useVxModal  from "@/hooks/useVxModal"
+
 
 const props = defineProps({
   topButton: {
@@ -105,7 +108,6 @@ const { proxy } = getCurrentInstance();
 const emit = defineEmits(["handleBtnEvent", "reloadTableData"]);
 
 const modalConfig = reactive({
-  modalVisible: false,
   modalW: 1000,
   modalH: 600,
   pageTitle: "提示",
@@ -173,7 +175,9 @@ function handleEvent(data) {
     data.VTYPE == 1 ||
     data.VTYPE == 27
   ) {
-    modalConfig.modalVisible = true;
+
+    tiggerModal()
+
     formID.value = {
       MODULEID: data.PK_MODULE,
       PAGEID: data.PK_PAGE,

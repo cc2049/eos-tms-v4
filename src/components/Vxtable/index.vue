@@ -3,7 +3,8 @@
     <!-- checkStrictly:  !tableCFG.treeID?true:false  控制多选框是否级联 -->
     <!-- @header-cell-click="headerCellClickEvent" @header-cell-dblclick="headerCellClickEvent" -->
 
-    <vxe-table class="mytable-scrollbar mytable-footer" resizable round show-overflow ref="xTable" :edit-rules="validRules" size="mini" highlight-hover-row header-row-class-name="bg-blue" width="100%" :show-footer="tableCFG.mergeCFG && tableCFG.mergeCFG.length" border :loading="tableCFG.loading" :cell-class-name="cellClassName" :height=" showMoreQuery? tableCFG.height-50 : tableCFG.height  " :column-config="{ isCurrent: false, isHover: true }" :row-config="{
+    <vxe-table class="mytable-scrollbar mytable-footer" resizable round show-overflow ref="xTable" :edit-rules="validRules" size="mini" highlight-hover-row header-row-class-name="bg-blue" width="100%" :show-footer="tableCFG.mergeCFG && tableCFG.mergeCFG.length" border :loading="tableCFG.loading"
+      :cell-class-name="cellClassName" :height=" showMoreQuery? tableCFG.height-50 : tableCFG.height  " :column-config="{ isCurrent: false, isHover: true }" :row-config="{
         isCurrent: true,
         isHover: true,
         height:  34 ,
@@ -15,7 +16,8 @@
         !tableCFG.SelectType || tableCFG.SelectType != 'radio'
           ? { highlight: true   }
           : null
-      " :sort-config="{ showIcon: false }" :footer-method="footerMethod" :expand-config="{ labelField: tableCFG.expandID }" :tree-config="{transform: tableCFG.treeID?.transform ==1 ? true :false , rowField: tableCFG.treeID?.rowField , parentField: tableCFG.treeID?.parentField }" :row-class-name="rowClassName" @toggle-row-expand="toggleExpandChangeEvent" @sort-change="sortChange" @radio-change="radioChangeEvent" @checkbox-change="checkboxChange" @checkbox-all="checkboxChange" @custom="toolbarCustomEvent" @cell-click="rowClick" @cell-dblclick="
+      " :sort-config="{ showIcon: false }" :footer-method="footerMethod" :expand-config="{ labelField: tableCFG.expandID }" :tree-config="{transform: tableCFG.treeID?.transform ==1 ? true :false , rowField: tableCFG.treeID?.rowField , parentField: tableCFG.treeID?.parentField }"
+      :row-class-name="rowClassName" @toggle-row-expand="toggleExpandChangeEvent" @sort-change="sortChange" @radio-change="radioChangeEvent" @checkbox-change="checkboxChange" @checkbox-all="checkboxChange" @custom="toolbarCustomEvent" @cell-click="rowClick" @cell-dblclick="
         (e) => {
           openDetail(e.row);
         }
@@ -54,9 +56,10 @@
 
         <template v-else>
 
-          <vxe-column :field="config.FIELD" :align="config.ALIGN" :width="setColWidth(config)" :title=" setColTitle(config)  " :fixed="config.ISFIXED=='left'?'left':null" :height="30" :resizable="true" :key="i" :tree-node=" tableCFG.treeID?.treenodeId == config.FIELD " :visible="setTableColShow(config)" :sortable="config.ISSORT == 1">
+          <vxe-column :field="config.FIELD" :align="config.ALIGN" :width="setColWidth(config)" :title=" setColTitle(config)  " :fixed="config.ISFIXED=='left'?'left':null" :height="30" :resizable="true" :key="i" :tree-node=" tableCFG.treeID?.treenodeId == config.FIELD "
+            :visible="setTableColShow(config)" :sortable="config.ISSORT == 1">
             <template #header="{ column }">
-              <Header :column="column" :config="config" :sortCFG :tableCFG="tableCFG" @filterEvent="filterEvent" @handleSortEvent="headerCellClickEvent" @rightClick="rightClickEvent" />
+              <Header :column="column" :config="config" :sortCFG :tableCFG="tableCFG" @filterEvent="filterEvent" @handleSortEvent="headerCellClickEvent" @rightClick="rightClickEvent" @setColShowEvent="setColShowEvent" />
             </template>
 
             <template #default="{ row }">
@@ -97,14 +100,14 @@
                 <el-link type="primary" v-if="row[config.FIELD]" @click.stop="handleFileList(row, config)">{{ getFileLength(row,[config.FIELD]) }}个文件</el-link>
               </template>
 
-              <template v-else-if="tableCFG.treeID?.treenodeId == config.FIELD">
+              <!-- <template v-else-if="tableCFG.treeID?.treenodeId == config.FIELD">
                 <template v-if="tableCFG.treeID.groupName">
                   {{ row[tableCFG.treeID.groupName] || '' }}
                 </template>
                 <template v-else-if="tableCFG.treeID.treenodeId">
                   {{ row[tableCFG.treeID.treenodeId] || '' }}
                 </template>
-              </template>
+              </template> -->
 
               <!-- 超链接 -->
               <template v-else-if="config.VTYPE == 'link'">
@@ -392,7 +395,7 @@ const cellClassName = ({ row, column }) => {
   return null;
 };
 
-const emit = defineEmits(["dragRow", "queryEvent"]);
+const emit = defineEmits(["dragRow", "queryEvent", "resetConfig"]);
 const props = defineProps({
   // 配置
   tableCFG: {
@@ -491,12 +494,12 @@ const setStatusNodes = computed((config, val) => {
           newArr[0].COLOR == "info"
             ? "#909399"
             : newArr[0].COLOR == "primary"
-              ? "#409EFF"
-              : newArr[0].COLOR == "success"
-                ? "#67C23A"
-                : newArr[0].COLOR == "danger"
-                  ? "#F56C6C"
-                  : "#E6A23C";
+            ? "#409EFF"
+            : newArr[0].COLOR == "success"
+            ? "#67C23A"
+            : newArr[0].COLOR == "danger"
+            ? "#F56C6C"
+            : "#E6A23C";
         let LABEL = newArr[0].LABEL;
         let VALUE = newArr[0].VALUE;
         return { color, LABEL, VALUE };
@@ -526,6 +529,7 @@ const sortCFG = reactive({
 });
 
 function refreshColumn() {
+  console.log("refreshColumn");
   proxy.$refs.xTable.refreshColumn();
 }
 // 刷新表格数据
@@ -938,6 +942,11 @@ function rightClickEvent(data) {
   if (data.type == "openRight") {
     sortCFG.activeID = data.column.field;
   }
+}
+
+function setColShowEvent(data) {
+  let index = props.tableCFG.tableColumns.findIndex((i) => i.FIELD == data.id);
+  props.tableCFG.tableColumns[index].SELECTEDFLAG = data.isShow;
 }
 
 // 支持列头筛选的查询条件 ID
