@@ -72,6 +72,40 @@
         <FormPage :menuID="formID" />
       </template>
     </vxe-modal>
+
+    <!-- 用户授权 -->
+    <vxe-modal destroy-on-close v-model="pageConfig.modalVisible" :width="pageConfig.modalW" :height="pageConfig.modalH" id="formModal" resize storage transfer show-zoom show-footer>
+      <template #title>
+        <span> {{ pageConfig.modelTitle }} </span>
+      </template>
+      <template #default>
+        <el-row :gutter="10">
+          <Form ref="formRef" v-model:formData="form" labelWidth="100px" :formConfig="formConfig" :rules="rules" >
+            <template #MENULIST>
+              <div class="menuSelect">
+                <el-checkbox v-model="menuExpand" @change="handleCheckedTreeExpand($event)">展开/折叠</el-checkbox>
+                <el-checkbox v-model="menuNodeAll" @change="handleCheckedTreeNodeAll($event)">全选/全不选</el-checkbox>
+                <el-checkbox v-model="menuFandZ">父子联动</el-checkbox>
+                <el-tree class="tree-border" :data="AllMenuTree" show-checkbox ref="menuRef" node-key="VALUE" :check-strictly="!menuFandZ" empty-text="暂无数据" :props="TreeProps"></el-tree>
+              </div>
+            </template>
+            <template #PANELID>
+                <div>
+                  <el-select v-model.trim="form.PANELID" placeholder="请选择" clearable @change="changePANELID" style="width: 100%;">
+                    <el-option v-for="item in PANELIDList" :key="item.BILLNO" :label="item.PANEL_NAME" :value="item.BILLNO"></el-option>
+                  </el-select>
+                </div>
+              </template>
+          </Form>
+        </el-row>
+      </template>
+      <template #footer>
+        <el-button type="primary" size="default" @click="formSubmit">保存</el-button>
+      </template>
+    </vxe-modal>
+
+
+
   </div>
 
 </template>
@@ -81,8 +115,15 @@ import { ElMessageBox } from "element-plus";
 import { axiosGet } from "#/common";
 import { inject, reactive } from "vue";
 import { getUrlParams } from "@/utils";
+import { getFormValue, getFormRule } from "@/utils";
 
 import FormPage from "@/views/formPage/index.vue";
+
+import { getMENUBENTree, RoleDetail  } from "#/system/role";
+import { getAuthRoles} from "#/system/user";
+
+const route = useRoute();
+
 
 const props = defineProps({
   topButton: {
@@ -97,6 +138,112 @@ const props = defineProps({
     default: 1
   }
 });
+
+
+// 用户授权===============================================================
+const data = reactive({
+  baseForm: {},
+  form: {},
+  formConfig: [],
+  AllMenuTree: [],
+  queryParams: {
+    PAGENUM: 1,
+    PAGESIZE: 10,
+    MODULEID: route.meta.BILLNO,
+    PAGEID: route.meta.PBILLNO,
+    PK_ORG: undefined,
+    PK_DEPT: undefined,
+  },
+  BILLSTATUS: [
+    { "LABEL": "正常", "VALUE": "1", "COLOR": "primary" },
+    { "LABEL": "停用", "VALUE": "0", "COLOR": "danger" },
+    { "LABEL": "锁定", "VALUE": "2", "COLOR": "danger" }
+  ],
+  rules: {},
+  TreeProps: {
+    label: "LABEL",
+    children: "CHILDREN",
+    disabled: (data) => {
+      let { VALUE } = data;
+      return roleData.value.includes(VALUE)
+    },
+  },
+});
+const roleData = ref([]);
+const { queryParams, baseForm, form, formConfig, BILLSTATUS, AllMenuTree, rules, TreeProps } = toRefs(data);
+// 菜单权限相关
+const menuRef = ref();
+const menuExpand = ref(false);
+const menuNodeAll = ref(false);
+const menuFandZ = ref(true);
+
+
+// 弹窗
+const pageConfig = reactive({
+  modalVisible: false,
+  modalW: "50%",
+  modalH: "50%",
+  modelTitle: "",
+});
+// 初始化 用户授权 表单
+const initPERMISSForm = () => {
+  let config = [
+    { FIELD: "VNAME", LABEL: "用户", COL: 24, CONTROLS: "ExReadCard", ISREQUIRE: 1, ISSHOW: 1, OTHER: "" },
+    { FIELD: "ROLENAME", LABEL: "角色", COL: 24, CONTROLS: "ExReadCard", ISREQUIRE: 1, ISSHOW: 1, OTHER: "" },
+    { FIELD: "MENULIST", LABEL: "菜单权限", COL: 24, CONTROLS: "slot", ISSHOW: 1 }
+  ];
+  formConfig.value = config;
+  let formData = getFormValue(config);
+  baseForm.value = formData;
+  form.value = formData;
+  rules.value = getFormRule(config);
+  pageConfig.modalW = "600px";
+  pageConfig.modalH = "70%";
+};
+/** 树权限（展开/折叠）*/
+function handleCheckedTreeExpand(value) {
+  let treeList = AllMenuTree.value;
+  for (let i = 0; i < treeList.length; i++) {
+    menuRef.value.store.nodesMap[treeList[i].VALUE].expanded = value;
+  }
+}
+
+const handlePermiss = (row) => {
+  // formType.value = "permiss";
+  let { BILLNO, PK_ROLE } = row;
+  
+  getMENUBENTree({
+    BILLFROM: '0',
+  }).then((res) => {
+    AllMenuTree.value = res.RESULT;
+    initPERMISSForm();
+    form.value = row;
+    RoleDetail({
+      BILLNO: PK_ROLE,
+    }).then((res) => {
+      roleData.value = [...res.RESULT.MENU, ...res.RESULT.BTN];
+      console.log(BILLNO)
+      getAuthRoles({ BILLNO }).then((res) => {
+        pageConfig.modelTitle = "用户授权";
+        let selectMenu = [...roleData.value];
+        pageConfig.modalVisible = true;
+        if (res.RESULT) {
+          selectMenu = [...selectMenu, ...res.RESULT.MENU, ...res.RESULT.BTN]
+        }
+        nextTick(() => {
+          menuExpand.value = true;
+          handleCheckedTreeExpand(true);
+          selectMenu.forEach((v) => {
+            menuRef.value.setChecked(v, true, false);
+          });
+        });
+      });
+    });
+  });
+};
+
+
+// ===============================================================
 
 const MenuID = inject("menuID");
 const formID = ref(null);
@@ -222,7 +369,30 @@ function handleEvent(data) {
   } else if (data.VTYPE == 15) {
     // 文件路径下载
     downFilesByUrl(data);
+  }else if (data.VTYPE == 21) { 
+    console.log(selectRecords)
+    switch (data.BTNTITLE) {
+        case 'userAuthorization':   // 用户授权
+          handlePermiss(selectRecords[0])
+            break
+        case 'userOrgScope':   // 用户组织授权
+            // emit('update', 'hour', cycleTotal.value, 'hour')
+            break
+        // case 3:
+        //     emit('update', 'hour', averageTotal.value, 'hour')
+        //     break
+        // case 4:
+        //     if (checkboxList.value.length === 0) {
+        //         checkboxList.value.push(checkCopy.value[0])
+        //     } else {
+        //         checkCopy.value = checkboxList.value
+        //     }
+        //     emit('update', 'hour', checkboxString.value, 'hour')
+        //     break
+    }
+    //     
   }
+
 }
 
 // 二次确认事件
@@ -253,7 +423,12 @@ function submitByBtn(btn, data) {
     }
     sdata = { data: arr };
   } else {
-    sdata = { ...data, ...params };
+    // sdata = { ...data, ...params };
+    sdata = { 
+      CHOOSEDATA:Array.isArray(data)?data:[data],
+      // ...data,
+      ...params 
+    };    
   }
   sdata.MODULEID = btn.PK_MODULE;
   sdata.PAGEID = btn.PK_PAGE;

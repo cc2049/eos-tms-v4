@@ -117,3 +117,22 @@ export function deptTreeSelect(roleId) {
     method: 'get'
   })
 }
+
+
+// 查询 对应终端的 菜单树
+export function getMENUBENTree(data) {
+  return request({
+    url: "/sys/module/getRoleTreeList",
+    method: "post",
+    data
+  })
+}
+
+// 查询角色详细
+export function RoleDetail(data) {
+  return request({
+    url: '/sys/role/getDetail',
+    method: "post",
+    data
+  })
+}

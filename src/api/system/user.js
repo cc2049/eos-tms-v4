@@ -133,3 +133,13 @@ export function deptTreeSelect() {
     method: 'get'
   })
 }
+
+// 查询授权角色
+export function getAuthRoles(data) {
+  return request({
+    url: '/sys/userMenu/getDetail',
+    method: 'post',
+    data
+  })
+}
+
