@@ -2,7 +2,7 @@
  * @Author: cc2049
  * @Date: 2024-04-23 10:08:57
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-04-24 11:10:34
+ * @LastEditTime: 2024-05-14 17:06:58
  * @Description: 简介
  */
 import request from '@/utils/request'
@@ -44,12 +44,11 @@ export function saveUserConfig(data) {
 export function login(data) {
   localforage.clear()
   return request({
-    url: '/auth/check/login',
+    url: '/sys/check/login',
     headers: {
       isToken: false
     },
     method: 'post',
-    encry: false,
     data
   })
 }
@@ -78,7 +77,7 @@ export function getInfo() {
 // 退出方法
 export function logout() {
   return request({
-    url: '/auth/check/logout',
+    url: '/sys/check/logout',
     method: 'post',
     encry: false,
   })
@@ -100,7 +99,7 @@ export function getCodeImg() {
 // 获取短信验证码
 export function getNoteCode(data) {
   return request({
-    url: 'auth/check/sendSmsCode ',
+    url: 'sys/check/sendSmsCode ',
     headers: {
       isToken: false
     },
@@ -127,7 +126,7 @@ export function updatePwd(data) {
 // 发送验证码
 export function sendSmsCode(data) {
   return request({
-    url: 'auth/check/sendSmsCode',
+    url: 'sys/check/sendSmsCode',
     headers: {
       isToken: false
     },
@@ -141,7 +140,7 @@ export function sendSmsCode(data) {
 export function forgotPwd(data) {
   return request({
     // url: 'user/forgotPwd',
-    url: '/auth/check/retrieve',
+    url: '/sys/check/retrieve',
     headers: {
       isToken: false
     },

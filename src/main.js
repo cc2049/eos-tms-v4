@@ -2,7 +2,7 @@
  * @Author: cc2049
  * @Date: 2024-04-19 09:01:33
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-05-14 13:01:38
+ * @LastEditTime: 2024-05-14 18:47:07
  * @Description: 简介
  */
 import { createApp } from 'vue'
@@ -43,7 +43,6 @@ import { getAssetsFile } from "@/utils";
 
 import { useDict } from '@/utils/dict'
 import { parseTime, resetForm, addDateRange, handleTree, selectDictLabel, selectDictLabels } from '@/utils/ruoyi'
-
 // 分页组件
 import Pagination from '@/components/Pagination'
 // 自定义表格工具组件
@@ -68,7 +67,7 @@ import 'vxe-table/lib/style.css'
 const app = createApp(App)
 
 // 全局方法挂载
-// app.config.globalProperties.useDict = useDict
+app.config.globalProperties.useDict = useDict
 // app.config.globalProperties.download = download
 // app.config.globalProperties.parseTime = parseTime
 // app.config.globalProperties.resetForm = resetForm

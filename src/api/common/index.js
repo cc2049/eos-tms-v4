@@ -1,8 +1,8 @@
 /*
  * @Author: cc2049
  * @Date: 2024-04-19 11:32:18
- * @LastEditors: piplns piplns@163.com
- * @LastEditTime: 2024-05-09 14:37:06
+ * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2024-05-14 17:07:21
  * @Description: 简介
  */
 import request from '@/utils/request'
@@ -106,7 +106,7 @@ export function getRole(){
 
 export function setRole(data){
   return request({
-    url: "/auth/check/changeUser" ,
+    url: "/sys/check/changeUser" ,
     method: "post",
     data: data
   })

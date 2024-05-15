@@ -2,7 +2,7 @@
  * @Author: cc2049
  * @Date: 2024-04-28 13:10:44
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-05-14 10:24:21
+ * @LastEditTime: 2024-05-14 18:21:07
  * @Description: 简介
 -->
 <template v-if="pageConfig">
@@ -188,11 +188,14 @@ const dragTableRow = ({ row, $rowIndex }) => {
 };
 
 const getTableData = () => {
+  tableCFG.value.loading = true
   queryJSON.value.PAGENUM = pageInfo.currentPage;
   queryJSON.value.SORTNAME = pageInfo.sortName;
   queryJSON.value.REVERSE = pageInfo.sortOrder;
   axiosGet(queryURL.value, queryJSON.value).then((res) => {
-     currentData.value = null;
+     currentData.value = [];
+      tableCFG.value.loading = false
+
     if (Array.isArray(res.RESULT)) {
       tableData.value = res.RESULT;
       pageInfo.totalResult = res.RESULT.length;

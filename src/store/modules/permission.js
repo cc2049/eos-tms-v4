@@ -129,8 +129,8 @@ function filterAsyncRouter(asyncRouterMap, lastRouter = false, type = false, par
       } else if (route.COMPONENT === "dashboard") {
         route.component = () => import('@/views/table/index');
       } else if (route.COMPONENT === "999") {
-        route.component = AsyncImport(route.VURL)
-        // route.component = loadView(route.VURL)
+        // route.component = AsyncImport(route.VURL)
+        route.component = loadView(route.VURL)
       } else {
         route.component = AsyncImport(route.COMPONENT)
         // route.component = loadView(route.COMPONENT)
@@ -229,6 +229,7 @@ export function filterDynamicRoutes(routes) {
 }
 
 export const loadView = (view) => {
+  // console.log('99999', view );
   let res;
   for (const path in modules) {
     const dir = path.split("views/")[1].split(".vue")[0];

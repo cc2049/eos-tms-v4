@@ -2,62 +2,76 @@
  * @Author: cc2049
  * @Date: 2024-04-28 15:12:29
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-05-14 12:54:27
+ * @LastEditTime: 2024-05-15 08:54:41
  * @Description: 简介
 -->
 
 <template>
-  <div class="top-button">
-    <div class="fixed-top-button">
-      <div class="flex-box">
-        <div class="buttom-item" @click="handelEvent()" >
-          过滤
-        </div>
-        <div class="buttom-item" @click="handelEvent()"  >
-          刷新
-        </div>
-      </div>
+  <div class="button-wrap">
 
-      <template v-for="(itemBtn) in topButton" :key="itemBtn.BILLNO">
-        <div class="buttom-item" @click="handelEvent(itemBtn)" :title="itemBtn.BTNTITLE " v-if="setShowBtn(itemBtn) ">
-          {{ itemBtn.VNAME }}
-        </div>
-        <el-dropdown v-else-if="itemBtn.CHILDREN?.length" style="margin: 0 6px" @command="handelEvent" size="large">
-          <div class="buttom-item ">
-            {{ itemBtn.VNAME }}
-            <el-icon class="el-icon--right">
-              <arrow-down />
-            </el-icon>
+    <div class="top-button">
+      <div class="fixed-top-button">
+        <div class="flex flex-items-center" v-if="sourceType==1">
+          <div class="buttom-item" @click="leftHandleEvent(1)">
+            过滤
           </div>
+          <div class="buttom-item" @click="leftHandleEvent(2)">
+            刷新
+          </div>
+          <el-divider direction="vertical" />
+        </div>
 
-          <template #dropdown>
-            <el-dropdown-menu>
-              <template v-for="itemBtnS in itemBtn.CHILDREN" :key="itemBtnS.BILLNO">
-                <el-dropdown-item :command="itemBtnS" v-if=" setShowBtn(itemBtnS)">
-                  {{ itemBtnS.VNAME }}
-                </el-dropdown-item>
-              </template>
-            </el-dropdown-menu>
-          </template>
-        </el-dropdown>
+        <template v-for="(itemBtn) in topButton" :key="itemBtn.BILLNO">
+          <div class="buttom-item" @click="handleEvent(itemBtn)" :title="itemBtn.BTNTITLE " v-if="setShowBtn(itemBtn) ">
+            {{ itemBtn.VNAME }}
+          </div>
+          <el-dropdown v-else-if="itemBtn.CHILDREN?.length" style="margin: 0 6px" @command="handelEvent" size="large">
+            <div class="buttom-item ">
+              {{ itemBtn.VNAME }}
+              <el-icon class="el-icon--right">
+                <arrow-down />
+              </el-icon>
+            </div>
+
+            <template #dropdown>
+              <el-dropdown-menu>
+                <template v-for="itemBtnS in itemBtn.CHILDREN" :key="itemBtnS.BILLNO">
+                  <el-dropdown-item :command="itemBtnS" v-if=" setShowBtn(itemBtnS)">
+                    {{ itemBtnS.VNAME }}
+                  </el-dropdown-item>
+                </template>
+              </el-dropdown-menu>
+            </template>
+          </el-dropdown>
+        </template>
+      </div>
+
+      <div class="top-button-right">
+        <div class="tool-wrap">
+          <el-icon color="#949eb5" :size="20">
+            <Icon icon="tabler:bulb-filled"></Icon>
+          </el-icon>
+        </div>
+
+        <div class="tool-wrap">
+          <el-icon color="#2a4bff" :size="20">
+            <Icon icon="ant-design:setting-outlined"></Icon>
+          </el-icon>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- 公共弹窗表单模块 -->
+    <vxe-modal destroy-on-close v-model="modalConfig.modalVisible" :width="modalConfig.modalW" :height="modalConfig.modalH" id="formModal" resize storage transfer show-zoom @close="closeModal">
+      <template #title>
+        <span class="modal-title"> {{ modalConfig.pageTitle  }}
+        </span>
       </template>
-
-    </div>
-
-    <div class="top-button-right">
-      <div class="tool-wrap">
-        <el-icon color="#949eb5" :size="20">
-          <Icon icon="tabler:bulb-filled"></Icon>
-        </el-icon>
-      </div>
-
-      <div class="tool-wrap">
-        <el-icon color="#2a4bff" :size="20">
-          <Icon icon="ant-design:setting-outlined"></Icon>
-        </el-icon>
-      </div>
-
-    </div>
+      <template #default>
+        <FormPage :menuID="formID" />
+      </template>
+    </vxe-modal>
   </div>
 
 </template>
@@ -65,7 +79,10 @@
 <script setup name="Button">
 import { ElMessageBox } from "element-plus";
 import { axiosGet } from "#/common";
-import { inject } from "vue";
+import { inject, reactive } from "vue";
+import { getUrlParams } from "@/utils";
+
+import FormPage from "@/views/formPage/index.vue";
 
 const props = defineProps({
   topButton: {
@@ -75,12 +92,24 @@ const props = defineProps({
     type: Array,
   },
   treeNode: {},
+  sourceType:{ // 1: 表格 2: 表单
+    type: [String, Number],
+    default: 1
+  }
 });
 
 const MenuID = inject("menuID");
+const formID = ref(null);
 // console.log('topButton', props.topButton );
 const { proxy } = getCurrentInstance();
 const emit = defineEmits(["handelEvent", "reloadTableData"]);
+
+const modalConfig = reactive({
+  modalVisible: false,
+  modalW: 1000,
+  modalH: 600,
+  pageTitle: "提示",
+});
 
 // 设置是否显示按钮
 
@@ -108,10 +137,21 @@ const setShowBtn = (btn) => {
   }
 };
 
+function leftHandleEvent(type) {
+  switch (type) {
+    case 1:
+      proxy.$emit("filterEvent");
+      break;
+    case 2:
+      proxy.$emit("reloadTableData");
+      break;
+  }
+}
+
 // proxy.$emit("handelEvent", { data, row: null });
 
 // 表格的顶部按钮操作
-function handelEvent(data) {
+function handleEvent(data) {
   console.log("handelEvent", data);
   let selectRecords = props.currentData;
   // 如果弹窗大小的值存在就进行设置弹窗大小  VTYPE =2  7  是开弹窗
@@ -128,6 +168,12 @@ function handelEvent(data) {
     data.VTYPE == 1 ||
     data.VTYPE == 27
   ) {
+    modalConfig.modalVisible = true;
+    formID.value = {
+      MODULEID: data.PK_MODULE,
+      PAGEID: data.PK_PAGE,
+    };
+    console.log(123, modalConfig);
   } else if (data.VTYPE == 3) {
     //  选中数据并提交
     let dataChoose = props.currentData;
@@ -155,27 +201,8 @@ function handelEvent(data) {
       submitByBtn(data, { ...queryJson.value, CHOOSE: dataChoose });
     }
   } else if (data.VTYPE == 7 && data.ACTION == "QRY") {
-    //表格弹窗
-    if (data.CHOOSE2SUB == "no") {
-      // 如果选中数组给子表的配置，是 del，则表示要删掉数据
-      selectRecords = [];
-      currentData.value = [];
-    }
-
-    const [val1, val2] = data.ACTIONADDRESS.split(",");
-    formModalTableCFG.value.PAGE = val2;
-    formModalTableCFG.value.MODULE = val1;
-    // formModalTableCFG.value.tableBillNo = currentData.value[currentData.value.length - 1].billno;
-    formModalTableCFG.value.ListtableData =
-      selectRecords[selectRecords.length - 1];
-    // currentData.value[currentData.value.length - 1];
-    pageConfig.modelTitle = data.VNAME || "提示";
-    modalPageInfo.pageSize = 10;
-    modalPageInfo.currentPage = 1;
-    tableShowCGF.value = true;
-  }
-  //  文件流下载 导出
-  if (data.VTYPE == 13) {
+  } else if (data.VTYPE == 13) {
+    //  文件流下载 导出
     let chooseData = currentData.value
       ? currentData.value.map((i) => i.BILLNO).join(",")
       : "";
@@ -192,142 +219,9 @@ function handelEvent(data) {
       VERSION: "",
     };
     handleExport(data.ACTIONADDRESS, aaDown);
-  }
-  // 文件路径下载
-  if (data.VTYPE == 15) {
+  } else if (data.VTYPE == 15) {
+    // 文件路径下载
     downFilesByUrl(data);
-  }
-  //模板新增
-  if (data.VTYPE == 17) {
-    pageConfig.modelTitle = data.VNAME || "提示";
-    formConfig.formType = data.ACTION || "";
-    mbType.value = true;
-    if (MBConfig.MODULEID == "" && MBConfig.PAGEID == "") {
-      MBConfig.MODULEID = MBTableData.value.PK_MODULE;
-      MBConfig.PAGEID = MBTableData.value.PK_PAGE;
-    } else {
-      formModalTableCFG.MODULE = MBConfig.MODULEID;
-      formModalTableCFG.PAGEID = MBConfig.PAGEID;
-    }
-    pageConfig.modalVisible = true;
-    getOnlyPageConfig(data.CHOOSE2SUB, 17); // 获取独立的配置
-  }
-  //打开菜单
-  if (data.VTYPE == 16) {
-    if (formModalTableCFG.value.tableBillNo != "") {
-      router.push({
-        path: data.ACTIONADDRESS,
-        query: { billno: formModalTableCFG.value.tableBillNo },
-      });
-    } else if (data.OTHER == "fenceMap") {
-      router.push({
-        path: data.ACTIONADDRESS,
-        query: { billno: currentData.value[0].BILLNO },
-      });
-    } else if (data.OTHER == "formBillNo") {
-      const orderNos = currentData.value.map((order) => order.BILLNO).join(",");
-      router.push({
-        path: data.ACTIONADDRESS,
-        query: { billno: orderNos },
-      });
-    } else {
-      router.push({
-        path: data.ACTIONADDRESS,
-      });
-    }
-  }
-  if (data.VTYPE == 21 && data.PAGEPATH == "type:cyspjmb") {
-    reportCGF.value = true;
-    let arr = currentData.value[currentData.value.length - 1].BILLNO;
-    // 打开弹窗
-    ReportType.value = "";
-    ReportType.value = 1;
-    pageConfig.modelTitle = data.VNAME || "提示";
-    reportFromData.value.moduleid = data.PK_MODULE;
-    reportFromData.value.pageid = data.PK_PAGE;
-    reportFromData.value.type = ReportType.value;
-    reportFromData.value.billno = arr;
-    reportFromData.value.queryURL = data.ACTIONADDRESS;
-    reportFromData.value.saveURL = data.APPLETOTHER;
-    pageConfig.modalVisible = true;
-    reportFromData.value.isDetail = false;
-
-    if (data.ACTION == "DTL") {
-      reportFromData.value.isDetail = true;
-    }
-  }
-  //承运商评价模板审核按钮
-  if (
-    data.VTYPE == 21 &&
-    data.ACTION == "EDIT" &&
-    data.PAGEPATH == "type:cyspjmb"
-  ) {
-    ReportType.value = "";
-    ReportType.value = 2;
-    let arr = currentData.value[currentData.value.length - 1].BILLNO;
-    // 打开弹窗
-    reportFromData.value.moduleid = data.PK_MODULE;
-    reportFromData.value.pageid = data.PK_PAGE;
-    reportFromData.value.type = ReportType.value;
-    reportFromData.value.billno = arr;
-    reportFromData.value.examine = true;
-    reportFromData.value.isDetail = false;
-    pageConfig.modelTitle = data.VNAME || "提示";
-    pageConfig.modalVisible = true;
-  }
-  // 启用批量操作  ACTION: "BATCHEDIT"  isSonTable
-  // if (data.VTYPE == 22 && data.ACTION == "BATCHEDIT") {
-  //   pageConfig.batchTable = !pageConfig.batchTable;
-  //   data.VNAME = pageConfig.batchTable ? "取消编辑" : "批量编辑";
-  // }
-
-  // 启用了批量编辑时的数据提交功能   { LABEL: "保存并重置", VALUE: "14" },
-  if (pageConfig.batchTable && data.VTYPE == 14) {
-    batchTableSubmit(data);
-  }
-
-  // 查看审批流节点
-  if (data.VTYPE == 23) {
-    let workBillNo = Array.isArray(currentData.value)
-      ? currentData.value[0].PROCESSINSTANCEID
-      : currentData.value.PROCESSINSTANCEID;
-    // ElMessage({
-    //   message: "未获取到单据的审批流主键PROCESSINSTANCEID无法查看审批节点！",
-    //   type: "error",
-    // });
-    if (!workBillNo) return;
-    detailDo(workBillNo).then((res) => {
-      workDoData.value = res.RESULT;
-      pageConfig.modalW = "40vw";
-      pageConfig.modalH = "60%";
-      workModal.value = true;
-    });
-  }
-
-  // 分享 ，复制到粘贴板
-  if (data.VTYPE == 24) {
-    let arr = [];
-    //获取客户端
-    let newArr = tableCFG.tableColumns.filter((ele) => ele.FIELD == "CTYPENO");
-    let newArr1 = JSON.parse(newArr[0].OTHER);
-    currentData.value.forEach((item, index) => {
-      let terminalTypArr = newArr1.filter((ele) => ele.VALUE == item.CTYPENO);
-      arr.push(
-        // `客户：${item.CUSTOMERNAME}\n客户端：${item.CTYPENO}\n机器码：${item.MACCODE}\n注册码：${item.REGCODE} \n有效期：${item.EXPIREDATE} \n************************`
-        `客户：${item.CUSTOMERNAME}\n客户端：${terminalTypArr[0].LABEL}\n机器码：${item.MACCODE}\n注册码：${item.REGCODE} \n有效期：${item.EXPIREDATE} \n************************`
-      );
-    });
-    let str = arr.join("\n");
-    copyTextSuccess(str);
-  }
-
-  // 文件预览
-  if (data.VTYPE == 25) {
-    previewFilesByUrl(data);
-  }
-  // 单据溯源
-  if (data.VTYPE == 29) {
-    tracingModal.value = true;
   }
 }
 
@@ -437,4 +331,6 @@ function evilFn(row, fn) {
 .font-16 {
   font-size: 16px;
 }
+
+
 </style>
