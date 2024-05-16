@@ -62,12 +62,19 @@
 
             <!-- </div> -->
         </div>
+
+
+       
+    <AllocationPlan :showModal="showModal" :leftList="radioList" ></AllocationPlan>
+
+
     </div>
 </template>
 
 <script setup>
 import FiltrationCom from "./components/filtrationCom";
 import SettingFilter from "./components/settingFilter";
+import AllocationPlan from "./components/allocationPlan";
 const emit = defineEmits("updateHeight");
 
 const props = defineProps({
@@ -75,6 +82,10 @@ const props = defineProps({
         type: Array,
         default: [],
     },
+    showModal:{
+        type: Boolean,
+        default: false,
+    }
 });
 
 const binSize = computed(() => {
