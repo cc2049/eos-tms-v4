@@ -1,4 +1,5 @@
 <template>
+  <!-- 模板设计 -->
   <div class="">
     <el-row>
       <el-col :span="4">
@@ -20,10 +21,7 @@
               <el-col :span="1.5">
                 <el-button plain :icon="FullScreen" @click="bigTable" />
               </el-col>
-              <el-col :span="1.5">
-                <el-button plain @click="previw" type="primary">预览</el-button>
-              </el-col>
-              <el-col :span="1.5" v-if="configForm.formValue.GROUPNO != 'BTN' &&configForm.formValue.GROUPNO != 'QRY'">
+              <!-- <el-col :span="1.5" v-if="configForm.formValue.GROUPNO != 'BTN' &&configForm.formValue.GROUPNO != 'QRY'">
                 <el-button plain @click="createConfig" type="primary">一键生成</el-button>
               </el-col>
               <el-col :span="1.5">
@@ -31,7 +29,7 @@
               </el-col>
               <el-col :span="1.5">
                 <el-button plain @click="plusTabs">新增</el-button>
-              </el-col>
+              </el-col> -->
               <el-col :span="1.5">
                 <el-button plain @click="SubmitConfig" type="primary">保存</el-button>
               </el-col>
@@ -43,10 +41,8 @@
                     <div class="tab-name">
                       {{ item.VNAME }}
                       <template v-if="activeTabRow.BILLNO == item.BILLNO">
-                        <template v-if="item.GROUPNO !='QRY' && item.GROUPNO!='BTN'">
-                          <Notification @click="EditTabs" style="width: 1em; height: 1em; margin-left: 8px" />
-                          <Close v-if="item.ISDELETE == '1'" @click="DelTabs" style="width: 1em; height: 1em; margin-left: 8px" />
-                        </template>
+                        <Notification @click="EditTabs" style="width: 1em; height: 1em; margin-left: 8px" />
+                        <Close v-if="item.ISDELETE == '1'" @click="DelTabs" style="width: 1em; height: 1em; margin-left: 8px" />
                       </template>
                     </div>
                   </el-tooltip>
@@ -55,7 +51,7 @@
             </el-tabs>
             <div class="tabs-content" v-loading="loading">
               <!-- <Form v-if="configForm.formColumns.length > 0 && configForm.formValue.GROUPNO != 'QRY' && configForm.formValue.GROUPNO != 'BTN'" ref="TableForm" class="marg10" v-model:formData="configForm.formValue" :formConfig="configForm.formColumns" :rules="configForm.formRules" labelWidth="65px" /> -->
-              <Etable ref="ETableRef" :tableCFG="tableCFG" v-model:tableData="tableData" :validRules="tableRules" :actionBarWidth="110" @change="tableChange" @headerClick="headerClick">
+              <Etable ref="ETableRef" :tableCFG="tableCFG" v-model:tableData="tableData" :validRules="tableRules" :actionBarWidth="90" @change="tableChange" @headerClick="headerClick">
                 <template #edit_PK_PAGE="{ row }">
                   <el-select v-model="row.PK_PAGE" :teleported="false">
                     <el-option v-for="item in selectTabList" :key="item.BILLNO" :label="item.VNAME" :value="item.BILLNO" />
@@ -81,19 +77,16 @@
                 <template #default_GROUPID="{ row }">
                   {{ DictLabel(BTNGROUP, row.GROUPID) }}
                 </template>
-                <template #actionBar="{ row, rowIndex }">
+                <template #actionBar="{ row }">
                   <el-row :gutter="10">
                     <el-col :span="1.5">
-                      <el-link :icon="Plus" @click="plusConfig(rowIndex)" />
+                      <el-link :icon="Plus" @click="plusConfig" />
                     </el-col>
                     <el-col :span="1.5">
                       <el-link :icon="Delete" @click="delConfig(row)" />
                     </el-col>
                     <el-col :span="1.5">
                       <el-link :icon="Notification" @click="editConfig(row)" />
-                    </el-col>
-                    <el-col :span="1.5">
-                      <el-link :icon="CopyDocument" @click="copyConfig(rowIndex)" />
                     </el-col>
                   </el-row>
                 </template>
@@ -112,31 +105,17 @@
         <span> {{ pageConfig.modelTitle }} </span>
       </template>
       <template #default>
-        <!-- <Form ref="formRef" v-model:formData="formConfig.formValue" :formConfig="formConfig.formColumns" :rules="formConfig.formRules">
+        <Form ref="formRef" v-model:formData="formConfig.formValue" :formConfig="formConfig.formColumns" :rules="formConfig.formRules">
           <template #PK_PAGE="{ data }">
             <el-select v-model="data.PK_PAGE">
               <el-option v-for="item in selectTabList" :key="item.BILLNO" :label="item.VNAME" :value="item.BILLNO" />
               <el-option label="自定义" value="slot" />
             </el-select>
           </template>
-        </Form> -->
+        </Form>
       </template>
       <template #footer>
-        <el-button size="default" @click="formSubmit"> 保存 </el-button>
-      </template>
-    </vxe-modal>
-
-    <!-- 预览功能 -->
-    <vxe-modal destroy-on-close v-model="previwVisible" :width="pageConfig.modalW" :height="pageConfig.modalH" id="formModal" resize storage transfer show-zoom show-footer>
-      <template #title>
-        <span> {{ configForm.formValue.VNAME }} </span>
-      </template>
-      <template #default>
-        <!-- <Form ref="formRef" v-if="configForm.formValue.GROUPNO== 'FM' " v-model:formData="previwForm.Data" :formConfig="previwForm.formColumns" :rules="previwForm.formRules">
-        </Form> -->
-        <!-- <Vtable :tableCFG="previwTableCFG" :tableData="[]" v-else /> -->
-      </template>
-      <template #footer>
+        <!-- <el-button size="default" @click="formSubmit"> 保存 </el-button> -->
       </template>
     </vxe-modal>
 
@@ -146,15 +125,15 @@
 </template>
 
 <script setup name="config">
-import { TreeMenu, MenuTabs, MenuTabsDetail, MenuTabsConfigDetail, MenuTabsAdd, MenuTabsDelete, SaveMenuTabsConfig, delMenuTabsConfig, createdConfig, TableConfig_Form, TableConfig_Qty, TableConfig_Table, TableConfig_Btn, FormConfig, delMenuBtn } from "#/system/config";
-import Etable from "@/components/Vxtable/edit";
-// import Form from "@/components/Form";
+import { TreeTemplate, TemplateTabs,SaveTemplateConfig , delTemplateConfig, TemplateConfigDetail, MenuTabsDetail, MenuTabsConfigDetail, MenuTabsAdd, MenuTabsDelete, SaveMenuTabsConfig, delMenuTabsConfig, createdConfig, TableConfig_Form, TableConfig_Qty, TableConfig_Table, TableConfig_Btn, FormConfig, delMenuBtn } from "#/system/config";
+import Etable from "@/components/Tables/edit";
+import Form from "@/components/Form";
 import copyMenuComponent from "./copyMenu";
-import { getFormValue, getFormRule, deepClone } from "@/utils";
-import { Plus, Delete, Edit, FullScreen, Notification, CopyDocument, Close } from "@element-plus/icons-vue";
+import { getFormValue, getFormRule } from "@/utils/index";
+import { Plus, Delete, Edit, FullScreen, Notification, Close } from "@element-plus/icons-vue";
 import screenfull from "screenfull";
 import PinyinMatch from "pinyin-match";
-import Vtable from "@/components/Vxtable";
+
 const { proxy } = getCurrentInstance();
 const keyword = ref("");
 watch(keyword, (val) => {
@@ -166,9 +145,10 @@ const treeHeight = window.innerHeight - 162;
 // 左侧树
 const treeRef = ref();
 const TreeActive = ref();
+const TreeActivePK_PARENT = ref(null) 
 const getMenuList = () => {
   let query = { KEYWORD: keyword.value };
-  TreeMenu(query).then((res) => {
+  TreeTemplate(query).then((res) => {
     menuOptions.value = res.RESULT;
   });
 };
@@ -180,7 +160,8 @@ const filterNode = (value, data) => {
 const handleNodeClick = (val) => {
   if (TreeActive.value == val.VALUE) return;
   TreeActive.value = val.VALUE;
-  if (val.CHILDREN.length == 0) getTabsList(val.VALUE);
+  TreeActivePK_PARENT.value = val.PK_PARENT
+  if (val.CHILDREN.length == 0) getTabsList();
 };
 
 // tabs
@@ -189,7 +170,12 @@ const activeTabRow = ref({});
 const TabsList = ref([]);
 const selectTabList = ref([]);
 const getTabsList = (value) => {
-  MenuTabs(value).then((newRes) => {
+
+  let queryTabs = {
+    BILLNO:TreeActive.value ,
+    MODULEID: TreeActivePK_PARENT.value
+  }
+  TemplateTabs(queryTabs).then((newRes) => {
     let res = newRes.RESULT
     if (res.length == 0) return;
     TabsList.value = res;
@@ -235,17 +221,18 @@ const plusTabs = () => {
   formType.value = "add";
   pageConfig.modalVisible = true;
 };
+
 const EditTabs = () => {
   let formData = getFormValue(FormConfig);
   formConfig.formColumns = FormConfig;
   formConfig.formBase = formData;
-  formData.MODULENAME = treeFind(menuOptions.value, el => el.VALUE == activeTabRow.value.PK_MODULE).LABEL
   formConfig.formValue = { ...formData, ...activeTabRow.value };
   formConfig.formRules = getFormRule(FormConfig);
   pageConfig.modelTitle = "编辑自定义页面";
   formType.value = "edit";
   pageConfig.modalVisible = true;
 };
+
 const DelTabs = () => {
   proxy.$modal.confirm("是否确定删除？").then((res) => {
     let id = activeTabRow.value.BILLNO;
@@ -261,36 +248,39 @@ const DelTabs = () => {
 // 根据 页面类型-GROUP 切换 表格配置
 const setTableConfig = () => {
   let { GROUPNO } = activeTabRow.value;
-  tableCFG.hasCheck = true
   switch (GROUPNO) {
     case "FM":
       tableCFG.tableColumns = TableConfig_Form;
+      tableCFG.hasCheck = true
       BaseRowData.value = JSON.parse(JSON.stringify(getFormValue(TableConfig_Form)));
       tableRules.value = getFormRule(TableConfig_Form);
-      tableCFG.height = window.innerHeight - 220;
+      tableCFG.height = window.innerHeight - 170;
       break;
     case "QRY":
       tableCFG.tableColumns = TableConfig_Qty;
+      tableCFG.hasCheck = false
       BaseRowData.value = JSON.parse(
         JSON.stringify(getFormValue(TableConfig_Qty))
       );
       tableRules.value = getFormRule(TableConfig_Qty);
-      tableCFG.height = window.innerHeight - 220;
+      tableCFG.height = window.innerHeight - 170;
       break;
     case "TAB":
       tableCFG.tableColumns = TableConfig_Table;
+      tableCFG.hasCheck = true
       BaseRowData.value = JSON.parse(
         JSON.stringify(getFormValue(TableConfig_Table)));
       tableRules.value = getFormRule(TableConfig_Table);
-      tableCFG.height = window.innerHeight - 220;
+      tableCFG.height = window.innerHeight - 170;
       break;
     case "BTN":
       tableCFG.tableColumns = TableConfig_Btn;
+      tableCFG.hasCheck = false
       BaseRowData.value = JSON.parse(
         JSON.stringify(getFormValue(TableConfig_Btn))
       );
       tableRules.value = getFormRule(TableConfig_Btn);
-      tableCFG.height = window.innerHeight - 220;
+      tableCFG.height = window.innerHeight - 170;
       break;
   }
 };
@@ -345,10 +335,11 @@ const tableData = ref([]);
 const getMenuConfig = () => {
   const row = activeTabRow.value;
   loading.value = true;
-  MenuTabsConfigDetail({
+  TemplateConfigDetail({
     PK_MODULE: row.PK_MODULE,
     PK_PAGE: row.BILLNO,
     GROUPNO: row.GROUPNO,
+    BILLNO : TreeActive.value ,
   }).then((newRes) => {
     let res = newRes.RESULT
     if (res.length == 0) {
@@ -392,13 +383,11 @@ const tableChange = (data) => {
 }
 
 // Table操作
-const plusConfig = (rowIndex) => {
-  rowIndex += 1
-  const actionTab = activeTabRow.value;
-  BaseRowData.value.PK_PAGE = actionTab.BILLNO;
-  BaseRowData.value.GROUPNO = actionTab.GROUPNO;
-  if (tableData.value.length == rowIndex) rowIndex = -1
-  ETableRef.value.xEditTable.insertAt({ ...BaseRowData.value }, rowIndex);
+const plusConfig = () => {
+  const row = activeTabRow.value;
+  BaseRowData.value.PK_PAGE = row.BILLNO;
+  BaseRowData.value.GROUPNO = row.GROUPNO;
+  ETableRef.value.xEditTable.insertAt({ ...BaseRowData.value }, -1);
 };
 const editRow = ref();
 const editConfig = (row) => {
@@ -413,6 +402,7 @@ const editConfig = (row) => {
   formType.value = "edit";
   pageConfig.modalVisible = true;
 };
+
 const delConfig = (row) => {
   if (tableCheck.value.length > 0) {
     proxy.$modal.confirm("是否删除选中的配置？").then((res) => {
@@ -425,7 +415,7 @@ const delConfig = (row) => {
       }
       let ids = tableCheck.value.filter(el => el.BILLNO != undefined)
       if (ids.length > 0)
-        delMenuTabsConfig({
+       delTemplateConfig({
           data: ids.map(el => el.BILLNO),
         }).then((res) => {
           proxy.$modal.msgSuccess("删除成功");
@@ -446,7 +436,7 @@ const delConfig = (row) => {
             ETableRef.value.xEditTable.remove(row);
           });
         } else {
-          delMenuTabsConfig({
+          delTemplateConfig({
             data: [BILLNO],
           }).then((res) => {
             proxy.$modal.msgSuccess("删除成功");
@@ -457,14 +447,6 @@ const delConfig = (row) => {
     });
   }
 };
-const copyConfig = rowIndex => {
-  let row = deepClone(tableData.value[rowIndex])
-  delete row._X_ROW_KEY
-  delete row.BILLNO
-  let newRowIndex = rowIndex + 1
-  if (tableData.value.length == newRowIndex) newRowIndex = -1
-  ETableRef.value.xEditTable.insertAt({ ...row }, newRowIndex);
-}
 //批量修改
 function headerClick(id) {
   let config = tableCFG.tableColumns.find((el) => el.FIELD == id);
@@ -481,79 +463,24 @@ function headerClick(id) {
   pageConfig.modalVisible = true;
 }
 const SubmitConfig = () => {
-  if (TableForm.value) {
-    // 表单 表格 查询
-    TableForm.value.submitForm().then((valid) => {
-      if (!valid) return;
-      ETableRef.value.xEditTable.validate(true).then((valid) => {
-        if (valid != undefined) return;
-        let { insertRecords, updateRecords } = ETableRef.value.xEditTable.getRecordset();
-        let tableData = [...insertRecords, ...updateRecords];
-        tableData = tableData.map((el) => {
-          delete el.EnumData;
-          return el;
-        });
-        SaveMenuTabsConfig({
-          ...configForm.formValue,
-          COLUMNS: tableData,
-          MODULEID: TreeActive.value,
-        }).then((res) => {
-          proxy.$modal.msgSuccess("提交成功");
-          getTabsList(TreeActive.value);
-        });
-      });
-    });
-  } else {
-    // 按钮
-    ETableRef.value.xEditTable.validate(true).then((valid) => {
-      if (valid != undefined) return;
-      let { tableData } = ETableRef.value.xEditTable.getTableData();
-      tableData = tableData.map((el) => {
+  ETableRef.value.xEditTable.validate(true).then((valid) => {
+    if (valid != undefined) return;
+    let { tableData } = ETableRef.value.xEditTable.getTableData();
+    tableData = tableData.map((el) => {
         delete el.EnumData;
         return el;
-      });
-      SaveMenuTabsConfig({
-        ...configForm.formValue,
-        COLUMNS: tableData,
-        MODULEID: TreeActive.value,
-      }).then((res) => {
-        proxy.$modal.msgSuccess("提交成功");
-        getTabsList(TreeActive.value);
-      });
     });
-  }
+    SaveTemplateConfig({
+      ...configForm.formValue,
+      COLUMNS: tableData,
+      MODULEID: TreeActive.value,
+      PK_CUSTOMTP: TreeActive.value
+    }).then((res) => {
+      proxy.$modal.msgSuccess("提交成功");
+      getTabsList(TreeActive.value);
+    });
+  });
 };
-
-// 预览功能
-const previwVisible = ref(false)
-const previwForm = ref({
-  formRules: null,
-  formColumns: [],
-  Data: null
-})
-
-
-const previwTableCFG = reactive({
-  tableColumns: [],
-  hasTableTools: false, // 是否有操作栏
-  hasSeq: false, // 是否显示序号
-  toolsConfig: [],
-  loading: false,
-  hasFill: true, // 表格补位
-  height: 300,
-  // SelectType: 'checkbox',
-});
-
-const previw = () => {
-  let { tableData } = ETableRef.value.xEditTable.getTableData();
-  if (TableForm.value) {
-    previwForm.value.formRules = getFormRule(tableData)
-    previwForm.value.formColumns = tableData
-    previwForm.value.Data = getFormValue(tableData)
-    previwTableCFG.tableColumns = tableData
-    previwVisible.value = true
-  }
-}
 
 // 局部全屏
 const bigTable = () => {
@@ -572,8 +499,8 @@ const formRef = ref();
 const formType = ref("");
 const pageConfig = reactive({
   modalVisible: false,
-  modalW: "80%",
-  modalH: "70%",
+  modalW: "70%",
+  modalH: "60%",
   modelTitle: "新增自定义页面",
 });
 const formConfig = reactive({
@@ -609,22 +536,6 @@ const formSubmit = () => {
   });
 };
 
-// 查找树结构中的数据
-function treeFind(tree, func, found = { value: false }) {
-  for (const data of tree) {
-    if (func(data)) {
-      found.value = true;
-      return data;
-    }
-    if (data.CHILDREN || data.children) {
-      const res = treeFind(data.CHILDREN || data.children, func, found);
-      if (res) return res;
-      if (found.value) found.value = false;
-    }
-  }
-  return null;
-}
-
 // 引入
 const copyMenuRef = ref(null);
 const copyMenuOpen = () => copyMenuRef.value.open();
@@ -656,7 +567,7 @@ const DictLabel = (arr, data) => {
 //   overflow: hidden;
 // }
 :deep(.el-tabs__nav-wrap) {
-  width: calc(100% - 350px);
+  width: calc(100% - 300px);
   .el-tabs__nav-prev {
     left: 4px;
   }

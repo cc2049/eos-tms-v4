@@ -2,13 +2,13 @@
  * @Author: cc2049
  * @Date: 2024-04-28 13:10:44
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-05-15 14:39:11
+ * @LastEditTime: 2024-05-16 16:56:49
  * @Description: 简介
 -->
 <template v-if="pageConfig">
-  <TopButton :topButton="pageConfig?.topButton" :currentData="currentData" @handleBtnEvent="handelEvent" @reloadTableData="reloadTableData" />
+  <TopButton :topButton="pageConfig?.topButton" :currentData="currentData" @handleTopBtn="handleTopBtn" @reloadTableData="reloadTableData" />
   <div class="custom-query" ref="AdvancedQuery">
-    <AdvanceQuery :queryConfig="pageConfig?.queryConfig" @updateHeight="queryHeight" />
+    <AdvanceQuery :queryConfig="pageConfig?.queryConfig" @updateHeight="queryHeight" :customPlan :showModal="showCustomPlan" />
   </div>
 
   <div class="table-content">
@@ -75,6 +75,8 @@ const defaultExpandedKeys = ref([]);
 const currentData = ref([]);
 
 const AdvancedQuery = ref(null);
+const showCustomPlan = ref(false)
+const customPlan = ref([])
 
 const pageInfo = reactive({
   currentPage: 1,
@@ -169,6 +171,15 @@ function reloadTableData() {
   getTableData();
 }
 
+function handleTopBtn(data){
+  console.log(666, data);
+  if(data.type == 'openCustomPlan'){
+    showCustomPlan.value = true
+  }else{
+    handelEvent({ data: data, row: currentData.value });
+  }
+}
+
 function treeClick(data) {
   pageInfo.currentPage = 1;
   queryJSON.value.PAGENUM = 1;
@@ -242,6 +253,7 @@ watch(
         pageConfig.value = res.pageConfig;
         queryURL.value = pageConfig.value.queryUrl;
         queryJSON.value = pageConfig.value.queryJson;
+        customPlan.value = pageConfig.value.customPlan
         let getConfigPager = tableCFG.value.pagerConfig;
         pageInfo.pageSize = getConfigPager.pageSize || 10;
         queryJSON.value.PAGESIZE = getConfigPager.pageSize || pageInfo.pageSize;

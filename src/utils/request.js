@@ -69,8 +69,12 @@ service.interceptors.request.use(config => {
     // console.log('要解密' , config.data ,  );
   }
 
-  delete config.data.DATA.MODULEID
-  delete config.data.DATA.PAGEID
+  if (config.data.DATA?.MODULEID) {
+    delete config.data.DATA.MODULEID
+    delete config.data.DATA.PAGEID
+  }
+
+
 
 
   return config

@@ -2,7 +2,7 @@
  * @Author: cc2049
  * @Date: 2024-04-19 09:01:33
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-05-14 18:47:07
+ * @LastEditTime: 2024-05-17 11:41:05
  * @Description: 简介
  */
 import { createApp } from 'vue'
@@ -73,8 +73,8 @@ app.config.globalProperties.useDict = useDict
 // app.config.globalProperties.resetForm = resetForm
 // app.config.globalProperties.handleTree = handleTree
 // app.config.globalProperties.addDateRange = addDateRange
-// app.config.globalProperties.selectDictLabel = selectDictLabel
-// app.config.globalProperties.selectDictLabels = selectDictLabels
+app.config.globalProperties.selectDictLabel = selectDictLabel
+app.config.globalProperties.selectDictLabels = selectDictLabels
 
 app.config.globalProperties.getAssetsFile = getAssetsFile;
 
