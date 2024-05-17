@@ -2,7 +2,7 @@
  * @Author: cc2049
  * @Date: 2024-04-25 17:34:36
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-05-14 10:01:32
+ * @LastEditTime: 2024-05-16 16:55:03
  * @Description: 获取动态配置
  */
 
@@ -27,6 +27,7 @@ const useTableConifg = (menu) => {
         queryUrl: null,
         queryJson: {},
         queryConfig: null,
+        customPlan:[],
         hasSubTable: false,
         activeBtn: {},
         pageShow: true,
@@ -85,6 +86,7 @@ const useTableConifg = (menu) => {
             QUERY,
             COLUMNS,
             SUBTABLE,
+            CUSTOMPLAN,
             BUTTON,
             SLOTCFG,
             MAINTABLE,
@@ -99,6 +101,7 @@ const useTableConifg = (menu) => {
             VDEF3,
             VDEF4,
             VMEMO,
+
         } = res.RESULT
 
         /*
@@ -114,6 +117,7 @@ const useTableConifg = (menu) => {
         }
         // 设置页面配置
         pageConfig.initButton = BUTTON;
+        pageConfig.customPlan = CUSTOMPLAN;
         pageConfig.queryConfig = QUERY;
         pageConfig.isSonTable = ISSONTABLE == 1;
         pageConfig.pageShow = VDEF1 == "1"; // 控制列表是否展示分页功能

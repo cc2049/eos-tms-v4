@@ -2,7 +2,7 @@
  * @Author: cc2049
  * @Date: 2024-04-28 15:12:29
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-05-15 18:54:52
+ * @LastEditTime: 2024-05-16 16:30:51
  * @Description: 简介
 -->
 
@@ -282,7 +282,7 @@ const MenuID = inject("menuID");
 const formID = ref(null);
 // console.log('topButton', props.topButton );
 const { proxy } = getCurrentInstance();
-const emit = defineEmits(["handleBtnEvent", "reloadTableData"]);
+const emit = defineEmits(["handleTopBtn", "reloadTableData"]);
 
 const modalConfig = reactive({
   modalW: 1000,
@@ -317,12 +317,13 @@ const setShowBtn = (btn) => {
 };
 
 function leftHandleEvent(type) {
+  console.log(777,type );
   switch (type) {
     case 1:
-      proxy.$emit("filterEvent");
+      emit("handleTopBtn",{type:'openCustomPlan'});
       break;
     case 2:
-      proxy.$emit("reloadTableData");
+      emit("reloadTableData");
       break;
   }
 }
