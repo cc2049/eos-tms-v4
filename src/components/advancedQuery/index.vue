@@ -45,7 +45,7 @@
                             <el-button type="primary" @click="visible = false" size="mini">确定</el-button>
                         </div>
                     </el-popover>
-                    <div class="ml10 mr10 btnStyle">保存</div>
+                    <div class="ml10 mr10 btnStyle" @click="clickSavePlan">保存</div>
                     <div class="btnStyle">重置</div>
                     <template v-if="filterArr.length > 2">
                         <el-icon color="#0055ff" :size="15" class="ml10 cp foldOUnfoldIcon" @click="foldOUnfold(1)"
@@ -76,7 +76,7 @@
 import FiltrationCom from "./components/filtrationCom";
 import SettingFilter from "./components/settingFilter";
 import AllocationPlan from "./components/allocationPlan";
-import { getList } from "#/system/advancedQuery";
+import { getList, savePlan } from "#/system/advancedQuery";
 import { inject, reactive } from "vue";
 const MenuID = inject("menuID");
 
@@ -134,6 +134,23 @@ watch(
 );
 
 
+const clickSavePlan = () => {
+
+    // savePlan
+    const protData = {
+
+
+
+        ...MenuID.value
+    }
+    savePlan(protData).then((res) => {
+
+    });
+
+
+
+
+}
 
 const getPlanList = () => {
     getList(MenuID.value).then((res) => {

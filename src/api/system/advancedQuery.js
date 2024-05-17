@@ -36,3 +36,13 @@ export function getList(data) {
     data: data
   })
 }
+
+
+// 保存方案
+export function savePlan(data) {
+  return request({
+    url: 'sys/queryprogUserDtl/add',
+    method: 'post',
+    data: data
+  })
+}
