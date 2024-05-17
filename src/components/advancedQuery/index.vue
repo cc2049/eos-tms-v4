@@ -8,8 +8,9 @@
     <div class="advancedQuery">
         <div class="disflex advancedQuery-alone mb20">
             <div class="advancedQuery-title">我的方案</div>
-            <div class="currentRadio" :class="chooseRadioVal == item ? 'active' : ''" v-for="(item, index) in radioList"
-                :key="index" @click="clickRadio(item, index)"> {{ item }}</div>
+            <div class="currentRadio" :class="chooseRadioVal == item.BILLNO ? 'active' : ''"
+                v-for="(item, index) in myPlanList" :key="index" @click="clickRadio(item, index)"> {{ item.VNAME }}
+            </div>
         </div>
         <div class=" advancedQuery-alone ">
             <div class="advancedQuery-title">快捷过滤</div>
@@ -64,8 +65,8 @@
         </div>
 
 
-       
-    <AllocationPlan :showModal="showModal" :leftList="radioList" ></AllocationPlan>
+
+        <AllocationPlan :showModal="showModal" :leftList="myPlanList"></AllocationPlan>
 
 
     </div>
@@ -75,6 +76,10 @@
 import FiltrationCom from "./components/filtrationCom";
 import SettingFilter from "./components/settingFilter";
 import AllocationPlan from "./components/allocationPlan";
+import { getList } from "#/system/advancedQuery";
+import { inject, reactive } from "vue";
+const MenuID = inject("menuID");
+
 const emit = defineEmits("updateHeight");
 
 const props = defineProps({
@@ -82,7 +87,7 @@ const props = defineProps({
         type: Array,
         default: [],
     },
-    showModal:{
+    showModal: {
         type: Boolean,
         default: false,
     }
@@ -96,10 +101,10 @@ const binSize = computed(() => {
 });
 
 // 我的方案
-const chooseRadioVal = ref("默认方案");
-const radioList = ref(["默认方案", "我的未完成订单", "今天", "本周", "本月"]);
+const chooseRadioVal = ref(null);
+const myPlanList = ref(["默认方案", "我的未完成订单", "今天", "本周", "本月"]);
 const clickRadio = (item, index) => {
-    chooseRadioVal.value = item;
+    chooseRadioVal.value = item.BILLNO;
 };
 
 // 快捷过滤
@@ -129,7 +134,21 @@ watch(
 );
 
 onMounted(() => {
+    getPlanList()
 });
+
+
+const getPlanList = () => {
+    getList(MenuID.value).then((res) => {
+        console.log("🚀 ~ getList ~ res:", res)
+        myPlanList.value = res.RESULT
+        chooseRadioVal.value = myPlanList.value[0].BILLNO;
+
+    });
+}
+
+
+
 
 // 折叠和展示
 const FiltrationComHeight = ref("36px");

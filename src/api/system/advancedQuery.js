@@ -9,3 +9,11 @@ export function addPlan(data) {
   })
 }
 
+// 查询方案列表
+export function getList(data) {
+  return request({
+    url: 'sys/queryprogUser/getList',
+    method: 'post',
+    data: data
+  })
+}
