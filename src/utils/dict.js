@@ -1,5 +1,12 @@
+/*
+ * @Author: cc2049
+ * @Date: 2024-04-19 09:01:33
+ * @LastEditors: 
+ * @LastEditTime: 2024-05-17 14:19:05
+ * @Description: 简介
+ */
 import useDictStore from '@/store/modules/dict'
-import { getDicts } from '@/api/system/dict/data'
+import { getDicts } from '@/api/system/dict'
 
 /**
  * 获取字典数据
