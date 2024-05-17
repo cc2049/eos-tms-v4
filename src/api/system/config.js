@@ -196,7 +196,7 @@ export const TableConfig_Qty = [
 ]
 export const TableConfig_Table = [
   { FIELD: "LABEL", LABEL: "名称", WIDTH: "120", ALIGN: "left",ISFIXED: "left", CONTROLS: "ExTextBox", ISREQUIRE: 1, EDITTABLE: 1, FIXED: "left", ISSHOW: 1, COL: 8 },
-  { FIELD: "FIELD", LABEL: "主键", WIDTH: "120", ALIGN: "left",ISFIXED: "left", CONTROLS: "ExTextBox", ISREQUIRE: 1, EDITTABLE: 1, FIXED: "left", ISSHOW: 1, COL: 8 },
+  { FIELD: "FIELD", LABEL: "主键", WIDTH: "120", ALIGN: "left",ISFIXED: "left", CONTROLS: "ExTextBox", ISREQUIRE: 0, EDITTABLE: 1, FIXED: "left", ISSHOW: 1, COL: 8 },
   { FIELD: "SORTCODE", LABEL: "排序", WIDTH: "100", ALIGN: "center", CONTROLS: "ExNumber", EDITTABLE: 1, DEFAULTVAL: "", ISSHOW: 1, COL: 8, ISSORT: 1, ISREQUIRE: 1, LINKAGE: "{\"POINT\":\"0\"}" },
   { FIELD: "WIDTH", LABEL: "宽度", WIDTH: "80", ALIGN: "left", CONTROLS: "ExNumber", EDITTABLE: 1, MAXLENGHT: "9999", DEFAULTVAL: "100", ISREQUIRE: 1, ISSHOW: 1, COL: 8 },
   { FIELD: "VTYPE", LABEL: "类型", WIDTH: "80", ALIGN: "left", VTYPE: "exNum", CONTROLS: "ExSelect", VTYPE: "exNum", OTHER: JSON.stringify(VTYPE), EDITTABLE: 1, DEFAULTVAL: "0", ISREQUIRE: 1, ISSHOW: 1, COL: 8 },

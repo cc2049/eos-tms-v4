@@ -112,14 +112,14 @@
         <span> {{ pageConfig.modelTitle }} </span>
       </template>
       <template #default>
-        <!-- <Form ref="formRef" v-model:formData="formConfig.formValue" :formConfig="formConfig.formColumns" :rules="formConfig.formRules">
+        <eos-form ref="formRef" v-model="formConfig.formValue" :config="formConfig.formColumns" :detail="false" >
           <template #PK_PAGE="{ data }">
             <el-select v-model="data.PK_PAGE">
               <el-option v-for="item in selectTabList" :key="item.BILLNO" :label="item.VNAME" :value="item.BILLNO" />
               <el-option label="自定义" value="slot" />
             </el-select>
           </template>
-        </Form> -->
+        </eos-form >
       </template>
       <template #footer>
         <el-button size="default" @click="formSubmit"> 保存 </el-button>
