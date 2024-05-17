@@ -1,8 +1,8 @@
 /*
  * @Author: cc2049
  * @Date: 2024-04-19 09:01:33
- * @LastEditors: 
- * @LastEditTime: 2024-05-17 14:19:05
+ * @LastEditors: piplns piplns@163.com
+ * @LastEditTime: 2024-05-17 15:00:21
  * @Description: 简介
  */
 import useDictStore from '@/store/modules/dict'
@@ -21,7 +21,7 @@ export function useDict(...args) {
         res.value[dictType] = dicts;
       } else {
         getDicts(dictType).then(resp => {
-          res.value[dictType] = resp.data.map(p => ({ label: p.dictLabel, value: p.dictValue, elTagType: p.listClass, elTagClass: p.cssClass }))
+          res.value[dictType] = resp.RESULT.map(p => ({ label: p.dictLabel, value: p.dictValue, elTagType: p.listClass, elTagClass: p.cssClass }))
           useDictStore().setDict(dictType, res.value[dictType]);
         })
       }

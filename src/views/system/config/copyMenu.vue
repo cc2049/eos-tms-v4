@@ -24,7 +24,7 @@
 
 <script setup name=''>
 import { MenuTabs, MenuTabsConfigDetail } from "#/system/config";
-import { reactive, watch } from "@vue/runtime-core";
+import { reactive, watch } from "vue";
 import PinyinMatch from "pinyin-match";
 
 const props = defineProps({
