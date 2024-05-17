@@ -25,8 +25,8 @@
                             <div class="mr10 btnStyle">修改</div>
                         </div>
                         <div class="content-left-main">
-                            <div v-for="(item, index) in leftList" :key="index"  @click="chooseLeftVal(item)">
-                                {{ item }}
+                            <div v-for="(item, index) in leftList" :key="index">
+                                {{ item.VNAME }}
                             </div>
                         </div>
                         <el-checkbox v-model="checked1" class="ml-10" label="下次以此方案自动进入" size="large" />
@@ -123,7 +123,7 @@ const props = defineProps({
     // }
 });
 
-const chooseLeftVal=ref('')
+
 
 const showModals = computed(() => props.showModal)
 const saveAsModal = ref(false)
