@@ -1,6 +1,6 @@
 <template>
   <div class="edit_table">
-    <vxe-table ref="xEditTable" size="mini" border show-overflow keep-source width="100%" :loading="tableCFG.loading" :row-config="{ isCurrent: true, isHover: true , height:  26 }" :height="tableCFG.height" :column-config="{ resizable: true }" v-model:data="tableData" :show-footer="tableCFG.mergeCFG && tableCFG.mergeCFG.length" :footer-method="footerMethod" class="mytable-scrollbar mytable-footer" @header-cell-click="headerCellClickEvent" @header-cell-dblclick="headColDbClickEvent" :edit-rules="validRules" :edit-config="{trigger: 'click',mode: 'row',showUpdateStatus: true,showInsertStatus: true}" :sort-config="{ showIcon: false }" :checkbox-config="!tableCFG.SelectType || tableCFG.SelectType != 'radio'? {highlight: true,}: null" @checkbox-all="checkboxChange" @checkbox-change="checkboxChange" @edit-closed="editClose">
+    <vxe-table ref="xEditTable" size="mini" border show-overflow keep-source width="100%" :loading="tableCFG.loading" :row-config="{ isCurrent: true, isHover: true , height:  26 }" :height="tableCFG.height" :column-config="{ resizable: true }" v-model:data="tableData" :show-footer="tableCFG.mergeCFG && tableCFG.mergeCFG.length" :footer-method="footerMethod" class="mytable-scrollbar mytable-footer" @header-cell-click="headerCellClickEvent" @header-cell-dblclick="headColDbClickEvent" :edit-rules="validRules" :edit-config="{trigger: 'click',mode: 'cell'}" :sort-config="{ showIcon: false }" :checkbox-config="!tableCFG.SelectType || tableCFG.SelectType != 'radio'? {highlight: true,}: null" @checkbox-all="checkboxChange" @checkbox-change="checkboxChange" @edit-closed="editClose">
       <vxe-column v-if="tableCFG?.hasSeq" title="" width="50" type="seq" align="center" fixed="left"></vxe-column>
       <vxe-column v-if="tableCFG?.hasCheck" type="checkbox" align="center" width="50" fixed="left"></vxe-column>
 
@@ -18,8 +18,9 @@
             </el-input>
 
             <!-- ExTextBox 输入框  -->
-            <el-input v-else-if="Ci.CONTROLS == 'ExTextBox'" v-model="row[Ci.FIELD]" clearable :disabled="calcDISABLED(Ci,rowIndex)" :maxlength="calcNumberMax(Ci)" placeholder="请输入" style="width: 100%"></el-input>
-
+            <!-- <el-input v-else-if="Ci.CONTROLS == 'ExTextBox'" v-model="row[Ci.FIELD]" clearable :disabled="calcDISABLED(Ci,rowIndex)" :maxlength="calcNumberMax(Ci)" placeholder="请输入" style="width: 100%"></el-input> -->
+            
+          <vxe-input v-else-if="Ci.CONTROLS == 'ExTextBox'" v-model="row[Ci.FIELD]"  type="text"></vxe-input>
             <!-- ExPassword 密码  -->
             <el-input v-else-if="Ci.CONTROLS == 'ExPassword'" v-model.trim="row[Ci.FIELD]" clearable :disabled="calcDISABLED(Ci,rowIndex)" placeholder="请输入" type="password" style="width: 100%"></el-input>
 
@@ -48,7 +49,7 @@
               <template #append v-if="Ci.SUFFIX && Ci.SUFFIX != ''">{{setSuffix(row, Ci,true)}}</template>
             </el-input> -->
             <div class="mo-input--number" v-else-if="Ci.CONTROLS == 'ExNumber'">
-              <el-input-number :controls="false" v-model="row[Ci.FIELD]" clearable type="number" :disabled="calcDISABLED(Ci, rowIndex)" :min="calcNumberMin(Ci)" :max="calcNumberMax(Ci)" @input="calcPoint($event, Ci, row)" @blur="inputBlur(Ci,row)" @clear="inputBlur(Ci,row)" style="width: 100%" @keydown.enter="enterNextEl">
+              <el-input-number :controls="false" v-model="row[Ci.FIELD]" clearable type="number" :disabled="calcDISABLED(Ci, rowIndex)" :min="calcNumberMin(Ci)" :max="calcNumberMax(Ci)" @input="calcPoint($event, Ci, row)" @blur="inputBlur(Ci,row)" @clear="inputBlur(Ci,row)" style="width: 100%" >
               </el-input-number>
               <!-- <div class="define-append" v-if="Ci.SUFFIX">{{setSuffix(row, Ci,true)}}</div> -->
             </div>
@@ -248,7 +249,7 @@
         </template>
         <template #default>
           <FileUploadList v-if="modalConfig.type=='Filelist'" v-model="FileRow[FileConfig.FIELD]" :filelist="FileRow[FileConfig.FIELD+'Arr']" @change="val=>setUploadFile(val,FileRow,FileConfig)" :detail="FileConfig.ISEDIT == '1' || FileConfig.EDITTABLE == 1" />
-          <ModalTable v-else ref="modalRef" :MODULE="modalConfig.MENUID" :PAGE="modalConfig.PAGEID" @submit="(data) => SelectChange(openModalConfig, data, openModalIndex)" />
+          <!-- <ModalTable v-else ref="modalRef" :MODULE="modalConfig.MENUID" :PAGE="modalConfig.PAGEID" @submit="(data) => SelectChange(openModalConfig, data, openModalIndex)" /> -->
         </template>
         <template #footer>
           <el-button v-if="modalConfig.type=='Modal'" type="primary" size="default" @click="modalSubmit">保存</el-button>
@@ -280,8 +281,8 @@ export default {
 
 <script setup name="">
 import { Search, ArrowDown } from "@element-plus/icons-vue";
-import VTable from "@/components/Tables";
-import ModalTable from "@/components/Form/modal.vue";
+import VTable from './index.vue';
+// import ModalTable from "@/components/Form/modal.vue";
 import { getPageConfig, getTableData } from "@/api/system/page";
 import { getFormValue, GetDateAfter, evilFn, formatDate, deepClone } from "@/utils";
 import TableFileUpload from "@/components/FileUpload/table"
@@ -399,9 +400,7 @@ const calcDISABLED = computed((config, rowIndex) => {
 })
 
 const optionsFont = ref([]);
-const getAreaData = import("@/utils/font-awesome").then((res) => {
-  optionsFont.value = res.default;
-});
+
 
 const SelectLoading = ref(false);
 // 是否启用 selectSearch 的自新建功能

@@ -1,29 +1,22 @@
 <template>
   <div class="upload-file">
+    <el-link type="primary" class="filelist-tips" v-if="fileList.length">{{fileList.length}} 个文件</el-link>
     <template v-if="fileList.length < limit">
       <el-upload :multiple="limit!='1'" :accept="fileAccept" :action="uploadFileUrl" :before-upload="handleBeforeUpload" :file-list="fileList" :limit="limit" :on-error="handleUploadError" :on-exceed="handleExceed" :on-success="handleUploadSuccess" :show-file-list="false" :headers="headers" :data="upData" class="upload-file-uploader" ref="fileUpload">
         <!-- 上传按钮 -->
-        <el-button type="">选择附件</el-button>
+        <el-tooltip effect="light" popper-class="tips">
+          <el-link type="primary">选取文件</el-link>
+          <template #content>
+            <div class="el-upload__tip">
+              请上传
+              <template v-if="fileSize"> 大小不超过 <b style="color: #f56c6c">{{ fileSize }}MB</b> </template>
+              <template v-if="fileTypeArr"> 格式为 <b style="color: #f56c6c">{{ fileTypeArr.join("/") }}</b> </template>
+              的文件
+            </div>
+          </template>
+        </el-tooltip>
       </el-upload>
-      <!-- 上传提示 -->
-      <!-- <div class="el-upload__tip" v-if="showTip">
-        请上传
-        <template v-if="fileSize"> 大小不超过 <b style="color: #f56c6c">{{ fileSize }}MB</b> </template>
-        <template v-if="fileTypeArr"> 格式为 <b style="color: #f56c6c">{{ fileTypeArr.join("/") }}</b> </template>
-        的文件
-      </div> -->
     </template>
-    <!-- 文件列表 -->
-    <transition-group class="upload-file-list el-upload-list el-upload-list--text" name="el-fade-in-linear" tag="ul">
-      <li :key="file.uid" class="el-upload-list__item ele-upload-list__item-content" v-for="(file, index) in fileList">
-        <el-link :href="file.url" :underline="false" target="_blank" class="file-item" :title="getFileName(file.name)">
-          <span class="el-icon-document"> {{ getFileName(file.name) }} </span>
-        </el-link>
-        <div class="ele-upload-list__item-content-action">
-          <el-link :underline="false" @click="handleDelete(index)" type="danger">删除</el-link>
-        </div>
-      </li>
-    </transition-group>
   </div>
 </template>
 
@@ -50,7 +43,7 @@ const props = defineProps({
   // 文件类型, 例如['png', 'jpg', 'jpeg']
   fileType: {
     type: String,
-    default: ".pdf"
+    default: "pdf"
   },
   // 是否显示提示
   isShowTip: {
@@ -81,9 +74,7 @@ const upData = ref({
   BILLFROM: "0"
 })
 const fileList = ref([]);
-// 默认文件格式 txt\PDF、word、excel、ppt、apk、jpg、png、sql、rar，zip
-const basefileType = [];
-const fileTypeArr = computed(() => props.fileType == '' ? ["pdf"] : props.fileType.split(",").map(el => el.replaceAll(".", '')))
+const fileTypeArr = computed(() => !props.fileType ? ["pdf"] : props.fileType.split(",").map(el => el.replaceAll(".", '')))
 const fileAccept = computed(() => fileTypeArr.value.map(el => `.${el}`))
 const showTip = computed(() => props.isShowTip && (fileTypeArr.value || props.fileSize));
 
@@ -121,16 +112,6 @@ watch(() => props.modelValue, val => {
       uploadList.value = list;
     }
     number.value = uploadList.value.length
-    // let temp = 1;
-    // // 首先将值转为数组
-    // const list = Array.isArray(val) ? val : val.split(',');
-    // // 然后将数组转为对象数组
-    // fileList.value = list.map(item => {
-    //   let nameArr = item.split("/");
-    //   if (typeof item === "string") item = { name: nameArr[nameArr.length - 1], url: item };
-    //   item.uid = item.uid || new Date().getTime() + temp++;
-    //   return item;
-    // });
   } else {
     fileList.value = [];
     uploadList.value = [];
@@ -142,7 +123,7 @@ watch(() => props.modelValue, val => {
 // 上传前校检格式和大小
 function handleBeforeUpload(file) {
   // 校检文件类型
-  if (fileTypeArr.value.length) {
+  if (fileTypeArr.value?.length) {
     let fileExtension = "";
     if (file.name.lastIndexOf(".") > -1) {
       fileExtension = file.name.slice(file.name.lastIndexOf(".") + 1);
@@ -187,10 +168,10 @@ function handleUploadError(err) {
 
 // 上传成功回调
 function handleUploadSuccess(res, file) {
-  if (res.SUCCESS) {
+  if (res.STATUS == '200') {
     uploadList.value.push({
       FILENAME: res.RESULT.SUBMITTEDFILENAME,
-      URL: res.RESULT.FILEPATH.includes('http')? res.RESULT.FILEPATH : '/' + res.RESULT.FILEPATH,
+      URL: '/' + res.RESULT.FILEPATH,
       BILLNO: res.RESULT.PK_FILE,
       SIZE: res.RESULT.SIZE,
       CREATIONTIME: res.RESULT.CREATIONTIME
@@ -208,7 +189,7 @@ function handleUploadSuccess(res, file) {
 // 删除文件
 function handleDelete(index) {
   fileList.value.splice(index, 1);
-  uploadList.value.splice(index, 1)
+  uploadList.value.splice(index, 1);
   number.value--;
   emit("change", uploadList.value)
   emit("update:modelValue", listToString(uploadList.value));
@@ -228,10 +209,7 @@ function uploadedSuccessfully() {
 
 // 获取文件名称
 function getFileName(name) {
-  if(name.includes('attname')){
-    let newName = name.split('=')[1];
-    return newName
-  }else if (name.lastIndexOf("/") > -1) {
+  if (name.lastIndexOf("/") > -1) {
     return name.slice(name.lastIndexOf("/") + 1);
   } else {
     return name;
@@ -252,8 +230,9 @@ function listToString(list, separator) {
 </script>
 
 <style scoped lang="scss">
-.upload-file-uploader {
-  margin-bottom: 5px;
+.upload-file {
+  display: flex;
+  align-items: center;
 }
 .upload-file-list .el-upload-list__item {
   border: 1px solid #e4e7ed;
@@ -273,6 +252,12 @@ function listToString(list, separator) {
   justify-items: center;
 }
 .ele-upload-list__item-content-action .el-link {
+  margin-right: 10px;
+}
+.tips .el-upload__tip {
+  margin-top: 0 !important;
+}
+.filelist-tips {
   margin-right: 10px;
 }
 ul {
@@ -298,9 +283,6 @@ ul {
       white-space: nowrap;
     }
   }
-}
-.el-upload__tip {
-  line-height: 1.3;
 }
 :deep(.el-icon--close-tip) {
   display: none !important;
