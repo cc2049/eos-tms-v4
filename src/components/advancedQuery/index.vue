@@ -66,7 +66,7 @@
 
 
 
-        <AllocationPlan :showModal="showModal" :leftList="myPlanList"></AllocationPlan>
+        <AllocationPlan :showModal="showModal" :leftList="myPlanList" @updateLeftList="getPlanList"></AllocationPlan>
 
 
     </div>
@@ -102,7 +102,7 @@ const binSize = computed(() => {
 
 // 我的方案
 const chooseRadioVal = ref(null);
-const myPlanList = ref(["默认方案", "我的未完成订单", "今天", "本周", "本月"]);
+const myPlanList = ref([]);
 const clickRadio = (item, index) => {
     chooseRadioVal.value = item.BILLNO;
 };
@@ -133,16 +133,13 @@ watch(
     { immediate: true }
 );
 
-onMounted(() => {
-    getPlanList()
-});
 
 
 const getPlanList = () => {
     getList(MenuID.value).then((res) => {
         console.log("🚀 ~ getList ~ res:", res)
         myPlanList.value = res.RESULT
-        chooseRadioVal.value = myPlanList.value[0].BILLNO;
+        !chooseRadioVal.value ? chooseRadioVal.value = myPlanList.value[0].BILLNO : '';
 
     });
 }
@@ -177,6 +174,11 @@ const delFilterArr = (index) => {
     filterArr.value.splice(index, 1);
     emit("updateHeight", index);
 };
+
+onMounted(() => {
+    getPlanList()
+});
+
 </script>
 
 <style scoped lang="scss">

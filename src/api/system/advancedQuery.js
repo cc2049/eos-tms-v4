@@ -1,6 +1,6 @@
 import request from '@/utils/request'
 
-// 查询参数列表
+//  新增方案
 export function addPlan(data) {
   return request({
     url: 'sys/queryprogUser/add',
@@ -8,6 +8,25 @@ export function addPlan(data) {
     data: data
   })
 }
+
+//  编辑方案
+export function updatePlan(data) {
+  return request({
+    url: 'sys/queryprogUser/update',
+    method: 'post',
+    data: data
+  })
+}
+
+//  删除方案
+export function deleteBatchIds(data) {
+  return request({
+    url: 'sys/queryprogUser/deleteBatchIds',
+    method: 'post',
+    data: data
+  })
+}
+
 
 // 查询方案列表
 export function getList(data) {
