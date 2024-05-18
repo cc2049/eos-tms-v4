@@ -18,7 +18,7 @@
         <!-- <FiltrationCom :filterConfig="filterConfig" :filterArr="filterArr"  class="oneLine-left"
                         :style="{ height: FiltrationComHeight,maxWidth:windowWidth>1473?'1040px':'520px'}" :defaultFilterArr="defaultFilterArr"
                         @changeFilter="changeFilter" /> -->
-        <FiltrationCom :filterConfig="filterConfig" :filterArr="filterArr" class="oneLine-left" :style="{ height: FiltrationComHeight, maxWidth: binSize + 'px' }" :defaultFilterArr="defaultFilterArr" @changeFilter="changeFilter" />
+        <FiltrationCom :filterConfig="filterConfig" :filterArr="filterArr" class="oneLine-left" :style="{ height: FiltrationComHeight, maxWidth: binSize + 'px' }" :defaultFilterArr="defaultFilterArr" @changeFilter="changeFilter" @changeCurrentQueryList="changeCurrentQueryList" />
         <div class="advancedQuery-rightBtn">
           <el-button type="primary" @click="searchBtn">
             <el-icon color="#fff" :size="20">
@@ -132,15 +132,15 @@ const clickRadio = (item, index) => {
   emit("handleCustomPlan", {
     type: "1",
     PROGRAMID: chooseRadioVal.value,
-    QUERYS: item.BILLNO,
+    // QUERYS: item.BILLNO,
   });
 };
 // 查询按钮事件
 function searchBtn() {
   emit("handleCustomPlan", {
     type: "2",
-    PROGRAMID: chooseRadioVal.value,
-    QUERYS: filterArr.value,
+    // PROGRAMID: chooseRadioVal.value,
+    QUERYS: querySaveList.value,
   });
 }
 
@@ -148,9 +148,27 @@ function searchBtn() {
 // const filterSeceletArr = ref(['单据编号','供应商','物料编码'])
 const value = ref(null);
 const filterConfig = ref({
-  // filterSeceletArr: ['单据编号', '供应商', '物料编码'],
-  filterSeceletArr: [],
-  filterSeceletArr1: ["包含", "等于", "大于"],
+    // filterSeceletArr: ['单据编号', '供应商', '物料编码'],
+    filterSeceletArr: [],
+    filterSeceletArr1: [
+        { LABEL: "IsNull-为空", VALUE: "IsNull" },
+        { LABEL: "IsNotNull-不为空", VALUE: "IsNotNull" },
+        { LABEL: "EqualTo-等于", VALUE: "EqualTo" },
+        { LABEL: "NotEqualTo-不等于", VALUE: "NotEqualTo" },
+        { LABEL: "GreaterThan-大于", VALUE: "GreaterThan" },
+        { LABEL: "GreaterThanOrEqualTo-大于等于", VALUE: "GreaterThanOrEqualTo", },
+        { LABEL: "LessThan-小于", VALUE: "LessThan" },
+        { LABEL: "LessThanOrEqualTo-小于等于", VALUE: "LessThanOrEqualTo" },
+        { LABEL: "Like-模糊匹配", VALUE: "Like" },
+        { LABEL: "NotLike-模糊不匹配", VALUE: "NotLike" },
+        { LABEL: "In-包含", VALUE: "In" },
+        { LABEL: "NotIn-不包含", VALUE: "NotIn" },
+        { LABEL: "Between-在**之间", VALUE: "Between" },
+        { LABEL: "NotBetween-不**在之间", VALUE: "NotBetween" },
+        { LABEL: "LeftLike-左匹配", VALUE: "LeftLike" },
+        { LABEL: "RightLike-右匹配", VALUE: "RightLike" },
+        { LABEL: "FUZZYRET-复杂检索", VALUE: "FUZZYRET" },
+    ],
 });
 
 const filterArr = ref([]);
@@ -170,13 +188,23 @@ watch(
   { immediate: true }
 );
 
+const querySaveList = ref([])
+const changeCurrentQueryList = (val) => {
+    // console.log("🚀 ~ changeCurrentQueryList ~ val:", val)
+    querySaveList.value = JSON.parse(JSON.stringify(val))
+}
+
 const clickSavePlan = () => {
-  // savePlan
-  const protData = {
-    ...MenuID.value,
-  };
-  savePlan(protData).then((res) => {});
-};
+    // savePlan
+    const protData = {
+        BILLNO: chooseRadioVal.value,   // 方案主键
+        QUERYS: querySaveList.value,
+        ...MenuID.value
+    }
+    savePlan(protData).then((res) => {
+        console.log("🚀 ~ savePlan ~ res:", res)
+    });
+}
 
 const getPlanList = () => {
   getList(MenuID.value).then((res) => {
