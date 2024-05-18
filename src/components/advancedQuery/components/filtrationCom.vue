@@ -55,9 +55,9 @@ const changeFilter = (val, item, index) => {
     emit("changeFilter", val, item, index)
 }
 
-const newfilterArrs = ref([])
+// const newfilterArrs = ref([])
 watch(() => props.filterArr, value => {
-    newfilterArrs.value = value
+    // newfilterArrs.value = value
     currentQueryList.value = value.map(ele => {
         return {
             FIELD: '',
