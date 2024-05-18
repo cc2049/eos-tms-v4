@@ -397,8 +397,8 @@ const cellClassName = ({ row, column }) => {
 
 const key17Status = ref(null);
 onMounted(() => {
-  watchKeyEvent() 
-})
+  watchKeyEvent();
+});
 
 const emit = defineEmits(["dragRow", "queryEvent", "resetConfig"]);
 const props = defineProps({
@@ -463,24 +463,23 @@ const clickGrade = (row, config) => {
   gradeModalRowData.value = row;
 };
 
-const watchKeyEvent = ()=> {
+const watchKeyEvent = () => {
   const setKeyStatus = (keyCode, status) => {
     switch (keyCode) {
       case 17:
-        if (key17Status.value === status) return
-        key17Status.value = status
-        console.log('ctrl', status ? '按下' : '抬起')
-        break
+        if (key17Status.value === status) return;
+        key17Status.value = status;
+        console.log("ctrl", status ? "按下" : "抬起");
+        break;
     }
-  }
+  };
   document.onkeydown = (e) => {
-    setKeyStatus(e.keyCode, true)
-  }
+    setKeyStatus(e.keyCode, true);
+  };
   document.onkeyup = (e) => {
-    setKeyStatus(e.keyCode, false)
-  }
-}
-
+    setKeyStatus(e.keyCode, false);
+  };
+};
 
 const xTable = ref(null);
 
@@ -837,8 +836,6 @@ function rowClick({ row, column, triggerCheckbox, rowIndex }) {
   if (props.tableCFG.treeID?.transform) {
     return;
   }
-
-  proxy.$emit("clickRow", row);
   if (proxy.tableCFG.SelectType == "radio") return;
   let selectRecords = proxy.$refs.xTable.getCheckboxRecords(),
     checked = false;
@@ -846,15 +843,15 @@ function rowClick({ row, column, triggerCheckbox, rowIndex }) {
     rowClickIndex.value = null;
   }
   if (!triggerCheckbox) {
-    proxy.$refs.xTable?.clearCheckboxRow();
-    if (rowClickIndex.value != rowIndex) {
+    !key17Status.value ? proxy.$refs.xTable?.clearCheckboxRow() : null;
+    if (rowClickIndex.value != rowIndex ) {
       rowClickIndex.value = rowIndex;
       checked = true;
       proxy.$refs.xTable.toggleCheckboxRow(row);
     }
     let giveParentData = {
       clicktype: "checkbox",
-      data: checked ? [row] : [],
+      data: checked ? proxy.$refs.xTable.getCheckboxRecords() : [],
       checked: checked,
       rowIndex,
     };
@@ -969,8 +966,8 @@ function rightClickEvent(data) {
 }
 
 /*
-* 表头右键事件
-*/
+ * 表头右键事件
+ */
 function setColShowEvent(data) {
   let index = props.tableCFG.tableColumns.findIndex((i) => i.FIELD == data.id);
   if (data.isShow) {
@@ -1011,7 +1008,6 @@ function DateChange(val, config) {
   }
   filterEvent();
 }
-
 
 function mergeRowMethod({ row, _rowIndex, column, visibleData }) {
   const fields = props.tableCFG.mergeRowField || [];
