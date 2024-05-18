@@ -38,6 +38,46 @@
             <div class="tr">
               <el-button @click="visible = false" size="mini">取消</el-button>
               <el-button type="primary" @click="visible = false" size="mini">确定</el-button>
+                <FiltrationCom :filterConfig="filterConfig" :filterArr="filterArr" class="oneLine-left"
+                    :style="{ height: FiltrationComHeight, maxWidth: binSize + 'px' }"
+                    :defaultFilterArr="defaultFilterArr" @changeFilter="changeFilter" />
+                <div class="advancedQuery-rightBtn">
+                    <el-button type="primary">
+                        <el-icon color="#fff" :size="20">
+                            <Icon icon="iconamoon:search"></Icon>
+                        </el-icon>
+                    </el-button>
+                    <el-popover placement="bottom" :width="600" trigger="click" :visible="visible">
+                        <template #reference>
+                            <el-button @click="visible = true">
+                                <el-icon :size="20">
+                                    <Icon icon="uil:setting"></Icon>
+                                </el-icon>
+                            </el-button>
+                        </template>
+                        <SettingFilter :filterConfig="filterConfig" :filterArr="filterArr"
+                            :defaultFilterArr="defaultFilterArr" @changeCondition="changeCondition"
+                            @resetCondition="resetCondition" @delFilterArr="delFilterArr" />
+                        <el-divider />
+                        <div class="tr">
+                            <el-button @click="visible = false" size="mini">取消</el-button>
+                            <el-button type="primary" @click="visible = false" size="mini">确定</el-button>
+                        </div>
+                    </el-popover>
+                    <div class="ml10 mr10 btnStyle" @click="clickSavePlan">保存</div>
+                    <div class="btnStyle">重置</div>
+                    <template v-if="filterArr.length > 2">
+                        <el-icon color="#0055ff" :size="15" class="ml10 cp foldOUnfoldIcon" @click="foldOUnfold(1)"
+                            v-if="FiltrationComHeight == 'auto'">
+                            <Icon icon="codicon:fold-up"></Icon>
+                        </el-icon>
+                        <el-icon color="#0055ff" :size="15" class="ml10 cp foldOUnfoldIcon" @click="foldOUnfold(0)"
+                            v-else>
+                            <Icon icon="codicon:fold-down"></Icon>
+                        </el-icon>
+
+                    </template>
+                </div>
             </div>
           </el-popover>
           <div class="ml10 mr10 btnStyle">保存</div>
@@ -66,7 +106,7 @@
 import FiltrationCom from "./components/filtrationCom";
 import SettingFilter from "./components/settingFilter";
 import AllocationPlan from "./components/allocationPlan";
-import { getList } from "#/system/advancedQuery";
+import { getList, savePlan } from "#/system/advancedQuery";
 import { inject, reactive } from "vue";
 const MenuID = inject("menuID");
 
@@ -129,6 +169,25 @@ watch(
   },
   { immediate: true }
 );
+
+
+const clickSavePlan = () => {
+
+    // savePlan
+    const protData = {
+
+
+
+        ...MenuID.value
+    }
+    savePlan(protData).then((res) => {
+
+    });
+
+
+
+
+}
 
 const getPlanList = () => {
   getList(MenuID.value).then((res) => {

@@ -36,7 +36,7 @@
                                 {{ item.VNAME }}
                             </div>
                         </div>
-                        <el-checkbox v-model="choosePlanObj.ISDEFAULT" class="ml-10" label="下次以此方案自动进入" size="large" />
+                        <el-checkbox v-model="choosePlanObj.ISDEFAULT" class="ml-10 mr-10" label="下次以此方案自动进入" size="large" />
                     </div>
                     <div class="content-right ">
                         <div class="flex">
@@ -248,7 +248,7 @@ const clickDelete = () => {
         &-btn {}
 
         &-main {
-            margin-left: 10px;
+            margin:0 10px;
             border: 1px solid #ddd;
             border-radius: 4px;
 
