@@ -42,8 +42,7 @@
             </template>
             <template v-else-if="currentConfig.CONTROLS == 'ExSelect'">
                 <el-select placeholder="请选择" v-model="formData.DEFAULTVAL" clearable style="width: 100%">
-                    <el-option v-for="item in EnumData[currentConfig.FIELD]" :key="item.VALUE" :label="item.LABEL"
-                        :value="item.VALUE" />
+                    <el-option v-for="item in EnumArr" :key="item.VALUE" :label="item.LABEL" :value="item.VALUE" />
                 </el-select>
             </template>
             <template v-else-if="currentConfig.CONTROLS == 'ExSelectModal'">
@@ -170,6 +169,7 @@ const input = ref('')
 
 const leftInputVal = ref(null)
 const rightInputVal = ref(null)
+const EnumArr = ref([]);
 
 const tableData = ref([{}, {}, { label: '222' }])
 
@@ -181,6 +181,10 @@ const changeFilter = (e) => {
 
 watch(() => props.filterVal, value => {
     selectvalue.value = value.BILLNO
+    if (value.CONTROLS == 'ExSelect') {
+        EnumArr.value = JSON.parse(value.OTHER)
+        // console.log("🚀 ~ watch ~ EnumArr.value :", EnumArr.value)
+    }
 }, { immediate: true })
 
 
@@ -188,12 +192,14 @@ watch(() => props.filterVal, value => {
 //     console.log(value)
 // }, { immediate: true })
 
-// 枚举数据
-const EnumData = ref({});
-const mapEnumData = () => {
-    let rowData = getFormValue(props.formConfig);
-    EnumData.value = { ...rowData.EnumData, ...rowData._getDICT };
-};
+// // 枚举数据
+// const EnumData = ref({});
+// const mapEnumData = () => {
+//     let rowData = getFormValue(props.formConfig);
+//     EnumData.value = { ...rowData.EnumData, ...rowData._getDICT };
+// };
+
+
 
 // 时间确认事件
 function DateChange(val) {
@@ -357,6 +363,9 @@ function GetUrlParams(url, backType) {
     return backType == "obj" ? { obj, importantObj } : arr;
 }
 
+onMounted(() => {
+
+});
 
 
 </script>

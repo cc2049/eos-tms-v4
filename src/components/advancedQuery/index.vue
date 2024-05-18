@@ -181,7 +181,6 @@ const clickSavePlan = () => {
 
 const getPlanList = () => {
   getList(MenuID.value).then((res) => {
-    console.log("🚀 ~ getList ~ res:", res);
     myPlanList.value = res.RESULT;
     !chooseRadioVal.value
       ? (chooseRadioVal.value = myPlanList.value[0].BILLNO)
