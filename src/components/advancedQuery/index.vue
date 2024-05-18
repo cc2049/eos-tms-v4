@@ -219,8 +219,9 @@ const getPlanList = () => {
     getList(MenuID.value).then((res) => {
         myPlanList.value = res.RESULT;
         if (myPlanList.value.length) {
+            let newArr = myPlanList.value.filter(ele => ele.ISDEFAULT == 1)
             !chooseRadioVal.value
-                ? (chooseRadioVal.value = myPlanList.value[0].BILLNO)
+                ? (chooseRadioVal.value = newArr.length ? newArr[0].BILLNO : myPlanList.value[0].BILLNO)
                 : "";
         }
 
