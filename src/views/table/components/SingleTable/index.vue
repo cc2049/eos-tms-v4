@@ -2,13 +2,13 @@
  * @Author: cc2049
  * @Date: 2024-04-28 13:10:44
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-05-16 16:56:49
+ * @LastEditTime: 2024-05-18 08:29:58
  * @Description: 简介
 -->
 <template v-if="pageConfig">
   <TopButton :topButton="pageConfig?.topButton" :currentData="currentData" @handleTopBtn="handleTopBtn" @reloadTableData="reloadTableData" />
   <div class="custom-query" ref="AdvancedQuery">
-    <AdvanceQuery :queryConfig="pageConfig?.queryConfig" @updateHeight="queryHeight" :customPlan :showModal="showCustomPlan" />
+    <AdvanceQuery :queryConfig="pageConfig?.queryConfig" @updateHeight="queryHeight" :customPlan :showModal="showCustomPlan"  @handleCustomPlan="handleCustomPlan" />
   </div>
 
   <div class="table-content">
@@ -284,6 +284,12 @@ function queryHeight() {
     tableCFG.value.height =
       window.innerHeight - 160 - AdvancedQuery.value?.clientHeight;
   });
+}
+
+// 
+function handleCustomPlan(data){
+  // PROGRAMID  QUERYS
+  console.log( 'handleCustomPlan' , data );
 }
 
 function resetConfig(data) {
