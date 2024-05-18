@@ -173,7 +173,7 @@ const rightInputVal = ref(null)
 const tableData = ref([{}, {}, { label: '222' }])
 
 const changeFilter = (e) => {
-    let newArr = filterSeceletArrs.value.filter(ele => ele.BILLNO == e)
+    let newArr = filterSeceletArrs.value.filter(ele => ele.FIELD == e)
     emit('changeFilter', newArr[0] || {})
 
 }
