@@ -1,8 +1,8 @@
 /*
  * @Author: cc2049
  * @Date: 2024-04-19 09:01:33
- * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-05-17 11:41:05
+ * @LastEditors: PiPin 33947354+p1Master@users.noreply.github.com
+ * @LastEditTime: 2024-05-18 16:03:43
  * @Description: 简介
  */
 import { createApp } from 'vue'
@@ -19,6 +19,7 @@ import '@eosine/form/dist/style.css'
 import '@/assets/styles/index.scss' // global css
 import request from '@/utils/request'
 import { getToken } from '@/utils/auth'
+import { getDicts } from '@/api/system/dict'
 
 import App from './App'
 import store from './store'
@@ -63,6 +64,8 @@ import DictTag from '@/components/DictTag'
 
 import VXETable from 'vxe-table'
 import 'vxe-table/lib/style.css'
+import VXETablePluginElement from "vxe-table-plugin-element";
+VXETable.use(VXETablePluginElement);
 
 const app = createApp(App)
 
@@ -87,8 +90,6 @@ app.config.globalProperties.getAssetsFile = getAssetsFile;
 // app.component('ImagePreview', ImagePreview)
 // app.component('RightToolbar', RightToolbar)
 
-
-
 app.component('Icon', Icon)
 
 app.use(router)
@@ -111,6 +112,7 @@ app.use(ElementPlus, {
 app.use(eosForm, {
   getData: request,
   getConfig: request,
+  getDict: getDicts,
   uploadUrl: "/eos-api/sys/file/upload",
   uploadHeaders: {
     Authorization: "Bearer " + getToken()
