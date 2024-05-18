@@ -113,25 +113,17 @@
       </template>
       <template #default>
         <eos-form ref="formRef" v-model="formConfig.formValue" :config="formConfig.formColumns" :detail="false">
-<<<<<<< HEAD
-=======
-
           <template #PK_PARENT="{ data }">
             <el-select v-model="data.PK_PARENT" :teleported="false">
               <el-option v-for="item in selectTabList" :key="item.BILLNO" :label="item.VNAME" :value="item.BILLNO" />
             </el-select>
           </template>
->>>>>>> f25718381d00606494edd273fd79b5406819e266
           <template #PK_PAGE="{ data }">
             <el-select v-model="data.PK_PAGE">
               <el-option v-for="item in selectTabList" :key="item.BILLNO" :label="item.VNAME" :value="item.BILLNO" />
               <el-option label="自定义" value="slot" />
             </el-select>
           </template>
-<<<<<<< HEAD
-=======
-
->>>>>>> f25718381d00606494edd273fd79b5406819e266
         </eos-form>
       </template>
       <template #footer>
