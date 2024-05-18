@@ -113,12 +113,25 @@
       </template>
       <template #default>
         <eos-form ref="formRef" v-model="formConfig.formValue" :config="formConfig.formColumns" :detail="false">
+<<<<<<< HEAD
+=======
+
+          <template #PK_PARENT="{ data }">
+            <el-select v-model="data.PK_PARENT" :teleported="false">
+              <el-option v-for="item in selectTabList" :key="item.BILLNO" :label="item.VNAME" :value="item.BILLNO" />
+            </el-select>
+          </template>
+>>>>>>> f25718381d00606494edd273fd79b5406819e266
           <template #PK_PAGE="{ data }">
             <el-select v-model="data.PK_PAGE">
               <el-option v-for="item in selectTabList" :key="item.BILLNO" :label="item.VNAME" :value="item.BILLNO" />
               <el-option label="自定义" value="slot" />
             </el-select>
           </template>
+<<<<<<< HEAD
+=======
+
+>>>>>>> f25718381d00606494edd273fd79b5406819e266
         </eos-form>
       </template>
       <template #footer>
@@ -146,12 +159,36 @@
 </template>
 
 <script setup name="config">
-import { TreeMenu, MenuTabs, MenuTabsDetail, MenuTabsConfigDetail, MenuTabsAdd, MenuTabsDelete, SaveMenuTabsConfig, delMenuTabsConfig, createdConfig, TableConfig_Form, TableConfig_Qty, TableConfig_Table, TableConfig_Btn, FormConfig, delMenuBtn } from "#/system/config";
+import {
+  TreeMenu,
+  MenuTabs,
+  MenuTabsDetail,
+  MenuTabsConfigDetail,
+  MenuTabsAdd,
+  MenuTabsDelete,
+  SaveMenuTabsConfig,
+  delMenuTabsConfig,
+  createdConfig,
+  TableConfig_Form,
+  TableConfig_Qty,
+  TableConfig_Table,
+  TableConfig_Btn,
+  FormConfig,
+  delMenuBtn,
+} from "#/system/config";
 import Etable from "@/components/Vxtable/edit";
 // import Form from "@/components/Form";
 import copyMenuComponent from "./copyMenu";
 import { getFormValue, getFormRule, deepClone } from "@/utils";
-import { Plus, Delete, Edit, FullScreen, Notification, CopyDocument, Close } from "@element-plus/icons-vue";
+import {
+  Plus,
+  Delete,
+  Edit,
+  FullScreen,
+  Notification,
+  CopyDocument,
+  Close,
+} from "@element-plus/icons-vue";
 import screenfull from "screenfull";
 import PinyinMatch from "pinyin-match";
 import Vtable from "@/components/Vxtable";
@@ -175,7 +212,7 @@ const getMenuList = () => {
 getMenuList();
 const filterNode = (value, data) => {
   if (!value) return true;
-  return PinyinMatch.match(data.LABEL, keyword.value)
+  return PinyinMatch.match(data.LABEL, keyword.value);
 };
 const handleNodeClick = (val) => {
   if (TreeActive.value == val.VALUE) return;
@@ -190,10 +227,12 @@ const TabsList = ref([]);
 const selectTabList = ref([]);
 const getTabsList = (value) => {
   MenuTabs(value).then((newRes) => {
-    let res = newRes.RESULT
+    let res = newRes.RESULT;
     if (res.length == 0) return;
     TabsList.value = res;
-    selectTabList.value = res.filter((el) => el.GROUPNO != "QRY" && el.GROUPNO != "BTN");
+    selectTabList.value = res.filter(
+      (el) => el.GROUPNO != "QRY" && el.GROUPNO != "BTN"
+    );
     if (activeTab.value + 1 > res.length) activeTab.value = 0;
     activeTabRow.value = res[activeTab.value];
     configForm.formValue = { ...configForm.formBase, ...activeTabRow.value };
@@ -204,19 +243,22 @@ const getTabsList = (value) => {
 watch(activeTab, () => {
   activeTabRow.value = TabsList.value[activeTab.value];
   configForm.formValue = { ...configForm.formBase, ...activeTabRow.value };
-  tableCheck.value = []
+  tableCheck.value = [];
   setTableConfig();
   getMenuConfig();
 });
 const beforeTabsChange = (val, oldval) => {
   return new Promise((resolve, reject) => {
     if (EditTableData()) {
-      proxy.$modal.confirm("是否切换页面？系统可能不会保存您所做的更改").then(() => {
-        tableCheck.value = []
-        resolve();
-      }).catch(() => {
-        reject();
-      });
+      proxy.$modal
+        .confirm("是否切换页面？系统可能不会保存您所做的更改")
+        .then(() => {
+          tableCheck.value = [];
+          resolve();
+        })
+        .catch(() => {
+          reject();
+        });
     } else {
       resolve();
     }
@@ -239,7 +281,10 @@ const EditTabs = () => {
   let formData = getFormValue(FormConfig);
   formConfig.formColumns = FormConfig;
   formConfig.formBase = formData;
-  formData.MODULENAME = treeFind(menuOptions.value, el => el.VALUE == activeTabRow.value.PK_MODULE).LABEL
+  formData.MODULENAME = treeFind(
+    menuOptions.value,
+    (el) => el.VALUE == activeTabRow.value.PK_MODULE
+  ).LABEL;
   formConfig.formValue = { ...formData, ...activeTabRow.value };
   formConfig.formRules = getFormRule(FormConfig);
   pageConfig.modelTitle = "编辑自定义页面";
@@ -261,11 +306,13 @@ const DelTabs = () => {
 // 根据 页面类型-GROUP 切换 表格配置
 const setTableConfig = () => {
   let { GROUPNO } = activeTabRow.value;
-  tableCFG.hasCheck = true
+  tableCFG.hasCheck = true;
   switch (GROUPNO) {
     case "FM":
       tableCFG.tableColumns = TableConfig_Form;
-      BaseRowData.value = JSON.parse(JSON.stringify(getFormValue(TableConfig_Form)));
+      BaseRowData.value = JSON.parse(
+        JSON.stringify(getFormValue(TableConfig_Form))
+      );
       tableRules.value = getFormRule(TableConfig_Form);
       tableCFG.height = window.innerHeight - 220;
       break;
@@ -280,7 +327,8 @@ const setTableConfig = () => {
     case "TAB":
       tableCFG.tableColumns = TableConfig_Table;
       BaseRowData.value = JSON.parse(
-        JSON.stringify(getFormValue(TableConfig_Table)));
+        JSON.stringify(getFormValue(TableConfig_Table))
+      );
       tableRules.value = getFormRule(TableConfig_Table);
       tableCFG.height = window.innerHeight - 220;
       break;
@@ -326,10 +374,10 @@ const configForm = reactive({
   formRules: {}, // form验证
 });
 const initConfigForm = () => {
-  let config = FormConfig.filter(el => el.ISCY).map(el => {
-    el.COL = '8'
-    return el
-  })
+  let config = FormConfig.filter((el) => el.ISCY).map((el) => {
+    el.COL = "8";
+    return el;
+  });
   let formData = getFormValue(config);
   configForm.formBase = formData;
   configForm.formColumns = config;
@@ -340,7 +388,7 @@ initConfigForm();
 
 // 表格
 const BaseRowData = ref({});
-const tableCheck = ref([])
+const tableCheck = ref([]);
 const tableData = ref([]);
 const getMenuConfig = () => {
   const row = activeTabRow.value;
@@ -349,21 +397,23 @@ const getMenuConfig = () => {
     PK_MODULE: row.PK_MODULE,
     PK_PAGE: row.BILLNO,
     GROUPNO: row.GROUPNO,
-  }).then((newRes) => {
-    let res = newRes.RESULT
-    if (res.length == 0) {
-      BaseRowData.value.PK_PAGE = row.BILLNO;
-      BaseRowData.value.GROUPNO = row.GROUPNO;
-      res = [BaseRowData.value];
-    }
-    tableData.value = res.map((el) => {
-      el = { ...BaseRowData.value, ...el };
-      return el;
+  })
+    .then((newRes) => {
+      let res = newRes.RESULT;
+      if (res.length == 0) {
+        BaseRowData.value.PK_PAGE = row.BILLNO;
+        BaseRowData.value.GROUPNO = row.GROUPNO;
+        res = [BaseRowData.value];
+      }
+      tableData.value = res.map((el) => {
+        el = { ...BaseRowData.value, ...el };
+        return el;
+      });
+      ETableRef.value.xEditTable.reloadData(tableData.value);
+    })
+    .finally(() => {
+      loading.value = false;
     });
-    ETableRef.value.xEditTable.reloadData(tableData.value);
-  }).finally(() => {
-    loading.value = false;
-  });
 };
 const tableCFG = reactive({
   tableColumns: TableConfig_Form,
@@ -382,22 +432,22 @@ const EditTableData = () => {
 };
 const getTabsName = (id) => {
   if (id == "" || id == null || id == undefined) return "";
-  if (id == 'slot') return "自定义"
+  if (id == "slot") return "自定义";
   let data = selectTabList.value.find((el) => el.BILLNO == id);
   if (!data) return id;
   return data.VNAME;
 };
 const tableChange = (data) => {
-  tableCheck.value = data
-}
+  tableCheck.value = data;
+};
 
 // Table操作
 const plusConfig = (rowIndex) => {
-  rowIndex += 1
+  rowIndex += 1;
   const actionTab = activeTabRow.value;
   BaseRowData.value.PK_PAGE = actionTab.BILLNO;
   BaseRowData.value.GROUPNO = actionTab.GROUPNO;
-  if (tableData.value.length == rowIndex) rowIndex = -1
+  if (tableData.value.length == rowIndex) rowIndex = -1;
   ETableRef.value.xEditTable.insertAt({ ...BaseRowData.value }, rowIndex);
 };
 const editRow = ref();
@@ -416,17 +466,17 @@ const editConfig = (row) => {
 const delConfig = (row) => {
   if (tableCheck.value.length > 0) {
     proxy.$modal.confirm("是否删除选中的配置？").then((res) => {
-      let newRows = tableCheck.value.filter(el => el.BILLNO == undefined)
+      let newRows = tableCheck.value.filter((el) => el.BILLNO == undefined);
       if (newRows.length > 0) {
         for (let i = 0; i < newRows.length; i++) {
           const el = newRows[i];
           ETableRef.value.xEditTable.remove(el);
         }
       }
-      let ids = tableCheck.value.filter(el => el.BILLNO != undefined)
+      let ids = tableCheck.value.filter((el) => el.BILLNO != undefined);
       if (ids.length > 0)
         delMenuTabsConfig({
-          data: ids.map(el => el.BILLNO),
+          data: ids.map((el) => el.BILLNO),
         }).then((res) => {
           proxy.$modal.msgSuccess("删除成功");
           getTabsList(TreeActive.value);
@@ -457,14 +507,14 @@ const delConfig = (row) => {
     });
   }
 };
-const copyConfig = rowIndex => {
-  let row = deepClone(tableData.value[rowIndex])
-  delete row._X_ROW_KEY
-  delete row.BILLNO
-  let newRowIndex = rowIndex + 1
-  if (tableData.value.length == newRowIndex) newRowIndex = -1
+const copyConfig = (rowIndex) => {
+  let row = deepClone(tableData.value[rowIndex]);
+  delete row._X_ROW_KEY;
+  delete row.BILLNO;
+  let newRowIndex = rowIndex + 1;
+  if (tableData.value.length == newRowIndex) newRowIndex = -1;
   ETableRef.value.xEditTable.insertAt({ ...row }, newRowIndex);
-}
+};
 //批量修改
 function headerClick(id) {
   let config = tableCFG.tableColumns.find((el) => el.FIELD == id);
@@ -487,7 +537,8 @@ const SubmitConfig = () => {
       if (!valid) return;
       ETableRef.value.xEditTable.validate(true).then((valid) => {
         if (valid != undefined) return;
-        let { insertRecords, updateRecords } = ETableRef.value.xEditTable.getRecordset();
+        let { insertRecords, updateRecords } =
+          ETableRef.value.xEditTable.getRecordset();
         let tableData = [...insertRecords, ...updateRecords];
         tableData = tableData.map((el) => {
           delete el.EnumData;
@@ -525,13 +576,12 @@ const SubmitConfig = () => {
 };
 
 // 预览功能
-const previwVisible = ref(false)
+const previwVisible = ref(false);
 const previwForm = ref({
   formRules: null,
   formColumns: [],
-  Data: null
-})
-
+  Data: null,
+});
 
 const previwTableCFG = reactive({
   tableColumns: [],
@@ -547,13 +597,13 @@ const previwTableCFG = reactive({
 const previw = () => {
   let { tableData } = ETableRef.value.xEditTable.getTableData();
   if (TableForm.value) {
-    previwForm.value.formRules = getFormRule(tableData)
-    previwForm.value.formColumns = tableData
-    previwForm.value.Data = getFormValue(tableData)
-    previwTableCFG.tableColumns = tableData
-    previwVisible.value = true
+    previwForm.value.formRules = getFormRule(tableData);
+    previwForm.value.formColumns = tableData;
+    previwForm.value.Data = getFormValue(tableData);
+    previwTableCFG.tableColumns = tableData;
+    previwVisible.value = true;
   }
-}
+};
 
 // 局部全屏
 const bigTable = () => {
@@ -630,12 +680,13 @@ const copyMenuRef = ref(null);
 const copyMenuOpen = () => copyMenuRef.value.open();
 const copyMenu = (res) => {
   const row = activeTabRow.value;
-  let data = [...res.map((el) => {
-    el = { ...BaseRowData.value, ...el };
-    el.PK_PAGE = row.BILLNO;
-    el.GROUPNO = row.GROUPNO;
-    return el;
-  }),
+  let data = [
+    ...res.map((el) => {
+      el = { ...BaseRowData.value, ...el };
+      el.PK_PAGE = row.BILLNO;
+      el.GROUPNO = row.GROUPNO;
+      return el;
+    }),
   ];
   ETableRef.value.xEditTable.insert(data);
 };

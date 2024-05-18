@@ -8,15 +8,16 @@
     <div class="filterForm">
 
         <div class="firstSelect mr10">
-            <el-select v-model="selectvalue" placeholder="请选择" style="width: 120px" :size="commonSize"
+            <el-select v-model="formData.FIELD" placeholder="请选择" style="width: 120px" :size="commonSize"
                 @change="changeFilter">
-                <el-option v-for="item in filterSeceletArrs" :key="item.BILLNO" :label="item.LABEL"
-                    :value="item.BILLNO" />
+                <el-option v-for="item in filterSeceletArrs" :key="item.FIELD" :label="item.LABEL"
+                    :value="item.FIELD" />
             </el-select>
         </div>
         <div class="mr10">
-            <el-select v-model="selectvalue1" placeholder="请选择" style="width: 100px" :size="commonSize">
-                <el-option v-for="item in filterSeceletArrs1" :key="item" :label="item" :value="item" />
+            <el-select v-model="formData.QUERYTYPE" placeholder="请选择" style="width: 100px" :size="commonSize">
+                <el-option v-for="item in filterSeceletArrs1" :key="item.VALUE" :label="item.LABEL"
+                    :value="item.VALUE" />
             </el-select>
 
         </div>
@@ -24,23 +25,22 @@
             <!-- ExDate 日期选择 -->
 
             <template v-if="currentConfig.CONTROLS == 'ExDate'">
-                <el-date-picker v-model="formData[currentConfig.FIELD]" clearable style="width: 100%"
-                    placeholder="请选择" />
+                <el-date-picker v-model="formData.DEFAULTVAL" clearable style="width: 100%" placeholder="请选择" />
             </template>
             <template v-else-if="currentConfig.CONTROLS == 'ExDateRange'">
-                <el-date-picker v-model="formData[currentConfig.FIELD + 'Arr']" unlink-panels clearable
-                    range-separator="至" style="width: 100%" placeholder="请选择" />
+                <el-date-picker v-model="formData.DEFAULTVAL" unlink-panels clearable range-separator="至"
+                    style="width: 100%" placeholder="请选择" />
             </template>
             <template v-else-if="currentConfig.CONTROLS == 'ExDateTime'">
-                <el-date-picker v-model="formData[currentConfig.FIELD]" clearable type="datetime"
+                <el-date-picker v-model="formData.DEFAULTVAL" clearable type="datetime"
                     value-format="YYYY-MM-DD HH:mm:ss" style="width: 100%" />
             </template>
             <template v-else-if="currentConfig.CONTROLS == 'ExDateTimeRange'">
-                <el-date-picker v-model="formData[currentConfig.FIELD + 'Arr']" clearable unlink-panels
-                    type="datetimerange" range-separator="至" value-format="YYYY-MM-DD HH:mm:ss" style="width: 100%" />
+                <el-date-picker v-model="formData.DEFAULTVAL" clearable unlink-panels type="datetimerange"
+                    range-separator="至" value-format="YYYY-MM-DD HH:mm:ss" style="width: 100%" />
             </template>
             <template v-else-if="currentConfig.CONTROLS == 'ExSelect'">
-                <el-select placeholder="请选择" v-model="formData[currentConfig.FIELD]" clearable style="width: 100%">
+                <el-select placeholder="请选择" v-model="formData.DEFAULTVAL" clearable style="width: 100%">
                     <el-option v-for="item in EnumData[currentConfig.FIELD]" :key="item.VALUE" :label="item.LABEL"
                         :value="item.VALUE" />
                 </el-select>
@@ -50,7 +50,7 @@
                 padding: 0
             }">
                     <template #reference>
-                        <el-input v-model="formData[currentConfig.FIELD]" style="width: 100%" placeholder="请输入"
+                        <el-input v-model="formData.DEFAULTVAL" style="width: 100%" placeholder="请输入"
                             @input="val => ExSelectModalInput(val, currentConfig)" />
                     </template>
 
@@ -113,7 +113,7 @@
 
             </template>
             <template v-else>
-                <el-input v-model="formData[currentConfig.FIELD]" style="width: 100%" placeholder="输入关键字后回车查询" />
+                <el-input v-model="formData.DEFAULTVAL" style="width: 100%" placeholder="输入关键字后回车查询" />
             </template>
 
 
@@ -155,6 +155,7 @@ const props = defineProps({
     }
 });
 
+
 const commonSize = ref('mini')
 const filterSeceletArrs = computed(() => props.filterConfig.filterSeceletArr)
 const filterSeceletArrs1 = computed(() => props.filterConfig.filterSeceletArr1)
@@ -172,7 +173,7 @@ const rightInputVal = ref(null)
 const tableData = ref([{}, {}, { label: '222' }])
 
 const changeFilter = (e) => {
-    let newArr = filterSeceletArrs.value.filter(ele => ele.BILLNO == e)
+    let newArr = filterSeceletArrs.value.filter(ele => ele.FIELD == e)
     emit('changeFilter', newArr[0] || {})
 
 }
@@ -181,6 +182,10 @@ watch(() => props.filterVal, value => {
     selectvalue.value = value.BILLNO
 }, { immediate: true })
 
+
+// watch(() => props.formData, value => {
+//     console.log(value)
+// }, { immediate: true })
 
 // 枚举数据
 const EnumData = ref({});
@@ -275,7 +280,7 @@ function ParseOtherConfig(config) {
                 importantData = {};
 
 
-            console.log(paramsArr)
+   
 
             if (paramsArr.length == 0) {
                 url = config;
@@ -305,18 +310,18 @@ function ParseOtherConfig(config) {
 /** 转换数据 */
 function ConvertData(obj) {
     let data = {}
-    for (let ii in obj) {
-        let valueKey = obj[ii]
-        if (valueKey.includes("M$")) {
-            valueKey = calcHasMSKey(valueKey)
-            data[ii] = props.mainFormData[valueKey] || "";
-        } else if (valueKey.includes("S$")) {
-            valueKey = calcHasMSKey(valueKey)
-            data[ii] = props.formData[valueKey] || "";
-        } else {
-            data[ii] = props.formData[valueKey] || "";
-        }
-    }
+    // for (let ii in obj) {
+    //     let valueKey = obj[ii]
+    //     if (valueKey.includes("M$")) {
+    //         valueKey = calcHasMSKey(valueKey)
+    //         data[ii] = props.mainFormData[valueKey] || "";
+    //     } else if (valueKey.includes("S$")) {
+    //         valueKey = calcHasMSKey(valueKey)
+    //         data[ii] = props.formData[valueKey] || "";
+    //     } else {
+    //         data[ii] = props.formData[valueKey] || "";
+    //     }
+    // }
     return data
 }
 
@@ -340,6 +345,7 @@ function GetUrlParams(url, backType) {
     });
     return backType == "obj" ? { obj, importantObj } : arr;
 }
+
 
 
 </script>

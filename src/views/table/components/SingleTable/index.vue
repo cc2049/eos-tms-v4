@@ -2,13 +2,13 @@
  * @Author: cc2049
  * @Date: 2024-04-28 13:10:44
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-05-16 16:56:49
+ * @LastEditTime: 2024-05-18 09:06:09
  * @Description: 简介
 -->
 <template v-if="pageConfig">
   <TopButton :topButton="pageConfig?.topButton" :currentData="currentData" @handleTopBtn="handleTopBtn" @reloadTableData="reloadTableData" />
   <div class="custom-query" ref="AdvancedQuery">
-    <AdvanceQuery :queryConfig="pageConfig?.queryConfig" @updateHeight="queryHeight" :customPlan :showModal="showCustomPlan" />
+    <AdvanceQuery :queryConfig="pageConfig?.queryConfig" @updateHeight="queryHeight" :customPlan :showModal="showCustomPlan" @handleCustomPlan="handleCustomPlan" />
   </div>
 
   <div class="table-content">
@@ -75,8 +75,8 @@ const defaultExpandedKeys = ref([]);
 const currentData = ref([]);
 
 const AdvancedQuery = ref(null);
-const showCustomPlan = ref(false)
-const customPlan = ref([])
+const showCustomPlan = ref(false);
+const customPlan = ref([]);
 
 const pageInfo = reactive({
   currentPage: 1,
@@ -171,11 +171,11 @@ function reloadTableData() {
   getTableData();
 }
 
-function handleTopBtn(data){
+function handleTopBtn(data) {
   console.log(666, data);
-  if(data.type == 'openCustomPlan'){
-    showCustomPlan.value = true
-  }else{
+  if (data.type == "openCustomPlan") {
+    showCustomPlan.value = true;
+  } else {
     handelEvent({ data: data, row: currentData.value });
   }
 }
@@ -253,7 +253,7 @@ watch(
         pageConfig.value = res.pageConfig;
         queryURL.value = pageConfig.value.queryUrl;
         queryJSON.value = pageConfig.value.queryJson;
-        customPlan.value = pageConfig.value.customPlan
+        customPlan.value = pageConfig.value.customPlan;
         let getConfigPager = tableCFG.value.pagerConfig;
         pageInfo.pageSize = getConfigPager.pageSize || 10;
         queryJSON.value.PAGESIZE = getConfigPager.pageSize || pageInfo.pageSize;
@@ -284,6 +284,15 @@ function queryHeight() {
     tableCFG.value.height =
       window.innerHeight - 160 - AdvancedQuery.value?.clientHeight;
   });
+}
+
+//
+function handleCustomPlan(data) {
+  // PROGRAMID  QUERYS
+  console.log("handleCustomPlan", data);
+  queryJSON.value.PROGRAMID = data.PROGRAMID;
+  queryJSON.value.QUERYS = data.QUERYS || [];
+  pageConfig.value.hasTree ? getTreeData() : getTableData();
 }
 
 function resetConfig(data) {
