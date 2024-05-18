@@ -179,7 +179,7 @@ const changeCurrentQueryList = (val) => {
     querySaveList.value = JSON.parse(JSON.stringify(val))
 }
 const settingQueryList = ref([])
-const settingChangeCurrentQueryList = () => {
+const settingChangeCurrentQueryList = (val) => {
     clickStatus.value = 2
     settingQueryList.value = JSON.parse(JSON.stringify(val))
 }
