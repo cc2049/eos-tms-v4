@@ -19,8 +19,8 @@
 
             <!-- ExTextBox 输入框  -->
             <!-- <el-input v-else-if="Ci.CONTROLS == 'ExTextBox'" v-model="row[Ci.FIELD]" clearable :disabled="calcDISABLED(Ci,rowIndex)" :maxlength="calcNumberMax(Ci)" placeholder="请输入" style="width: 100%"></el-input> -->
-            
-          <vxe-input v-else-if="Ci.CONTROLS == 'ExTextBox'" v-model="row[Ci.FIELD]"  type="text"></vxe-input>
+
+            <vxe-input v-else-if="Ci.CONTROLS == 'ExTextBox'" v-model="row[Ci.FIELD]" type="text"></vxe-input>
             <!-- ExPassword 密码  -->
             <el-input v-else-if="Ci.CONTROLS == 'ExPassword'" v-model.trim="row[Ci.FIELD]" clearable :disabled="calcDISABLED(Ci,rowIndex)" placeholder="请输入" type="password" style="width: 100%"></el-input>
 
@@ -49,7 +49,7 @@
               <template #append v-if="Ci.SUFFIX && Ci.SUFFIX != ''">{{setSuffix(row, Ci,true)}}</template>
             </el-input> -->
             <div class="mo-input--number" v-else-if="Ci.CONTROLS == 'ExNumber'">
-              <el-input-number :controls="false" v-model="row[Ci.FIELD]" clearable type="number" :disabled="calcDISABLED(Ci, rowIndex)" :min="calcNumberMin(Ci)" :max="calcNumberMax(Ci)" @input="calcPoint($event, Ci, row)" @blur="inputBlur(Ci,row)" @clear="inputBlur(Ci,row)" style="width: 100%" >
+              <el-input-number :controls="false" v-model="row[Ci.FIELD]" clearable type="number" :disabled="calcDISABLED(Ci, rowIndex)" :min="calcNumberMin(Ci)" :max="calcNumberMax(Ci)" @input="calcPoint($event, Ci, row)" @blur="inputBlur(Ci,row)" @clear="inputBlur(Ci,row)" style="width: 100%">
               </el-input-number>
               <!-- <div class="define-append" v-if="Ci.SUFFIX">{{setSuffix(row, Ci,true)}}</div> -->
             </div>
@@ -236,7 +236,6 @@
         </template>
       </vxe-column>
 
-      
       <template #empty>
         <el-empty :image="emptyImg" description="很抱歉，暂时没有相关数据~" :image-size="200" />
       </template>
@@ -343,7 +342,7 @@ const BaseRowData = ref({})
 const EnumData = ref({});
 const mapEnumData = () => {
   let data = getFormValue(props.tableCFG.tableColumns);
-  EnumData.value = data.EnumData;
+  EnumData.value = { ...data.EnumData, ...data._getDICT };
   BaseRowData.value = JSON.parse(JSON.stringify(data));
 };
 
