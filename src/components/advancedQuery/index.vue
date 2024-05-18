@@ -67,7 +67,7 @@
         </div>
 
         <AllocationPlan :showModal="showModal" :leftList="myPlanList" @updateLeftList="getPlanList"
-            @closeModal="closeShowModal"></AllocationPlan>
+            ref="allocationPlanRef" @closeModal="closeShowModal"></AllocationPlan>
 
     </div>
 </template>
@@ -184,24 +184,46 @@ const settingChangeCurrentQueryList = (val) => {
     settingQueryList.value = JSON.parse(JSON.stringify(val))
 }
 
+const allocationPlanRef = ref(null)
 const clickSavePlan = () => {
-    // savePlan
+
+    if (myPlanList.value) {
+        callAddition()
+    } else {
+        allocationPlanRef.value.showSaveAs(querySaveList.value)
+    }
+
+
+
+}
+
+// 调用保存方案
+const callAddition = () => {
     const protData = {
         BILLNO: chooseRadioVal.value,   // 方案主键
         QUERYS: querySaveList.value,
         ...MenuID.value
     }
     savePlan(protData).then((res) => {
-        console.log("🚀 ~ savePlan ~ res:", res)
+        proxy.$message({
+            message: '保存成功',
+            type: "success",
+        });
     });
+
 }
+
+
 
 const getPlanList = () => {
     getList(MenuID.value).then((res) => {
         myPlanList.value = res.RESULT;
-        !chooseRadioVal.value
-            ? (chooseRadioVal.value = myPlanList.value[0].BILLNO)
-            : "";
+        if (myPlanList.value.length) {
+            !chooseRadioVal.value
+                ? (chooseRadioVal.value = myPlanList.value[0].BILLNO)
+                : "";
+        }
+
     });
 };
 

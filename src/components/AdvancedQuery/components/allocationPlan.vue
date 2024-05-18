@@ -162,8 +162,11 @@ const chooseTab = (item) => {
     chooseTabVal.value = item
 }
 
-
-const showSaveAs = () => {
+const addConditionList=ref([])
+const showSaveAs = (list = []) => {
+    if(list.length){
+        addConditionList.value = list
+    }
     saveAsModal.value = true
 }
 
@@ -189,7 +192,8 @@ const savePlanLeft = () => {
         // GROUPINFO: null,
         // ISDEFAULT: 1,
         ...saveAsForm.value,
-        ...MenuID.value
+        ...MenuID.value,
+        QUERYS:addConditionList.value,  // 如果外面没有方案，那么保存时候会走新增方案，把外层方案传过来
     }
 
     if (saveAsForm.value.BILLNO) {
@@ -205,6 +209,10 @@ const savePlanLeft = () => {
     } else {
         addPlan(protData).then((res) => {
             saveAsModal.value = false
+            proxy.$message({
+                message: res.MESSAGE,
+                type: "success",
+            });
             emit('updateLeftList')
 
         });
@@ -237,7 +245,9 @@ const clickDelete = () => {
 }
 
 
-
+defineExpose({
+    showSaveAs,
+});
 
 
 </script>
