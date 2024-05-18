@@ -16,9 +16,6 @@
             <div class="advancedQuery-title">快捷过滤</div>
             <!-- <div style="width: calc(100% - 100px)"> -->
             <div class="oneLine">
-                <!-- <FiltrationCom :filterConfig="filterConfig" :filterArr="filterArr"  class="oneLine-left"
-                        :style="{ height: FiltrationComHeight,maxWidth:windowWidth>1473?'1040px':'520px'}" :defaultFilterArr="defaultFilterArr"
-                        @changeFilter="changeFilter" /> -->
                 <FiltrationCom :filterConfig="filterConfig" :filterArr="filterArr" class="oneLine-left"
                     :style="{ height: FiltrationComHeight, maxWidth: binSize + 'px' }"
                     :defaultFilterArr="defaultFilterArr" @changeFilter="changeFilter"
