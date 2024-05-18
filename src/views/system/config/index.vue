@@ -112,14 +112,14 @@
         <span> {{ pageConfig.modelTitle }} </span>
       </template>
       <template #default>
-        <eos-form ref="formRef" v-model="formConfig.formValue" :config="formConfig.formColumns" :detail="false" >
+        <eos-form ref="formRef" v-model="formConfig.formValue" :config="formConfig.formColumns" :detail="false">
           <template #PK_PAGE="{ data }">
             <el-select v-model="data.PK_PAGE">
               <el-option v-for="item in selectTabList" :key="item.BILLNO" :label="item.VNAME" :value="item.BILLNO" />
               <el-option label="自定义" value="slot" />
             </el-select>
           </template>
-        </eos-form >
+        </eos-form>
       </template>
       <template #footer>
         <el-button size="default" @click="formSubmit"> 保存 </el-button>
@@ -583,7 +583,7 @@ const formConfig = reactive({
   formRules: {}, // form验证
 });
 const formSubmit = () => {
-  formRef.value.submitForm().then((valid) => {
+  formRef.value.validate().then((valid) => {
     if (!valid) return;
     if (formType.value == "add" || formType.value == "edit") {
       formConfig.formValue.ISDELETE = "1";
