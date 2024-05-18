@@ -105,14 +105,14 @@
         <span> {{ pageConfig.modelTitle }} </span>
       </template>
       <template #default>
-        <Form ref="formRef" v-model:formData="formConfig.formValue" :formConfig="formConfig.formColumns" :rules="formConfig.formRules">
+        <!-- <Form ref="formRef" v-model:formData="formConfig.formValue" :formConfig="formConfig.formColumns" :rules="formConfig.formRules">
           <template #PK_PAGE="{ data }">
             <el-select v-model="data.PK_PAGE">
               <el-option v-for="item in selectTabList" :key="item.BILLNO" :label="item.VNAME" :value="item.BILLNO" />
               <el-option label="自定义" value="slot" />
             </el-select>
           </template>
-        </Form>
+        </Form> -->
       </template>
       <template #footer>
         <!-- <el-button size="default" @click="formSubmit"> 保存 </el-button> -->
@@ -126,8 +126,8 @@
 
 <script setup name="config">
 import { TreeTemplate, TemplateTabs,SaveTemplateConfig , delTemplateConfig, TemplateConfigDetail, MenuTabsDetail, MenuTabsConfigDetail, MenuTabsAdd, MenuTabsDelete, SaveMenuTabsConfig, delMenuTabsConfig, createdConfig, TableConfig_Form, TableConfig_Qty, TableConfig_Table, TableConfig_Btn, FormConfig, delMenuBtn } from "#/system/config";
-import Etable from "@/components/Tables/edit";
-import Form from "@/components/Form";
+import Etable from "@/components/Vxtable/edit";
+// import Form from "@/components/Form";
 import copyMenuComponent from "./copyMenu";
 import { getFormValue, getFormRule } from "@/utils/index";
 import { Plus, Delete, Edit, FullScreen, Notification, Close } from "@element-plus/icons-vue";

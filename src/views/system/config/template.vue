@@ -39,7 +39,7 @@
       <el-tabs v-model="activeTab" type="border-card" size="mini">
         <el-tab-pane v-for="item in TabsList" :key="item.VALUE" :label="item.LABEL" :name="item.VALUE" />
       </el-tabs>
-      <Vtable ref="tableRef" :tableCFG="tableConfig" :tableData="dataList" actionBar :actionBarWidth="80" @change="tableChange">
+      <!-- <Vtable ref="tableRef" :tableCFG="tableConfig" :tableData="dataList" actionBar :actionBarWidth="80" @change="tableChange">
         <template #actionBar="{row}">
           <el-row :gutter="10">
             <el-col :span="1.5">
@@ -50,7 +50,7 @@
             </el-col>
           </el-row>
         </template>
-      </Vtable>
+      </Vtable> -->
       <vxe-pager size="mini" :page-size="queryParams.PAGESIZE" :page-sizes="[ 10, 20, 30, 50, 100, 1000, 2000]" :current-page="queryParams.PAGENUM" :total="total" :layouts="['Total', 'PrevPage', 'JumpNumber', 'NextPage', 'Sizes']" @page-change="handlePageChange">
       </vxe-pager>
     </div>
@@ -85,9 +85,9 @@
 </template>
 
 <script setup name='configTemplate'>
-import QueryForm from "@/components/Query"
-import Vtable from "@/components/Tables"
-import Etable from "@/components/Tables/edit"
+// import QueryForm from "@/components/Query"
+// import Vtable from "@/components/Tables"
+// import Etable from "@/components/Tables/edit"
 import { templateList, addTemplate, templateDetail, delTemplate, QueryConfig, TableConfig_Form, TableConfig_Qty, TableConfig_Table } from "#/system/configTemplate"
 import { getFormValue, getFormRule } from "@/utils";
 import { Search, Edit, Delete, Plus, Refresh } from "@element-plus/icons-vue";

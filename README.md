@@ -31,6 +31,13 @@ npm run dev
 ## 内置功能
 
 
+## docker 重启 nginx
+
+```
+docker-compose restart etmsnginx
+```
+
+
 
 
  ## 目录说明
