@@ -162,16 +162,20 @@ const chooseTab = (item) => {
     chooseTabVal.value = item
 }
 
-const addConditionList=ref([])
+const addConditionList = ref([])
 const showSaveAs = (list = []) => {
-    if(list.length){
+    if (list.length) {
         addConditionList.value = list
     }
     saveAsModal.value = true
 }
-
+const ruleFormRef = ref(null)
 const confirmSaveAs = () => {
-    savePlanLeft()
+    ruleFormRef.value.validate((valid, fields) => {
+        if (valid) {
+            savePlanLeft()
+        }
+    })
 }
 
 const cancelSaveAs = () => {
@@ -181,7 +185,11 @@ const cancelSaveAs = () => {
 const saveAsForm = ref({
 
 })
-const saveAsRules = ref({})
+const saveAsRules = ref({
+    VNAME: [
+        { required: true, message: '请输入方案名称', trigger: 'blur' },
+    ],
+})
 const savePlanLeft = () => {
 
     const protData = {
@@ -193,7 +201,7 @@ const savePlanLeft = () => {
         // ISDEFAULT: 1,
         ...saveAsForm.value,
         ...MenuID.value,
-        QUERYS:addConditionList.value,  // 如果外面没有方案，那么保存时候会走新增方案，把外层方案传过来
+        QUERYS: addConditionList.value,  // 如果外面没有方案，那么保存时候会走新增方案，把外层方案传过来
     }
 
     if (saveAsForm.value.BILLNO) {
