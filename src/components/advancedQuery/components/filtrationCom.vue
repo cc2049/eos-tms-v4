@@ -65,7 +65,7 @@ watch(() => props.filterArr, value => {
             DEFAULTVAL: '',
             DEFAULTVAL2: '',
             SORTCODE: '',
-
+            DEFAULTVALArr:''
         }
     })
 

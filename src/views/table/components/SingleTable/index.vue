@@ -8,7 +8,7 @@
 <template v-if="pageConfig">
   <TopButton :topButton="pageConfig?.topButton" :currentData="currentData" @handleTopBtn="handleTopBtn" @reloadTableData="reloadTableData" />
   <div class="custom-query" ref="AdvancedQuery">
-    <AdvanceQuery :queryConfig="pageConfig?.queryConfig" @updateHeight="queryHeight" :customPlan :showModal="showCustomPlan" @handleCustomPlan="handleCustomPlan" />
+    <AdvanceQuery :queryConfig="pageConfig?.queryConfig" @updateHeight="queryHeight" :customPlan  ref="advanceQueryRef"  @handleCustomPlan="handleCustomPlan" />
   </div>
 
   <div class="table-content">
@@ -75,7 +75,7 @@ const defaultExpandedKeys = ref([]);
 const currentData = ref([]);
 
 const AdvancedQuery = ref(null);
-const showCustomPlan = ref(false);
+// const showCustomPlan = ref(false);
 const customPlan = ref([]);
 
 const pageInfo = reactive({
@@ -170,11 +170,13 @@ function reloadTableData() {
   queryJSON.value.PAGENUM = 1;
   getTableData();
 }
-
+const advanceQueryRef=ref(null)
 function handleTopBtn(data) {
   console.log(666, data);
   if (data.type == "openCustomPlan") {
-    showCustomPlan.value = true;
+    // showCustomPlan.value = true;
+    advanceQueryRef.value.openShowModal()
+    
   } else {
     handelEvent({ data: data, row: currentData.value });
   }

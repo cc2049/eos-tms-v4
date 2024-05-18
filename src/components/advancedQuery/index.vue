@@ -57,7 +57,7 @@
       <!-- </div> -->
     </div>
 
-    <AllocationPlan :showModal="showModal" :leftList="myPlanList" @updateLeftList="getPlanList"></AllocationPlan>
+    <AllocationPlan :showModal="showModal" :leftList="myPlanList" @updateLeftList="getPlanList" @closeModal="closeShowModal"></AllocationPlan>
 
   </div>
 </template>
@@ -77,18 +77,25 @@ const props = defineProps({
     type: Array,
     default: [],
   },
-  showModal: {
-    type: Boolean,
-    default: false,
-  },
+//   showModal: {
+//     type: Boolean,
+//     default: false,
+//   },
 });
-
+const showModal=ref(false)
 const binSize = computed(() => {
   const windowWidth = document.documentElement.clientWidth;
   let val = (windowWidth - 20 - 20 - 50 - 165) / 520;
   let newVal = Math.floor(val);
   return 520 * newVal;
 });
+
+const openShowModal = ()=>{
+    showModal.value = true
+}
+const closeShowModal = ()=>{
+    showModal.value = false
+}
 
 // 我的方案
 const chooseRadioVal = ref(null);
@@ -209,6 +216,10 @@ const delFilterArr = (index) => {
   filterArr.value.splice(index, 1);
   emit("updateHeight", index);
 };
+
+defineExpose({
+  openShowModal,
+});
 
 onMounted(() => {
   getPlanList();
