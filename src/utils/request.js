@@ -57,6 +57,8 @@ service.interceptors.request.use(config => {
     MODULEID: axiosData ? (config.data.MODULEID || '') : '',
     PAGEID: axiosData ? (config.data.PAGEID || '') : '',
     PARENTPAGE: axiosData ? (config.data.PARENTPAGE) || '' : '',
+    PROGRAMID: axiosData ? (config.data.PROGRAMID) || '' : '',
+
     VERSION: ""
   }
   if (config.url.includes('ISRSA=1')) {
@@ -71,6 +73,8 @@ service.interceptors.request.use(config => {
 
   if (config.data.DATA?.MODULEID) {
     delete config.data.DATA.MODULEID
+    delete config.data.DATA.PROGRAMID
+
     delete config.data.DATA.PAGEID
   }
 
