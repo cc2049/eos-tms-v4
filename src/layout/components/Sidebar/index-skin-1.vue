@@ -2,7 +2,7 @@
  * @Author: cc2049
  * @Date: 2024-04-25 14:41:35
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-05-09 12:47:23
+ * @LastEditTime: 2024-05-18 12:19:18
  * @Description: 简介
 -->
 <template>
@@ -40,16 +40,26 @@
     <div class="mark" @click="showSidebarRight = false" v-if="showSidebarRight"></div>
 
     <el-scrollbar :height="sidebarHeight" class="sidebar-right" :style="{ left: lenfMenuWidth + 'px' , width: sideBarRightWidth + 'px'}">
-      <div class="my-sub-title">{{ subMenuList.NAME || '999' }}</div>
+      <div class="my-sub-title flex justify-between flex-items-center">
+        <!-- {{ subMenuList.NAME || '999' }} -->
+        <div class="left-sub-title"></div>
+        <div class="my-sub-title-right flex flex-items-center">
+          <el-icon color="#949eb5" :size="26">
+            <Icon icon="uiw:setting" />
+          </el-icon>
+          <el-divider direction="vertical" />
+          <img :src="ColSwitchIcon" alt="" srcset="">
+        </div>
+      </div>
       <el-scrollbar :height="modalHeight">
-        <div class="favorite" v-if="myStartMenu.length">
-          <div class="favorite-title ali-menu-title">快捷入口</div>
-          <div class="favorite-content">
+        <div class="favorite mb20" v-if="myStartMenu.length">
+          <div class="favorite-title ali-menu-title mb10">快捷入口</div>
+          <div class="favorite-content flex">
             <div class="favorite-item" v-for="i in myStartMenu" :key="i.BILLNO">
               <router-link :to="i.ROUTE" class="eoslink-a" @click="closeMenu">
                 {{ i.MENUNAME }}
               </router-link>
-              <el-icon class="my-start" title="取消快捷入口" :size="16" @click.stop="jionStart(i, 0)">
+              <el-icon class="my-start " color="wrang" title="取消快捷入口" :size="16" @click.stop="jionStart(i, 0)">
                 <StarFilled />
               </el-icon>
             </div>
@@ -166,6 +176,10 @@ const menuKeyword = ref(null);
 
 const modalHeight = window.innerHeight - 100;
 const modalWidth = ref(null);
+
+const ColSwitch = ref(); // 菜单排序方式
+
+const ColSwitchIcon = proxy.getAssetsFile("icon/switch-1.png");
 
 // 右侧弹窗菜单
 const subMenuList = ref({});
@@ -604,6 +618,13 @@ $new-menu-style-bgcolor: #fff;
       font-size: 20px;
       padding-bottom: 10px;
       border-bottom: 1px solid #e3e3e3;
+      &-right{
+        .el-icon:hover{
+          cursor: pointer;
+          color: var(--el-color-primary);
+        }
+      }
+
     }
   }
 
@@ -721,6 +742,7 @@ $new-menu-style-bgcolor: #fff;
 
 #app .sidebar-container a {
   font-size: 16px !important;
+  width: auto;
 }
 
 .eos-menu {
@@ -738,26 +760,33 @@ $new-menu-style-bgcolor: #fff;
     padding: 0 8px;
     color: #666;
     font-size: 12px;
-    height: 32px;
-    line-height: 32px;
+    height: 40px;
+    line-height: 40px;
     position: relative;
+    display: flex;
+    align-items: center;
     .el-icon {
-      position: absolute;
-      right: 8px;
-      top: 8px;
-      z-index: 10;
       color: #ff6a00;
       display: none;
       cursor: pointer;
     }
   }
   .eoslink:hover {
-    color: #333;
-    background-color: #f4f6f7;
+    color: var(--el-color-primary);
+    // background-color: #f4f6f7;
     border-color: transparent;
     .el-icon {
       display: block;
     }
+  }
+}
+.favorite {
+  &-item {
+    width: 230px;
+  }
+
+  .my-start {
+    color: #ff6a00;
   }
 }
 </style>

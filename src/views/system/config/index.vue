@@ -100,9 +100,12 @@
               </Etable>
             </div>
           </template>
-          <el-empty v-else>
+
+          <el-empty v-else :image="emptyImg" description="很抱歉，暂时没有相关数据~" :image-size="200">
             <el-button @click="plusTabs">去新建</el-button>
           </el-empty>
+
+
         </div>
       </el-col>
     </el-row>
@@ -190,6 +193,7 @@ watch(keyword, (val) => {
   treeRef.value.filter(val);
 });
 const menuOptions = ref([]);
+const emptyImg = proxy.getAssetsFile("icon_task_NoData.png");
 
 const treeHeight = window.innerHeight - 162;
 // 左侧树

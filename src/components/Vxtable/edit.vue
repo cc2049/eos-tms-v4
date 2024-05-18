@@ -236,8 +236,9 @@
         </template>
       </vxe-column>
 
+      
       <template #empty>
-        <el-empty description="没有更多数据了！" :image-size="100" />
+        <el-empty :image="emptyImg" description="很抱歉，暂时没有相关数据~" :image-size="200" />
       </template>
     </vxe-table>
 
@@ -325,6 +326,7 @@ const { proxy } = getCurrentInstance();
 const xEditTable = ref();
 const router = useRouter();
 const MENUID = router.currentRoute.value.meta.BILLNO;
+const emptyImg = proxy.getAssetsFile("icon_task_NoData.png");
 
 const checkboxChange = ({ records }) => emit("change", records)
 
