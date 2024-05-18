@@ -183,9 +183,9 @@ watch(() => props.filterVal, value => {
 }, { immediate: true })
 
 
-watch(() => props.formData, value => {
-    console.log(value)
-}, { immediate: true })
+// watch(() => props.formData, value => {
+//     console.log(value)
+// }, { immediate: true })
 
 // 枚举数据
 const EnumData = ref({});
@@ -280,7 +280,7 @@ function ParseOtherConfig(config) {
                 importantData = {};
 
 
-            console.log(paramsArr)
+   
 
             if (paramsArr.length == 0) {
                 url = config;

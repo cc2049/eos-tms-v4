@@ -36,7 +36,8 @@
                                 {{ item.VNAME }}
                             </div>
                         </div>
-                        <el-checkbox v-model="choosePlanObj.ISDEFAULT" class="ml-10 mr-10" label="下次以此方案自动进入" size="large" />
+                        <el-checkbox v-model="choosePlanObj.ISDEFAULT" true-value="1" class="ml-10 mr-10"
+                            label="下次以此方案自动进入" size="large" @change="changeBox" />
                     </div>
                     <div class="content-right ">
                         <div class="flex">
@@ -105,12 +106,12 @@ const emit = defineEmits(["update:formData", "updateLeftList"]);
 import { addPlan, updatePlan, deleteBatchIds } from "#/system/advancedQuery";
 import { inject, reactive } from "vue";
 
+const { proxy } = getCurrentInstance();
 
 const rightMenu = ref([
     '条件', '高级', '排序', '显示隐藏列'
 ])
 const MenuID = inject("menuID");
-// console.log("🚀 ~ MenuID:", MenuID.value)
 
 const props = defineProps({
     showModal: {
@@ -139,10 +140,14 @@ const closeModal1 = () => {
 
 }
 
+const changeBox = (val) => {
+    saveAsForm.value = JSON.parse(JSON.stringify(choosePlanObj.value))
+    savePlanLeft()
+}
+
 
 const choosePlanObj = ref({})
 const clickLeftPlan = (item) => {
-    console.log("🚀 ~ clickLeftPlan ~ item:", item)
 
     choosePlanObj.value = item
 
@@ -190,7 +195,10 @@ const savePlanLeft = () => {
     if (saveAsForm.value.BILLNO) {
         updatePlan(protData).then((res) => {
             saveAsModal.value = false
-
+            proxy.$message({
+                message: res.MESSAGE,
+                type: "success",
+            });
             emit('updateLeftList')
 
         });
@@ -217,7 +225,7 @@ const clickUpdate = () => {
 
 const clickDelete = () => {
     const protData = {
-        CHOOSEDATA:[choosePlanObj.value],
+        CHOOSEDATA: [choosePlanObj.value],
         ...MenuID.value
     }
 
@@ -248,7 +256,7 @@ const clickDelete = () => {
         &-btn {}
 
         &-main {
-            margin:0 10px;
+            margin: 0 10px;
             border: 1px solid #ddd;
             border-radius: 4px;
 

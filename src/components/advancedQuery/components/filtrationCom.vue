@@ -11,7 +11,6 @@
                 @changeFilter="val => changeFilter(val, item, index)" /> -->
             <FilterForm :filterConfig="filterConfig" :filterVal="item" v-model:formData="currentQueryList[index]"
                 @changeFilter="val => changeFilter(val, item, index)" />
-            <!-- <div @click="click11">dasdasd</div> -->
         </div>
 
     </div>
@@ -53,8 +52,6 @@ onMounted(() => {
 
 
 const changeFilter = (val, item, index) => {
-    console.log(props.filterArr)
-    console.log(currentQueryList.value)
     emit("changeFilter", val, item, index)
 }
 
@@ -79,9 +76,6 @@ watch(() => currentQueryList.value, value => {
 
 }, { immediate: true, deep: true })
 
-// const click11 = () => {
-//     console.log(currentQueryList.value)
-// }
 
 </script>
 
