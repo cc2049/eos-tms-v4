@@ -370,7 +370,7 @@ import {
 } from "@/utils";
 import useSettingsStore from "@/store/modules/settings";
 import VueQr from "vue-qr/src/packages/vue-qr.vue";
-import { nextTick, computed } from "vue";
+import { nextTick, computed, onMounted } from "vue";
 
 import Header from "./header.vue";
 
@@ -394,6 +394,11 @@ const cellClassName = ({ row, column }) => {
   }
   return null;
 };
+
+const keyStatus = ref(null);
+onMounted(() => {
+  watchKeyEvent() 
+})
 
 const emit = defineEmits(["dragRow", "queryEvent", "resetConfig"]);
 const props = defineProps({
@@ -457,6 +462,30 @@ const clickGrade = (row, config) => {
   gradeModal.value = true;
   gradeModalRowData.value = row;
 };
+
+const watchKeyEvent = ()=> {
+  const setKeyStatus = (keyCode, status) => {
+    switch (keyCode) {
+      case 16:
+        // if (this.onShfit === status) return
+        console.log('shif', status ? '按下' : '抬起')
+        this.onShfit = status
+        break
+      case 17:
+        // if (this.onCtrl === status) return
+        console.log('ctrl', status ? '按下' : '抬起')
+        this.onCtrl = status
+        break
+    }
+  }
+  document.onkeydown = (e) => {
+    setKeyStatus(e.keyCode, true)
+  }
+  document.onkeyup = (e) => {
+    setKeyStatus(e.keyCode, false)
+  }
+}
+
 
 const xTable = ref(null);
 
@@ -988,30 +1017,6 @@ function DateChange(val, config) {
   filterEvent();
 }
 
-// 推断日期组件类型
-const mapDateType = computed((config, isRange = false) => {
-  return (config, isRange) => {
-    let { SLOTCFG, SUFFIX } = config,
-      Ctype = SLOTCFG || SUFFIX,
-      type = "",
-      format = "";
-    switch (Ctype) {
-      case "year":
-        type = isRange ? "daterange" : "year";
-        format = "YYYY";
-        break;
-      case "month":
-        type = isRange ? "monthrange" : "month";
-        format = "YYYY-MM";
-        break;
-      default:
-        type = isRange ? "daterange" : "date";
-        format = "YYYY-MM-DD";
-        break;
-    }
-    return { type, format };
-  };
-});
 
 function mergeRowMethod({ row, _rowIndex, column, visibleData }) {
   const fields = props.tableCFG.mergeRowField || [];
