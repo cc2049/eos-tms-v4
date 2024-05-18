@@ -2,7 +2,7 @@
  * @Author: cc2049
  * @Date: 2024-04-28 15:12:29
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-05-18 18:00:04
+ * @LastEditTime: 2024-05-18 18:05:18
  * @Description: 简介
 -->
 
@@ -48,14 +48,14 @@
 
       <div class="top-button-right">
         <div class="tool-wrap">
-          <el-icon color="#949eb5" :size="20">
+          <el-icon color="#949eb5" :size="22" style="top:3px"> 
             <Icon icon="tabler:bulb-filled"></Icon>
           </el-icon>
         </div>
         <vxe-pulldown ref="pulldownRef" destroy-on-close>
           <template #default>
-            <div class="tool-wrap 22" @click="openPulldown">
-              <el-icon color="#2a4bff" :size="20">
+            <div class="tool-wrap" @click="openPulldown">
+              <el-icon color="#2a4bff" :size="20" style="top:4px">
                 <Icon icon="ant-design:setting-outlined"></Icon>
               </el-icon>
             </div>
