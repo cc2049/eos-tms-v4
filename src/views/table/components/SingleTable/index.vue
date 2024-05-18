@@ -2,7 +2,7 @@
  * @Author: cc2049
  * @Date: 2024-04-28 13:10:44
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-05-18 09:06:09
+ * @LastEditTime: 2024-05-18 09:37:13
  * @Description: 简介
 -->
 <template v-if="pageConfig">
@@ -290,8 +290,6 @@ function queryHeight() {
 
 //
 function handleCustomPlan(data) {
-  // PROGRAMID  QUERYS
-  console.log("handleCustomPlan", data);
   queryJSON.value.PROGRAMID = data.PROGRAMID;
   queryJSON.value.QUERYS = data.QUERYS || [];
   pageConfig.value.hasTree ? getTreeData() : getTableData();
