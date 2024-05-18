@@ -2,7 +2,7 @@
  * @Author: cc2049
  * @Date: 2024-02-20 09:00:04
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-05-15 15:15:11
+ * @LastEditTime: 2024-05-18 10:00:46
  * @Description: 简介
 -->
 
@@ -42,16 +42,16 @@
         </el-popover>
 
       </div>
-      <div class="right-menu-item">
+      <div class="right-menu-item" @click="fixedEvent(column, 1)">
         <el-icon :size="16" color="#606875">
           <Icon icon="mdi:lock" />
         </el-icon>
         <span>
-          冻结列
+          冻结列 {{ column.defaultFixed }}
         </span>
       </div>
 
-      <div class="right-menu-item">
+      <div class="right-menu-item" @click="fixedEvent(column, 0)">
         <el-icon :size="16" color="#606875">
           <Icon icon="mdi:unlocked-variant" />
         </el-icon>
@@ -394,6 +394,12 @@ function getColumnsList(data) {
 
 function checkboxChange(e) {
   let data = { id: e.label, isShow: e.value ? "1" : "0" };
+  emit("setColShowEvent", data);
+}
+
+function fixedEvent(e, t) {
+  console.log(e, t);
+  let data = { id: e.field, isShow: "", isFixed: t ? "left" : "" };
   emit("setColShowEvent", data);
 }
 </script>

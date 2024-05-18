@@ -944,9 +944,16 @@ function rightClickEvent(data) {
   }
 }
 
+/*
+* 表头右键事件
+*/
 function setColShowEvent(data) {
   let index = props.tableCFG.tableColumns.findIndex((i) => i.FIELD == data.id);
-  props.tableCFG.tableColumns[index].SELECTEDFLAG = data.isShow;
+  if (data.isShow) {
+    props.tableCFG.tableColumns[index].SELECTEDFLAG = data.isShow;
+  } else {
+    props.tableCFG.tableColumns[index].ISFIXED = data.isFixed;
+  }
 }
 
 // 支持列头筛选的查询条件 ID
