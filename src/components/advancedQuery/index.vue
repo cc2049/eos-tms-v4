@@ -132,15 +132,15 @@ const clickRadio = (item, index) => {
   emit("handleCustomPlan", {
     type: "1",
     PROGRAMID: chooseRadioVal.value,
-    QUERYS: item.BILLNO,
+    // QUERYS: item.BILLNO,
   });
 };
 // 查询按钮事件
 function searchBtn() {
   emit("handleCustomPlan", {
     type: "2",
-    PROGRAMID: chooseRadioVal.value,
-    QUERYS: filterArr.value,
+    // PROGRAMID: chooseRadioVal.value,
+    QUERYS: querySaveList.value,
   });
 }
 
