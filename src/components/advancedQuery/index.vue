@@ -139,7 +139,7 @@ const clickRadio = (item, index) => {
 function searchBtn() {
   emit("handleCustomPlan", {
     type: "2",
-    // PROGRAMID: chooseRadioVal.value,
+    PROGRAMID: chooseRadioVal.value,
     QUERYS: querySaveList.value,
   });
 }
