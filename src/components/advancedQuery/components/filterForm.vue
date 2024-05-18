@@ -28,16 +28,17 @@
                 <el-date-picker v-model="formData.DEFAULTVAL" clearable style="width: 100%" placeholder="请选择" />
             </template>
             <template v-else-if="currentConfig.CONTROLS == 'ExDateRange'">
-                <el-date-picker v-model="formData.DEFAULTVAL" unlink-panels clearable range-separator="至"
-                    style="width: 100%" placeholder="请选择" />
+                <el-date-picker v-model="formData.DEFAULTVALArr" unlink-panels clearable range-separator="至"
+                    style="width: 100%" placeholder="请选择" @change="(v) => DateChange(v)" @clear="DateChange(null)" />
             </template>
             <template v-else-if="currentConfig.CONTROLS == 'ExDateTime'">
                 <el-date-picker v-model="formData.DEFAULTVAL" clearable type="datetime"
                     value-format="YYYY-MM-DD HH:mm:ss" style="width: 100%" />
             </template>
             <template v-else-if="currentConfig.CONTROLS == 'ExDateTimeRange'">
-                <el-date-picker v-model="formData.DEFAULTVAL" clearable unlink-panels type="datetimerange"
-                    range-separator="至" value-format="YYYY-MM-DD HH:mm:ss" style="width: 100%" />
+                <el-date-picker v-model="formData.DEFAULTVALArr" clearable unlink-panels type="datetimerange"
+                    range-separator="至" value-format="YYYY-MM-DD HH:mm:ss" style="width: 100%"
+                    @change="(v) => DateChange(v)" @clear="DateChange(null)" />
             </template>
             <template v-else-if="currentConfig.CONTROLS == 'ExSelect'">
                 <el-select placeholder="请选择" v-model="formData.DEFAULTVAL" clearable style="width: 100%">
@@ -194,6 +195,16 @@ const mapEnumData = () => {
     EnumData.value = { ...rowData.EnumData, ...rowData._getDICT };
 };
 
+// 时间确认事件
+function DateChange(val) {
+    if (currentConfig.value.CONTROLS == 'ExDateRange' || currentConfig.value.CONTROLS == 'ExDateTimeRange') {
+        props.formData.DEFAULTVAL = !val ? "" : val.join(",");
+    } else {
+        props.formData.DEFAULTVAL = !val ? "" : val
+    }
+}
+
+
 const modalConfig = ref({})
 const inputVisible = ref(false)
 const ExSelectModalInput = (e, config) => {
@@ -280,7 +291,7 @@ function ParseOtherConfig(config) {
                 importantData = {};
 
 
-   
+
 
             if (paramsArr.length == 0) {
                 url = config;
