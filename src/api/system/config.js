@@ -190,7 +190,7 @@ export const TableConfig_Qty = [
   { FIELD: "MAXLENGTH", LABEL: "最大长度", WIDTH: "100", ALIGN: "left", CONTROLS: "ExNumber", EDITTABLE: 1, OTHER: "", DEFAULTVAL: "100", ISSHOW: 1, COL: 8, },
   { FIELD: "REVERFIELD", LABEL: "映射", WIDTH: "100", ALIGN: "left", CONTROLS: "ExTextBox", EDITTABLE: 1, OTHER: '', DEFAULTVAL: "", ISSHOW: 1, COL: 8 },
   { FIELD: "QUERYTYPE", LABEL: "查询类型", WIDTH: "150", ALIGN: "left", CONTROLS: "ExSelect", EDITTABLE: 1, OTHER: JSON.stringify(QUERYTYPE), DEFAULTVAL: "Like", ISSHOW: 1, COL: 8, ISREQUIRE: 1, },
-  { FIELD: "VCODE", LABEL: "查询类型枚举", WIDTH: "150", ALIGN: "left", CONTROLS: "ExSelect", EDITTABLE: 1, OTHER: "${QueryTypeEnum}", DEFAULTVAL: "Like", ISSHOW: 1, COL: 8, ISREQUIRE: 1, },
+  { FIELD: "VCODE", LABEL: "查询类型枚举", WIDTH: "150", ALIGN: "left", CONTROLS: "ExSelect", EDITTABLE: 1, OTHER: "${QueryTypeEnum}", DEFAULTVAL: "Like", ISSHOW: 1, COL: 8, ISREQUIRE: 0, },
   { FIELD: "LINKAGE", LABEL: "级联", WIDTH: "100", ALIGN: "left", CONTROLS: "ExTextBox", EDITTABLE: 1, DEFAULTVAL: "", ISSHOW: 1, COL: 8 },
   { FIELD: "OTHER", LABEL: "其他配置", WIDTH: "150", ALIGN: "left", CONTROLS: "ExTextBox", EDITTABLE: 1, DEFAULTVAL: "", ISSHOW: 1, COL: 8, LINKAGE: "TRIM", MAXLENGHT: "9999", },
   { FIELD: "SLOTCFG", LABEL: "插槽配置", WIDTH: "100", ALIGN: "left", CONTROLS: "ExTextBox", EDITTABLE: 1, DEFAULTVAL: "", ISSHOW: 1, COL: 8 },

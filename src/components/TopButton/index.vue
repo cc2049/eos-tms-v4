@@ -2,7 +2,7 @@
  * @Author: cc2049
  * @Date: 2024-04-28 15:12:29
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-05-18 11:24:16
+ * @LastEditTime: 2024-05-18 18:00:04
  * @Description: 简介
 -->
 
@@ -52,12 +52,31 @@
             <Icon icon="tabler:bulb-filled"></Icon>
           </el-icon>
         </div>
+        <vxe-pulldown ref="pulldownRef" destroy-on-close>
+          <template #default>
+            <div class="tool-wrap 22" @click="openPulldown">
+              <el-icon color="#2a4bff" :size="20">
+                <Icon icon="ant-design:setting-outlined"></Icon>
+              </el-icon>
+            </div>
+          </template>
+          <template #dropdown>
+            <div class="my-dropdown3">
+              <el-scrollbar :height="300">
+                <vxe-checkbox-group v-model="checkList" class="column-list" @change="checkboxChange" style="display: flex;flex-direction: column;junt-content: flex-start;">
+                  <template v-for="item in topButton" :key="item.BILLNO">
+                    <vxe-checkbox style="margin-left:0;margin-bottom:10px" :content="item.VNAME" :label="item.BILLNO" />
+                    <template v-if="item.CHILDREN?.length">
+                      <vxe-checkbox style="margin-left:20px;margin-bottom:10px" :content="item2.VNAME" :label="item2.BILLNO" v-for="(item2) in item.CHILDREN" :key="item2.BILLNO" />
+                    </template>
+                  </template>
+                </vxe-checkbox-group>
+              </el-scrollbar>
 
-        <div class="tool-wrap">
-          <el-icon color="#2a4bff" :size="20">
-            <Icon icon="ant-design:setting-outlined"></Icon>
-          </el-icon>
-        </div>
+            </div>
+          </template>
+        </vxe-pulldown>
+
       </div>
 
     </div>
@@ -121,11 +140,12 @@ import { getMENUBENTree, RoleDetail } from "#/system/role";
 import { getAuthRoles } from "#/system/user";
 
 const route = useRoute();
-
+const topButton = defineModel("topButton");
+console.log(777, topButton);
 const props = defineProps({
-  topButton: {
-    type: Array,
-  },
+  // topButton: {
+  //   type: Array,
+  // },
   currentData: {
     type: Array,
   },
@@ -192,7 +212,7 @@ const pageConfig = reactive({
 });
 
 const isGetDetail = ref(false);
-const activeBtn = ref(null)
+const activeBtn = ref(null);
 function closeModal() {
   modalConfig.modalVisible = false;
 }
@@ -276,11 +296,8 @@ const handlePermiss = (row) => {
   });
 };
 
-
-
 const MenuID = inject("menuID");
 const formID = ref(null);
-// console.log('topButton', props.topButton );
 const { proxy } = getCurrentInstance();
 const emit = defineEmits(["handleTopBtn", "reloadTableData"]);
 
@@ -289,6 +306,50 @@ const modalConfig = reactive({
   modalH: 600,
   pageTitle: "提示",
 });
+
+// 打开按钮
+const checkList = ref([]);
+const pulldownRef = ref(null);
+const topButtonExpand = ref([]);
+
+function openPulldown() {
+  checkList.value = topButton.value
+    .filter((i) => i.ISSHOW == 1)
+    .map((i) => i.BILLNO);
+  const $pulldown = pulldownRef.value;
+  topButtonExpand.value = treeToArray(topButton.value);
+  if ($pulldown) {
+    $pulldown.togglePanel();
+  }
+}
+function checkboxChange(e) {
+  let index = topButton.value.findIndex((i) => i.BILLNO == e.label);
+  if (index > 0) {
+    topButton.value[index].ISSHOW = e.value ? "1" : "0";
+  } else {
+    let parentIndex = topButtonExpand.value.findIndex(
+      (i) => i.BILLNO == e.label
+    );
+    let newIndex = topButton.value.findIndex((i) => i.BILLNO == topButtonExpand.value[parentIndex].GROUPID);
+    let subIndex = topButton.value[newIndex].CHILDREN.findIndex(
+      (i) => i.BILLNO == e.label
+    );
+    topButton.value[newIndex].CHILDREN[subIndex].ISSHOW = e.value ? "1" : "0";
+  }
+}
+
+// 扁平化树
+function treeToArray(tree) {
+  let res = [];
+  for (const item of tree) {
+    const { CHILDREN, ...i } = item;
+    if (CHILDREN && CHILDREN.length) {
+      res = res.concat(treeToArray(CHILDREN));
+    }
+    res.push(i);
+  }
+  return res;
+}
 
 // 设置是否显示按钮
 
@@ -317,10 +378,9 @@ const setShowBtn = (btn) => {
 };
 
 function leftHandleEvent(type) {
-  console.log(777,type );
   switch (type) {
     case 1:
-      emit("handleTopBtn",{type:'openCustomPlan'});
+      emit("handleTopBtn", { type: "openCustomPlan" });
       break;
     case 2:
       emit("reloadTableData");
@@ -335,7 +395,7 @@ function handleEvent(data) {
   console.log("handelEvent", data);
   let selectRecords = props.currentData;
 
-  activeBtn.value = data
+  activeBtn.value = data;
   // 表单中的按钮事件直接调
   if (props.sourceType == 2) {
     return emit("handleBtnEvent", data);
@@ -356,7 +416,7 @@ function handleEvent(data) {
     data.VTYPE == 27
   ) {
     if (data.ACTION == "EDIT") {
-      if ( !props.currentData.length) {
+      if (!props.currentData.length) {
         return proxy.$message.warning("请先选择数据再操作");
       }
       isGetDetail.value = true;
@@ -366,7 +426,6 @@ function handleEvent(data) {
       MODULEID: data.PK_MODULE,
       PAGEID: data.PK_PAGE,
     };
-
   } else if (data.VTYPE == 3) {
     //  选中数据并提交
     let dataChoose = props.currentData;
@@ -546,6 +605,16 @@ function evilFn(row, fn) {
       }
     }
   }
+}
+
+.my-dropdown3 {
+  width: 200px !important;
+  position: relative;
+  left: -155px;
+  padding: 5px 0 0 10px;
+  border: 1px solid var(--el-border-color);
+  z-index: 10000;
+  background-color: #fff;
 }
 
 .font-16 {

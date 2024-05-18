@@ -2,11 +2,11 @@
  * @Author: cc2049
  * @Date: 2024-04-28 13:10:44
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-05-18 09:37:13
+ * @LastEditTime: 2024-05-18 17:21:29
  * @Description: 简介
 -->
 <template v-if="pageConfig">
-  <TopButton :topButton="pageConfig?.topButton" :currentData="currentData" @handleTopBtn="handleTopBtn" @reloadTableData="reloadTableData" />
+  <TopButton v-model:topButton="topButton" :currentData="currentData" @handleTopBtn="handleTopBtn" @reloadTableData="reloadTableData" />
   <div class="custom-query" ref="AdvancedQuery">
     <AdvanceQuery :queryConfig="pageConfig?.queryConfig" @updateHeight="queryHeight" :customPlan  ref="advanceQueryRef"  @handleCustomPlan="handleCustomPlan" />
   </div>
@@ -243,6 +243,7 @@ function getTreeData() {
 
 const queryURL = ref(null);
 const queryJSON = ref(null);
+const topButton =ref([])
 
 const { allConfig, getConfig } = useTableConifg(props.menuID);
 
@@ -253,6 +254,7 @@ watch(
       getConfig().then((res) => {
         tableCFG.value = res.tableCFG;
         pageConfig.value = res.pageConfig;
+        topButton.value = res.pageConfig.topButton
         queryURL.value = pageConfig.value.queryUrl;
         queryJSON.value = pageConfig.value.queryJson;
         customPlan.value = pageConfig.value.customPlan;

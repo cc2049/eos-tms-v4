@@ -12,8 +12,8 @@ importers:
         specifier: 2.3.1
         version: 2.3.1(vue@3.4.27)
       '@eosine/form':
-        specifier: ^0.0.48
-        version: 0.0.48
+        specifier: ^0.0.51
+        version: 0.0.51
       '@visactor/vchart':
         specifier: ^1.10.5
         version: 1.11.0
@@ -89,6 +89,9 @@ importers:
       vxe-table:
         specifier: ^4.6.5
         version: 4.6.12(vue@3.4.27)
+      vxe-table-plugin-element:
+        specifier: ^4.0.2
+        version: 4.0.2(vxe-table@4.6.12(vue@3.4.27))
     devDependencies:
       '@iconify/vue':
         specifier: ^4.1.2
@@ -298,8 +301,8 @@ packages:
     peerDependencies:
       vue: ^3.2.0
 
-  '@eosine/form@0.0.48':
-    resolution: {integrity: sha512-zlA9YqJIJ4ivRc8hqR+otO3q7hJWyoccf5nC5IcZSEdhsmKQ3e1SCe0EneiYyV7iPugxqjZUAZjJWy/2CzqwCw==}
+  '@eosine/form@0.0.51':
+    resolution: {integrity: sha512-VthaQr73da9a2Uyl2+R4v1y6oOR0DWtEBubij+FlXZZO/Dhxpurd+Yr06aXkqqVsw4EMHc1WMJdG71NqZ13EGQ==}
 
   '@esbuild/aix-ppc64@0.19.12':
     resolution: {integrity: sha512-bmoCYyWdEL3wDQIVbcyzRyeKLgk2WtWLTWz1ZIAZF/EGbNOwSA6ew3PftJ1PqMiOOGu0OyFMzG53L0zqIpPeNA==}
@@ -2442,8 +2445,8 @@ packages:
     resolution: {integrity: sha512-spBB5sgC4cv2YcW03f/IAUN1pgDJWNWD8FzkyY4mArLUMJW+KlQhlmUdKAHQuPfb00Jl5xIfImeOsf6YL8QK7Q==}
     engines: {node: '>=0.10.0'}
 
-  preact@10.21.0:
-    resolution: {integrity: sha512-aQAIxtzWEwH8ou+OovWVSVNlFImL7xUCwJX3YMqA3U8iKCNC34999fFOnWjYNsylgfPgMexpbk7WYOLtKr/mxg==}
+  preact@10.22.0:
+    resolution: {integrity: sha512-RRurnSjJPj4rp5K6XoP45Ui33ncb7e4H7WiOHVpjbkvqvA3U+N8Z6Qbo0AE6leGYBV66n8EhEaFixvIu3SkxFw==}
 
   prismjs@1.29.0:
     resolution: {integrity: sha512-Kx/1w86q/epKcmte75LNrEoT+lX8pBpavuAbvJWRXar7Hz8jrtF+e3vY751p0R8H9HdArwaCTNDDzHg/ScJK1Q==}
@@ -2997,6 +3000,11 @@ packages:
       typescript:
         optional: true
 
+  vxe-table-plugin-element@4.0.2:
+    resolution: {integrity: sha512-ONBqacMzyYh/i1FSM3GqegvbyfY0J4pEIdCE54OXmycEfnhxT+vLXHILTGPSGW389PRnqRsU70nG8tWfmrTD/w==}
+    peerDependencies:
+      vxe-table: ^4.5.0
+
   vxe-table@4.6.12:
     resolution: {integrity: sha512-CJr+LHY5La00ur3bV4i+pUBvfqVlo2WdE9ELnEpf7/8wBdOrwe1niPoGovsAagfCdfA0Esw7F5pCN+1RjV40Ww==}
     peerDependencies:
@@ -3262,7 +3270,7 @@ snapshots:
     dependencies:
       vue: 3.4.27
 
-  '@eosine/form@0.0.48':
+  '@eosine/form@0.0.51':
     dependencies:
       '@wangeditor/editor': 5.1.23
       '@wangeditor/editor-for-vue': 5.1.12(@wangeditor/editor@5.1.23)(vue@3.4.27)
@@ -3746,7 +3754,7 @@ snapshots:
       mime-match: 1.0.2
       namespace-emitter: 2.0.1
       nanoid: 3.3.7
-      preact: 10.21.0
+      preact: 10.22.0
 
   '@uppy/store-default@2.1.1': {}
 
@@ -5664,7 +5672,7 @@ snapshots:
       posthtml-parser: 0.2.1
       posthtml-render: 1.4.0
 
-  preact@10.21.0: {}
+  preact@10.22.0: {}
 
   prismjs@1.29.0: {}
 
@@ -6327,6 +6335,10 @@ snapshots:
       '@vue/runtime-dom': 3.4.27
       '@vue/server-renderer': 3.4.27(vue@3.4.27)
       '@vue/shared': 3.4.27
+
+  vxe-table-plugin-element@4.0.2(vxe-table@4.6.12(vue@3.4.27)):
+    dependencies:
+      vxe-table: 4.6.12(vue@3.4.27)
 
   vxe-table@4.6.12(vue@3.4.27):
     dependencies:
