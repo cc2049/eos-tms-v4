@@ -395,7 +395,7 @@ const cellClassName = ({ row, column }) => {
   return null;
 };
 
-const keyStatus = ref(null);
+const key17Status = ref(null);
 onMounted(() => {
   watchKeyEvent() 
 })
@@ -466,15 +466,10 @@ const clickGrade = (row, config) => {
 const watchKeyEvent = ()=> {
   const setKeyStatus = (keyCode, status) => {
     switch (keyCode) {
-      case 16:
-        // if (this.onShfit === status) return
-        console.log('shif', status ? '按下' : '抬起')
-        this.onShfit = status
-        break
       case 17:
-        // if (this.onCtrl === status) return
+        if (key17Status.value === status) return
+        key17Status.value = status
         console.log('ctrl', status ? '按下' : '抬起')
-        this.onCtrl = status
         break
     }
   }
