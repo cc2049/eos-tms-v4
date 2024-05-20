@@ -21,7 +21,7 @@ import { watch } from "vue";
 import FilterForm from "./filterForm"
 import { getFormValue } from "@/utils";
 
-const emit = defineEmits(["changeFilter","changeCurrentQueryList"]);
+const emit = defineEmits(["changeFilter", "changeCurrentQueryList"]);
 
 
 const props = defineProps({
@@ -59,20 +59,25 @@ const changeFilter = (val, item, index) => {
 watch(() => props.filterArr, value => {
     // newfilterArrs.value = value
     currentQueryList.value = value.map(ele => {
-        return {
-            FIELD: '',
-            QUERYTYPE: '',
-            DEFAULTVAL: '',
-            DEFAULTVAL2: '',
-            SORTCODE: '',
-            DEFAULTVALArr:''
+        if (ele.BILLNO) {
+            return ele
+        } else {
+            return {
+                FIELD: '',
+                QUERYTYPE: '',
+                DEFAULTVAL: '',
+                DEFAULTVAL2: '',
+                SORTCODE: '',
+                DEFAULTVALArr: ''
+            }
         }
+
     })
 
 }, { immediate: true })
 
 watch(() => currentQueryList.value, value => {
-    emit('changeCurrentQueryList',value)
+    emit('changeCurrentQueryList', value)
 
 }, { immediate: true, deep: true })
 

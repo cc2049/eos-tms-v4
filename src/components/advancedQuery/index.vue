@@ -39,7 +39,7 @@
           </el-popover>
           <div class="ml10 mr10 btnStyle" @click="clickSavePlan">保存</div>
           <div class="btnStyle">重置</div>
-          <template v-if="filterArr.length > 2">
+          <template v-if="filterArr.length > 1">
             <el-icon color="#0055ff" :size="15" class="ml10 cp foldOUnfoldIcon" @click="foldOUnfold(1)" v-if="FiltrationComHeight == 'auto'">
               <Icon icon="codicon:fold-up"></Icon>
             </el-icon>
@@ -64,6 +64,7 @@ import FiltrationCom from "./components/filtrationCom";
 import SettingFilter from "./components/settingFilter";
 import AllocationPlan from "./components/allocationPlan";
 import { getList, savePlan } from "#/system/advancedQuery";
+const { proxy } = getCurrentInstance();
 
 import { axiosGet } from "#/common";
 
@@ -98,6 +99,8 @@ const closeShowModal = () => {
 
 const clickStatus = ref(""); // 1是点击外层查询  2 是点击设置的确定
 
+const filterArr = ref([]);
+const defaultFilterArr = ref([]);
 // 我的方案
 const chooseRadioVal = ref(null);
 const myPlanList = ref([]);
@@ -109,7 +112,10 @@ const clickRadio = (item, index) => {
     PKBILLNO: item.BILLNO,
   };
   // 查询方案里面的值
-  axiosGet("/sys/queryprogUserDtl/getSubList", query).then((res) => {});
+  axiosGet("/sys/queryprogUserDtl/getSubList", query).then((res) => {
+  console.log("🚀 ~ axiosGet ~ res:", res)
+  filterArr.value = res.RESULT
+  });
 
   emit("handleCustomPlan", {
     type: "1",
@@ -157,8 +163,6 @@ const filterConfig = ref({
   ],
 });
 
-const filterArr = ref([]);
-const defaultFilterArr = ref([]);
 
 watch(
   () => props.queryConfig,
@@ -169,7 +173,7 @@ watch(
     defaultFilterArr.value = JSON.parse(
       JSON.stringify(filterConfig.value.filterSeceletArr)
     );
-    filterArr.value = JSON.parse(JSON.stringify(defaultFilterArr.value));
+    // filterArr.value = JSON.parse(JSON.stringify(defaultFilterArr.value));
   },
   { immediate: true }
 );
@@ -202,10 +206,7 @@ const callAddition = () => {
     ...MenuID.value,
   };
   savePlan(protData).then((res) => {
-    proxy.$message({
-      message: "保存成功",
-      type: "success",
-    });
+    proxy.$modal.msgSuccess("保存成功");
   });
 };
 
