@@ -1,29 +1,25 @@
 <!--
  * @Author: cc2049
  * @Date: 2024-04-23 11:35:41
- * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-05-16 09:04:01
+ * @LastEditors: PiPin 33947354+p1Master@users.noreply.github.com
+ * @LastEditTime: 2024-05-21 09:19:49
  * @Description: 大表单组件
 -->
 
 <template>
   <div class="form-container">
     <TopButton :topButton="topButton" sourceType="2" @handleBtnEvent="handleBtnEvent" @reloadTableData="reloadTableData" />
-    <div class="mt20 p-10 ">
-      <eos-form ref="eosFormRef" v-model="formData" :config="formConfig" :detail="detail">
-        <template #subTable="{ config }" v-if="tableConfig.length > 0">
-          <div class="formTable" :style="`margin-left:-${labelWidth}`">
-            <SubTableCom :ref="config.FIELD+'Ref'" :key="config.FIELD" :detail="detail || config.ISDISABLED == '1'" :title="config.LABEL" :config="comConfig(config)" v-model:data="formData[config.FIELD]" v-model:mainFormData="formData" :othConfig="othConfig" @EtbaleLinkChange="EtbaleLinkChange"
-              @updateTableData="updateTableData">
-              <template #modalBtnAfter>
-                <slot name="modalBtnAfter" />
-              </template>
-            </SubTableCom>
-          </div>
-        </template>
-      </eos-form>
-    </div>
-
+    <eos-form ref="eosFormRef" v-model="formData" :config="formConfig" :detail="detail">
+      <template #subTable="{ config }" v-if="tableConfig.length > 0">
+        <div class="formTable" :style="`margin-left:-${labelWidth}`">
+          <SubTableCom :ref="config.FIELD+'Ref'" :key="config.FIELD" :detail="detail || config.ISDISABLED == '1'" :title="config.LABEL" :config="comConfig(config)" v-model:data="formData[config.FIELD]" v-model:mainFormData="formData" :othConfig="othConfig" @EtbaleLinkChange="EtbaleLinkChange" @updateTableData="updateTableData">
+            <template #modalBtnAfter>
+              <slot name="modalBtnAfter" />
+            </template>
+          </SubTableCom>
+        </div>
+      </template>
+    </eos-form>
   </div>
 </template>
 
@@ -71,7 +67,7 @@ watch(
         if (props.isGetDetail) {
           getDetail(SLOTCFG);
         }
-        nextTick(() => {});
+        nextTick(() => { });
       });
     }
   },
@@ -88,7 +84,7 @@ function resetButton(arr) {
   try {
     let customCF = JSON.parse(copyBtn.PAGEPATH);
     copyBtn.VNAME = customCF.sName;
-  } catch (error) {}
+  } catch (error) { }
 
   let newBtn = [copyBtn];
   return newBtn;
