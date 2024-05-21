@@ -79,9 +79,9 @@
                     </div>
                   </div>
                   <!-- <countDown ref="countDownRef" v-if="bidInfo.BILLSTATUS == 5" :time="bidInfo.BIDENDTIME" /> -->
-                  <countDown ref="countDownRef"
+                  <!-- <countDown ref="countDownRef"
                     v-if="bidInfo.BILLSTATUS == 5 || bidInfo.BILLSTATUS == 4 || bidInfo.BILLSTATUS == 3"
-                    :time="bidInfo.BILLSTATUS == 5 ? bidInfo.BIDENDTIME : bidInfo.BILLSTATUS == 4 ? bidInfo.BIDSTARTTIME : bidInfo.BILLSTATUS == 3 ? bidInfo.SIGNENDTIME : ''" />
+                    :time="bidInfo.BILLSTATUS == 5 ? bidInfo.BIDENDTIME : bidInfo.BILLSTATUS == 4 ? bidInfo.BIDSTARTTIME : bidInfo.BILLSTATUS == 3 ? bidInfo.SIGNENDTIME : ''" /> -->
                 </div>
               </div>
             </div>
