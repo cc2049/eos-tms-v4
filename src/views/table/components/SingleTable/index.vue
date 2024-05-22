@@ -64,6 +64,7 @@ import useTableConifg from "@/hooks/useTableConifg";
 import { axiosGet } from "#/common";
 import { getUrlParams } from "@/utils";
 import { watchEffect } from "vue";
+const emit = defineEmits(["openCustemPage"]);
 
 const props = defineProps({
   menuID: {
@@ -183,8 +184,9 @@ const advanceQueryRef = ref(null);
 function handleTopBtn(data) {
   console.log(666, data);
   if (data.type == "openCustomPlan") {
-    // showCustomPlan.value = true;
     advanceQueryRef.value.openShowModal();
+  } else if(data.type == "openCustemPage"){
+    emit("openCustemPage",data)
   } else {
     handelEvent({ data: data, row: currentData.value });
   }

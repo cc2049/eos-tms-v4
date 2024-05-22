@@ -404,11 +404,15 @@ function handleEvent(data) {
   } else {
   }
 
-  // 打开弹窗
-  if (
+  if( data.VTYPE == 1){
+    if (data.PK_PAGE && data?.PK_PAGE == "slot") {
+      emit("handleTopBtn", { type: "openCustemPage",btnConf:data });
+
+    } 
+
+  }else if (// 打开弹窗
     data.VTYPE == 2 ||
     data.VTYPE == 20 ||
-    data.VTYPE == 1 ||
     data.VTYPE == 27
   ) {
     if (data.ACTION == "EDIT") {
@@ -535,6 +539,8 @@ function submitByBtn(btn, data) {
 
   submitEvent(btn.ACTIONADDRESS, sdata);
 }
+
+
 
 // 数据提交
 function submitEvent(URL, sdata) {

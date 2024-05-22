@@ -8,7 +8,10 @@
 <template>
 
   <div class="page-container">
-    <SingleTable ref="listTableRef" :menuID="menuParams"   />
+    <SingleTable ref="listTableRef" :menuID="menuParams"  @openCustemPage="openCustemPages"  />
+
+    
+
   </div>
 
 </template>
@@ -26,6 +29,30 @@ const menuParams = ref({
   MODULEID: routerParams.BILLNO || "MU221010650325",
   PAGEID: routerParams.ACTION || "PG221010670930",
 });
+const visibleFormPage = ref(false);
+
+const openCustemPages=(data) => {
+  console.log("🚀 ~ openCustemPage ~ data:", data)
+        openCustemPage(data.btnConf.VTYPE, data.btnConf.PAGEPATH); // 打开自定义页面
+
+}
+
+
+/** 动态自定义组件 */
+const slotCustemPage = ref();
+const openCustemPage = (type, path) => {
+  try {
+    // visibleFormPage.value = true;
+    type == 1
+      ? (visibleFormPage.value = true)
+      : (pageConfig.modalVisible = true);
+    slotCustemPage.value = pageAutoComponent(path);
+    // slotCustemPage.value = defineAsyncComponent(() => import(`./page.js`))
+  } catch (err) {
+    console.error("打开自定义页面", err);
+  }
+};
+
 
 
 
