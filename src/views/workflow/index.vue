@@ -70,9 +70,10 @@
 
 <script setup name='workflow'>
 import Workflow from "@/components/Workflow";
-import Form from "@/components/Form";
-import Vtable from "@/components/Tables";
-import { getFormValue, getFormRule } from "@/utils";
+// import Form from "@/components/Form";
+// import Vtable from "@/components/Tables";
+import Vtable from "@/components/Vxtable";
+// import { getFormValue, getFormRule } from "@/utils";
 import { WFList, WFAdd, WFDetail, WFDelete, TableConfig } from "#/workflow";
 const { proxy } = getCurrentInstance();
 const route = useRoute();

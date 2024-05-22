@@ -106,6 +106,8 @@ import { getFormValue, getFormRule } from "@/utils";
 
 import FormPage from "@/views/formPage/index.vue";
 
+import Workflow from "@/views/workflow/index.vue";
+
 const route = useRoute();
 const topButton = defineModel("topButton");
 const props = defineProps({
@@ -135,7 +137,9 @@ function closeModal() {
 const MenuID = inject("menuID");
 const formID = ref(null);
 const { proxy } = getCurrentInstance();
-const emit = defineEmits(["handleTopBtn", "reloadTableData"]);
+// const emit = defineEmits(["handleTopBtn", "reloadTableData"]);
+const emit = defineEmits([ "reloadTableData"]);
+
 
 const modalConfig = reactive({
   modalW: 1000,
@@ -213,6 +217,7 @@ const setShowBtn = (btn) => {
   }
 };
 
+
 function leftHandleEvent(type) {
   switch (type) {
     case 1:
@@ -250,7 +255,9 @@ function handleEvent(data) {
 
     } 
 
-  }else if (// 打开弹窗
+  }else 
+  
+  if (// 打开弹窗
     data.VTYPE == 2 ||
     data.VTYPE == 20 ||
     data.VTYPE == 27
