@@ -469,7 +469,7 @@ const watchKeyEvent = () => {
       case 17:
         if (key17Status.value === status) return;
         key17Status.value = status;
-        console.log("ctrl", status ? "按下" : "抬起");
+        // console.log("ctrl", status ? "按下" : "抬起");
         break;
     }
   };

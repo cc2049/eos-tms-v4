@@ -16,7 +16,6 @@
       <LoginForm @clickForgetPassword="forgetPassword" :LoginConfigs @clickShowClause="showClause" />
     </div>
 
-
   </div>
   <ForgetPassword v-if="LoginConfigs.isResetPassword" :isShow="forgetPasswordModel"
     @close="forgetPasswordModel = false" />

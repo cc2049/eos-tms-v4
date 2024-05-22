@@ -2,13 +2,13 @@
  * @Author: cc2049
  * @Date: 2024-04-28 13:10:44
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-05-18 17:21:29
+ * @LastEditTime: 2024-05-22 08:39:16
  * @Description: 简介
 -->
 <template v-if="pageConfig">
   <TopButton v-model:topButton="topButton" :currentData="currentData" @handleTopBtn="handleTopBtn" @reloadTableData="reloadTableData" />
   <div class="custom-query" ref="AdvancedQuery">
-    <AdvanceQuery :queryConfig="pageConfig?.queryConfig" @updateHeight="queryHeight" :customPlan  ref="advanceQueryRef"  @handleCustomPlan="handleCustomPlan" />
+    <AdvanceQuery :queryConfig="pageConfig?.queryConfig" @updateHeight="queryHeight" :customPlan ref="advanceQueryRef" @handleCustomPlan="handleCustomPlan" />
   </div>
 
   <div class="table-content">
@@ -32,6 +32,12 @@
     </template>
     <!-- 表格主体 -->
     <div class="table-wrap" :class="pageConfig?.hasTree && showZtree ? 'has-tree-table' :'' " v-if="tableCFG">
+
+      <!-- <el-tabs :tab-position="tabPosition" class="demo-tabs" v-model="mainActive" @tab-click="handleMainTabsClick">
+        <el-tab-pane :label="item.VNAME" v-for="(item, index) in pageConfig.mainTable" :key="index" :name="index">
+        </el-tab-pane>
+      </el-tabs> -->
+
       <Vxtable ref="VxtableRef" class="bg-white" :tableCFG="tableCFG" :tableData="tableData" @change="tableChange" @dragRow="dragTableRow" @queryEvent="queryEvent" @resetConfig="resetConfig">
       </Vxtable>
       <vxe-pager size="mini" class-name="vxe-page-wrap " :page-size="pageInfo.pageSize" :page-sizes="ListPageSize" :current-page="pageInfo.currentPage" :total="pageInfo.totalResult" :layouts="pagerLayouts" @page-change="handlePageChange">
@@ -41,6 +47,9 @@
           </div>
         </template>
       </vxe-pager>
+
+      <!-- <SubTable :SubTableConfig :currentData /> -->
+
     </div>
   </div>
 
@@ -170,13 +179,12 @@ function reloadTableData() {
   queryJSON.value.PAGENUM = 1;
   getTableData();
 }
-const advanceQueryRef=ref(null)
+const advanceQueryRef = ref(null);
 function handleTopBtn(data) {
   console.log(666, data);
   if (data.type == "openCustomPlan") {
     // showCustomPlan.value = true;
-    advanceQueryRef.value.openShowModal()
-    
+    advanceQueryRef.value.openShowModal();
   } else {
     handelEvent({ data: data, row: currentData.value });
   }
@@ -207,19 +215,23 @@ const getTableData = () => {
   queryJSON.value.PAGENUM = pageInfo.currentPage;
   queryJSON.value.SORTNAME = pageInfo.sortName;
   queryJSON.value.REVERSE = pageInfo.sortOrder;
-  axiosGet(queryURL.value, queryJSON.value).then((res) => {
-    currentData.value = [];
-    tableCFG.value.loading = false;
+  axiosGet(queryURL.value, queryJSON.value)
+    .then((res) => {
+      currentData.value = [];
+      tableCFG.value.loading = false;
 
-    if (Array.isArray(res.RESULT)) {
-      tableData.value = res.RESULT;
-      pageInfo.totalResult = res.RESULT.length;
-    } else {
-      const { RECORDS, TOTAL } = res.RESULT;
-      tableData.value = RECORDS;
-      pageInfo.totalResult = TOTAL;
-    }
-  });
+      if (Array.isArray(res.RESULT)) {
+        tableData.value = res.RESULT;
+        pageInfo.totalResult = res.RESULT.length;
+      } else {
+        const { RECORDS, TOTAL } = res.RESULT;
+        tableData.value = RECORDS;
+        pageInfo.totalResult = TOTAL;
+      }
+    })
+    .catch(() => {
+      tableCFG.value.loading = false;
+    });
 };
 
 function getTreeData() {
@@ -243,7 +255,7 @@ function getTreeData() {
 
 const queryURL = ref(null);
 const queryJSON = ref(null);
-const topButton =ref([])
+const topButton = ref([]);
 
 const { allConfig, getConfig } = useTableConifg(props.menuID);
 
@@ -254,7 +266,7 @@ watch(
       getConfig().then((res) => {
         tableCFG.value = res.tableCFG;
         pageConfig.value = res.pageConfig;
-        topButton.value = res.pageConfig.topButton
+        topButton.value = res.pageConfig.topButton;
         queryURL.value = pageConfig.value.queryUrl;
         queryJSON.value = pageConfig.value.queryJson;
         customPlan.value = pageConfig.value.customPlan;

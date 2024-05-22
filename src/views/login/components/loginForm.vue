@@ -122,7 +122,7 @@
 import Cookies from "js-cookie";
 import { handleThemeStyle } from "@/utils/theme";
 import { getUserConfig } from "#/common";
-import { getFormValue, getFormRule, aesJmEncrypt } from "@/utils";
+import { getFormValue, getFormRule } from "@/utils";
 
 import {
   getCodeImg,

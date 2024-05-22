@@ -2,7 +2,7 @@
  * @Author: cc2049
  * @Date: 2024-04-23 10:08:57
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-05-14 17:06:58
+ * @LastEditTime: 2024-05-21 11:22:49
  * @Description: 简介
  */
 import request from '@/utils/request'
@@ -79,6 +79,7 @@ export function logout() {
   return request({
     url: '/sys/check/logout',
     method: 'post',
+    data:{},
     encry: false,
   })
 }

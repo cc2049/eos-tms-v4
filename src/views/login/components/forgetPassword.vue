@@ -75,9 +75,7 @@ import {
     Lock,
 } from "@element-plus/icons-vue";
 import md5 from 'js-md5';
-import { getFormValue, getFormRule, aesJmEncrypt } from "@/utils";
-
-
+import {aesJmEncrypt} from "@/utils/aes";
 
 const props = defineProps({
     isShow: {

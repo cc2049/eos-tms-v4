@@ -8,13 +8,7 @@ import { saveAs } from 'file-saver'
 import useUserStore from '@/store/modules/user'
 // import useFileDownStore from "@/store/modules/filedown"
 
-// import {
-//   RSAEncrypt,
-//   RSADencrypt,
-//   random16,
-//   aesJmEncrypt,
-//   aesJmDEncrypt,
-// } from "@/utils";
+import { aesEncrypt , aesDEncrypt } from '@/utils/aes.js'
 
 let downloadLoadingInstance;
 // 是否显示重新登录
@@ -58,29 +52,20 @@ service.interceptors.request.use(config => {
     PAGEID: axiosData ? (config.data.PAGEID || '') : '',
     PARENTPAGE: axiosData ? (config.data.PARENTPAGE) || '' : '',
     PROGRAMID: axiosData ? (config.data.PROGRAMID) || '' : '',
-
     VERSION: ""
   }
   if (config.url.includes('ISRSA=1')) {
-    // let str16 = random16();
-    // let rsa16 = RSAEncrypt(str16);
-    // let aesData = aesJmEncrypt(JSON.stringify(config.data.DATA), str16)
-    // config.data.KEY = rsa16
-    // delete config.data.DATA
-    // config.data.SECRETDATA = aesData
-    // console.log('要解密' , config.data ,  );
+    const {aesKey , aesData  } = aesEncrypt( config.data.DATA)
+    config.data.KEY = aesKey
+    delete config.data.DATA
+    config.data.SECRETDATA = aesData
   }
 
   if (config.data.DATA?.MODULEID) {
     delete config.data.DATA.MODULEID
     delete config.data.DATA.PROGRAMID
-
     delete config.data.DATA.PAGEID
   }
-
-
-
-
   return config
 }, error => {
   Promise.reject(error)
@@ -133,9 +118,9 @@ service.interceptors.response.use(res => {
     return Promise.reject(res.data)
   } else {
     if (res.data && res.data.KEY) {
-      // let SECRETRESULT = res.data.SECRETRESULT, sraKey = RSADencrypt(res.data.KEY), KMData = aesJmDEncrypt(sraKey, SECRETRESULT);
+      // let SECRETRESULT = res.data.SECRETRESULT, sraKey = aesDEncrypt(res.data.KEY), KMData = aesJmDEncrypt(sraKey, SECRETRESULT);
       let KMData = {};
-      KMData = KMData ? JSON.parse(KMData) : null
+      KMData = KMData ? JSON.parse(aesDEncrypt(res.data)) : null
       res.data.RESULT = KMData
     }
     return Promise.resolve(res.data)

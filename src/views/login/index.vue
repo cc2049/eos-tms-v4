@@ -2,7 +2,7 @@
  * @Author: cc2049
  * @Date: 2024-04-19 09:01:33
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-04-24 10:47:40
+ * @LastEditTime: 2024-05-22 08:49:06
  * @Description: 简介
 -->
 <template>
@@ -51,7 +51,6 @@ const getGlobalConfig = () => {
       LoginConfig.value = newObj.LoginConfig
         ? JSON.parse(newObj.LoginConfig)
         : {};
-      console.log("LoginConfig.value", LoginConfig.value);
     } catch (error) {
       console.log("获取登录界面配置出错", error);
     }

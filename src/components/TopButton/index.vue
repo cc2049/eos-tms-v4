@@ -2,7 +2,7 @@
  * @Author: cc2049
  * @Date: 2024-04-28 15:12:29
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-05-18 18:05:18
+ * @LastEditTime: 2024-05-21 11:52:28
  * @Description: 简介
 -->
 
@@ -88,7 +88,7 @@
         </span>
       </template>
       <template #default>
-        <FormPage :menuID="formID" @closeModal="closeModal" :isGetDetail :currentData :activeBtn />
+        <FormPage :menuID="formID" @closeModal="closeModal" :isGetDetail :currentData :activeBtn :topButton />
       </template>
     </vxe-modal>
 
@@ -141,11 +141,7 @@ import { getAuthRoles } from "#/system/user";
 
 const route = useRoute();
 const topButton = defineModel("topButton");
-console.log(777, topButton);
 const props = defineProps({
-  // topButton: {
-  //   type: Array,
-  // },
   currentData: {
     type: Array,
   },

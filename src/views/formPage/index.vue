@@ -2,7 +2,7 @@
  * @Author: cc2049
  * @Date: 2024-04-23 11:35:41
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-05-16 09:04:01
+ * @LastEditTime: 2024-05-21 14:16:01
  * @Description: 大表单组件
 -->
 
@@ -31,7 +31,7 @@
 import TopButton from "@/components/TopButton";
 
 import { getPageConfig } from "#/system/page.js";
-import { getFormValue } from "@/utils";
+import { getFormValue , getQueryUrl } from "@/utils";
 import { axiosGet } from "#/common";
 
 const emit = defineEmits(["closeModal"]);
@@ -47,6 +47,7 @@ const props = defineProps({
   },
   currentData: {},
   activeBtn: {},
+  topButton:{}
 });
 
 const { proxy } = getCurrentInstance();
@@ -67,9 +68,10 @@ watch(
         formConfig.value = COLUMNS;
         formData.value = getFormValue(COLUMNS);
         labelWidth.value = VDEF2 || "100px";
-        console.log("activeBtn", props.activeBtn);
+        // console.log("activeBtn", props.activeBtn , );
         if (props.isGetDetail) {
-          getDetail(SLOTCFG);
+          let detailURL  = SLOTCFG || getQueryUrl(props.topButton);
+          getDetail(detailURL);
         }
         nextTick(() => {});
       });
@@ -94,9 +96,16 @@ function resetButton(arr) {
   return newBtn;
 }
 
+const detailBtn = ref(null)
+
 function getDetail(URL) {
   if (URL == "CurrentData") {
     formData.value = Object.assign(formData.value, props.currentData[0]);
+  }else{
+    let queryDetail = { ...props.menuID, ...props.currentData[0] }
+    axiosGet(URL, queryDetail ).then((res) => {
+      formData.value = Object.assign(formData.value, res.RESULT);
+    });
   }
 }
 
