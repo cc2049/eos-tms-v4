@@ -2,16 +2,13 @@
  * @Author: cc2049
  * @Date: 2024-04-23 11:33:59
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-05-08 12:02:35
+ * @LastEditTime: 2024-05-22 10:52:53
  * @Description: 简介
 -->
 <template>
 
   <div class="page-container">
-    <SingleTable ref="listTableRef" :menuID="menuParams"  @openCustemPage="openCustemPages"  />
-
-    
-
+    <SingleTable ref="listTableRef" :menuID="menuParams" :compType="routerParams.COMP"  />
   </div>
 
 </template>
@@ -54,6 +51,7 @@ const openCustemPage = (type, path) => {
 };
 
 
+console.log(123, routerParams);
 
 
 provide("menuID", menuParams);

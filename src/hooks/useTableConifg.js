@@ -28,7 +28,8 @@ const useTableConifg = (menu) => {
         queryJson: {},
         queryConfig: null,
         customPlan:[],
-        hasSubTable: false,
+        subTable: [],
+
         activeBtn: {},
         pageShow: true,
         modalVisible: false,
@@ -129,6 +130,8 @@ const useTableConifg = (menu) => {
         
         pageConfig.queryUrl = SLOTCFG ? SLOTCFG : getQueryUrl(BUTTON);
         pageConfig.treeQueryUrl = getQueryUrl(BUTTON, "tree") || '';
+        pageConfig.subTable = SUBTABLE
+        
 
         let initQueryJson = getFormValue(QUERY);
         if (pageConfig.treeQueryUrl) {
