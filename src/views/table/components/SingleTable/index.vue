@@ -2,7 +2,7 @@
  * @Author: cc2049
  * @Date: 2024-04-28 13:10:44
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-05-22 08:39:16
+ * @LastEditTime: 2024-05-22 10:54:06
  * @Description: 简介
 -->
 <template v-if="pageConfig">
@@ -48,7 +48,9 @@
         </template>
       </vxe-pager>
 
-      <!-- <SubTable :SubTableConfig :currentData /> -->
+      <template v-if="compType=='VTableSub' && pageConfig.subTable.length">
+        <SubTable :SubTableConfig :currentData />
+      </template>
 
     </div>
   </div>
@@ -63,13 +65,15 @@ import Ztree from "./../Ztree";
 import useTableConifg from "@/hooks/useTableConifg";
 import { axiosGet } from "#/common";
 import { getUrlParams } from "@/utils";
-import { watchEffect } from "vue";
+
+import SubTable from "./SubTable.vue";
 
 const props = defineProps({
   menuID: {
     type: [String, Object],
     default: "",
   },
+  compType:{}
 });
 
 const VxtableRef = ref(null);
