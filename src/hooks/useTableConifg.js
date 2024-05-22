@@ -2,7 +2,7 @@
  * @Author: cc2049
  * @Date: 2024-04-25 17:34:36
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-05-16 16:55:03
+ * @LastEditTime: 2024-05-22 18:54:39
  * @Description: 获取动态配置
  */
 
@@ -13,8 +13,6 @@ import { getQueryUrl, resetColConfig } from './utils'
 import { getFormValue, getFormRule, getShowCFG, setSuffix } from '@/utils'
 
 const useTableConifg = (menu) => {
-    const allConfig = ref(null)
-
     const pageConfig = reactive({
         hasTree: false, // 是否存在左侧树型结构
         treeExpand: true, // 是否展开树
@@ -90,6 +88,7 @@ const useTableConifg = (menu) => {
             CUSTOMPLAN,
             BUTTON,
             SLOTCFG,
+            TABLEHEIGHT,
             MAINTABLE,
             TABLESTYLE,
             ISTREE,
@@ -162,7 +161,7 @@ const useTableConifg = (menu) => {
 
     }
 
-    return { allConfig, getConfig }
+    return { getConfig }
 }
 
 export default useTableConifg
