@@ -190,9 +190,11 @@ function handleTopBtn(data) {
   console.log(666, data);
   if (data.type == "openCustomPlan") {
     advanceQueryRef.value.openShowModal();
-  } else if(data.type == "openCustemPage"){
-    emit("openCustemPage",data)
-  } else {
+  }
+   else if(data.type == "openCustemPage"){
+    emit("openCustemPage",{data:data,row: currentData.value})
+  } 
+  else {
     handelEvent({ data: data, row: currentData.value });
   }
 }
