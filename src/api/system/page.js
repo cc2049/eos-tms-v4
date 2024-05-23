@@ -1,8 +1,8 @@
 /*
  * @Author: cc2049
  * @Date: 2024-04-25 17:39:07
- * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-05-21 10:25:58
+ * @LastEditors: PiPin 33947354+p1Master@users.noreply.github.com
+ * @LastEditTime: 2024-05-23 18:32:29
  * @Description: 获取菜单配置相关
  */
 
@@ -34,12 +34,11 @@ export async function getPageConfig(data) {
       })
       PageCache == 1 ? localforage.setItem(localKey, configData) : null
     }
-
     return new Promise((resolve, reject) => {
       resolve(configData);
     });
   } catch (err) {
-    console.log(err);
+    console.error("Err:", err);
   }
 }
 

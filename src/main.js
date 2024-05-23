@@ -2,7 +2,7 @@
  * @Author: cc2049
  * @Date: 2024-04-19 09:01:33
  * @LastEditors: PiPin 33947354+p1Master@users.noreply.github.com
- * @LastEditTime: 2024-05-18 16:03:43
+ * @LastEditTime: 2024-05-23 18:08:01
  * @Description: 简介
  */
 import { createApp } from 'vue'
@@ -20,6 +20,7 @@ import '@/assets/styles/index.scss' // global css
 import request from '@/utils/request'
 import { getToken } from '@/utils/auth'
 import { getDicts } from '@/api/system/dict'
+import { getPageConfig } from "@/api/system/page";
 
 import App from './App'
 import store from './store'
@@ -111,7 +112,7 @@ app.use(ElementPlus, {
 
 app.use(eosForm, {
   getData: request,
-  getConfig: request,
+  getConfig: getPageConfig,
   getDict: getDicts,
   uploadUrl: "/eos-api/sys/file/upload",
   uploadHeaders: {
