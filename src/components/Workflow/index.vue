@@ -69,7 +69,6 @@ import { TreeMenu, MenuTabs } from "#/system/config"
 import { BaseWorkFlowData } from "#/workflow"
 
 import useworkflowStore from "@/store/modules/workflow"
-import { reactive, watch } from "@vue/runtime-core";
 const workflowStore = useworkflowStore();
 let { setTableId, setIsTried } = workflowStore
 
