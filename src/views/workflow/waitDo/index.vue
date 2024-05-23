@@ -88,7 +88,7 @@
 <script setup name='waitDo'>
 import MasterForm from "@/components/MasterForm";
 import WorkflowTimeLine from "@/components/Workflow/timeLine.vue";
-import Vtable from "@/components/Tables";
+import Vtable from "@/components/Vxtable";
 import useWorkflowStore from "@/store/modules/workflow";
 const WorkflowStore = useWorkflowStore()
 import request from "@/utils/request";

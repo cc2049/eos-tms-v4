@@ -2,7 +2,7 @@
 <template>
   <div class="app-wrap">
     <div class="query-wrap">
-      <Form class="query-form" ref="formRefTop" v-model:formData="queryJson" :formConfig="set24col(queryConfig, 4)" inline @select="formSelect" @enter="enterEvent" />
+      <!-- <Form class="query-form" ref="formRefTop" v-model:formData="queryJson" :formConfig="set24col(queryConfig, 4)" inline @select="formSelect" @enter="enterEvent" /> -->
       <div class="flex-row-end">
         <el-button @click="queryEvent" type="primary" size="Default">查找</el-button>
         <el-button @click="queryDrawer=true" size="Default">高级</el-button>
@@ -55,8 +55,8 @@
 </template>
 
 <script setup>
-import Form from "@/components/Form"
-import VTable from "@/components/Tables";
+// import Form from "@/components/Form"
+import VTable from "@/components/Vxtable";
 import MasterForm from "@/components/MasterForm";
 import WorkflowTimeLine from "@/components/Workflow/timeLine.vue";
 import { getFormValue, deepClone, getShowCFG, getFormRule } from "@/utils";

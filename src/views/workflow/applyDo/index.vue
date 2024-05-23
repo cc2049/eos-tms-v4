@@ -75,7 +75,7 @@
 <script setup name='applyDo'>
 import MasterForm from "@/components/MasterForm";
 import WorkflowTimeLine from "@/components/Workflow/timeLine.vue";
-import Vtable from "@/components/Tables";
+import Vtable from "@/components/Vxtable";
 import { applyDoList, detailDo, applyDoTableConfig, doStatusDict } from "#/workflow/do";
 import request from "@/utils/request";
 import { getPageConfig } from "@/api/system/page";

@@ -59,8 +59,8 @@ export default {
 </script>
 <script setup>
 import Form from "@/components/Form";
-import ETable from "@/components/Tables/edit";
-import VTable from "@/components/Tables";
+import ETable from "@/components/Vxtable/edit";
+import VTable from "@/components/Vxtable";
 import { getFormValue, getFormRule, deepClone } from "@/utils/index";
 import { Plus, Delete, Edit, Notification } from "@element-plus/icons-vue";
 

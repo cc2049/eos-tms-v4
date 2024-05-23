@@ -75,7 +75,7 @@
 <script setup name='outDo'>
 import MasterForm from "@/components/MasterForm";
 import WorkflowTimeLine from "@/components/Workflow/timeLine.vue";
-import Vtable from "@/components/Tables";
+import Vtable from "@/components/Vxtable";
 import request from "@/utils/request";
 import { outDoList, detailDo, outDoTableConfig, doStatusDict } from "#/workflow/do";
 import { getPageConfig } from "@/api/system/page";

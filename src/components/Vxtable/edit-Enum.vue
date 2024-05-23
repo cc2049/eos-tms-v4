@@ -168,7 +168,7 @@
 <script setup name="">
 import { Search, ArrowDown } from "@element-plus/icons-vue";
 import { dict2name, setSuffix } from "@/utils"
-import VTable from "@/components/Tables"
+// import VTable from "@/components/Tables"
 import ModalTable from "@/components/Form/modal.vue"
 import { getPageConfig, getTableData } from "@/api/system/page";
 import { GetDateAfter } from "@/utils/index";

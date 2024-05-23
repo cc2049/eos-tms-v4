@@ -42,14 +42,14 @@
           </div>
         </el-tooltip>
 
-        <el-tooltip content="我找车">
+        <!-- <el-tooltip content="我找车">
           <div class="layout-item" @click="setMenuStype('WZC')">
             <div class="left left-right"></div>
             <div class="dtg" v-if="menuStyle == 'WZC'">
               <el-icon><Select /></el-icon>
             </div>
           </div>
-        </el-tooltip>
+        </el-tooltip> -->
 
       </div>
       <el-divider />

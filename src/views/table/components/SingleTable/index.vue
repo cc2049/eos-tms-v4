@@ -2,7 +2,7 @@
  * @Author: cc2049
  * @Date: 2024-04-28 13:10:44
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-05-22 19:16:47
+ * @LastEditTime: 2024-05-23 08:50:29
  * @Description: 简介
 -->
 <template v-if="pageConfig">
@@ -323,7 +323,8 @@ function resetHeight() {
   let newTBHeight =
     window.innerHeight - 160 - AdvancedQuery.value?.clientHeight;
   if (props.compType == "VTableSub" && SubTableConfig.value.length) {
-    newTBHeight -= 150;
+    let subHeight =  SubTableConfig.value[0].TABLEHEIGHT*1 || 120;
+    newTBHeight -= subHeight;
   }
   tableCFG.value.height = newTBHeight;
 }
@@ -353,7 +354,11 @@ function resetConfig(data) {
   console.log("resetConfig", tableCFG.value.tableColumns);
 }
 
-onMounted(() => {});
+onMounted(() => {
+   window.onresize = function onresize() {
+    resetHeight()
+  };
+});
 </script>
 
 
