@@ -42,6 +42,8 @@ export default defineConfig(({ mode, command }) => {
       proxy: {
         '/eos-api': {
           target: 'http://116.63.138.118:8079/',// 4.0 测试地址 
+          // target: 'http://192.168.10.22:9300/',// 武小飞
+          // rewrite: (p) => p.replace(/^\/eos-api/, '')
           // target: 'http://120.48.123.183',// 我找车 现场测试
         },
         '/group1/M00': {
