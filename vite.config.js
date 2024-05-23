@@ -2,7 +2,7 @@
  * @Author: cc2049
  * @Date: 2024-04-19 09:01:33
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-05-18 21:49:41
+ * @LastEditTime: 2024-05-20 17:33:19
  * @Description: 简介
  */
 
@@ -42,7 +42,7 @@ export default defineConfig(({ mode, command }) => {
       proxy: {
         '/eos-api': {
           target: 'http://116.63.138.118:8079/',// 4.0 测试地址 
-          // target: 'http://192.168.10.22:9300/',// 武小飞
+          // target: 'http://192.168.10.183:9300/',// 4.0 测试地址 
           // rewrite: (p) => p.replace(/^\/eos-api/, '')
           // target: 'http://120.48.123.183',// 我找车 现场测试
         },

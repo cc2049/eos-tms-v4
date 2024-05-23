@@ -2,7 +2,7 @@
  * @Author: cc2049
  * @Date: 2024-04-28 13:10:44
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-05-22 10:54:06
+ * @LastEditTime: 2024-05-22 19:16:47
  * @Description: 简介
 -->
 <template v-if="pageConfig">
@@ -40,16 +40,20 @@
 
       <Vxtable ref="VxtableRef" class="bg-white" :tableCFG="tableCFG" :tableData="tableData" @change="tableChange" @dragRow="dragTableRow" @queryEvent="queryEvent" @resetConfig="resetConfig">
       </Vxtable>
-      <vxe-pager size="mini" class-name="vxe-page-wrap " :page-size="pageInfo.pageSize" :page-sizes="ListPageSize" :current-page="pageInfo.currentPage" :total="pageInfo.totalResult" :layouts="pagerLayouts" @page-change="handlePageChange">
-        <template #left>
-          <div class="check-acount">
-            已选 <span class="waring-color"> {{ currentData.length }} </span> 行
-          </div>
-        </template>
-      </vxe-pager>
 
-      <template v-if="compType=='VTableSub' && pageConfig.subTable.length">
-        <SubTable :SubTableConfig :currentData />
+      <div class="pager-wrap flex flex-items-center" :class=" compType=='VTableSub'?'justify-between':'justify-end' ">
+        <EosTabs :tabsList="SubTableConfig" @change="changeTab" v-if="compType=='VTableSub' && SubTableConfig.length" />
+        <vxe-pager size="mini" class-name="vxe-page-wrap " :page-size="pageInfo.pageSize" :page-sizes="ListPageSize" :current-page="pageInfo.currentPage" :total="pageInfo.totalResult" :layouts="pagerLayouts" @page-change="handlePageChange">
+          <template #left>
+            <div class="check-acount">
+              已选 <span class="waring-color"> {{ currentData.length }} </span> 行
+            </div>
+          </template>
+        </vxe-pager>
+      </div>
+
+      <template v-if="compType=='VTableSub' && SubTableConfig.length">
+        <SubTable ref="SubTableRef" :SubTableConfig />
       </template>
 
     </div>
@@ -65,7 +69,10 @@ import Ztree from "./../Ztree";
 import useTableConifg from "@/hooks/useTableConifg";
 import { axiosGet } from "#/common";
 import { getUrlParams } from "@/utils";
-import { watchEffect } from "vue";
+
+import EosTabs from "@/components/EosTabs/index.vue";
+
+
 const emit = defineEmits(["openCustemPage"]);
 
 import SubTable from "./SubTable.vue";
@@ -75,7 +82,7 @@ const props = defineProps({
     type: [String, Object],
     default: "",
   },
-  compType:{}
+  compType: {},
 });
 
 const VxtableRef = ref(null);
@@ -86,6 +93,10 @@ const tableData = ref([]);
 const treeData = ref([]);
 const showZtree = ref(true);
 const defaultExpandedKeys = ref([]);
+
+const SubTableConfig = ref([]);
+
+const SubTableRef = ref(null);
 
 const currentData = ref([]);
 
@@ -119,7 +130,7 @@ const handleSplitbar = () => {
 // 表格内部的多选事件，顶部筛选排序事件, 超链接事件
 
 function tableChange(data) {
-  console.log("tableChange", data);
+  console.log("tableChange", data.data);
   if (data.clicktype == "sort") {
     pageInfo.sortName = data.data.sortBy;
     pageInfo.sortOrder = data.data.sort;
@@ -140,44 +151,48 @@ function tableChange(data) {
     handelEvent({ data: detailBtnCFG.value, row: data.data });
   } else if (data.clicktype == "checkbox") {
     currentData.value = data.data;
+    console.log(777, currentData.value.length);
+    if (props.compType == "VTableSub" && SubTableConfig.value.length) {
+      SubTableRef.value.getSubData(currentData.value);
+    }
     // let expandRow = getRowExpandRecords()
   }
-  if (data.clicktype == "openLink") {
-    // 超链接点击事件
-    formModalTableCFG.value.tableBillNo = data.data.BILLNO;
+  // if (data.clicktype == "openLink") {
+  //   // 超链接点击事件
+  //   formModalTableCFG.value.tableBillNo = data.data.BILLNO;
 
-    currentData.value = data.data;
+  //   currentData.value = data.data;
 
-    if (data.linkCFG.includes("?") && data.linkCFG.includes(":")) {
-      // 如果配置了三元运算
-      let currentLinkCFG = getEvalValue(data.data, data.linkCFG);
-      let getLinkBtn = pageConfig.initButton.filter((i) => {
-        return i.BILLNO == currentLinkCFG;
-      });
-      // currentData.value = data.data;
-      getLinkBtn.length
-        ? handelEvent({ data: getLinkBtn[0], row: data.data })
-        : null;
-    } else {
-      let getLinkBtn = pageConfig.initButton.filter((i) => {
-        return i.BILLNO == data.linkCFG;
-      });
-      // currentData.value = data.data;
-      getLinkBtn.length
-        ? handelEvent({ data: getLinkBtn[0], row: data.data })
-        : null;
-    }
-  }
-  if (data.clicktype == "openDrawer") {
-    colDrawer.value = true;
-  } else {
-    currentData.value = data.data;
-  }
+  //   if (data.linkCFG.includes("?") && data.linkCFG.includes(":")) {
+  //     // 如果配置了三元运算
+  //     let currentLinkCFG = getEvalValue(data.data, data.linkCFG);
+  //     let getLinkBtn = pageConfig.initButton.filter((i) => {
+  //       return i.BILLNO == currentLinkCFG;
+  //     });
+  //     // currentData.value = data.data;
+  //     getLinkBtn.length
+  //       ? handelEvent({ data: getLinkBtn[0], row: data.data })
+  //       : null;
+  //   } else {
+  //     let getLinkBtn = pageConfig.initButton.filter((i) => {
+  //       return i.BILLNO == data.linkCFG;
+  //     });
+  //     // currentData.value = data.data;
+  //     getLinkBtn.length
+  //       ? handelEvent({ data: getLinkBtn[0], row: data.data })
+  //       : null;
+  //   }
+  // }
+  // if (data.clicktype == "openDrawer") {
+  //   colDrawer.value = true;
+  // } else {
+  //   currentData.value = data.data;
+  // }
 
-  // 表格点击事件
-  if (data.clicktype == "clinkBTN") {
-    handelEvent({ data: data.linkCFG, row: data.data });
-  }
+  // // 表格点击事件
+  // if (data.clicktype == "clinkBTN") {
+  //   handelEvent({ data: data.linkCFG, row: data.data });
+  // }
 }
 
 function reloadTableData() {
@@ -266,7 +281,7 @@ const queryURL = ref(null);
 const queryJSON = ref(null);
 const topButton = ref([]);
 
-const { allConfig, getConfig } = useTableConifg(props.menuID);
+const { getConfig } = useTableConifg(props.menuID);
 
 watch(
   () => props.menuID,
@@ -279,12 +294,14 @@ watch(
         queryURL.value = pageConfig.value.queryUrl;
         queryJSON.value = pageConfig.value.queryJson;
         customPlan.value = pageConfig.value.customPlan;
+
+        SubTableConfig.value = pageConfig.value.subTable;
+
         let getConfigPager = tableCFG.value.pagerConfig;
         pageInfo.pageSize = getConfigPager.pageSize || 10;
         queryJSON.value.PAGESIZE = getConfigPager.pageSize || pageInfo.pageSize;
         nextTick(() => {
-          tableCFG.value.height =
-            window.innerHeight - 160 - AdvancedQuery.value?.clientHeight;
+          resetHeight();
         });
         if (pageConfig.value.hasTree) {
           getTreeData();
@@ -302,12 +319,18 @@ watch(
 /*
  * 重新设置相关高度
  */
-function resetHeight() {}
+function resetHeight() {
+  let newTBHeight =
+    window.innerHeight - 160 - AdvancedQuery.value?.clientHeight;
+  if (props.compType == "VTableSub" && SubTableConfig.value.length) {
+    newTBHeight -= 150;
+  }
+  tableCFG.value.height = newTBHeight;
+}
 
 function queryHeight() {
   nextTick(() => {
-    tableCFG.value.height =
-      window.innerHeight - 160 - AdvancedQuery.value?.clientHeight;
+    resetHeight();
   });
 }
 

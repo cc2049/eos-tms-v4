@@ -1,7 +1,7 @@
 <!--
  * @Date: 2022-08-25 14:05:59
- * @LastEditors: StavinLi 495727881@qq.com
- * @LastEditTime: 2022-09-21 14:36:50
+ * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2024-05-23 08:29:46
  * @FilePath: /Workflow-Vue3/src/components/drawer/promoterDrawer.vue
 -->
 <template>
@@ -24,7 +24,6 @@ import employeesDialog from '../dialog/employeesDialog.vue'
 import $func from '../plugins/preload'
 import { mapState } from '../plugins/lib'
 import useworkflowStore from "@/store/modules/workflow"
-import { watch } from '@vue/runtime-core';
 const workflowStore = useworkflowStore();
 let { promoterDrawer, flowPermission1 } = mapState()
 let { setPromoter, setFlowPermission } = workflowStore
