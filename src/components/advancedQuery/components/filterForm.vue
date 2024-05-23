@@ -21,7 +21,6 @@
 
     <div style="width: 260px">
       <!-- ExDate 日期选择 -->
-
       <template v-if="currentConfig.CONTROLS == 'ExDate'">
         <el-date-picker v-model="formData.DEFAULTVAL" clearable style="width: 100%" placeholder="请选择" />
       </template>
@@ -139,6 +138,7 @@ const props = defineProps({
     default: {},
   },
 });
+
 
 const commonSize = ref("mini");
 const filterSeceletArrs = computed(() => props.filterConfig.filterSeceletArr);

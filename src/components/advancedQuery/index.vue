@@ -8,14 +8,17 @@
   <div class="advancedQuery">
     <div class="disflex advancedQuery-alone mb20">
       <div class="advancedQuery-title">我的方案</div>
-      <div class="currentRadio" :class="chooseRadioVal == item.BILLNO ? 'active' : ''" v-for="(item, index) in myPlanList" :key="index" @click="clickRadio(item, index)"> {{ item.VNAME }}
+      <div class="currentRadio" :class="chooseRadioVal == item.BILLNO ? 'active' : ''"
+        v-for="(item, index) in myPlanList" :key="index" @click="clickRadio(item, index)"> {{ item.VNAME }}
       </div>
     </div>
     <div class=" advancedQuery-alone ">
       <div class="advancedQuery-title">快捷过滤</div>
       <!-- <div style="width: calc(100% - 100px)"> -->
       <div class="oneLine">
-        <FiltrationCom :filterConfig="filterConfig" :filterArr="filterArr" class="oneLine-left" :style="{ height: FiltrationComHeight, maxWidth: binSize + 'px' }" :defaultFilterArr="defaultFilterArr" @changeFilter="changeFilter" @changeCurrentQueryList="changeCurrentQueryList" />
+        <FiltrationCom :filterConfig="filterConfig" :filterArr="filterArr" class="oneLine-left"
+          :style="{ height: FiltrationComHeight, maxWidth: binSize + 'px' }" :defaultFilterArr="defaultFilterArr"
+          @changeFilter="changeFilter" @changeCurrentQueryList="changeCurrentQueryList" />
         <div class="advancedQuery-rightBtn">
           <el-button type="primary" @click="searchBtn">
             <el-icon color="#fff" :size="20">
@@ -30,7 +33,9 @@
                 </el-icon>
               </el-button>
             </template>
-            <SettingFilter :filterConfig="filterConfig" :filterArr="filterArr" :defaultFilterArr="defaultFilterArr" @changeCondition="changeCondition" @resetCondition="resetCondition" @delFilterArr="delFilterArr" @changeCurrentQueryList="settingChangeCurrentQueryList" />
+            <SettingFilter :filterConfig="filterConfig" :filterArr="filterArr" :defaultFilterArr="defaultFilterArr"
+              @changeCondition="changeCondition" @resetCondition="resetCondition" @delFilterArr="delFilterArr"
+              @changeFilter="changeFilter" @changeCurrentQueryList="settingChangeCurrentQueryList" />
             <el-divider />
             <div class="tr">
               <el-button @click="visible = false" size="mini">取消</el-button>
@@ -40,7 +45,8 @@
           <div class="ml10 mr10 btnStyle" @click="clickSavePlan">保存</div>
           <div class="btnStyle">重置</div>
           <template v-if="filterArr.length > 1">
-            <el-icon color="#0055ff" :size="15" class="ml10 cp foldOUnfoldIcon" @click="foldOUnfold(1)" v-if="FiltrationComHeight == 'auto'">
+            <el-icon color="#0055ff" :size="15" class="ml10 cp foldOUnfoldIcon" @click="foldOUnfold(1)"
+              v-if="FiltrationComHeight == 'auto'">
               <Icon icon="codicon:fold-up"></Icon>
             </el-icon>
             <el-icon color="#0055ff" :size="15" class="ml10 cp foldOUnfoldIcon" @click="foldOUnfold(0)" v-else>
@@ -54,7 +60,8 @@
       <!-- </div> -->
     </div>
 
-    <AllocationPlan :showModal="showModal" :leftList="myPlanList" @updateLeftList="getPlanList" ref="allocationPlanRef" @closeModal="closeShowModal"></AllocationPlan>
+    <AllocationPlan :showModal="showModal" :leftList="myPlanList" @updateLeftList="getPlanList" ref="allocationPlanRef"
+      @closeModal="closeShowModal"></AllocationPlan>
 
   </div>
 </template>
@@ -113,8 +120,8 @@ const clickRadio = (item, index) => {
   };
   // 查询方案里面的值
   axiosGet("/sys/queryprogUserDtl/getSubList", query).then((res) => {
-  console.log("🚀 ~ axiosGet ~ res:", res)
-  filterArr.value = res.RESULT
+    console.log("🚀 ~ axiosGet ~ res:", res)
+    filterArr.value = res.RESULT
   });
 
   emit("handleCustomPlan", {
@@ -131,16 +138,14 @@ function searchBtn() {
       clickStatus.value == 1
         ? querySaveList.value
         : clickStatus.value == 2
-        ? settingQueryList.value
-        : [],
+          ? settingQueryList.value
+          : [],
   });
 }
 
 // 快捷过滤
-// const filterSeceletArr = ref(['单据编号','供应商','物料编码'])
 const value = ref(null);
 const filterConfig = ref({
-  // filterSeceletArr: ['单据编号', '供应商', '物料编码'],
   filterSeceletArr: [],
   filterSeceletArr1: [
     { LABEL: "IsNull-为空", VALUE: "IsNull" },
@@ -217,8 +222,8 @@ const getPlanList = () => {
       let newArr = myPlanList.value.filter((ele) => ele.ISDEFAULT == 1);
       !chooseRadioVal.value
         ? (chooseRadioVal.value = newArr.length
-            ? newArr[0].BILLNO
-            : myPlanList.value[0].BILLNO)
+          ? newArr[0].BILLNO
+          : myPlanList.value[0].BILLNO)
         : "";
     }
   });
@@ -241,7 +246,11 @@ const changeFilter = (val, item, index) => {
 
 const visible = ref(false);
 const changeCondition = (e) => {
+
   filterArr.value.push(e);
+  filterArr.value = JSON.parse(JSON.stringify(filterArr.value));  // 重新更新下数据 不然视图有问题
+
+
 };
 const resetCondition = () => {
   filterArr.value = JSON.parse(JSON.stringify(defaultFilterArr.value));
@@ -386,7 +395,7 @@ onMounted(() => {
     }
   }
 
-  .el-input__suffix-inner > :first-child {
+  .el-input__suffix-inner> :first-child {
     margin: 5px;
   }
 }
