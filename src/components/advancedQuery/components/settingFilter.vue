@@ -9,7 +9,8 @@
 
         <div v-for="(item, index) in filterArr" :key="index" class="aloneFilter mb10">
             <div class="disflex ">
-                <FilterForm :filterConfig="filterConfig" :filterVal="item" class="mr10" v-model:formData="currentQueryList[index]" />
+                <FilterForm :filterConfig="filterConfig" :filterVal="item" class="mr10"
+                    v-model:formData="currentQueryList[index]" @changeFilter="val => changeFilter(val, item, index)" />
                 <div>
                     <el-icon v-if="index != 0" color="#b9c9fb" :size="20" class="delIcon cp"
                         @click="delFilterArr(item, index)">
@@ -49,7 +50,7 @@
 <script setup>
 import { computed } from "vue";
 import FilterForm from "./filterForm"
-const emit = defineEmits('changeCondition', 'resetCondition', 'delFilterArr','changeCurrentQueryList')
+const emit = defineEmits('changeCondition', 'resetCondition', 'delFilterArr', 'changeCurrentQueryList','changeFilter')
 
 
 const props = defineProps({
@@ -61,15 +62,8 @@ const props = defineProps({
         type: Array,
         default: [],
     },
-    defaultFilterArr: {
-        type: Array,
-        default: [],
-    },
-    deaufilterArr: {
-        type: Array,
-        default: [],
-    }
 });
+
 
 const currentQueryList = ref([])
 
@@ -77,6 +71,7 @@ const filterSeceletArr = computed(() => props.filterConfig.filterSeceletArr)
 const conditionValue = ref(null)
 const changeCondition = (e) => {
     let newArr = filterSeceletArr.value.filter(ele => ele.BILLNO == e)
+    console.log("🚀 ~ changeCondition ~ newArr:", newArr)
     emit('changeCondition', newArr[0] || {})
 }
 
@@ -89,24 +84,33 @@ const delFilterArr = (item, index) => {
 
 }
 
+const changeFilter = (val, item, index) => {
+    emit("changeFilter", val, item, index)
+}
+
 // const newfilterArrs = ref([])
 watch(() => props.filterArr, value => {
-    // newfilterArrs.value = value
+    console.log("🚀 ~ watch ~ value:", value)
     currentQueryList.value = value.map(ele => {
-        return {
-            FIELD: '',
-            QUERYTYPE: '',
-            DEFAULTVAL: '',
-            DEFAULTVAL2: '',
-            SORTCODE: '',
-            DEFAULTVALArr:''
+        if (ele.BILLNO) {
+            return ele
+        } else {
+            return {
+                FIELD: '',
+                QUERYTYPE: '',
+                DEFAULTVAL: '',
+                DEFAULTVAL2: '',
+                SORTCODE: '',
+                DEFAULTVALArr: ''
+            }
         }
     })
 
 }, { immediate: true })
 
 watch(() => currentQueryList.value, value => {
-    emit('changeCurrentQueryList',value)
+    console.log("🚀 ~ watch ~ value:", value)
+    emit('changeCurrentQueryList', value)
 
 }, { immediate: true, deep: true })
 
