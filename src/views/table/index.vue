@@ -2,13 +2,15 @@
  * @Author: cc2049
  * @Date: 2024-04-23 11:33:59
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-05-23 10:21:38
+ * @LastEditTime: 2024-05-24 11:08:15
  * @Description: 简介
 -->
 <template>
 
   <div class="page-container">
     <SingleTable ref="listTableRef" :menuID="menuParams" :compType="routerParams.COMP"  />
+    <!-- <MultiTable v-else-if="A==2" />
+    <BC v-else /> -->
   </div>
 
 </template>
