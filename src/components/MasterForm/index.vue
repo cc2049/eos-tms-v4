@@ -11,8 +11,11 @@
         </div>
       </template>
     </eos-form>
+
     <eos-modal ref="modalRef">
-      111123123
+      <template #default>
+        <TablePage ref="TablePageRef" :menuID="modalConfig.page" />
+      </template>
     </eos-modal>
   </div>
 </template>
@@ -25,6 +28,7 @@
 import useTableHook from "./hooks/table.hook";
 import useModalHook from "./hooks/modal.hook"
 import SubTableCom from "./subtable.vue";
+import TablePage from "@/views/table/components/SingleTable/index.vue";
 import { toRefs, ref } from "vue";
 const props = defineProps({
   modelValue: {
@@ -49,17 +53,22 @@ const props = defineProps({
   }
 })
 const emit = defineEmits(["update:modelValue", "updateTableData", "EtbaleLinkChange"])
-
+const FormRef = ref(null);
+const TablePageRef = ref(null)
 const formData = computed({
   get: () => props.modelValue,
   set: (val) => emit("update:modelValue", val)
 })
 const { formConfig, tableConfig, tableRules, labelWidth } = toRefs(props)
 
-const FormRef = ref();
-
 const { GET_TableConfig, UPDATA_TableData } = useTableHook()
 const { modalRef, modalConfig, openModal } = useModalHook()
+
+watch(modalConfig, val => {
+  console.log(val);
+}, {
+  immediate: true
+})
 
 /**
  * 主子表单验证

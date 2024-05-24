@@ -1,36 +1,24 @@
 <!--
  * @Author: cc2049
  * @Date: 2024-04-23 11:35:41
- * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-05-23 10:31:04
+ * @LastEditors: PiPin 33947354+p1Master@users.noreply.github.com
+ * @LastEditTime: 2024-05-24 17:14:27
  * @Description: 大表单组件
 -->
 
 <template>
   <div class="form-container">
     <TopButton :topButton="topButton" sourceType="2" @handleBtnEvent="handleBtnEvent" @reloadTableData="reloadTableData" />
-    <eos-form ref="eosFormRef" v-model="formData" :config="formConfig" :detail="detail">
-      <template #subTable="{ config }" v-if="tableConfig.length > 0">
-        <div class="formTable" :style="`margin-left:-${labelWidth}`">
-          <SubTableCom :ref="config.FIELD+'Ref'" :key="config.FIELD" :detail="detail || config.ISDISABLED == '1'" :title="config.LABEL" :config="comConfig(config)" v-model:data="formData[config.FIELD]" v-model:mainFormData="formData" :othConfig="othConfig" @EtbaleLinkChange="EtbaleLinkChange" @updateTableData="updateTableData">
-            <template #modalBtnAfter>
-              <slot name="modalBtnAfter" />
-            </template>
-          </SubTableCom>
-        </div>
-      </template>
-    </eos-form>
+    <MasterForm ref="eosFormRef" v-model="formData" :formConfig="formConfig" :detail="detail" :tableConfig="tableConfig" />
   </div>
 </template>
 
 <script setup>
 import TopButton from "@/components/TopButton";
-
+import MasterForm from "@/components/MasterForm/index.vue";
 import { getPageConfig } from "#/system/page.js";
-import { getFormValue , getQueryUrl } from "@/utils";
+import { getFormValue, getQueryUrl } from "@/utils";
 import { axiosGet } from "#/common";
-
-const emit = defineEmits(["closeModal"]);
 
 const props = defineProps({
   menuID: {
@@ -43,8 +31,9 @@ const props = defineProps({
   },
   currentData: {},
   activeBtn: {},
-  topButton:{}
+  topButton: {}
 });
+const emit = defineEmits(["closeModal"]);
 
 const { proxy } = getCurrentInstance();
 const eosFormRef = ref(null);
@@ -54,29 +43,24 @@ const formData = ref({});
 const detail = ref(false);
 const labelWidth = ref("100px");
 const tableConfig = ref([]);
-watch(
-  () => props.menuID,
-  (value) => {
-    if (value) {
-      getPageConfig(props.menuID).then((res) => {
-        const { COLUMNS, VDEF2, BUTTON, SLOTCFG } = res.RESULT;
-        topButton.value = resetButton(BUTTON);
-        formConfig.value = COLUMNS;
-        formData.value = getFormValue(COLUMNS);
-        labelWidth.value = VDEF2 || "100px";
-        // console.log("activeBtn", props.activeBtn , );
-        if (props.isGetDetail) {
-          let detailURL  = SLOTCFG || getQueryUrl(props.topButton);
-          getDetail(detailURL);
-        }
-        nextTick(() => { });
-      });
-    }
-  },
-  {
-    immediate: true,
+watch(() => props.menuID, value => {
+  if (value) {
+    getPageConfig(props.menuID).then((res) => {
+      const { COLUMNS, VDEF2, BUTTON, SLOTCFG } = res.RESULT;
+      topButton.value = resetButton(BUTTON);
+      formConfig.value = COLUMNS;
+      formData.value = getFormValue(COLUMNS);
+      labelWidth.value = VDEF2 || "100px";
+      if (props.isGetDetail) {
+        let detailURL = SLOTCFG || getQueryUrl(props.topButton);
+        getDetail(detailURL);
+      }
+      nextTick(() => { });
+    });
   }
-);
+}, {
+  immediate: true,
+});
 
 function resetButton(arr) {
   if (arr.length) {
@@ -98,9 +82,9 @@ function getDetail(URL) {
   console.log('URL', URL);
   if (URL == "CurrentData") {
     formData.value = Object.assign(formData.value, props.currentData[0]);
-  }else{
+  } else {
     let queryDetail = { ...props.menuID, ...props.currentData[0] }
-    axiosGet(URL, queryDetail ).then((res) => {
+    axiosGet(URL, queryDetail).then((res) => {
       formData.value = Object.assign(formData.value, res.RESULT);
     });
   }
