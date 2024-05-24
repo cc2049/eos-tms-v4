@@ -12,8 +12,8 @@ importers:
         specifier: 2.3.1
         version: 2.3.1(vue@3.4.27)
       '@eosine/form':
-        specifier: ^0.0.51
-        version: 0.0.51
+        specifier: ^0.0.56
+        version: 0.0.56
       '@visactor/vchart':
         specifier: ^1.10.5
         version: 1.11.0
@@ -301,8 +301,8 @@ packages:
     peerDependencies:
       vue: ^3.2.0
 
-  '@eosine/form@0.0.51':
-    resolution: {integrity: sha512-VthaQr73da9a2Uyl2+R4v1y6oOR0DWtEBubij+FlXZZO/Dhxpurd+Yr06aXkqqVsw4EMHc1WMJdG71NqZ13EGQ==}
+  '@eosine/form@0.0.56':
+    resolution: {integrity: sha512-ORltJ3jePo7n13LGT79orFpig47tiEAkMUGaVfjKm+njiF65x1aL3NSizHMk2QSAGeefc5xbPtiUj0cOuM86+A==}
 
   '@esbuild/aix-ppc64@0.19.12':
     resolution: {integrity: sha512-bmoCYyWdEL3wDQIVbcyzRyeKLgk2WtWLTWz1ZIAZF/EGbNOwSA6ew3PftJ1PqMiOOGu0OyFMzG53L0zqIpPeNA==}
@@ -1453,6 +1453,9 @@ packages:
 
   dom-zindex@1.0.2:
     resolution: {integrity: sha512-QceDZxPlvzhpg6e8szxNiKPUt5Y9SfFTe3nZy8og3JoPQPlAlzBzHa/lhDkhgeG3cjbKyQcuoic+wymF0o0d1Q==}
+
+  dom-zindex@1.0.4:
+    resolution: {integrity: sha512-PNk7u71TJ1C9Lwjjp5nNuQcVWuECFMmr9kZAwi2UbgWUM7jXdTCe4O4x5bhLUa07jpcZUVA5Du3ho7/FXzS9Ng==}
 
   dom7@3.0.0:
     resolution: {integrity: sha512-oNlcUdHsC4zb7Msx7JN3K0Nro1dzJ48knvBOnDPKJ2GV9wl1i5vydJZUSyOfrkKFDZEud/jBsTk92S/VGSAe/g==}
@@ -3010,6 +3013,11 @@ packages:
     peerDependencies:
       vue: ^3.2.28
 
+  vxe-table@4.6.16:
+    resolution: {integrity: sha512-Svm2FE5PNYpTPyUP33OBiJesvk+RCpKfD/92mvwFY9ImMz0wQKTAFDmV//OoRFPRSLCMgIu/yOUODuvvSFyUvQ==}
+    peerDependencies:
+      vue: ^3.2.28
+
   webpack-sources@3.2.3:
     resolution: {integrity: sha512-/DyMEOrDgLKKIG0fmvtz+4dUX/3Ghozwgm6iPp8KRhvn+eQf9+Q7GWxVNMk3+uCPWfdXYC4ExGBckIXdFEfH1w==}
     engines: {node: '>=10.13.0'}
@@ -3270,8 +3278,9 @@ snapshots:
     dependencies:
       vue: 3.4.27
 
-  '@eosine/form@0.0.51':
+  '@eosine/form@0.0.56':
     dependencies:
+      '@element-plus/icons-vue': 2.3.1(vue@3.4.27)
       '@wangeditor/editor': 5.1.23
       '@wangeditor/editor-for-vue': 5.1.12(@wangeditor/editor@5.1.23)(vue@3.4.27)
       element-plus: 2.7.3(vue@3.4.27)
@@ -3280,6 +3289,8 @@ snapshots:
       pinia-plugin-persist: 1.0.0(pinia@2.1.7(vue@3.4.27))(vue@3.4.27)
       vue: 3.4.27
       vue3-json-viewer: 2.2.2(vue@3.4.27)
+      vxe-table: 4.6.16(vue@3.4.27)
+      vxe-table-plugin-element: 4.0.2(vxe-table@4.6.16(vue@3.4.27))
     transitivePeerDependencies:
       - '@vue/composition-api'
       - typescript
@@ -4611,6 +4622,8 @@ snapshots:
       entities: 2.2.0
 
   dom-zindex@1.0.2: {}
+
+  dom-zindex@1.0.4: {}
 
   dom7@3.0.0:
     dependencies:
@@ -6340,9 +6353,19 @@ snapshots:
     dependencies:
       vxe-table: 4.6.12(vue@3.4.27)
 
+  vxe-table-plugin-element@4.0.2(vxe-table@4.6.16(vue@3.4.27)):
+    dependencies:
+      vxe-table: 4.6.16(vue@3.4.27)
+
   vxe-table@4.6.12(vue@3.4.27):
     dependencies:
       dom-zindex: 1.0.2
+      vue: 3.4.27
+      xe-utils: 3.5.26
+
+  vxe-table@4.6.16(vue@3.4.27):
+    dependencies:
+      dom-zindex: 1.0.4
       vue: 3.4.27
       xe-utils: 3.5.26
 
