@@ -14,7 +14,11 @@
 
     <eos-modal ref="modalRef">
       <template #default>
-        <TablePage ref="TablePageRef" :menuID="modalConfig.page" />
+        <TablePage ref="TablePageRef" :menuID="modalConfig.page" @dbClick="TablePagedbClick" />
+      </template>
+      <template #footer>
+        <el-button type="info" size="default" @click="closeModal">取消</el-button>
+        <el-button type="primary" size="default" @click="handleConfirm">确定</el-button>
       </template>
     </eos-modal>
   </div>
@@ -25,11 +29,11 @@
  * 主子表单
  * @author WangJun 2024-05-11
  */
+import { toRefs, ref, computed, getCurrentInstance } from "vue";
 import useTableHook from "./hooks/table.hook";
 import useModalHook from "./hooks/modal.hook"
 import SubTableCom from "./subtable.vue";
 import TablePage from "@/views/table/components/SingleTable/index.vue";
-import { toRefs, ref } from "vue";
 const props = defineProps({
   modelValue: {
     type: Object,
@@ -53,6 +57,7 @@ const props = defineProps({
   }
 })
 const emit = defineEmits(["update:modelValue", "updateTableData", "EtbaleLinkChange"])
+const { proxy } = getCurrentInstance();
 const FormRef = ref(null);
 const TablePageRef = ref(null)
 const formData = computed({
@@ -62,13 +67,19 @@ const formData = computed({
 const { formConfig, tableConfig, tableRules, labelWidth } = toRefs(props)
 
 const { GET_TableConfig, UPDATA_TableData } = useTableHook()
-const { modalRef, modalConfig, openModal } = useModalHook()
+const { modalRef, modalConfig, openModal, closeModal } = useModalHook()
 
-watch(modalConfig, val => {
-  console.log(val);
-}, {
-  immediate: true
-})
+/** 表格页面 双击 */
+const TablePagedbClick = row => {
+  FormRef.value.update(modalConfig.value._config, row)
+  closeModal()
+}
+const handleConfirm = () => {
+  const CheckRows = TablePageRef.value.getCheckRows()
+  if (!CheckRows.length) return proxy.$modal.msgWarning("请选择数据")
+  FormRef.value.update(modalConfig.value._config, CheckRows)
+  closeModal()
+}
 
 /**
  * 主子表单验证
@@ -87,15 +98,15 @@ const validate = () => {
           HASONLY: el.GROUPNO === 'TAB' ? el.COLUMNS.filter(al => al.ISONLY == '1') : []
         }
       })
-      let InfoHasValid = InfoConfigList.value.filter(el => el.CONTROLS != 'WorkFlowTimeLine' && el.ISDISABLED != '1').map(el => {
-        return {
-          TYPE: "infoRef",
-          FIELD: el.FIELD,
-          GROUPNO: el.CONTROLS,
-          HASONLY: el.CONTROLS === 'TAB' ? el._config.tableColumns.filter(al => al.ISONLY == '1') : []
-        }
-      })
-      const HasValid = [...SubHasValid, ...InfoHasValid]
+      // let InfoHasValid = InfoConfigList.value.filter(el => el.CONTROLS != 'WorkFlowTimeLine' && el.ISDISABLED != '1').map(el => {
+      //   return {
+      //     TYPE: "infoRef",
+      //     FIELD: el.FIELD,
+      //     GROUPNO: el.CONTROLS,
+      //     HASONLY: el.CONTROLS === 'TAB' ? el._config.tableColumns.filter(al => al.ISONLY == '1') : []
+      //   }
+      // })
+      const HasValid = [...SubHasValid]
       if (HasValid.length == 0) {
         resolve(true);
       } else {

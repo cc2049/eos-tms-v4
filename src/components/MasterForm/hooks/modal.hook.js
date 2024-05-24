@@ -8,14 +8,17 @@ const useModal = () => {
   const modalRef = ref(null)
   const modalConfig = ref(null)
   const openModal = option => {
-    console.log("🚀 ~ openModal ~ option:", option)
     modalConfig.value = option
     modalRef.value.open(option)
+  }
+  const closeModal = () => {
+    modalRef.value.close()
   }
   return {
     modalRef,
     modalConfig,
-    openModal
+    openModal,
+    closeModal
   }
 }
 
