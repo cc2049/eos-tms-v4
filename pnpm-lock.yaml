@@ -12,8 +12,8 @@ importers:
         specifier: 2.3.1
         version: 2.3.1(vue@3.4.27)
       '@eosine/form':
-        specifier: ^0.0.56
-        version: 0.0.56
+        specifier: ^0.0.57
+        version: 0.0.57
       '@visactor/vchart':
         specifier: ^1.10.5
         version: 1.11.0
@@ -301,8 +301,8 @@ packages:
     peerDependencies:
       vue: ^3.2.0
 
-  '@eosine/form@0.0.56':
-    resolution: {integrity: sha512-ORltJ3jePo7n13LGT79orFpig47tiEAkMUGaVfjKm+njiF65x1aL3NSizHMk2QSAGeefc5xbPtiUj0cOuM86+A==}
+  '@eosine/form@0.0.57':
+    resolution: {integrity: sha512-de64j4GxCzOctsPOqrHphtf+LHt6ezmlXm78rcnGXy0/A2r2wRcuY8XBbehZJ3dARPnjiLPh9BRKlTeNhBQ6jw==}
 
   '@esbuild/aix-ppc64@0.19.12':
     resolution: {integrity: sha512-bmoCYyWdEL3wDQIVbcyzRyeKLgk2WtWLTWz1ZIAZF/EGbNOwSA6ew3PftJ1PqMiOOGu0OyFMzG53L0zqIpPeNA==}
@@ -3278,7 +3278,7 @@ snapshots:
     dependencies:
       vue: 3.4.27
 
-  '@eosine/form@0.0.56':
+  '@eosine/form@0.0.57':
     dependencies:
       '@element-plus/icons-vue': 2.3.1(vue@3.4.27)
       '@wangeditor/editor': 5.1.23
