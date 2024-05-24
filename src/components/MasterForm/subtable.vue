@@ -3,7 +3,7 @@
     <div class="title">{{title}}</div>
     <template v-if="!detail">
       <div class="saveAndAdd" v-if="ShowType == 'form'">
-        <Form ref="editFormRef" class="subForm" v-model:formData="form" v-model:mainFormData="mainFormData" :formConfig="tableCFG.tableColumns" :rules="Rules" />
+        <eos-form ref="editFormRef" class="subForm" v-model="form" v-model:mainFormData="mainFormData" :config="tableCFG.tableColumns" :rules="Rules" />
         <el-button class="mb10" type="primary" plain size="default" @click="formSubmit">保存并新增</el-button>
       </div>
       <div class="btn" v-if="ShowType == 'modal'">
@@ -44,7 +44,7 @@
       <span> {{ pageConfig.modelTitle }} </span>
     </template>
     <template #default>
-      <Form ref="editFormRef" mod="subForm" v-model:formData="form" v-model:mainFormData="mainFormData" :formConfig="tableCFG.tableColumns" :rules="Rules" />
+      <eos-form ref="editFormRef" mod="subForm" v-model="form" v-model:mainFormData="mainFormData" :config="tableCFG.tableColumns" :rules="Rules" />
     </template>
     <template #footer>
       <el-button size="default" @click="formSubmit">保存</el-button>
@@ -58,7 +58,6 @@ export default {
 }
 </script>
 <script setup>
-import Form from "@/components/Form";
 import ETable from "@/components/Vxtable/edit";
 import VTable from "@/components/Vxtable";
 import { getFormValue, getFormRule, deepClone } from "@/utils/index";

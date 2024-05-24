@@ -1,18 +1,31 @@
 <template>
-  <eos-form ref="FormRef" v-model="formData" :config="formConfig" :detail="detail">
-    <template #subTable="{ config }" v-if="tableConfig.length > 0">
-      <div class="formTable" :style="`margin-left:-${labelWidth}`">
-        <SubTableCom :ref="config.FIELD+'Ref'" :key="config.FIELD" :detail="detail || config.ISDISABLED == '1'" :title="config.LABEL" :config="comConfig(config)" v-model:data="formData[config.FIELD]" v-model:mainFormData="formData" :othConfig="othConfig" @EtbaleLinkChange="EtbaleLinkChange" @updateTableData="updateTableData">
-          <template #modalBtnAfter>
-            <slot name="modalBtnAfter" />
-          </template>
-        </SubTableCom>
-      </div>
-    </template>
-  </eos-form>
+  <div class="master-form">
+    <eos-form ref="FormRef" v-model="formData" :config="formConfig" :detail="detail" @openModal="openModal">
+      <template #subTable="{ config }" v-if="tableConfig.length > 0">
+        <div class="formTable" :style="`margin-left:-${labelWidth}`">
+          <SubTableCom :ref="config.FIELD+'Ref'" :key="config.FIELD" :detail="detail || config.ISDISABLED == '1'" :title="config.LABEL" :config="GET_TableConfig(config)" v-model:data="formData[config.FIELD]" v-model:mainFormData="formData" :othConfig="othConfig" @EtbaleLinkChange="EtbaleLinkChange" @updateTableData="UPDATA_TableData">
+            <template #modalBtnAfter>
+              <slot name="modalBtnAfter" />
+            </template>
+          </SubTableCom>
+        </div>
+      </template>
+    </eos-form>
+    <eos-modal ref="modalRef">
+      111123123
+    </eos-modal>
+  </div>
 </template>
 
 <script setup>
+/**
+ * 主子表单
+ * @author WangJun 2024-05-11
+ */
+import useTableHook from "./hooks/table.hook";
+import useModalHook from "./hooks/modal.hook"
+import SubTableCom from "./subtable.vue";
+import { toRefs, ref } from "vue";
 const props = defineProps({
   modelValue: {
     type: Object,
@@ -35,23 +48,18 @@ const props = defineProps({
     default: () => []
   }
 })
-const emit = defineEmits(["updateTableData", "EtbaleLinkChange"])
-const { formData, formConfig, tableConfig, tableRules, labelWidth } = toRefs(props)
+const emit = defineEmits(["update:modelValue", "updateTableData", "EtbaleLinkChange"])
+
+const formData = computed({
+  get: () => props.modelValue,
+  set: (val) => emit("update:modelValue", val)
+})
+const { formConfig, tableConfig, tableRules, labelWidth } = toRefs(props)
 
 const FormRef = ref();
 
-/** table 转换配置 */
-const comConfig = config => {
-  if (!config) return {}
-  let { OTHER } = config
-  let subTableConfig
-  if (tableConfig.value.length == 1) {
-    subTableConfig = tableConfig.value[0]
-  } else {
-    subTableConfig = tableConfig.value.find(el => el.BILLNO == OTHER)
-  }
-  return subTableConfig
-}
+const { GET_TableConfig, UPDATA_TableData } = useTableHook()
+const { modalRef, modalConfig, openModal } = useModalHook()
 
 /**
  * 主子表单验证

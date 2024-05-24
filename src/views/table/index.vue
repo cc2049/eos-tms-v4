@@ -8,9 +8,14 @@
 <template>
 
   <div class="page-container">
+<<<<<<< HEAD
     <SingleTable ref="listTableRef" :menuID="menuParams" :compType="routerParams.COMP"  />
     <!-- <MultiTable v-else-if="A==2" />
     <BC v-else /> -->
+=======
+    <SingleTable v-if="!visibleFormPage" ref="listTableRef" :menuID="menuParams" :compType="routerParams.COMP" @openCustemPage="openCustemPages"  />
+    <OpenCustom v-else :slotCustemPagePath="slotCustemPagePath" @backEvent="backEvent" />
+>>>>>>> 95edc319b1f5eef9c23044c6dd63d1a25459e2f9
   </div>
 
 </template>
@@ -18,6 +23,9 @@
 <script setup>
 import SingleTable from "./components/SingleTable/index.vue";
 import MultiTable from "./components/MultiTable/index.vue";
+import OpenCustom from "./components/openCustom/index.vue";
+
+
 
 /*
  * 解析路由获取菜单id
@@ -30,23 +38,23 @@ const menuParams = ref({
 });
 const visibleFormPage = ref(false);
 
-const openCustemPages=(data) => {
-  console.log("🚀 ~ openCustemPage ~ data:", data)
-        openCustemPage(data.btnConf.VTYPE, data.btnConf.PAGEPATH); // 打开自定义页面
+const openCustemPages=(acceptData) => {
+  const {data,row} = acceptData
+  openCustemPage(data.btnConf.VTYPE, data.btnConf.PAGEPATH); // 打开自定义页面
 
+}
+
+const backEvent=()=>{
+  visibleFormPage.value = false
 }
 
 
 /** 动态自定义组件 */
-const slotCustemPage = ref();
+const slotCustemPagePath=ref()
 const openCustemPage = (type, path) => {
   try {
-    // visibleFormPage.value = true;
-    type == 1
-      ? (visibleFormPage.value = true)
-      : (pageConfig.modalVisible = true);
-    slotCustemPage.value = pageAutoComponent(path);
-    // slotCustemPage.value = defineAsyncComponent(() => import(`./page.js`))
+    visibleFormPage.value = true;
+    slotCustemPagePath.value = path;
   } catch (err) {
     console.error("打开自定义页面", err);
   }
