@@ -253,7 +253,7 @@ const pageConfig = reactive({
   modelTitle: "编辑行",
 });
 const formSubmit = () => {
-  editFormRef.value.submitForm().then((valid) => {
+  editFormRef.value.validate().then((valid) => {
     if (!valid) return;
     if (ShowType.value == 'form' || ShowType.value == 'modal') {
       let newRowData = deepClone(form.value)

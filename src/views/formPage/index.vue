@@ -2,7 +2,7 @@
  * @Author: cc2049
  * @Date: 2024-04-23 11:35:41
  * @LastEditors: PiPin 33947354+p1Master@users.noreply.github.com
- * @LastEditTime: 2024-05-24 17:14:27
+ * @LastEditTime: 2024-05-24 18:19:27
  * @Description: 大表单组件
 -->
 
@@ -46,11 +46,12 @@ const tableConfig = ref([]);
 watch(() => props.menuID, value => {
   if (value) {
     getPageConfig(props.menuID).then((res) => {
-      const { COLUMNS, VDEF2, BUTTON, SLOTCFG } = res.RESULT;
+      const { COLUMNS, VDEF2, BUTTON, SLOTCFG, SUBTABLE } = res.RESULT;
       topButton.value = resetButton(BUTTON);
       formConfig.value = COLUMNS;
       formData.value = getFormValue(COLUMNS);
       labelWidth.value = VDEF2 || "100px";
+      tableConfig.value = SUBTABLE
       if (props.isGetDetail) {
         let detailURL = SLOTCFG || getQueryUrl(props.topButton);
         getDetail(detailURL);
@@ -88,9 +89,7 @@ function getDetail(URL) {
       formData.value = Object.assign(formData.value, res.RESULT);
     });
   }
-
-  console.log('formData.value', formData.value );
-
+  console.log('formData.value', formData.value);
 }
 
 function handleBtnEvent(btn) {
