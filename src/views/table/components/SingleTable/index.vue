@@ -2,7 +2,7 @@
  * @Author: cc2049
  * @Date: 2024-04-28 13:10:44
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-05-23 08:50:29
+ * @LastEditTime: 2024-05-24 17:07:51
  * @Description: 简介
 -->
 <template v-if="pageConfig">
@@ -38,7 +38,7 @@
         </el-tab-pane>
       </el-tabs> -->
 
-      <Vxtable ref="VxtableRef" class="bg-white" :tableCFG="tableCFG" :tableData="tableData" @change="tableChange" @dragRow="dragTableRow" @queryEvent="queryEvent" @resetConfig="resetConfig">
+      <Vxtable ref="VxtableRef" class="bg-white" :tableCFG="tableCFG" :tableData="tableData" @change="tableChange" @dragRow="dragTableRow" @queryEvent="queryEvent" @resetConfig="resetConfig" @dbClick="dbClickTable">
       </Vxtable>
 
       <div class="pager-wrap flex flex-items-center" :class=" compType=='VTableSub'?'justify-between':'justify-end' ">
@@ -73,7 +73,7 @@ import { getUrlParams } from "@/utils";
 import EosTabs from "@/components/EosTabs/index.vue";
 
 
-const emit = defineEmits(["openCustemPage"]);
+const emit = defineEmits(["openCustemPage","dbClick"]);
 
 import SubTable from "./SubTable.vue";
 
@@ -353,6 +353,19 @@ function resetConfig(data) {
   // VxtableRef.value.refreshColumn();
   console.log("resetConfig", tableCFG.value.tableColumns);
 }
+
+
+function  dbClickTable(data){
+  console.log(123, data);
+  emit('dbClick', data)
+  
+}
+
+function getCheckRows(){
+  return currentData.value
+}
+
+defineExpose({getCheckRows})
 
 onMounted(() => {
    window.onresize = function onresize() {

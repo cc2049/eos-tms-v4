@@ -2,7 +2,7 @@
  * @Author: cc2049
  * @Date: 2024-04-23 11:35:41
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-05-22 08:50:36
+ * @LastEditTime: 2024-05-23 10:31:04
  * @Description: 大表单组件
 -->
 
@@ -95,6 +95,7 @@ function resetButton(arr) {
 const detailBtn = ref(null)
 
 function getDetail(URL) {
+  console.log('URL', URL);
   if (URL == "CurrentData") {
     formData.value = Object.assign(formData.value, props.currentData[0]);
   }else{
@@ -103,6 +104,9 @@ function getDetail(URL) {
       formData.value = Object.assign(formData.value, res.RESULT);
     });
   }
+
+  console.log('formData.value', formData.value );
+
 }
 
 function handleBtnEvent(btn) {

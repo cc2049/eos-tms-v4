@@ -370,11 +370,13 @@ import {
 } from "@/utils";
 import useSettingsStore from "@/store/modules/settings";
 import VueQr from "vue-qr/src/packages/vue-qr.vue";
-import { nextTick, computed, onMounted } from "vue";
 
 import Header from "./header.vue";
 
 import { axiosSave } from "@/api/system/page";
+
+// import { key17Status } from '@/hooks/useKey17Status'
+
 
 const { proxy } = getCurrentInstance();
 const settingsStore = useSettingsStore();
@@ -394,11 +396,6 @@ const cellClassName = ({ row, column }) => {
   }
   return null;
 };
-
-const key17Status = ref(null);
-onMounted(() => {
-  watchKeyEvent();
-});
 
 const emit = defineEmits(["dragRow", "queryEvent", "resetConfig"]);
 const props = defineProps({
@@ -463,23 +460,6 @@ const clickGrade = (row, config) => {
   gradeModalRowData.value = row;
 };
 
-const watchKeyEvent = () => {
-  const setKeyStatus = (keyCode, status) => {
-    switch (keyCode) {
-      case 17:
-        if (key17Status.value === status) return;
-        key17Status.value = status;
-        // console.log("ctrl", status ? "按下" : "抬起");
-        break;
-    }
-  };
-  document.onkeydown = (e) => {
-    setKeyStatus(e.keyCode, true);
-  };
-  document.onkeyup = (e) => {
-    setKeyStatus(e.keyCode, false);
-  };
-};
 
 const xTable = ref(null);
 
@@ -830,6 +810,8 @@ function openDrawer() {
 //  行点击事件触发单选功能
 const rowClickIndex = ref(null);
 
+const key17Status = ref(false)
+
 function rowClick({ row, column, triggerCheckbox, rowIndex }) {
   selectRow.value = row;
   selectColumn.value = column;
@@ -842,9 +824,11 @@ function rowClick({ row, column, triggerCheckbox, rowIndex }) {
   if (selectRecords.length == 0) {
     rowClickIndex.value = null;
   }
+
+  console.log(77, triggerCheckbox, key17Status.value);
   if (!triggerCheckbox) {
     !key17Status.value ? proxy.$refs.xTable?.clearCheckboxRow() : null;
-    if (rowClickIndex.value != rowIndex ) {
+    if (rowClickIndex.value != rowIndex) {
       rowClickIndex.value = rowIndex;
       checked = true;
       proxy.$refs.xTable.toggleCheckboxRow(row);
@@ -885,11 +869,11 @@ function toolbarCustomEvent() {
 }
 
 function openDetail(row) {
-  let giveParentData = {
-    clicktype: "detail",
-    data: row,
-  };
-  proxy.$emit("change", giveParentData);
+  // let giveParentData = {
+  //   clicktype: "detail",
+  //   data: row,
+  // };
+  // proxy.$emit("change", giveParentData);
   proxy.$emit("dbClick", row);
 }
 

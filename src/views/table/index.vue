@@ -2,14 +2,20 @@
  * @Author: cc2049
  * @Date: 2024-04-23 11:33:59
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-05-23 10:21:38
+ * @LastEditTime: 2024-05-24 11:08:15
  * @Description: 简介
 -->
 <template>
 
   <div class="page-container">
+<<<<<<< HEAD
+    <SingleTable ref="listTableRef" :menuID="menuParams" :compType="routerParams.COMP"  />
+    <!-- <MultiTable v-else-if="A==2" />
+    <BC v-else /> -->
+=======
     <SingleTable v-if="!visibleFormPage" ref="listTableRef" :menuID="menuParams" :compType="routerParams.COMP" @openCustemPage="openCustemPages"  />
     <OpenCustom v-else :slotCustemPagePath="slotCustemPagePath" @backEvent="backEvent" />
+>>>>>>> 95edc319b1f5eef9c23044c6dd63d1a25459e2f9
   </div>
 
 </template>
