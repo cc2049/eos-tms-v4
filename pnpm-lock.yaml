@@ -12,8 +12,8 @@ importers:
         specifier: 2.3.1
         version: 2.3.1(vue@3.4.27)
       '@eosine/form':
-        specifier: ^0.0.57
-        version: 0.0.57
+        specifier: ^0.0.59
+        version: 0.0.59
       '@visactor/vchart':
         specifier: ^1.10.5
         version: 1.11.0
@@ -53,6 +53,9 @@ importers:
       jsencrypt:
         specifier: 3.3.2
         version: 3.3.2
+      keymaster:
+        specifier: ^1.6.2
+        version: 1.6.2
       localforage:
         specifier: ^1.10.0
         version: 1.10.0
@@ -301,8 +304,8 @@ packages:
     peerDependencies:
       vue: ^3.2.0
 
-  '@eosine/form@0.0.57':
-    resolution: {integrity: sha512-de64j4GxCzOctsPOqrHphtf+LHt6ezmlXm78rcnGXy0/A2r2wRcuY8XBbehZJ3dARPnjiLPh9BRKlTeNhBQ6jw==}
+  '@eosine/form@0.0.59':
+    resolution: {integrity: sha512-4cm0gbefj8z2ri2WuGhd0HS3b7dk4WYDNVlu4S9ltaUbeHCMd5e14lY9pI6uN7A0+dNyfUuYS4iRMwbURIMaAA==}
 
   '@esbuild/aix-ppc64@0.19.12':
     resolution: {integrity: sha512-bmoCYyWdEL3wDQIVbcyzRyeKLgk2WtWLTWz1ZIAZF/EGbNOwSA6ew3PftJ1PqMiOOGu0OyFMzG53L0zqIpPeNA==}
@@ -2061,6 +2064,9 @@ packages:
   jsonfile@6.1.0:
     resolution: {integrity: sha512-5dgndWOriYSm5cnYaJNhalLNDKOqFwyDB/rr1E9ZsGciGvKPs8R2xYGCacuf3z6K1YKDz182fd+fY3cn3pMqXQ==}
 
+  keymaster@1.6.2:
+    resolution: {integrity: sha512-OvA/AALN8IDKKkTk2Z+bDrzs/SQao4lo/QPbwSdDvm+frxfiYiYCSn1aHFUypJY3SruAO1y/c771agBmTXqUtg==}
+
   kind-of@3.2.2:
     resolution: {integrity: sha512-NOW9QQXMoZGg/oqnVNoNTTIFEIid1627WCffUBJEdMxYApq7mNE7CpzucIPc+ZQg25Phej7IJSmX3hO+oblOtQ==}
     engines: {node: '>=0.10.0'}
@@ -3278,7 +3284,7 @@ snapshots:
     dependencies:
       vue: 3.4.27
 
-  '@eosine/form@0.0.57':
+  '@eosine/form@0.0.59':
     dependencies:
       '@element-plus/icons-vue': 2.3.1(vue@3.4.27)
       '@wangeditor/editor': 5.1.23
@@ -5303,6 +5309,8 @@ snapshots:
       universalify: 2.0.1
     optionalDependencies:
       graceful-fs: 4.2.11
+
+  keymaster@1.6.2: {}
 
   kind-of@3.2.2:
     dependencies:

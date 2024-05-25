@@ -375,7 +375,7 @@ import Header from "./header.vue";
 
 import { axiosSave } from "@/api/system/page";
 
-// import { key17Status } from '@/hooks/useKey17Status'
+const key17Status = inject('key17Status')
 
 
 const { proxy } = getCurrentInstance();
@@ -810,7 +810,6 @@ function openDrawer() {
 //  行点击事件触发单选功能
 const rowClickIndex = ref(null);
 
-const key17Status = ref(false)
 
 function rowClick({ row, column, triggerCheckbox, rowIndex }) {
   selectRow.value = row;
@@ -825,7 +824,6 @@ function rowClick({ row, column, triggerCheckbox, rowIndex }) {
     rowClickIndex.value = null;
   }
 
-  console.log(77, triggerCheckbox, key17Status.value);
   if (!triggerCheckbox) {
     !key17Status.value ? proxy.$refs.xTable?.clearCheckboxRow() : null;
     if (rowClickIndex.value != rowIndex) {

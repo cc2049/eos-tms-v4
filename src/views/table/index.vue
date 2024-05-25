@@ -1,8 +1,8 @@
 <!--
  * @Author: cc2049
  * @Date: 2024-04-23 11:33:59
- * @LastEditors: PiPin 33947354+p1Master@users.noreply.github.com
- * @LastEditTime: 2024-05-24 17:13:48
+ * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2024-05-25 10:55:33
  * @Description: 简介
 -->
 <template>
@@ -18,6 +18,9 @@
 import SingleTable from "./components/SingleTable/index.vue";
 import MultiTable from "./components/MultiTable/index.vue";
 import OpenCustom from "./components/openCustom/index.vue";
+
+import useKey17Status from '@/hooks/useKey17Status'
+const { key17Status } = useKey17Status()
 
 /*
  * 解析路由获取菜单id
@@ -57,6 +60,7 @@ console.log(123, routerParams);
 
 
 provide("menuID", menuParams);
+provide("key17Status", key17Status);
 
 onMounted(() => {});
 </script>

@@ -2,7 +2,7 @@
  * @Author: cc2049
  * @Date: 2024-04-28 13:10:44
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-05-24 17:07:51
+ * @LastEditTime: 2024-05-25 08:54:23
  * @Description: 简介
 -->
 <template v-if="pageConfig">
@@ -69,13 +69,10 @@ import Ztree from "./../Ztree";
 import useTableConifg from "@/hooks/useTableConifg";
 import { axiosGet } from "#/common";
 import { getUrlParams } from "@/utils";
-
 import EosTabs from "@/components/EosTabs/index.vue";
-
+import SubTable from "./SubTable.vue";
 
 const emit = defineEmits(["openCustemPage","dbClick"]);
-
-import SubTable from "./SubTable.vue";
 
 const props = defineProps({
   menuID: {
@@ -151,7 +148,6 @@ function tableChange(data) {
     handelEvent({ data: detailBtnCFG.value, row: data.data });
   } else if (data.clicktype == "checkbox") {
     currentData.value = data.data;
-    console.log(777, currentData.value.length);
     if (props.compType == "VTableSub" && SubTableConfig.value.length) {
       SubTableRef.value.getSubData(currentData.value);
     }
@@ -356,9 +352,7 @@ function resetConfig(data) {
 
 
 function  dbClickTable(data){
-  console.log(123, data);
   emit('dbClick', data)
-  
 }
 
 function getCheckRows(){
