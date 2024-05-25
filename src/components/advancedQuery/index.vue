@@ -144,27 +144,26 @@ function searchBtn() {
 }
 
 // 快捷过滤
-const value = ref(null);
 const filterConfig = ref({
   filterSeceletArr: [],
   filterSeceletArr1: [
-    { LABEL: "IsNull-为空", VALUE: "IsNull" },
-    { LABEL: "IsNotNull-不为空", VALUE: "IsNotNull" },
-    { LABEL: "EqualTo-等于", VALUE: "EqualTo" },
-    { LABEL: "NotEqualTo-不等于", VALUE: "NotEqualTo" },
-    { LABEL: "GreaterThan-大于", VALUE: "GreaterThan" },
-    { LABEL: "GreaterThanOrEqualTo-大于等于", VALUE: "GreaterThanOrEqualTo" },
-    { LABEL: "LessThan-小于", VALUE: "LessThan" },
-    { LABEL: "LessThanOrEqualTo-小于等于", VALUE: "LessThanOrEqualTo" },
-    { LABEL: "Like-模糊匹配", VALUE: "Like" },
-    { LABEL: "NotLike-模糊不匹配", VALUE: "NotLike" },
-    { LABEL: "In-包含", VALUE: "In" },
-    { LABEL: "NotIn-不包含", VALUE: "NotIn" },
-    { LABEL: "Between-在**之间", VALUE: "Between" },
-    { LABEL: "NotBetween-不**在之间", VALUE: "NotBetween" },
-    { LABEL: "LeftLike-左匹配", VALUE: "LeftLike" },
-    { LABEL: "RightLike-右匹配", VALUE: "RightLike" },
-    { LABEL: "FUZZYRET-复杂检索", VALUE: "FUZZYRET" },
+    // { LABEL: "IsNull-为空", VALUE: "IsNull" },
+    // { LABEL: "IsNotNull-不为空", VALUE: "IsNotNull" },
+    // { LABEL: "EqualTo-等于", VALUE: "EqualTo" },
+    // { LABEL: "NotEqualTo-不等于", VALUE: "NotEqualTo" },
+    // { LABEL: "GreaterThan-大于", VALUE: "GreaterThan" },
+    // { LABEL: "GreaterThanOrEqualTo-大于等于", VALUE: "GreaterThanOrEqualTo" },
+    // { LABEL: "LessThan-小于", VALUE: "LessThan" },
+    // { LABEL: "LessThanOrEqualTo-小于等于", VALUE: "LessThanOrEqualTo" },
+    // { LABEL: "Like-模糊匹配", VALUE: "Like" },
+    // { LABEL: "NotLike-模糊不匹配", VALUE: "NotLike" },
+    // { LABEL: "In-包含", VALUE: "In" },
+    // { LABEL: "NotIn-不包含", VALUE: "NotIn" },
+    // { LABEL: "Between-在**之间", VALUE: "Between" },
+    // { LABEL: "NotBetween-不**在之间", VALUE: "NotBetween" },
+    // { LABEL: "LeftLike-左匹配", VALUE: "LeftLike" },
+    // { LABEL: "RightLike-右匹配", VALUE: "RightLike" },
+    // { LABEL: "FUZZYRET-复杂检索", VALUE: "FUZZYRET" },
   ],
 });
 
