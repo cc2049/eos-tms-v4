@@ -1,6 +1,6 @@
 <template>
   <div class="edit_table">
-    <vxe-table ref="xEditTable" size="mini" border show-overflow keep-source width="100%" :loading="tableCFG.loading" :row-config="{ isCurrent: true, isHover: true , height:  26 }" :height="tableCFG.height" :column-config="{ resizable: true }" v-model:data="tableData" :show-footer="tableCFG.mergeCFG && tableCFG.mergeCFG.length" :footer-method="footerMethod" class="mytable-scrollbar mytable-footer" @header-cell-click="headerCellClickEvent" @header-cell-dblclick="headColDbClickEvent" :edit-rules="validRules" :edit-config="{trigger: 'click',mode: 'cell'}" :sort-config="{ showIcon: false }" :checkbox-config="!tableCFG.SelectType || tableCFG.SelectType != 'radio'? {highlight: true,}: null" @checkbox-all="checkboxChange" @checkbox-change="checkboxChange" @edit-closed="editClose">
+    <vxe-table ref="xEditTable" size="mini" border show-overflow keep-source width="100%" :loading="tableCFG.loading" :row-config="{ isCurrent: true, isHover: true , height:  36 }" :height="tableCFG.height" :column-config="{ resizable: true }" v-model:data="tableData" :show-footer="tableCFG.mergeCFG && tableCFG.mergeCFG.length" :footer-method="footerMethod" class="mytable-scrollbar mytable-footer" @header-cell-click="headerCellClickEvent" @header-cell-dblclick="headColDbClickEvent" :edit-rules="validRules" :edit-config="{trigger: 'click',mode: 'cell'}" :sort-config="{ showIcon: false }" :checkbox-config="!tableCFG.SelectType || tableCFG.SelectType != 'radio'? {highlight: true,}: null" @checkbox-all="checkboxChange" @checkbox-change="checkboxChange" @edit-closed="editClose">
       <vxe-column v-if="tableCFG?.hasSeq" title="" width="50" type="seq" align="center" fixed="left"></vxe-column>
       <vxe-column v-if="tableCFG?.hasCheck" type="checkbox" align="center" width="50" fixed="left"></vxe-column>
 
@@ -45,13 +45,10 @@
             <el-input v-else-if="Ci.CONTROLS == 'ExTextarea'" v-model="row[Ci.FIELD]" :disabled="calcDISABLED(Ci,rowIndex)" :rows="3" type="textarea" placeholder="请输入" />
 
             <!-- ExNumber 数字输入框 -->
-            <!-- <el-input v-else-if="Ci.CONTROLS == 'ExNumber'" v-model.number="row[Ci.FIELD]" clearable :disabled="calcDISABLED(Ci,rowIndex)" style="width: 100%" type="number" :min="calcNumberMin(Ci)" :max="Number(Ci.MAXLENGTH)" @blur="numberBlur(Ci, row)" @input="calcPoint(Ci, row)">
-              <template #append v-if="Ci.SUFFIX && Ci.SUFFIX != ''">{{setSuffix(row, Ci,true)}}</template>
-            </el-input> -->
             <div class="mo-input--number" v-else-if="Ci.CONTROLS == 'ExNumber'">
               <el-input-number :controls="false" v-model="row[Ci.FIELD]" clearable type="number" :disabled="calcDISABLED(Ci, rowIndex)" :min="calcNumberMin(Ci)" :max="calcNumberMax(Ci)" @input="calcPoint($event, Ci, row)" @blur="inputBlur(Ci,row)" @clear="inputBlur(Ci,row)" style="width: 100%">
               </el-input-number>
-              <!-- <div class="define-append" v-if="Ci.SUFFIX">{{setSuffix(row, Ci,true)}}</div> -->
+              <!-- <div class="define-append" v-if="Ci.SUFFIX">{{setSuffix(row, Ci, true)}}</div> -->
             </div>
 
             <!-- ExSelect 选择 -->

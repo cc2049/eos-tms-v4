@@ -11,10 +11,10 @@ const useTable = () => {
     if (!config) return {}
     let { OTHER } = config
     let subTableConfig
-    if (proxy.tableConfig.value.length == 1) {
-      subTableConfig = proxy.tableConfig.value[0]
+    if (proxy.tableConfig.length == 1) {
+      subTableConfig = proxy.tableConfig[0]
     } else {
-      subTableConfig = proxy.tableConfig.value.find(el => el.BILLNO == OTHER)
+      subTableConfig = proxy.tableConfig.find(el => el.BILLNO == OTHER)
     }
     return subTableConfig
   }

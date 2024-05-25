@@ -16,7 +16,7 @@
   },
   "dependencies": {
     "@element-plus/icons-vue": "2.3.1",
-    "@eosine/form": "^0.0.58",
+    "@eosine/form": "^0.0.60",
     "@visactor/vchart": "^1.10.5",
     "@visactor/vtable": "^0.24.1",
     "@vueup/vue-quill": "1.2.0",
@@ -30,6 +30,7 @@
     "js-cookie": "3.0.5",
     "js-md5": "^0.8.3",
     "jsencrypt": "3.3.2",
+    "keymaster": "^1.6.2",
     "localforage": "^1.10.0",
     "mathjs": "^12.4.2",
     "nprogress": "0.2.0",
