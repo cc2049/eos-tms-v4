@@ -9,7 +9,7 @@
 
   <div class="page-container">
     <SingleTable v-if="!visibleFormPage" ref="listTableRef" :menuID="menuParams" :compType="routerParams.COMP" @openCustemPage="openCustemPages"  />
-    <OpenCustom v-else :slotCustemPagePath="slotCustemPagePath" @backEvent="backEvent" />
+    <OpenCustom v-else :slotCustemPagePath="slotCustemPagePath" @backEvents="backEvent" />
   </div>
 
 </template>
@@ -40,7 +40,8 @@ const openCustemPages=(acceptData) => {
 }
 
 const backEvent=()=>{
-  visibleFormPage.value = false
+  // 目前不行，这样的话 财旺写的组件会报错
+  // visibleFormPage.value = false
 }
 
 
