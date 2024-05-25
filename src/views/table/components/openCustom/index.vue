@@ -91,7 +91,9 @@ import { watch } from "vue";
   const storeSettings = computed(() => settingsStore);
   const userStore = useUserStore();
   const { proxy } = getCurrentInstance();
-  const emit = defineEmits(["treeClick"]);
+  const emit = defineEmits(["treeClick","backEvents"]);
+  // const emit = defineEmits(["treeClick",""]);
+
   const router = useRouter();
   const route = useRoute();
   let tableBillNo = route.query.billno;
@@ -288,15 +290,11 @@ import { watch } from "vue";
   const reportCGF = ref(false);
   const queryJson = ref({});
   const queryConfig = ref([]);
-  const queryConfig24Col = ref([]);
   const currentData = ref([]);
   const queryDrawer = ref(false);
   const colDrawer = ref(false);
   const reportFromData = ref({});
   const hasTemplate = ref(false); // 页面是否关联多模板
-  const templateList = ref([]); // 模板列表
-  const selectTemp = ref(""); // 选中的模板
-  const setShowCol = ref(""); // 选中的模板中的列配置
   const ListPageSize = ref([10, 20, 30, 50, 100, 500, 1000]);
   
   const customTitle = ref(""); // 表格弹窗的自定义标题
@@ -2013,13 +2011,12 @@ import { watch } from "vue";
   }
   
   function backEvent() {
-    treeKeyword.value = "";
-    visibleFormPage.value = false;
-    formConfig.showDetail = false;
-    formConfig.formValue = {};
-    currentData.value = [];
-
-    emit('backEvent')
+    // treeKeyword.value = "";
+    // visibleFormPage.value = false;
+    // formConfig.showDetail = false;
+    // formConfig.formValue = {};
+    // currentData.value = [];
+    emit('backEvents')
 
   }
   
