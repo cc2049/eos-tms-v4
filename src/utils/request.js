@@ -56,9 +56,11 @@ service.interceptors.request.use(config => {
   }
   if (config.url.includes('ISRSA=1')) {
     const {aesKey , aesData  } = aesEncrypt( config.data.DATA)
-    config.data.KEY = aesKey
+    const newRsaData = { KEY: aesKey, SECRETDATA: aesData}
+    // config.data.KEY = aesKey
+    // config.data.SECRETDATA = aesData
+    config.data = newRsaData
     delete config.data.DATA
-    config.data.SECRETDATA = aesData
   }
 
   if (config.data.DATA?.MODULEID) {
@@ -118,6 +120,8 @@ service.interceptors.response.use(res => {
     return Promise.reject(res.data)
   } else {
     if (res.data && res.data.KEY) {
+      // let SECRETRESULT = res.data.SECRETRESULT, sraKey = RSADencrypt(res.data.KEY), KMData = aesJmDEncrypt(sraKey, SECRETRESULT);
+      // KMData = KMData ? JSON.parse(KMData) : null
       // let SECRETRESULT = res.data.SECRETRESULT, sraKey = aesDEncrypt(res.data.KEY), KMData = aesJmDEncrypt(sraKey, SECRETRESULT);
       let KMData = {};
       KMData = KMData ? JSON.parse(aesDEncrypt(res.data)) : null

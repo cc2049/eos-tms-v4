@@ -2,7 +2,7 @@
  * @Author: cc2049
  * @Date: 2024-04-23 11:33:59
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-05-25 10:55:33
+ * @LastEditTime: 2024-05-27 16:49:07
  * @Description: 简介
 -->
 <template>
@@ -54,11 +54,7 @@ const openCustemPage = (type, path) => {
     console.error("打开自定义页面", err);
   }
 };
-
-
-console.log(123, routerParams);
-
-
+// console.log(123, routerParams);
 provide("menuID", menuParams);
 provide("key17Status", key17Status);
 

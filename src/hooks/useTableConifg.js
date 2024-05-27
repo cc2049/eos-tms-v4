@@ -2,7 +2,7 @@
  * @Author: cc2049
  * @Date: 2024-04-25 17:34:36
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-05-22 18:54:39
+ * @LastEditTime: 2024-05-27 17:01:29
  * @Description: 获取动态配置
  */
 
@@ -161,7 +161,12 @@ const useTableConifg = (menu) => {
 
     }
 
-    return { getConfig }
+
+    const resetTableConfig =(data)=>{
+        console.log('resetTableConfig', data);
+    }
+
+    return { getConfig , resetTableConfig}
 }
 
 export default useTableConifg
