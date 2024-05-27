@@ -15,7 +15,8 @@
 
     <div class="mr10">
       <el-select v-model="formData.QUERYTYPE" placeholder="请选择" style="width: 100px" :size="commonSize">
-        <el-option v-for="item in filterSeceletArrs1" :key="item.VALUE" :label="item.LABEL" :value="item.VALUE" />
+        <!-- <el-option v-for="item in filterSeceletArrs1" :key="item.VALUE" :label="item.LABEL" :value="item.VALUE" /> -->
+        <el-option v-for="item in showVcodeList()" :key="item.VALUE" :label="item.LABEL" :value="item.VALUE" />
       </el-select>
     </div>
 
@@ -189,6 +190,16 @@ watch(
 //     let rowData = getFormValue(props.formConfig);
 //     EnumData.value = { ...rowData.EnumData, ...rowData._getDICT };
 // };
+
+const showVcodeList=()=>{
+  try {
+    return JSON.parse(currentConfig.value.VCODE)
+  } catch (error) {
+    return []
+  }
+
+}
+
 
 // 时间确认事件
 function DateChange(val) {

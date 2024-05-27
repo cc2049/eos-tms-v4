@@ -72,6 +72,8 @@ import useworkflowStore from "@/store/modules/workflow"
 const workflowStore = useworkflowStore();
 let { setTableId, setIsTried } = workflowStore
 
+import nodeWrap from "@/components/Workflow/nodeWrap.vue"
+
 const props = defineProps({
   // 审批流数据
   data: Object,
