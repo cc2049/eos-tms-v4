@@ -283,7 +283,7 @@ const ShowType = computed(() => {
 
 /** 验证表单 */
 const HasOnlyConfig = computed(() => tableCFG.tableColumns.filter(al => al.ISONLY == '1'))
-const submitForm = () => {
+const validate = () => {
   let { tableData } = xEditTable.value.getTableData()
   if (HasOnlyConfig.value.length > 0)
     for (let i = 0; i < HasOnlyConfig.value.length; i++) {
@@ -332,7 +332,7 @@ onMounted(() => {
   InitConfig();
 })
 
-defineExpose({ type: "table", Field, updateTable, submitForm, xEditTable: xEditTable });
+defineExpose({ type: "table", Field, updateTable, validate, xEditTable: xEditTable });
 </script>
 
 <style lang="scss" scoped>
