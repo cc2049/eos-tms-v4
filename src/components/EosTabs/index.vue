@@ -2,13 +2,13 @@
  * @Author: cc2049
  * @Date: 2024-05-22 12:03:45
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-05-22 17:17:24
+ * @LastEditTime: 2024-05-28 16:40:14
  * @Description: 简介
 -->
 <template>
   <div class="eos-tabs flex">
     <div class="eos-tabs-item mr-4" v-for="(item, index) in tabsList" :key="index" :class="{ 'active': activeID === item.BILLNO }" @click="change(item)">
-      {{ item.VNAME  }}
+      {{ item.VNAME || item.pageTitle  }}
     </div>
   </div>
 </template>
