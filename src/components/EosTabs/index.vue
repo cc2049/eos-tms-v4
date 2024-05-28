@@ -2,12 +2,12 @@
  * @Author: cc2049
  * @Date: 2024-05-22 12:03:45
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-05-28 16:40:14
+ * @LastEditTime: 2024-05-28 18:39:09
  * @Description: 简介
 -->
 <template>
   <div class="eos-tabs flex">
-    <div class="eos-tabs-item mr-4" v-for="(item, index) in tabsList" :key="index" :class="{ 'active': activeID === item.BILLNO }" @click="change(item)">
+    <div class="eos-tabs-item mr-4" v-for="(item, index) in tabsList" :key="index" :class="{ 'active': activeID === item.BILLNO }" @click="change(item,index)">
       {{ item.VNAME || item.pageTitle  }}
     </div>
   </div>
@@ -24,9 +24,9 @@ const props = defineProps({
 
 const emit =defineEmits(['change'])
 const activeID = ref(props.tabsList[0].BILLNO);
-const change = (item) => {
+const change = (item, index) => {
   activeID.value = item.BILLNO;
-  emit('change', item)
+  emit('change', {data: item, index} )
 }
 
 </script>

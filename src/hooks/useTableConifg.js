@@ -2,7 +2,7 @@
  * @Author: cc2049
  * @Date: 2024-04-25 17:34:36
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-05-28 16:41:16
+ * @LastEditTime: 2024-05-28 18:52:37
  * @Description: 获取动态配置
  */
 
@@ -131,8 +131,8 @@ const useTableConifg = (menu) => {
         copyPageConfig.queryJson = Object.assign(initQueryJson, menu)
         copyPageConfig.pageTitle = VNAME
         copyPageConfig.pageID = {
-            MODULEID: BILLNO,
-            PAGEID: PK_MODULE,
+            MODULEID:PK_MODULE ,
+            PAGEID: BILLNO,
         }
         copyPageConfig.tableCFG = resetTableConfig(data)
         return copyPageConfig
@@ -149,7 +149,6 @@ const useTableConifg = (menu) => {
             ISTBSELECT,
             VMEMO,
         } = data
-        console.log(666, VMEMO);
         // 设置表格配置
         let copyTableCFG = JSON.parse(JSON.stringify(tableCFG));
         copyTableCFG.autoWidth = ISADAPTION;

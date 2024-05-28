@@ -2,7 +2,7 @@
  * @Author: cc2049
  * @Date: 2024-04-28 13:10:44
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-05-28 16:38:13
+ * @LastEditTime: 2024-05-28 18:52:58
  * @Description: 简介
 -->
 <template v-if="pageConfig">
@@ -32,11 +32,6 @@
     </template>
     <!-- 表格主体 -->
     <div class="table-wrap" :class="pageConfig?.hasTree && showZtree ? 'has-tree-table' :'' " v-if="tableCFG">
-
-      <!-- <el-tabs :tab-position="tabPosition" class="demo-tabs" v-model="mainActive" @tab-click="handleMainTabsClick">
-        <el-tab-pane :label="item.VNAME" v-for="(item, index) in pageConfig.mainTable" :key="index" :name="index">
-        </el-tab-pane>
-      </el-tabs> -->
 
       <template v-if="multiMainTable.length">
         <EosTabs :tabsList="multiMainTable" @change="changeTab" />
@@ -76,7 +71,15 @@ import { getUrlParams } from "@/utils";
 import EosTabs from "@/components/EosTabs/index.vue";
 import SubTable from "./SubTable.vue";
 
+import {
+  ElMessage,
+  ElMessageBox,
+  ElNotification,
+  ElLoading,
+} from "element-plus";
+
 const emit = defineEmits(["openCustemPage", "dbClick"]);
+const proxy = getCurrentInstance();
 
 const props = defineProps({
   menuID: {
@@ -126,6 +129,17 @@ const ListPageSize = ref([10, 20, 30, 50, 100, 500, 1000]);
 
 const handleSplitbar = () => {
   showZtree.value = !showZtree.value;
+};
+
+const activeTabsIndex = ref(0);
+const activeTabs = ref(null);
+
+const changeTab = (e) => {
+  // proxy.$modal.msgSuccess('切换成功</br>888888888888888888888888888888');
+  activeTabsIndex.value = e.index;
+  activeTabs.value = e.data;
+  getTableData()
+  console.log(123, e);
 };
 
 // 表格内部的多选事件，顶部筛选排序事件, 超链接事件
@@ -237,6 +251,12 @@ const getTableData = () => {
   queryJSON.value.PAGENUM = pageInfo.currentPage;
   queryJSON.value.SORTNAME = pageInfo.sortName;
   queryJSON.value.REVERSE = pageInfo.sortOrder;
+
+  if (multiMainTable.value.length) {
+    queryJSON.value.MODULEID = activeTabs.value.pageID.MODULEID;
+    queryJSON.value.PAGEID = activeTabs.value.pageID.PAGEID;
+  }
+
   axiosGet(queryURL.value, queryJSON.value)
     .then((res) => {
       currentData.value = [];
@@ -288,9 +308,9 @@ watch(
     if (value) {
       getConfig().then((res) => {
         console.log(888, res);
-
         if (Array.isArray(res.pageConfig)) {
           multiMainTable.value = res.pageConfig;
+          activeTabs.value = multiMainTable.value[0]
           pageConfig.value = multiMainTable.value[0];
           tableCFG.value = pageConfig.value.tableCFG;
         } else {
