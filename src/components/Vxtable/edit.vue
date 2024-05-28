@@ -90,7 +90,7 @@
                 </template>
                 <template #dropdown>
                   <div :style="`width:${ExSelectModalConfig.width? ExSelectModalConfig.width: '100%'}`">
-                    <VTable :tableCFG="ExSelectModalConfig" :tableData="SelectModalList" @clickRow.self="row => SelectChange(Ci, row, rowIndex)" />
+                    <VTable :tableCFG="ExSelectModalConfig" :tableData="SelectModalList" @dbClick.self="row => SelectChange(Ci, row, rowIndex)" />
                   </div>
                 </template>
               </vxe-pulldown>
@@ -108,7 +108,7 @@
                 </template>
                 <template #dropdown>
                   <div :style="`width:${ExSelectModalConfig.width? ExSelectModalConfig.width: '100%'}`">
-                    <VTable :tableCFG="ExSelectModalConfig" :tableData="SelectModalList" @clickRow.self="row => SelectChange(Ci, row, rowIndex)" />
+                    <VTable :tableCFG="ExSelectModalConfig" :tableData="SelectModalList" @dbClick.self="row => SelectChange(Ci, row, rowIndex)" />
                   </div>
                 </template>
               </vxe-pulldown>
