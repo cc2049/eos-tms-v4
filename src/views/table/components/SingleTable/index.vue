@@ -2,7 +2,7 @@
  * @Author: cc2049
  * @Date: 2024-04-28 13:10:44
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-05-25 08:54:23
+ * @LastEditTime: 2024-05-28 18:52:58
  * @Description: 简介
 -->
 <template v-if="pageConfig">
@@ -33,10 +33,9 @@
     <!-- 表格主体 -->
     <div class="table-wrap" :class="pageConfig?.hasTree && showZtree ? 'has-tree-table' :'' " v-if="tableCFG">
 
-      <!-- <el-tabs :tab-position="tabPosition" class="demo-tabs" v-model="mainActive" @tab-click="handleMainTabsClick">
-        <el-tab-pane :label="item.VNAME" v-for="(item, index) in pageConfig.mainTable" :key="index" :name="index">
-        </el-tab-pane>
-      </el-tabs> -->
+      <template v-if="multiMainTable.length">
+        <EosTabs :tabsList="multiMainTable" @change="changeTab" />
+      </template>
 
       <Vxtable ref="VxtableRef" class="bg-white" :tableCFG="tableCFG" :tableData="tableData" @change="tableChange" @dragRow="dragTableRow" @queryEvent="queryEvent" @resetConfig="resetConfig" @dbClick="dbClickTable">
       </Vxtable>
@@ -72,7 +71,15 @@ import { getUrlParams } from "@/utils";
 import EosTabs from "@/components/EosTabs/index.vue";
 import SubTable from "./SubTable.vue";
 
-const emit = defineEmits(["openCustemPage","dbClick"]);
+import {
+  ElMessage,
+  ElMessageBox,
+  ElNotification,
+  ElLoading,
+} from "element-plus";
+
+const emit = defineEmits(["openCustemPage", "dbClick"]);
+const proxy = getCurrentInstance();
 
 const props = defineProps({
   menuID: {
@@ -122,6 +129,17 @@ const ListPageSize = ref([10, 20, 30, 50, 100, 500, 1000]);
 
 const handleSplitbar = () => {
   showZtree.value = !showZtree.value;
+};
+
+const activeTabsIndex = ref(0);
+const activeTabs = ref(null);
+
+const changeTab = (e) => {
+  // proxy.$modal.msgSuccess('切换成功</br>888888888888888888888888888888');
+  activeTabsIndex.value = e.index;
+  activeTabs.value = e.data;
+  getTableData()
+  console.log(123, e);
 };
 
 // 表格内部的多选事件，顶部筛选排序事件, 超链接事件
@@ -201,11 +219,9 @@ function handleTopBtn(data) {
   console.log(666, data);
   if (data.type == "openCustomPlan") {
     advanceQueryRef.value.openShowModal();
-  }
-   else if(data.type == "openCustemPage"){
-    emit("openCustemPage",{data:data,row: currentData.value})
-  } 
-  else {
+  } else if (data.type == "openCustemPage") {
+    emit("openCustemPage", { data: data, row: currentData.value });
+  } else {
     handelEvent({ data: data, row: currentData.value });
   }
 }
@@ -235,6 +251,12 @@ const getTableData = () => {
   queryJSON.value.PAGENUM = pageInfo.currentPage;
   queryJSON.value.SORTNAME = pageInfo.sortName;
   queryJSON.value.REVERSE = pageInfo.sortOrder;
+
+  if (multiMainTable.value.length) {
+    queryJSON.value.MODULEID = activeTabs.value.pageID.MODULEID;
+    queryJSON.value.PAGEID = activeTabs.value.pageID.PAGEID;
+  }
+
   axiosGet(queryURL.value, queryJSON.value)
     .then((res) => {
       currentData.value = [];
@@ -276,6 +298,7 @@ function getTreeData() {
 const queryURL = ref(null);
 const queryJSON = ref(null);
 const topButton = ref([]);
+const multiMainTable = ref([]);
 
 const { getConfig } = useTableConifg(props.menuID);
 
@@ -284,18 +307,24 @@ watch(
   (value) => {
     if (value) {
       getConfig().then((res) => {
-        tableCFG.value = res.tableCFG;
-        pageConfig.value = res.pageConfig;
-        topButton.value = res.pageConfig.topButton;
+        console.log(888, res);
+        if (Array.isArray(res.pageConfig)) {
+          multiMainTable.value = res.pageConfig;
+          activeTabs.value = multiMainTable.value[0]
+          pageConfig.value = multiMainTable.value[0];
+          tableCFG.value = pageConfig.value.tableCFG;
+        } else {
+          pageConfig.value = res.pageConfig;
+          tableCFG.value = pageConfig.value.tableCFG;
+        }
+        topButton.value = pageConfig.value.topButton;
         queryURL.value = pageConfig.value.queryUrl;
         queryJSON.value = pageConfig.value.queryJson;
         customPlan.value = pageConfig.value.customPlan;
-
         SubTableConfig.value = pageConfig.value.subTable;
-
         let getConfigPager = tableCFG.value.pagerConfig;
         pageInfo.pageSize = getConfigPager.pageSize || 10;
-        queryJSON.value.PAGESIZE = getConfigPager.pageSize || pageInfo.pageSize;
+        queryJSON.value.PAGESIZE = pageInfo.pageSize;
         nextTick(() => {
           resetHeight();
         });
@@ -319,8 +348,11 @@ function resetHeight() {
   let newTBHeight =
     window.innerHeight - 160 - AdvancedQuery.value?.clientHeight;
   if (props.compType == "VTableSub" && SubTableConfig.value.length) {
-    let subHeight =  SubTableConfig.value[0].TABLEHEIGHT*1 || 120;
+    let subHeight = SubTableConfig.value[0].TABLEHEIGHT * 1 || 120;
     newTBHeight -= subHeight;
+  }
+  if (multiMainTable.value.length) {
+    newTBHeight -= 40;
   }
   tableCFG.value.height = newTBHeight;
 }
@@ -350,20 +382,19 @@ function resetConfig(data) {
   console.log("resetConfig", tableCFG.value.tableColumns);
 }
 
-
-function  dbClickTable(data){
-  emit('dbClick', data)
+function dbClickTable(data) {
+  emit("dbClick", data);
 }
 
-function getCheckRows(){
-  return currentData.value
+function getCheckRows() {
+  return currentData.value;
 }
 
-defineExpose({getCheckRows})
+defineExpose({ getCheckRows });
 
 onMounted(() => {
-   window.onresize = function onresize() {
-    resetHeight()
+  window.onresize = function onresize() {
+    resetHeight();
   };
 });
 </script>

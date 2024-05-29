@@ -2,7 +2,7 @@
  * @Author: cc2049
  * @Date: 2024-05-21 14:47:10
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-05-22 08:44:13
+ * @LastEditTime: 2024-05-25 11:30:07
  * @Description: 简介 加解密
  */
 import CryptoJS from "crypto-js";
@@ -46,7 +46,7 @@ export function aesJmEncrypt(text, key) {
 }
 
 // 解密
-function aesJmDEncrypt(text, key) {
+function aesJmDEncrypt(key, text) {
     let aseKey = key ? key : "430T934M148S45E9";
     let encrypt = CryptoJS.DES.decrypt(text, CryptoJS.enc.Utf8.parse(aseKey), {
         mode: CryptoJS.mode.ECB,
@@ -64,6 +64,6 @@ export function aesEncrypt(data) {
 
 export function aesDEncrypt(data) {
     let sraKey = RSADencrypt(data.KEY),
-        KMData = aesJmDEncrypt(sraKey, data.SECRETRESULT)
+        KMData = aesJmDEncrypt(sraKey, data.SECRETRESULT);
     return KMData
 }

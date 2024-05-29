@@ -2,7 +2,7 @@
  * @Author: cc2049
  * @Date: 2024-04-19 09:01:33
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-05-22 08:49:06
+ * @LastEditTime: 2024-05-25 11:23:38
  * @Description: 简介
 -->
 <template>
@@ -41,7 +41,7 @@ const LoginConfig = ref({
 
 const getGlobalConfig = () => {
   let data = { MODULETYPE: "PCCONFIG", VTYPE: "SYSCONFIG" };
-  axiosGet("sys/config/getList", data).then((res) => {
+  axiosGet("sys/config/getList?ISRSA=1", data).then((res) => {
     let { RESULT } = res,
       newObj = {};
     RESULT.forEach((item) => {

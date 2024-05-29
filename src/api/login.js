@@ -2,7 +2,7 @@
  * @Author: cc2049
  * @Date: 2024-04-23 10:08:57
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-05-21 11:22:49
+ * @LastEditTime: 2024-05-25 11:31:25
  * @Description: 简介
  */
 import request from '@/utils/request'
@@ -44,7 +44,7 @@ export function saveUserConfig(data) {
 export function login(data) {
   localforage.clear()
   return request({
-    url: '/sys/check/login',
+    url: '/sys/check/login?ISRSA=1',
     headers: {
       isToken: false
     },

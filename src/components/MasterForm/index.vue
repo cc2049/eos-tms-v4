@@ -98,20 +98,11 @@ const validate = () => {
           HASONLY: el.GROUPNO === 'TAB' ? el.COLUMNS.filter(al => al.ISONLY == '1') : []
         }
       })
-      // let InfoHasValid = InfoConfigList.value.filter(el => el.CONTROLS != 'WorkFlowTimeLine' && el.ISDISABLED != '1').map(el => {
-      //   return {
-      //     TYPE: "infoRef",
-      //     FIELD: el.FIELD,
-      //     GROUPNO: el.CONTROLS,
-      //     HASONLY: el.CONTROLS === 'TAB' ? el._config.tableColumns.filter(al => al.ISONLY == '1') : []
-      //   }
-      // })
       const HasValid = [...SubHasValid]
       if (HasValid.length == 0) {
         resolve(true);
       } else {
-        let validateArr = [],
-          RefArr = [...subFormRef.value ? Array.isArray(subFormRef.value) ? subFormRef.value : [subFormRef.value] : [], ...InfoRef.value ? InfoRef.value : []];
+        let validateArr = []
         for (let i = 0; i < HasValid.length; i++) {
           let { FIELD, GROUPNO, TYPE } = HasValid[i],
             refEl = proxy.$.refs[FIELD + 'Ref'];
