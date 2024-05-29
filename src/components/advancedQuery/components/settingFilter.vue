@@ -50,7 +50,7 @@
 <script setup>
 import { computed } from "vue";
 import FilterForm from "./filterForm"
-const emit = defineEmits('changeCondition', 'resetCondition', 'delFilterArr', 'changeCurrentQueryList','changeFilter')
+const emit = defineEmits('changeCondition', 'resetCondition', 'delFilterArr', 'changeCurrentQueryList', 'changeFilter')
 
 
 const props = defineProps({
@@ -89,22 +89,43 @@ const changeFilter = (val, item, index) => {
 }
 
 // const newfilterArrs = ref([])
-watch(() => props.filterArr, value => {
-    console.log("🚀 ~ watch ~ value:", value)
-    currentQueryList.value = value.map(ele => {
-        if (ele.BILLNO) {
-            return ele
-        } else {
-            return {
-                FIELD: '',
-                QUERYTYPE: '',
-                DEFAULTVAL: '',
-                DEFAULTVAL2: '',
-                SORTCODE: '',
-                DEFAULTVALArr: ''
-            }
+watch(() => props.filterArr, nArr => {
+    console.log("🚀 ~ watch ~ value:", nArr)
+
+    nArr.forEach((item, index) => {
+        console.log(currentQueryList.value[index])
+        if(currentQueryList.value[index]){
+            currentQueryList.value[index].FIELD = nArr[index].FIELD
+        }else{
+            currentQueryList.value[index] = {}
+            currentQueryList.value[index].FIELD = nArr[index].FIELD
         }
     })
+
+
+    // currentQueryList.value = value.map(ele => {
+    // console.log("🚀 ~ watch ~ ele:", ele)
+    //     if (ele.BILLNO) {
+    //         // return ele
+    //         return {
+    //             FIELD: ele.FIELD,
+    //             QUERYTYPE: '',
+    //             DEFAULTVAL: '',
+    //             DEFAULTVAL2: '',
+    //             SORTCODE: '',
+    //             DEFAULTVALArr: ''
+    //         }
+    //     } else {
+    //         return {
+    //             FIELD: '',
+    //             QUERYTYPE: '',
+    //             DEFAULTVAL: '',
+    //             DEFAULTVAL2: '',
+    //             SORTCODE: '',
+    //             DEFAULTVALArr: ''
+    //         }
+    //     }
+    // })
 
 }, { immediate: true })
 

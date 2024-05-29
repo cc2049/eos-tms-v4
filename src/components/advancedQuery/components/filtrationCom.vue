@@ -33,7 +33,7 @@ const props = defineProps({
         type: Array,
         default: [],
     },
-    defaultFilterArr: {
+    settingArr: {
         type: Array,
         default: [],
     }
@@ -59,6 +59,7 @@ const changeFilter = (val, item, index) => {
 watch(() => props.filterArr, value => {
     // newfilterArrs.value = value
     currentQueryList.value = value.map(ele => {
+
         if (ele.BILLNO) {
             return ele
         } else {
@@ -78,6 +79,11 @@ watch(() => props.filterArr, value => {
 
 watch(() => currentQueryList.value, value => {
     emit('changeCurrentQueryList', value)
+
+}, { immediate: true, deep: true })
+
+watch(() => props.settingArr, value => {
+    currentQueryList.value = JSON.parse(JSON.stringify(value))
 
 }, { immediate: true, deep: true })
 

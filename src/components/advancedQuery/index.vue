@@ -17,8 +17,8 @@
       <!-- <div style="width: calc(100% - 100px)"> -->
       <div class="oneLine">
         <FiltrationCom :filterConfig="filterConfig" :filterArr="filterArr" class="oneLine-left"
-          :style="{ height: FiltrationComHeight, maxWidth: binSize + 'px' }" :defaultFilterArr="defaultFilterArr"
-          @changeFilter="changeFilter" @changeCurrentQueryList="changeCurrentQueryList" />
+          :style="{ height: FiltrationComHeight, maxWidth: binSize + 'px' }" 
+          @changeFilter="changeFilter" @changeCurrentQueryList="changeCurrentQueryList" :settingArr="settingQueryList" />
         <div class="advancedQuery-rightBtn">
           <el-button type="primary" @click="searchBtn">
             <el-icon color="#fff" :size="20">
@@ -33,7 +33,7 @@
                 </el-icon>
               </el-button>
             </template>
-            <SettingFilter :filterConfig="filterConfig" :filterArr="filterArr" :defaultFilterArr="defaultFilterArr"
+            <SettingFilter :filterConfig="filterConfig" :filterArr="filterArr"
               @changeCondition="changeCondition" @resetCondition="resetCondition" @delFilterArr="delFilterArr"
               @changeFilter="changeFilter" @changeCurrentQueryList="settingChangeCurrentQueryList" />
             <el-divider />
@@ -174,16 +174,15 @@ watch(
     filterConfig.value.filterSeceletArr = props.queryConfig.filter(
       (el) => el.ISSHOW != 0
     );
-    defaultFilterArr.value = JSON.parse(
-      JSON.stringify(filterConfig.value.filterSeceletArr)
-    );
-    // filterArr.value = JSON.parse(JSON.stringify(defaultFilterArr.value));
+    
+    filterArr.value = JSON.parse(JSON.stringify(defaultFilterArr.value));
   },
   { immediate: true }
 );
 
 const querySaveList = ref([]);
 const changeCurrentQueryList = (val) => {
+  console.log("🚀 ~ changeCurrentQueryList ~ val:", val)
   clickStatus.value = 1;
   querySaveList.value = JSON.parse(JSON.stringify(val));
 };
@@ -191,6 +190,7 @@ const settingQueryList = ref([]);
 const settingChangeCurrentQueryList = (val) => {
   clickStatus.value = 2;
   settingQueryList.value = JSON.parse(JSON.stringify(val));
+  // querySaveList.value = JSON.parse(JSON.stringify(val));
 };
 
 const allocationPlanRef = ref(null);
