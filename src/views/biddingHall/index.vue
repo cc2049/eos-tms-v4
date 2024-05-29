@@ -461,11 +461,11 @@ const WINNUMList = ref([]);
 const cargoInfoList = ref([
   {
     title: "发货日期",
-    text: "BIDSTARTTIME",
+    text: "YQSTDATE",
   },
   {
     title: "要求送达日期",
-    text: "BIDSTARTTIME",
+    text: "YQEDDATE",
   },
   {
     title: "车辆类型",
@@ -477,11 +477,11 @@ const cargoInfoList = ref([
   },
   {
     title: "提供装货",
-    text: "BIDSTARTTIME",
+    text: "IS_LOAD",
   },
   {
     title: "提供卸货",
-    text: "BIDSTARTTIME",
+    text: "IS_UNLOAD",
   },
   {
     title: "提供发票",
