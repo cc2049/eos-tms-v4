@@ -2,16 +2,14 @@
  * @Author: cc2049
  * @Date: 2024-04-23 11:33:59
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-05-27 16:49:07
+ * @LastEditTime: 2024-05-28 22:33:19
  * @Description: 简介
 -->
 <template>
-
   <div class="page-container">
     <SingleTable v-if="!visibleFormPage" ref="listTableRef" :menuID="menuParams" :compType="routerParams.COMP" @openCustemPage="openCustemPages"  />
     <OpenCustom v-else :slotCustemPagePath="slotCustemPagePath" @backEvents="backEvent" />
   </div>
-
 </template>
 
 <script setup>

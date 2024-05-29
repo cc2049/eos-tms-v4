@@ -2,7 +2,7 @@
  * @Author: cc2049
  * @Date: 2024-04-28 13:10:44
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-05-28 18:52:58
+ * @LastEditTime: 2024-05-28 22:38:55
  * @Description: 简介
 -->
 <template v-if="pageConfig">
@@ -70,14 +70,6 @@ import { axiosGet } from "#/common";
 import { getUrlParams } from "@/utils";
 import EosTabs from "@/components/EosTabs/index.vue";
 import SubTable from "./SubTable.vue";
-
-import {
-  ElMessage,
-  ElMessageBox,
-  ElNotification,
-  ElLoading,
-} from "element-plus";
-
 const emit = defineEmits(["openCustemPage", "dbClick"]);
 const proxy = getCurrentInstance();
 
@@ -138,7 +130,11 @@ const changeTab = (e) => {
   // proxy.$modal.msgSuccess('切换成功</br>888888888888888888888888888888');
   activeTabsIndex.value = e.index;
   activeTabs.value = e.data;
-  getTableData()
+
+  pageConfig.value = e.data;
+  tableCFG.value = e.data.tableCFG;
+  setPageConfig();
+  getTableData();
   console.log(123, e);
 };
 
@@ -216,7 +212,7 @@ function reloadTableData() {
 }
 const advanceQueryRef = ref(null);
 function handleTopBtn(data) {
-  console.log(666, data);
+  // console.log(666, data);
   if (data.type == "openCustomPlan") {
     advanceQueryRef.value.openShowModal();
   } else if (data.type == "openCustemPage") {
@@ -302,6 +298,20 @@ const multiMainTable = ref([]);
 
 const { getConfig } = useTableConifg(props.menuID);
 
+const setPageConfig = () => {
+  topButton.value = pageConfig.value.topButton;
+  queryURL.value = pageConfig.value.queryUrl;
+  queryJSON.value = pageConfig.value.queryJson;
+  customPlan.value = pageConfig.value.customPlan;
+  SubTableConfig.value = pageConfig.value.subTable;
+  let getConfigPager = tableCFG.value.pagerConfig;
+  pageInfo.pageSize = getConfigPager.pageSize || 10;
+  queryJSON.value.PAGESIZE = pageInfo.pageSize;
+  nextTick(() => {
+    resetHeight();
+  });
+};
+
 watch(
   () => props.menuID,
   (value) => {
@@ -310,24 +320,15 @@ watch(
         console.log(888, res);
         if (Array.isArray(res.pageConfig)) {
           multiMainTable.value = res.pageConfig;
-          activeTabs.value = multiMainTable.value[0]
+          activeTabs.value = multiMainTable.value[0];
           pageConfig.value = multiMainTable.value[0];
           tableCFG.value = pageConfig.value.tableCFG;
         } else {
           pageConfig.value = res.pageConfig;
           tableCFG.value = pageConfig.value.tableCFG;
         }
-        topButton.value = pageConfig.value.topButton;
-        queryURL.value = pageConfig.value.queryUrl;
-        queryJSON.value = pageConfig.value.queryJson;
-        customPlan.value = pageConfig.value.customPlan;
-        SubTableConfig.value = pageConfig.value.subTable;
-        let getConfigPager = tableCFG.value.pagerConfig;
-        pageInfo.pageSize = getConfigPager.pageSize || 10;
-        queryJSON.value.PAGESIZE = pageInfo.pageSize;
-        nextTick(() => {
-          resetHeight();
-        });
+        setPageConfig();
+
         if (pageConfig.value.hasTree) {
           getTreeData();
         } else {

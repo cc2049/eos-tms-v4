@@ -2,7 +2,7 @@
  * @Author: cc2049
  * @Date: 2024-04-28 15:12:29
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-05-21 11:52:28
+ * @LastEditTime: 2024-05-29 10:20:34
  * @Description: 简介
 -->
 
@@ -48,7 +48,7 @@
 
       <div class="top-button-right">
         <div class="tool-wrap">
-          <el-icon color="#949eb5" :size="22" style="top:3px"> 
+          <el-icon color="#949eb5" :size="22" style="top:3px">
             <Icon icon="tabler:bulb-filled"></Icon>
           </el-icon>
         </div>
@@ -92,9 +92,6 @@
       </template>
     </vxe-modal>
 
-
-      
-
   </div>
 
 </template>
@@ -124,24 +121,17 @@ const props = defineProps({
   },
 });
 
-
-
-
-
 const isGetDetail = ref(false);
 const activeBtn = ref(null);
 function closeModal() {
   modalConfig.modalVisible = false;
 }
 
-
-
 const MenuID = inject("menuID");
 const formID = ref(null);
 const { proxy } = getCurrentInstance();
 // const emit = defineEmits(["handleTopBtn", "reloadTableData"]);
-const emit = defineEmits([ "reloadTableData"]);
-
+const emit = defineEmits(["reloadTableData"]);
 
 const modalConfig = reactive({
   modalW: 1000,
@@ -172,7 +162,9 @@ function checkboxChange(e) {
     let parentIndex = topButtonExpand.value.findIndex(
       (i) => i.BILLNO == e.label
     );
-    let newIndex = topButton.value.findIndex((i) => i.BILLNO == topButtonExpand.value[parentIndex].GROUPID);
+    let newIndex = topButton.value.findIndex(
+      (i) => i.BILLNO == topButtonExpand.value[parentIndex].GROUPID
+    );
     let subIndex = topButton.value[newIndex].CHILDREN.findIndex(
       (i) => i.BILLNO == e.label
     );
@@ -219,7 +211,6 @@ const setShowBtn = (btn) => {
   }
 };
 
-
 function leftHandleEvent(type) {
   switch (type) {
     case 1:
@@ -251,15 +242,12 @@ function handleEvent(data) {
   } else {
   }
 
-  if( data.VTYPE == 1){
+  if (data.VTYPE == 1) {
     if (data.PK_PAGE && data?.PK_PAGE == "slot") {
-      emit("handleTopBtn", { type: "openCustemPage",btnConf:data });
-
-    } 
-
-  }else 
-  
-  if (// 打开弹窗
+      emit("handleTopBtn", { type: "openCustemPage", btnConf: data });
+    }
+  } else if (
+    // 打开弹窗
     data.VTYPE == 2 ||
     data.VTYPE == 20 ||
     data.VTYPE == 27
@@ -271,6 +259,7 @@ function handleEvent(data) {
       isGetDetail.value = true;
     }
     modalConfig.modalVisible = true;
+    modalConfig.pageTitle = data.VNAME;
     formID.value = {
       MODULEID: data.PK_MODULE,
       PAGEID: data.PK_PAGE,
@@ -325,7 +314,6 @@ function handleEvent(data) {
     downFilesByUrl(data);
   } else if (data.VTYPE == 21) {
     console.log(selectRecords);
-    
   }
 }
 
@@ -369,8 +357,6 @@ function submitByBtn(btn, data) {
 
   submitEvent(btn.ACTIONADDRESS, sdata);
 }
-
-
 
 // 数据提交
 function submitEvent(URL, sdata) {

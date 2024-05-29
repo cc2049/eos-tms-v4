@@ -2,7 +2,7 @@
  * @Author: cc2049
  * @Date: 2024-05-22 12:03:45
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-05-28 18:39:09
+ * @LastEditTime: 2024-05-28 22:51:51
  * @Description: 简介
 -->
 <template>
@@ -40,8 +40,8 @@ const change = (item, index) => {
     text-align: center;
     cursor: pointer;
     border-radius: 4px 4px 0 0;
-    background-color: #fff;
-    color: #333;
+    background-color: #EEF2F8;
+    color: #273447;
     padding: 0 10px;
     &.active {
       color: #fff;
