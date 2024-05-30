@@ -2,7 +2,7 @@
  * @Author: cc2049
  * @Date: 2024-05-22 08:30:20
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-05-30 19:31:02
+ * @LastEditTime: 2024-05-30 20:24:49
  * @Description: 简介
 -->
 
@@ -76,16 +76,17 @@ const tableCFG = reactive({
 });
 
 onMounted(() => {
-  const { COLUMNS, TABLEHEIGHT } = props.SubTableConfig[0];
+  const { COLUMNS,  TABLEHEIGHT } = props.SubTableConfig[0];
+   tableCFG.height = props.subLayout == 1 ? props.height : TABLEHEIGHT;
   tableCFG.tableColumns = COLUMNS;
 });
 
 watch(
   () => props.height,
   (value) => {
+    const { TABLEHEIGHT } = props.SubTableConfig[0];
     tableCFG.height = props.subLayout == 1 ? props.height : TABLEHEIGHT;
-  console.log(666, props.subLayout, props.height, tableCFG.height);
-
+    console.log(666, props.subLayout ,  tableCFG.height );
   }
 );
 

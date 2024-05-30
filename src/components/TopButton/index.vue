@@ -2,7 +2,7 @@
  * @Author: cc2049
  * @Date: 2024-04-28 15:12:29
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-05-29 10:20:34
+ * @LastEditTime: 2024-05-30 20:42:12
  * @Description: 简介
 -->
 
@@ -88,7 +88,7 @@
         </span>
       </template>
       <template #default>
-        <FormPage :menuID="formID" @closeModal="closeModal" :isGetDetail :currentData :activeBtn :topButton />
+        <FormPage :menuID="formID" @closeModal="closeModal" @refreshTable="refreshTable" :isGetDetail :currentData :activeBtn :topButton />
       </template>
     </vxe-modal>
 
@@ -222,11 +222,15 @@ function leftHandleEvent(type) {
   }
 }
 
+function refreshTable() {
+  emit("reloadTableData");
+}
+
 // proxy.$emit("handelEvent", { data, row: null });
 
 // 表格的顶部按钮操作
 function handleEvent(data) {
-  console.log("handelEvent", data);
+  console.log("handelEvent22", data);
   let selectRecords = props.currentData;
 
   activeBtn.value = data;
@@ -354,7 +358,6 @@ function submitByBtn(btn, data) {
   }
   sdata.MODULEID = btn.PK_MODULE;
   sdata.PAGEID = btn.PK_PAGE;
-
   submitEvent(btn.ACTIONADDRESS, sdata);
 }
 
