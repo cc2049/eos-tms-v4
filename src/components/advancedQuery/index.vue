@@ -61,7 +61,7 @@
     </div>
 
     <AllocationPlan :showModal="showModal" :leftList="myPlanList" @updateLeftList="getPlanList" ref="allocationPlanRef"
-      @closeModal="closeShowModal"></AllocationPlan>
+      :filterConfig="filterConfig" @closeModal="closeShowModal"></AllocationPlan>
 
   </div>
 </template>

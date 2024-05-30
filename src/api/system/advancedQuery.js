@@ -46,3 +46,12 @@ export function savePlan(data) {
     data: data
   })
 }
+
+// 方案信息查询
+export function getSubList(data) {
+  return request({
+    url: 'sys/queryprogUserDtl/getSubList',
+    method: 'post',
+    data: data
+  })
+}
