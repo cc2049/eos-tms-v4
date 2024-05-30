@@ -12,8 +12,8 @@ importers:
         specifier: 2.3.1
         version: 2.3.1(vue@3.4.27)
       '@eosine/form':
-        specifier: ^0.0.59
-        version: 0.0.59
+        specifier: ^0.0.62
+        version: 0.0.62
       '@visactor/vchart':
         specifier: ^1.10.5
         version: 1.11.0
@@ -304,8 +304,8 @@ packages:
     peerDependencies:
       vue: ^3.2.0
 
-  '@eosine/form@0.0.59':
-    resolution: {integrity: sha512-4cm0gbefj8z2ri2WuGhd0HS3b7dk4WYDNVlu4S9ltaUbeHCMd5e14lY9pI6uN7A0+dNyfUuYS4iRMwbURIMaAA==}
+  '@eosine/form@0.0.62':
+    resolution: {integrity: sha512-mwKSgjKunJZBM3rxSBugdMzDsyNEF7tJQvQxpjsjCfyWpdDB8ujojiPPer2wpoufapK4G+FwHiWT7RFlOcdkpw==}
 
   '@esbuild/aix-ppc64@0.19.12':
     resolution: {integrity: sha512-bmoCYyWdEL3wDQIVbcyzRyeKLgk2WtWLTWz1ZIAZF/EGbNOwSA6ew3PftJ1PqMiOOGu0OyFMzG53L0zqIpPeNA==}
@@ -3284,13 +3284,13 @@ snapshots:
     dependencies:
       vue: 3.4.27
 
-  '@eosine/form@0.0.59':
+  '@eosine/form@0.0.62':
     dependencies:
       '@element-plus/icons-vue': 2.3.1(vue@3.4.27)
       '@wangeditor/editor': 5.1.23
       '@wangeditor/editor-for-vue': 5.1.12(@wangeditor/editor@5.1.23)(vue@3.4.27)
       element-plus: 2.7.3(vue@3.4.27)
-      lodash: 4.17.21
+      lodash-es: 4.17.21
       pinia: 2.1.7(vue@3.4.27)
       pinia-plugin-persist: 1.0.0(pinia@2.1.7(vue@3.4.27))(vue@3.4.27)
       vue: 3.4.27
