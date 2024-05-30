@@ -7,11 +7,21 @@
 <template>
   <div class="filterForm">
 
+    <div class="firstSelect ml10 mr10" v-if="isCondition">
+      <el-select v-model="formData.QRYPRE" placeholder="" style="width: 50px" :size="commonSize" @change="changeFilter">
+        <el-option label="(" value="(" />
+        <el-option label="((" value="((" />
+        <el-option label="(((" value="(((" />
+      </el-select>
+    </div>
+
     <div class="firstSelect mr10">
       <el-select v-model="formData.FIELD" placeholder="请选择" style="width: 120px" :size="commonSize" @change="changeFilter">
         <el-option v-for="item in filterSeceletArrs" :key="item.FIELD" :label="item.LABEL" :value="item.FIELD" />
       </el-select>
     </div>
+
+
 
     <div class="mr10">
       <el-select v-model="formData.QUERYTYPE" placeholder="请选择" style="width: 100px" :size="commonSize">
@@ -115,6 +125,21 @@
                 </el-input> -->
     </div>
 
+    <div class="firstSelect ml10 mr10" v-if="isCondition">
+      <el-select v-model="formData.QRYSUF" placeholder="" style="width: 50px" :size="commonSize" @change="changeFilter">
+        <el-option label=")" value=")" />
+        <el-option label="))" value="))" />
+        <el-option label=")))" value=")))" />
+      </el-select>
+    </div>
+
+    <div class="firstSelect mr10" v-if="isCondition">
+      <el-select v-model="formData.QRYCONT" placeholder="" style="width: 80px" :size="commonSize" @change="changeFilter">
+        <el-option label="并且" value="and" />
+        <el-option label="或者" value="or" />
+      </el-select>
+    </div>
+
   </div>
 </template>
 
@@ -138,6 +163,10 @@ const props = defineProps({
     type: Object,
     default: {},
   },
+  isCondition:{
+    type: Boolean,
+    default: false,
+  }
 });
 
 

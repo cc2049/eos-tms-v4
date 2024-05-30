@@ -7,7 +7,7 @@
 <template>
     <div class="container">
 
-        <vxe-modal destroy-on-close v-model="showModals" id="formModal" :width="600" resize storage transfer show-zoom
+        <vxe-modal destroy-on-close v-model="showModals" id="formModal" :width="970" resize storage transfer show-zoom
             @close="closeModal">
             <template #title>
                 <span class="modal-title"> 列表过滤
@@ -45,6 +45,9 @@
                                 :class="chooseTabVal == item ? 'active' : ''" @click="chooseTab(item)">
                                 {{ item }}
                             </div>
+                        </div>
+                        <div v-if="chooseTabVal == '条件' && choosePlanObj.BILLNO">
+                            <ConditionModule :filterConfig :filterArr="conditionModuleList" :choosePlanObj @closeModal="closeModal" />
                         </div>
                     </div>
                 </div>
@@ -103,8 +106,9 @@
 <script setup>
 
 const emit = defineEmits(["update:formData", "updateLeftList"]);
-import { addPlan, updatePlan, deleteBatchIds } from "#/system/advancedQuery";
+import { addPlan, updatePlan, deleteBatchIds, getSubList } from "#/system/advancedQuery";
 import { inject, reactive } from "vue";
+import ConditionModule from "./conditionModule.vue"
 
 const { proxy } = getCurrentInstance();
 
@@ -121,7 +125,11 @@ const props = defineProps({
     leftList: {
         type: Array,
         default: [],
-    }
+    },
+    filterConfig: {
+        type: Object,
+        default: {},
+    },
     // filterVal: {
     //     type: Object,
     //     default: {},
@@ -147,9 +155,17 @@ const changeBox = (val) => {
 
 
 const choosePlanObj = ref({})
+const conditionModuleList=ref([])
 const clickLeftPlan = (item) => {
 
     choosePlanObj.value = item
+    const protData = {
+        PKBILLNO: item.BILLNO,
+        ...MenuID.value,
+    }
+    getSubList(protData).then((res) => {
+       conditionModuleList.value = res.RESULT
+    });
 
 }
 
