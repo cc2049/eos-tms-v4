@@ -2,7 +2,7 @@
  * @Author: cc2049
  * @Date: 2024-04-28 13:10:44
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-05-28 22:38:55
+ * @LastEditTime: 2024-05-30 18:44:32
  * @Description: 简介
 -->
 <template v-if="pageConfig">
@@ -37,8 +37,17 @@
         <EosTabs :tabsList="multiMainTable" @change="changeTab" />
       </template>
 
-      <Vxtable ref="VxtableRef" class="bg-white" :tableCFG="tableCFG" :tableData="tableData" @change="tableChange" @dragRow="dragTableRow" @queryEvent="queryEvent" @resetConfig="resetConfig" @dbClick="dbClickTable">
-      </Vxtable>
+      <div class="main-sub-table flex">
+
+        <div class="left-table " :style="{width: SubLayoutConfig.subLayout==1? SubLayoutConfig.subLayoutLeft : '100%'}">
+          <Vxtable ref="VxtableRef" class="bg-white" :tableCFG="tableCFG" :tableData="tableData" :sourceTableData="sourceTableData" @change="tableChange" @dragRow="dragTableRow" @queryEvent="queryEvent" @resetConfig="resetConfig" @filterNameEvent="filterNameEvent" @dbClick="dbClickTable">
+          </Vxtable>
+        </div>
+
+        <div class="right-table ml-6" :style="{width:'50%'}" v-if="SubLayoutConfig.subLayout==1 && SubTableConfig.length">
+          <SubTable ref="SubTableRef" :SubTableConfig />
+        </div>
+      </div>
 
       <div class="pager-wrap flex flex-items-center" :class=" compType=='VTableSub'?'justify-between':'justify-end' ">
         <EosTabs :tabsList="SubTableConfig" @change="changeTab" v-if="compType=='VTableSub' && SubTableConfig.length" />
@@ -86,11 +95,17 @@ const VxtableRef = ref(null);
 const pageConfig = ref(null);
 const tableCFG = ref(null);
 const tableData = ref([]);
+const sourceTableData = ref([]);
 const treeData = ref([]);
 const showZtree = ref(true);
 const defaultExpandedKeys = ref([]);
 
 const SubTableConfig = ref([]);
+const SubLayoutConfig = ref({
+  subLayout: 0,
+  subLayoutLeft: "50%",
+  subLayoutRight: "50%",
+});
 
 const SubTableRef = ref(null);
 
@@ -127,15 +142,13 @@ const activeTabsIndex = ref(0);
 const activeTabs = ref(null);
 
 const changeTab = (e) => {
-  // proxy.$modal.msgSuccess('切换成功</br>888888888888888888888888888888');
   activeTabsIndex.value = e.index;
   activeTabs.value = e.data;
-
   pageConfig.value = e.data;
   tableCFG.value = e.data.tableCFG;
   setPageConfig();
   getTableData();
-  console.log(123, e);
+  // console.log(123, e);
 };
 
 // 表格内部的多选事件，顶部筛选排序事件, 超链接事件
@@ -162,7 +175,7 @@ function tableChange(data) {
     handelEvent({ data: detailBtnCFG.value, row: data.data });
   } else if (data.clicktype == "checkbox") {
     currentData.value = data.data;
-    if (props.compType == "VTableSub" && SubTableConfig.value.length) {
+    if ((props.compType == "VTableZtree" || props.compType == "VTableSub") && SubTableConfig.value.length) {
       SubTableRef.value.getSubData(currentData.value);
     }
     // let expandRow = getRowExpandRecords()
@@ -230,6 +243,18 @@ function treeClick(data) {
   getTableData();
 }
 
+function filterNameEvent(data) {
+  let copyTableData = JSON.parse(JSON.stringify(sourceTableData.value));
+  let id = data.config.FIELD,
+    checkList = data.checkList;
+
+  let newTableData = copyTableData.filter((item) => {
+    return checkList.includes(item[id]);
+  });
+  tableData.value = newTableData;
+  pageInfo.totalResult = newTableData.length;
+}
+
 // 分页点击
 function handlePageChange({ currentPage, pageSize }) {
   pageInfo.currentPage = currentPage;
@@ -257,7 +282,6 @@ const getTableData = () => {
     .then((res) => {
       currentData.value = [];
       tableCFG.value.loading = false;
-
       if (Array.isArray(res.RESULT)) {
         tableData.value = res.RESULT;
         pageInfo.totalResult = res.RESULT.length;
@@ -266,6 +290,11 @@ const getTableData = () => {
         tableData.value = RECORDS;
         pageInfo.totalResult = TOTAL;
       }
+      sourceTableData.value = JSON.parse(JSON.stringify(tableData.value));
+    })
+    .catch(() => {
+      tableCFG.value.loading = false;
+      // console.log(res.RESULT);
     })
     .catch(() => {
       tableCFG.value.loading = false;
@@ -304,9 +333,12 @@ const setPageConfig = () => {
   queryJSON.value = pageConfig.value.queryJson;
   customPlan.value = pageConfig.value.customPlan;
   SubTableConfig.value = pageConfig.value.subTable;
+  SubLayoutConfig.value = pageConfig.value.subConfig;
   let getConfigPager = tableCFG.value.pagerConfig;
   pageInfo.pageSize = getConfigPager.pageSize || 10;
   queryJSON.value.PAGESIZE = pageInfo.pageSize;
+
+  console.log(999, SubLayoutConfig.value);
   nextTick(() => {
     resetHeight();
   });

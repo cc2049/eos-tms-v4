@@ -59,7 +59,7 @@
           <vxe-column :field="config.FIELD" :align="config.ALIGN" :width="setColWidth(config)" :title=" setColTitle(config)  " :fixed="config.ISFIXED=='left'?'left':null" :height="30" :resizable="true" :key="i" :tree-node=" tableCFG.treeID?.treenodeId == config.FIELD "
             :visible="setTableColShow(config)" :sortable="config.ISSORT == 1">
             <template #header="{ column }">
-              <Header :column="column" :config="config" :sortCFG :tableCFG="tableCFG" @filterEvent="filterEvent" @handleSortEvent="headerCellClickEvent" @rightClick="rightClickEvent" @setColShowEvent="setColShowEvent" />
+              <Header :column="column" :config="config" :tableData="sourceTableData" :sortCFG :tableCFG="tableCFG" @filterEvent="filterEvent" @handleSortEvent="headerCellClickEvent" @rightClick="rightClickEvent" @setColShowEvent="setColShowEvent" />
             </template>
 
             <template #default="{ row }">
@@ -285,7 +285,7 @@
       </vxe-column>
 
       <template #empty>
-        <el-empty :image="emptyImg" description="很抱歉，暂时没有相关数据~" :image-size="200" />
+        <el-empty :image="emptyImg" description="很抱歉，暂时没有相关数据~" :image-size="150" />
       </template>
     </vxe-table>
 
@@ -397,7 +397,7 @@ const cellClassName = ({ row, column }) => {
   return null;
 };
 
-const emit = defineEmits(["dragRow", "queryEvent", "resetConfig"]);
+const emit = defineEmits(["dragRow", "queryEvent", "resetConfig" ,"filterNameEvent"]);
 const props = defineProps({
   // 配置
   tableCFG: {
@@ -406,6 +406,11 @@ const props = defineProps({
   },
   // 数据
   tableData: {
+    type: Array,
+    default: [],
+  },
+  // 表格的原数据
+  sourceTableData:{
     type: Array,
     default: [],
   },
@@ -967,13 +972,13 @@ const searchCtrl = ref("ExSelectSearch");
 const DateCtrl = ref("ExDate,ExDateTime,ExTime");
 
 // 过滤事件
-const filterNameMethod = ({ value, row }) => {
-  proxy.$emit("queryEvent");
-  return row;
-};
+// const filterNameMethod = ({ value, row }) => {
+//   proxy.$emit("queryEvent");
+//   return row;
+// };
 
-const filterEvent = () => {
-  proxy.$emit("queryEvent");
+const filterEvent = (data) => {
+  proxy.$emit("filterNameEvent",data);
 };
 
 // 时间确认事件
@@ -1277,130 +1282,8 @@ const rowDrop = () => {
   );
 };
 
-// 下拉查询事件
-const SelectLoading = ref(false);
-const SelectValueTo = ref(null);
-const SelectFocus = (config) => {
-  SelectQuery("", config);
-};
-
 const router = useRouter();
 const MENUID = router.currentRoute.value.meta.BILLNO;
-
-const SelectQuery = (keyword = undefined, config) => {
-  if (keyword == undefined) return;
-  let { FIELD, DEFAULTVAL, CONTROLS, OTHER } = config;
-  if (OTHER == "") return;
-  let { url, data } = ParseOtherConfig(OTHER);
-  if (url == "") return;
-  SelectLoading.value = true;
-  proxy
-    .request({
-      url: url,
-      method: "post",
-      data: {
-        KEYWORD: keyword,
-        MODULEID: MENUID,
-        ...data,
-      },
-      headers: {
-        repeatSubmit: false,
-      },
-    })
-    .then(({ RESULT }) => {
-      props.tableCFG.queryJson.EnumData[FIELD] = RESULT;
-    })
-    .catch(() => {
-      props.tableCFG.queryJson.EnumData[FIELD] = [];
-    })
-    .finally(() => {
-      SelectLoading.value = false;
-    });
-};
-
-const SelectChange = () => {
-  filterEvent();
-};
-
-// 解析 Other 配置
-function ParseOtherConfig(config) {
-  if (!config) {
-    SelectValueTo.value = [];
-    return { url: "", data: {}, importantData: {} };
-  }
-  try {
-    let newConfig = JSON.parse(config)[0];
-    if (newConfig.setvalue && JSON.stringify(newConfig.setvalue) != "{}") {
-      let arr = [];
-      for (const key in newConfig.setvalue) {
-        arr.push({ k: key, v: newConfig.setvalue[key] });
-      }
-      SelectValueTo.value = arr;
-    }
-    return {
-      url: newConfig.url,
-      data: newConfig?.params,
-      importantData: newConfig?.importantData,
-    };
-  } catch (error) {
-    if (config.indexOf("/") == "0") {
-      let paramsArr = config.split("?"),
-        url = "",
-        setQueryParam = {},
-        queryJson = {},
-        setImportantParam = {},
-        importantData = {};
-      if (paramsArr.length == 0) {
-        url = config;
-        SelectValueTo.value = [];
-      } else if (paramsArr.length > 0) {
-        url = paramsArr[0];
-        if (paramsArr.length > 1) {
-          let { obj, importantObj } = GetUrlParams("a?" + paramsArr[1], "obj");
-          queryJson = obj;
-          importantData = importantObj;
-        }
-        if (paramsArr.length > 2) {
-          let { obj, importantObj } = GetUrlParams("a?" + paramsArr[2], "obj");
-          setQueryParam = obj;
-          setImportantParam = importantObj;
-          queryJson = { ...queryJson, ...ConvertData(setQueryParam) };
-          importantData = {
-            ...importantData,
-            ...ConvertData(setImportantParam),
-          };
-        }
-        paramsArr[3]
-          ? (SelectValueTo.value = GetUrlParams("a?" + paramsArr[3], "arr"))
-          : [];
-      }
-      return { url, data: queryJson, importantData };
-    } else {
-      console.error("配置解析错误!", error);
-    }
-  }
-}
-
-// 获取url 后面的参数
-function GetUrlParams(url, backType) {
-  let reg = /([^&?=]+)=([^&?=]+)/g,
-    obj = {},
-    importantObj = {},
-    arr = [];
-  url.replace(reg, function () {
-    if (arguments[1].includes("!")) {
-      let key = arguments[1].substr(1); //删除第一个字符
-      importantObj[key] = arguments[2];
-    } else {
-      obj[arguments[1]] = arguments[2];
-    }
-    let objs = {};
-    objs.k = arguments[1];
-    objs.v = arguments[2];
-    arr.push(objs);
-  });
-  return backType == "obj" ? { obj, importantObj } : arr;
-}
 
 /** 获取附件数量 */
 const getFileLength = computed((row, FIELD) => {

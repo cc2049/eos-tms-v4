@@ -951,13 +951,12 @@ export function evalFun(DATA, OTHER) {
   return eval(OTHER)
 }
 
-export function percentageToNumber(percentage) {
-  // 去除百分号
+export function percentageToNumber(percentage='50%') {
   const percentageWithoutSign = percentage.replace('%', '');
-  // 将字符串转化为浮点数
-  const number = parseFloat(percentageWithoutSign);
-  // 将浮点数除以100，得到百分数对应的小数
-  return number / 100;
+  let  number = percentageWithoutSign*1 ;
+  number = number > 99 ? 100 : number;
+  let newNum =  (100 - number) + "%";
+  return newNum;
 }
 
 // 获取详情按钮接口
