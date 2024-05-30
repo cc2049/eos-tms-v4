@@ -2,7 +2,7 @@
  * @Author: cc2049
  * @Date: 2024-04-28 13:10:44
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-05-30 18:44:32
+ * @LastEditTime: 2024-05-30 19:16:34
  * @Description: 简介
 -->
 <template v-if="pageConfig">
@@ -44,8 +44,8 @@
           </Vxtable>
         </div>
 
-        <div class="right-table ml-6" :style="{width:'50%'}" v-if="SubLayoutConfig.subLayout==1 && SubTableConfig.length">
-          <SubTable ref="SubTableRef" :SubTableConfig />
+        <div class="right-table ml-6" :style="{width: SubLayoutConfig.subLayoutLeft }" v-if="SubLayoutConfig.subLayout==1 && SubTableConfig.length">
+          <SubTable ref="SubTableRef" :SubTableConfig :subLayout="SubLayoutConfig.subLayout" :height="tableCFG.height " />
         </div>
       </div>
 
@@ -337,8 +337,6 @@ const setPageConfig = () => {
   let getConfigPager = tableCFG.value.pagerConfig;
   pageInfo.pageSize = getConfigPager.pageSize || 10;
   queryJSON.value.PAGESIZE = pageInfo.pageSize;
-
-  console.log(999, SubLayoutConfig.value);
   nextTick(() => {
     resetHeight();
   });
