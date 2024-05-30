@@ -3,7 +3,7 @@
     <eos-form ref="FormRef" v-model="formData" :config="formConfig" :detail="detail" @openModal="openModal">
       <template #SubTable="{ config }" v-if="tableConfig.length > 0">
         <div class="formTable" :style="`margin-left:-${labelWidth}`">
-          <SubTableCom :ref="config.FIELD+'Ref'" :key="config.FIELD" :detail="detail || config.ISDISABLED == '1'" :title="config.LABEL" :config="GET_TableConfig(config)" v-model:data="formData[config.FIELD]" v-model:mainFormData="formData" :othConfig="othConfig" @EtbaleLinkChange="EtbaleLinkChange" @updateTableData="UPDATA_TableData">
+          <SubTableCom :ref="config.FIELD+'Ref'" :key="config.FIELD" :detail="detail || config.ISDISABLED == '1'" :title="config.LABEL" :config="GET_TableConfig(config)" v-model="formData[config.FIELD]" v-model:mainFormData="formData" :othConfig="othConfig" @EtbaleLinkChange="EtbaleLinkChange" @updateTableData="UPDATA_TableData">
             <template #modalBtnAfter>
               <slot name="modalBtnAfter" />
             </template>
