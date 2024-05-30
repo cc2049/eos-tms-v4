@@ -9,7 +9,7 @@
     <div class="disflex advancedQuery-alone mb20">
       <div class="advancedQuery-title">我的方案</div>
       <div class="currentRadio" :class="chooseRadioVal == item.BILLNO ? 'active' : ''"
-        v-for="(item, index) in myPlanList" :key="index" @click="clickRadio(item, index)"> {{ item.VNAME }}
+        v-for="(item, index) in myPlanList" :key="index" @click="clickRadio(item)"> {{ item.VNAME }}
       </div>
     </div>
     <div class=" advancedQuery-alone ">
@@ -17,8 +17,8 @@
       <!-- <div style="width: calc(100% - 100px)"> -->
       <div class="oneLine">
         <FiltrationCom :filterConfig="filterConfig" :filterArr="filterArr" class="oneLine-left"
-          :style="{ height: FiltrationComHeight, maxWidth: binSize + 'px' }" 
-          @changeFilter="changeFilter" @changeCurrentQueryList="changeCurrentQueryList" :settingArr="settingQueryList" />
+          :style="{ height: FiltrationComHeight, maxWidth: binSize + 'px' }" @changeFilter="changeFilter"
+          @changeCurrentQueryList="changeCurrentQueryList" :settingArr="settingQueryList" />
         <div class="advancedQuery-rightBtn">
           <el-button type="primary" @click="searchBtn">
             <el-icon color="#fff" :size="20">
@@ -33,9 +33,9 @@
                 </el-icon>
               </el-button>
             </template>
-            <SettingFilter :filterConfig="filterConfig" :filterArr="filterArr"
-              @changeCondition="changeCondition" @resetCondition="resetCondition" @delFilterArr="delFilterArr"
-              @changeFilter="changeFilter" @changeCurrentQueryList="settingChangeCurrentQueryList" />
+            <SettingFilter :filterConfig="filterConfig" :filterArr="filterArr" @changeCondition="changeCondition"
+              @resetCondition="resetCondition" @delFilterArr="delFilterArr" @changeFilter="changeFilter"
+              @changeCurrentQueryList="settingChangeCurrentQueryList" />
             <el-divider />
             <div class="tr">
               <el-button @click="visible = false" size="mini">取消</el-button>
@@ -111,7 +111,7 @@ const defaultFilterArr = ref([]);
 // 我的方案
 const chooseRadioVal = ref(null);
 const myPlanList = ref([]);
-const clickRadio = (item, index) => {
+const clickRadio = (item) => {
   chooseRadioVal.value = item.BILLNO;
 
   let query = {
@@ -174,7 +174,7 @@ watch(
     filterConfig.value.filterSeceletArr = props.queryConfig.filter(
       (el) => el.ISSHOW != 0
     );
-    
+
     filterArr.value = JSON.parse(JSON.stringify(defaultFilterArr.value));
   },
   { immediate: true }
@@ -219,11 +219,17 @@ const getPlanList = () => {
     myPlanList.value = res.RESULT;
     if (myPlanList.value.length) {
       let newArr = myPlanList.value.filter((ele) => ele.ISDEFAULT == 1);
-      !chooseRadioVal.value
-        ? (chooseRadioVal.value = newArr.length
-          ? newArr[0].BILLNO
-          : myPlanList.value[0].BILLNO)
-        : "";
+      // !chooseRadioVal.value
+      //   ? (chooseRadioVal.value = newArr.length
+      //     ? newArr[0].BILLNO
+      //     : myPlanList.value[0].BILLNO)
+      //   : "";
+
+      if (!chooseRadioVal.value) {
+        clickRadio(newArr[0])
+      }
+
+
     }
   });
 };
