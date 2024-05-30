@@ -204,11 +204,31 @@ const clickSavePlan = () => {
 
 // 调用保存方案
 const callAddition = () => {
+  let QUERYS = []
+  QUERYS = querySaveList.value.map(ele => {
+    return {
+      FIELD: ele.FIELD,
+      QUERYTYPE: ele.QUERYTYPE,
+      DEFAULTVAL: ele.DEFAULTVAL,
+      DEFAULTVAL2: ele.DEFAULTVAL2,
+      SORTCODE: ele.SORTCODE,
+      DEFAULTVALArr: ele.DEFAULTVALArr,
+      QRYCONT: ele.QRYCONT,
+      QRYPRE: ele.QRYPRE,
+      QRYSUF: ele.QRYSUF,
+    }
+  })
+
   const protData = {
     BILLNO: chooseRadioVal.value, // 方案主键
-    QUERYS: querySaveList.value,
+    QUERYS,
     ...MenuID.value,
   };
+  // const protData = {
+  //   BILLNO: chooseRadioVal.value, // 方案主键
+  //   QUERYS: querySaveList.value,
+  //   ...MenuID.value,
+  // };
   savePlan(protData).then((res) => {
     proxy.$modal.msgSuccess("保存成功");
   });
