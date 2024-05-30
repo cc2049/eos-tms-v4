@@ -164,7 +164,6 @@ const plusRow = (checkData = false) => {
     pageConfig.modelTitle = "添加"
     pageConfig.modalVisible = true;
   } else {
-    if (checkData == 'true' && newData.value.length > 0) return false
     subFormRef.value?.xEditTable.insertAt(BaseRowData.value, -1);
     updateTable()
   }
@@ -324,17 +323,13 @@ const InitConfig = () => {
   BaseRowData.value = deepClone(form)
   form.value = deepClone(BaseRowData.value)
   Rules.value = getFormRule(COLUMNS)
-  if (!props.detail && ShowType.value == 'row') {
-    setTimeout(() => {
-      plusRow(true)
-    }, 200)
+  if (!props.detail && ShowType.value == 'row' && newData.value.length == 0) {
+    newData.value = [deepClone(form)]
   }
 };
 
-watch(() => props.modelValue, val => {
+onMounted(() => {
   InitConfig();
-}, {
-  immediate: true
 })
 
 defineExpose({ type: "table", Field, updateTable, validate, xEditTable: xEditTable });
