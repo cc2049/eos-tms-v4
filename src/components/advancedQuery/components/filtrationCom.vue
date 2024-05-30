@@ -83,7 +83,7 @@ watch(() => currentQueryList.value, value => {
 }, { immediate: true, deep: true })
 
 watch(() => props.settingArr, value => {
-    currentQueryList.value = JSON.parse(JSON.stringify(value))
+    // currentQueryList.value = JSON.parse(JSON.stringify(value))
 
 }, { immediate: true, deep: true })
 

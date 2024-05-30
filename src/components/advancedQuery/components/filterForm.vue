@@ -8,7 +8,7 @@
   <div class="filterForm">
 
     <div class="firstSelect ml10 mr10" v-if="isCondition">
-      <el-select v-model="formData.QRYPRE" placeholder="" style="width: 50px" :size="commonSize" @change="changeFilter">
+      <el-select v-model="formData.QRYPRE" placeholder="" style="width: 50px" :size="commonSize">
         <el-option label="(" value="(" />
         <el-option label="((" value="((" />
         <el-option label="(((" value="(((" />
@@ -126,7 +126,7 @@
     </div>
 
     <div class="firstSelect ml10 mr10" v-if="isCondition">
-      <el-select v-model="formData.QRYSUF" placeholder="" style="width: 50px" :size="commonSize" @change="changeFilter">
+      <el-select v-model="formData.QRYSUF" placeholder="" style="width: 50px" :size="commonSize">
         <el-option label=")" value=")" />
         <el-option label="))" value="))" />
         <el-option label=")))" value=")))" />
@@ -134,7 +134,7 @@
     </div>
 
     <div class="firstSelect mr10" v-if="isCondition">
-      <el-select v-model="formData.QRYCONT" placeholder="" style="width: 80px" :size="commonSize" @change="changeFilter">
+      <el-select v-model="formData.QRYCONT" placeholder="" style="width: 80px" :size="commonSize">
         <el-option label="并且" value="and" />
         <el-option label="或者" value="or" />
       </el-select>
@@ -175,6 +175,7 @@ const filterSeceletArrs = computed(() => props.filterConfig.filterSeceletArr);
 // const filterSeceletArrs1 = computed(() => props.filterConfig.filterSeceletArr1)
 const filterSeceletArrs1 = ref([]);
 const currentConfig = computed(() => props.filterVal);
+console.log("🚀 ~ currentConfig:", currentConfig.value)
 
 const selectvalue = ref(null);
 const selectvalue1 = ref(null);
