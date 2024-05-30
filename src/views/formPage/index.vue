@@ -1,14 +1,14 @@
 <!--
  * @Author: cc2049
  * @Date: 2024-04-23 11:35:41
- * @LastEditors: PiPin 33947354+p1Master@users.noreply.github.com
- * @LastEditTime: 2024-05-24 18:19:27
+ * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2024-05-30 20:39:17
  * @Description: 大表单组件
 -->
 
 <template>
   <div class="form-container">
-    <TopButton :topButton="topButton" sourceType="2" @handleBtnEvent="handleBtnEvent" @reloadTableData="reloadTableData" />
+    <TopButton :topButton="topButton" sourceType="2" @handleBtnEvent="handleBtnEvent"  />
     <MasterForm ref="eosFormRef" v-model="formData" :formConfig="formConfig" :detail="detail" :tableConfig="tableConfig" />
   </div>
 </template>
@@ -33,7 +33,7 @@ const props = defineProps({
   activeBtn: {},
   topButton: {}
 });
-const emit = defineEmits(["closeModal"]);
+const emit = defineEmits(["closeModal","refreshTable"]);
 
 const { proxy } = getCurrentInstance();
 const eosFormRef = ref(null);
@@ -113,13 +113,12 @@ function submitEvent(URL, sdata) {
     if (SUCCESS) {
       proxy.$modal.msgSuccess(MESSAGE);
       emit("closeModal");
+      emit('refreshTable')
     }
   });
 }
 
-function reloadTableData(data) {
-  console.log(data);
-}
+
 </script>
 
 <style lang="scss" scoped>
