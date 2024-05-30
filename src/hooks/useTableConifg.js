@@ -2,7 +2,7 @@
  * @Author: cc2049
  * @Date: 2024-04-25 17:34:36
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-05-28 18:52:37
+ * @LastEditTime: 2024-05-30 18:07:51
  * @Description: 获取动态配置
  */
 
@@ -10,7 +10,7 @@ import { getPageConfig } from '#/system/page.js'
 
 import { getQueryUrl, resetColConfig } from './utils'
 
-import { getFormValue, getFormRule, getShowCFG, setSuffix } from '@/utils'
+import { getFormValue, getShowCFG , percentageToNumber} from '@/utils'
 
 const useTableConifg = (menu) => {
     const pageConfig = reactive({
@@ -35,6 +35,7 @@ const useTableConifg = (menu) => {
             PAGEID: "",
         },
         tableCFG: null,
+        subConfig: null,
     });
 
     // 单主表使用该配置
@@ -92,25 +93,14 @@ const useTableConifg = (menu) => {
             QUERY,
             BILLNO,
             PK_MODULE,
-            COLUMNS,
+            ISSUB,
             SUBTABLE,
             CUSTOMPLAN,
             BUTTON,
             SLOTCFG,
             TABLEHEIGHT,
-            MAINTABLE,
-            TABLESTYLE,
-            ISTREE,
-            PAGESIZE,
-            ISADAPTION,
-            MODALTYPE,
-            ISSONTABLE,
-            ISTBSELECT,
             VNAME,
             VDEF1,
-            VDEF3,
-            VDEF4,
-            VMEMO,
         } = data
 
         let copyPageConfig = JSON.parse(JSON.stringify(pageConfig));
@@ -135,6 +125,13 @@ const useTableConifg = (menu) => {
             PAGEID: BILLNO,
         }
         copyPageConfig.tableCFG = resetTableConfig(data)
+        // 左右布局表格
+        let subConfig = {
+            subLayout: ISSUB || 0,
+            subLayoutLeft: TABLEHEIGHT || '50%' ,
+            subLayoutRight:  percentageToNumber(TABLEHEIGHT )
+        }
+        copyPageConfig.subConfig = subConfig
         return copyPageConfig
     }
 

@@ -2,7 +2,7 @@
  * @Author: cc2049
  * @Date: 2024-02-20 09:00:04
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-05-18 10:00:46
+ * @LastEditTime: 2024-05-30 14:26:13
  * @Description: 简介
 -->
 
@@ -19,7 +19,6 @@
 
     <div class="right-menu" v-show="showRightMenu && sortCFG.activeID == column.field" @click.stop.prevent="rightClick(column)" extmenu.stop.prevent>
       <div class="right-menu-item bottom">
-
         <el-popover placement="right" :width="126">
           <template #reference>
             <div>
@@ -33,9 +32,7 @@
                 <ArrowRightBold />
               </el-icon>
             </div>
-
           </template>
-
           <vxe-checkbox-group v-model="checkList" class="column-list" @change="checkboxChange" style="display: flex;flex-direction: column;junt-content: flex-start;">
             <vxe-checkbox style="margin-left:0;margin-bottom:10px" :content="itemCol.LABEL" :label="itemCol.FIELD" :key="itemCol.BILLNO" v-for="itemCol in tableCFG.tableColumns" />
           </vxe-checkbox-group>
@@ -62,59 +59,46 @@
 
     </div>
 
-    <el-popover placement="bottom" :width="config.WIDTH" trigger="click" v-if="config.filterCfg">
-
-      <template #reference>
-        <div class="filter-icon" v-if="config.filterCfg">
+    <vxe-pulldown ref="pulldownRef" destroy-on-close transfer popup-class-name="custom-pulldown">
+      <template #default>
+        <div class="filter-icon" @click="openPulldown(column)">
           <el-icon color="#606875" :size="20">
             <Icon icon="material-symbols-light:filter-alt"></Icon>
           </el-icon>
         </div>
       </template>
-
-      <el-input v-if="config.filterCfg.CONTROLS == 'ExTextBox' " v-model="tableCFG.queryJson[config.FIELD]" @keydown.enter="filterEvent" clearable />
-      <!-- 
-
-    <template v-else-if="config.filterCfg.CONTROLS == 'ExSelect'">
-      <el-select placeholder=" " v-model="tableCFG.queryJson[config.FIELD]" clearable style="width: 100%" @change="filterEvent">
-        <el-option v-for="itemST in tableCFG.queryJson.EnumData[config.FIELD]" :key="itemST.VALUE" :label="itemST.LABEL" :value="itemST.VALUE" />
-      </el-select>
-    </template>
-
-    <div v-else-if="config.filterCfg.CONTROLS == 'ExSelectSearch'">
-      <el-select v-model="tableCFG.queryJson[config.filterCfg.FIELD]" clearable filterable remote remote-show-suffix :remote-method="(val) => SelectQuery(val, config.filterCfg)" :loading="SelectLoading" placeholder=" " @focus="SelectFocus( config.filterCfg )"
-        @change="(val) => SelectChange(config.filterCfg, val)" @clear="SelectChange" @keydown.enter="enterNextEl">
-        <el-option v-for="itemST in tableCFG.queryJson.EnumData[config.filterCfg.FIELD]" :key="itemST.VALUE" :label="itemST.LABEL" :value="itemST.VALUE" style="max-width:300px" />
-      </el-select>
-    </div> -->
-
-      <!-- ExSelectGroup 分组选择  -->
-      <!-- <template v-else-if="config.filterCfg.CONTROLS == 'ExSelectGroup'">
-      <el-tree-select v-model="tableCFG.queryJson[config.filterCfg.FIELD]" clearable filterable remote-show-suffix remote :remote-method="val => SelectQuery(val, config.filterCfg)" :loading="SelectLoading" :data="tableCFG.queryJson.EnumData[config.filterCfg.FIELD]"
-        @focus="SelectFocus(config.filterCfg)" @change="(val) => SelectChange(config.filterCfg, val)" @clear="SelectChange(config.filterCfg, null)" style="width: 100%" popper-class="popMaxWidth" :render-after-expand="false" :placeholder="' '"
-        :props="{ label: 'LABEL', children: 'CHILDREN' , disabled: 'ISDISABLED', }" value-key="VALUE" highlightCurrent />
-    </template> -->
-
-      <!-- ExDateRange 日期区间 -->
-      <!-- <el-date-picker v-else-if="config.filterCfg.CONTROLS == 'ExDateRange'" @clear="DateChange(null,config.filterCfg)" @change="(v) => DateChange(v, config.filterCfg)" v-model="tableCFG.queryJson[config.FIELD+'Arr']" unlink-panels clearable :type="mapDateType(config.filterCfg ,true).type"
-      range-separator="至" :value-format="mapDateType(config.filterCfg,true).format" style="width: 100%" /> -->
-
-      <!-- ExDateTime 日期时间选择  -->
-      <!-- <el-date-picker v-else-if="config.filterCfg.CONTROLS == 'ExDateTime'" v-model="tableCFG.queryJson[config.FIELD]" clearable @clear="DateChange(null,config.filterCfg)" type="datetime" value-format="YYYY-MM-DD HH:mm:ss" style="width: 100%" @change="(v)=>DateChange(v,config.filterCfg)" /> -->
-
-      <!-- ExDateTimeRange 日期时间区间 -->
-      <!-- <el-date-picker v-else-if="config.filterCfg.CONTROLS == 'ExDateTimeRange'" @change="(v) => DateChange(v, config.filterCfg)" v-model="tableCFG.queryJson[config.FIELD+'Arr']" clearable @clear="DateChange(null,config.filterCfg)" unlink-panels :prefix-icon="9" type="datetimerange"
-      range-separator="至" value-format="YYYY-MM-DD HH:mm:ss" style="width: 100%" /> -->
-
-    </el-popover>
-
+      <template #dropdown>
+        <div class="my-dropdown3">
+          <el-input v-model="searchValue" class="mb-10" size="small" placeholder="搜索" @input="searchEvent" />
+          <el-scrollbar :height="260">
+            <vxe-checkbox-group v-model="checkColList" class="column-list" @change="checkboxColChange" style="display: flex;flex-direction: column;junt-content: flex-start;">
+              <vxe-checkbox style="margin-left:0;margin-bottom:10px" content="全选" label="全选" />
+              <template v-for="item in colData" :key="item">
+                <vxe-checkbox style="margin-left:0;margin-bottom:10px" :label="item">
+                  {{ item }}
+                </vxe-checkbox>
+              </template>
+            </vxe-checkbox-group>
+          </el-scrollbar>
+          <div class="footer">
+            <div class="num-wra font-800">
+              已选{{ checkColList.length }}项
+            </div>
+            <div class="footer-btn flex mt-6">
+              <el-button type="primary" class="" size="small" @click="colFilterEvent">确定</el-button>
+              <el-button size="small" @click="colFilterEvent(1)">清除</el-button>
+            </div>
+          </div>
+        </div>
+      </template>
+    </vxe-pulldown>
   </div>
 
 </template>
 
 <script setup>
-import { inject } from "vue";
-
+import PinyinMatch from "pinyin-match";
+import TextOverflow from "@/components/TextOverflow/index.vue";
 import { axiosGet } from "#/common";
 
 const props = defineProps({
@@ -130,6 +114,9 @@ const props = defineProps({
     type: Object,
     default: () => {},
   },
+  tableData: {
+    type: Array,
+  },
   sortCFG: {},
 });
 
@@ -142,159 +129,75 @@ const emit = defineEmits([
 const { proxy } = getCurrentInstance();
 
 const checkList = ref([]);
+const checkColList = ref([]);
 
 const menuID = inject("menuID");
-
-const filterEvent = () => {
-  emit("filterEvent");
-};
 
 const handleSort = (column) => {
   emit("handleSortEvent", column);
 };
 
+const searchValue = ref("");
+const pulldownRef = ref(null);
+const colData = ref([]);
+const sourceColData = ref([]);
+
+/* 过滤事件 */
+
+function searchEvent() {
+  if (searchValue.value == "") return (colData.value = sourceColData.value);
+  let newColData = sourceColData.value.filter((item) =>
+    PinyinMatch.match(item, searchValue.value)
+  );
+  colData.value = newColData;
+}
+
+function openPulldown(col) {
+  let id = col.field;
+  try {
+    if (props.config.VTYPE == "exNum") {
+      let otherArr = JSON.parse(props.config.OTHER);
+      colData.value = otherArr.map((i) => {
+        return i.LABEL;
+      });
+    } else {
+      colData.value = getColData(id);
+    }
+    sourceColData.value = JSON.parse(JSON.stringify(colData.value));
+  } catch (error) {}
+
+  const $pulldown = pulldownRef.value;
+  if ($pulldown) {
+    $pulldown.togglePanel();
+  }
+}
+
+const colFilterEvent = (type) => {
+  if (type == 1) {
+    return (checkColList.value = []);
+  }
+  emit("filterEvent", { config: props.config, checkList: checkColList.value });
+  const $pulldown = pulldownRef.value;
+  if ($pulldown) {
+    $pulldown.hidePanel();
+  }
+};
+
+const getColData = (id) => {
+  let newArr = props.tableData.map((i) => {
+    return i[id];
+  });
+  newArr = [...new Set(newArr)];
+  return newArr;
+};
+
 // 下拉查询事件
 const SelectLoading = ref(false);
 const SelectValueTo = ref(null);
-const SelectFocus = (config) => {
-  SelectQuery("", config);
-};
+const SelectFocus = (config) => {};
 
 const router = useRouter();
 const MENUID = router.currentRoute.value.meta.BILLNO;
-
-const SelectQuery = (keyword = undefined, config) => {
-  if (keyword == undefined) return;
-  let { FIELD, DEFAULTVAL, CONTROLS, OTHER } = config;
-  if (OTHER == "") return;
-  let { url, data } = ParseOtherConfig(OTHER);
-  if (url == "") return;
-  SelectLoading.value = true;
-  proxy
-    .request({
-      url: url,
-      method: "post",
-      data: {
-        KEYWORD: keyword,
-        MODULEID: MENUID,
-        ...data,
-      },
-      headers: {
-        repeatSubmit: false,
-      },
-    })
-    .then(({ RESULT }) => {
-      props.tableCFG.queryJson.EnumData[FIELD] = RESULT;
-    })
-    .catch(() => {
-      props.tableCFG.queryJson.EnumData[FIELD] = [];
-    })
-    .finally(() => {
-      SelectLoading.value = false;
-    });
-};
-
-const SelectChange = () => {
-  filterEvent();
-};
-
-// 解析 Other 配置
-function ParseOtherConfig(config) {
-  if (!config) {
-    SelectValueTo.value = [];
-    return { url: "", data: {}, importantData: {} };
-  }
-  try {
-    let newConfig = JSON.parse(config)[0];
-    if (newConfig.setvalue && JSON.stringify(newConfig.setvalue) != "{}") {
-      let arr = [];
-      for (const key in newConfig.setvalue) {
-        arr.push({ k: key, v: newConfig.setvalue[key] });
-      }
-      SelectValueTo.value = arr;
-    }
-    return {
-      url: newConfig.url,
-      data: newConfig?.params,
-      importantData: newConfig?.importantData,
-    };
-  } catch (error) {
-    if (config.indexOf("/") == "0") {
-      let paramsArr = config.split("?"),
-        url = "",
-        setQueryParam = {},
-        queryJson = {},
-        setImportantParam = {},
-        importantData = {};
-      if (paramsArr.length == 0) {
-        url = config;
-        SelectValueTo.value = [];
-      } else if (paramsArr.length > 0) {
-        url = paramsArr[0];
-        if (paramsArr.length > 1) {
-          let { obj, importantObj } = GetUrlParams("a?" + paramsArr[1], "obj");
-          queryJson = obj;
-          importantData = importantObj;
-        }
-        if (paramsArr.length > 2) {
-          let { obj, importantObj } = GetUrlParams("a?" + paramsArr[2], "obj");
-          setQueryParam = obj;
-          setImportantParam = importantObj;
-          queryJson = { ...queryJson, ...ConvertData(setQueryParam) };
-          importantData = {
-            ...importantData,
-            ...ConvertData(setImportantParam),
-          };
-        }
-        paramsArr[3]
-          ? (SelectValueTo.value = GetUrlParams("a?" + paramsArr[3], "arr"))
-          : [];
-      }
-      return { url, data: queryJson, importantData };
-    } else {
-      console.error("配置解析错误!", error);
-    }
-  }
-}
-
-// 获取url 后面的参数
-function GetUrlParams(url, backType) {
-  let reg = /([^&?=]+)=([^&?=]+)/g,
-    obj = {},
-    importantObj = {},
-    arr = [];
-  url.replace(reg, function () {
-    if (arguments[1].includes("!")) {
-      let key = arguments[1].substr(1); //删除第一个字符
-      importantObj[key] = arguments[2];
-    } else {
-      obj[arguments[1]] = arguments[2];
-    }
-    let objs = {};
-    objs.k = arguments[1];
-    objs.v = arguments[2];
-    arr.push(objs);
-  });
-  return backType == "obj" ? { obj, importantObj } : arr;
-}
-
-/** 转换数据 */
-function ConvertData(obj) {
-  let data = {};
-  for (let ii in obj) {
-    let valueKey = obj[ii];
-    if (valueKey.includes("M$")) {
-      valueKey = calcHasMSKey(valueKey);
-      data[ii] = props.mainFormData[valueKey] || "";
-    } else if (valueKey.includes("S$")) {
-      valueKey = calcHasMSKey(valueKey);
-      data[ii] = props.formData[valueKey] || "";
-    } else {
-      data[ii] = props.formData[valueKey] || "";
-    }
-  }
-  return data;
-}
 
 const showRightMenu = ref(false);
 
@@ -397,6 +300,18 @@ function checkboxChange(e) {
   emit("setColShowEvent", data);
 }
 
+function checkboxColChange(e) {
+  if (e.label == "全选") {
+    checkColList.value = e.value ? [...colData.value, "全选"] : [];
+  } else {
+    if (checkColList.value.length == colData.value.length) {
+      checkColList.value.unshift("全选");
+    } else if (checkColList.value.includes("全选")) {
+      console.log("移除全选");
+    }
+  }
+}
+
 function fixedEvent(e, t) {
   console.log(e, t);
   let data = { id: e.field, isShow: "", isFixed: t ? "left" : "" };
@@ -404,7 +319,7 @@ function fixedEvent(e, t) {
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .custom-sort {
   color: #c0c4cc;
   cursor: pointer;
@@ -487,5 +402,22 @@ $border-color-jdy: #ceced2;
 
 :deep(.vxe-checkbox + .vxe-checkbox) {
   margin-left: none;
+}
+
+.custom-pulldown {
+  top: 30px;
+}
+
+.my-dropdown3 {
+  width: 200px;
+  padding: 6px;
+  border: 1px solid var(--border-color-jdy);
+  border-radius: 4px;
+  top: 20px;
+  .footer-btn {
+    .el-button {
+      width: 50%;
+    }
+  }
 }
 </style>
