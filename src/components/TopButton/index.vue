@@ -2,7 +2,7 @@
  * @Author: cc2049
  * @Date: 2024-04-28 15:12:29
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-05-30 20:42:12
+ * @LastEditTime: 2024-05-30 23:11:02
  * @Description: 简介
 -->
 
@@ -88,7 +88,7 @@
         </span>
       </template>
       <template #default>
-        <FormPage :menuID="formID" @closeModal="closeModal" @refreshTable="refreshTable" :isGetDetail :currentData :activeBtn :topButton />
+        <FormPage :menuID="formID" @closeModal="closeModal" @refreshTable="refreshTable" :isGetDetail :currentData :activeBtn :topButton :isDetail />
       </template>
     </vxe-modal>
 
@@ -120,7 +120,7 @@ const props = defineProps({
     default: 1,
   },
 });
-
+const isDetail = ref(false);
 const isGetDetail = ref(false);
 const activeBtn = ref(null);
 function closeModal() {
@@ -256,12 +256,16 @@ function handleEvent(data) {
     data.VTYPE == 20 ||
     data.VTYPE == 27
   ) {
-    if (data.ACTION == "EDIT") {
+    if (data.ACTION == "EDIT" || data.ACTION == "DTL") {
       if (!props.currentData.length) {
         return proxy.$message.warning("请先选择数据再操作");
       }
       isGetDetail.value = true;
+    } else {
+      isGetDetail.value = false;
     }
+    isDetail.value = data.ACTION == "DTL";
+
     modalConfig.modalVisible = true;
     modalConfig.pageTitle = data.VNAME;
     formID.value = {

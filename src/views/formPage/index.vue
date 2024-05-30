@@ -2,14 +2,14 @@
  * @Author: cc2049
  * @Date: 2024-04-23 11:35:41
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-05-30 20:39:17
+ * @LastEditTime: 2024-05-30 23:12:25
  * @Description: 大表单组件
 -->
 
 <template>
   <div class="form-container">
     <TopButton :topButton="topButton" sourceType="2" @handleBtnEvent="handleBtnEvent"  />
-    <MasterForm ref="eosFormRef" v-model="formData" :formConfig="formConfig" :detail="detail" :tableConfig="tableConfig" />
+    <MasterForm ref="eosFormRef" v-model="formData" :formConfig="formConfig" :detail="isDetail" :tableConfig="tableConfig" />
   </div>
 </template>
 
@@ -24,6 +24,10 @@ const props = defineProps({
   menuID: {
     type: [String, Object],
     default: "",
+  },
+  isDetail: {
+    type: Boolean,
+    default: false,
   },
   isGetDetail: {
     type: Boolean,
@@ -80,7 +84,6 @@ function resetButton(arr) {
 const detailBtn = ref(null)
 
 function getDetail(URL) {
-  console.log('URL', URL);
   if (URL == "CurrentData") {
     formData.value = Object.assign(formData.value, props.currentData[0]);
   } else {
