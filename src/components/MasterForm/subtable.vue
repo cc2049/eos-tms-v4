@@ -164,7 +164,7 @@ const plusRow = (checkData = false) => {
     pageConfig.modelTitle = "添加"
     pageConfig.modalVisible = true;
   } else {
-    if (checkData && newData.value.length > 0) return false
+    if (checkData == 'true' && newData.value.length > 0) return false
     subFormRef.value?.xEditTable.insertAt(BaseRowData.value, -1);
     updateTable()
   }
