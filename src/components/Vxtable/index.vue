@@ -375,8 +375,7 @@ import Header from "./header.vue";
 
 import { axiosSave } from "@/api/system/page";
 
-const key17Status = inject('key17Status')
-
+const key17Status = inject("key17Status");
 
 const { proxy } = getCurrentInstance();
 const settingsStore = useSettingsStore();
@@ -397,7 +396,12 @@ const cellClassName = ({ row, column }) => {
   return null;
 };
 
-const emit = defineEmits(["dragRow", "queryEvent", "resetConfig" ,"filterNameEvent"]);
+const emit = defineEmits([
+  "dragRow",
+  "queryEvent",
+  "resetConfig",
+  "filterNameEvent",
+]);
 const props = defineProps({
   // 配置
   tableCFG: {
@@ -410,7 +414,7 @@ const props = defineProps({
     default: [],
   },
   // 表格的原数据
-  sourceTableData:{
+  sourceTableData: {
     type: Array,
     default: [],
   },
@@ -464,7 +468,6 @@ const clickGrade = (row, config) => {
   gradeModal.value = true;
   gradeModalRowData.value = row;
 };
-
 
 const xTable = ref(null);
 
@@ -814,9 +817,17 @@ function openDrawer() {
 
 //  行点击事件触发单选功能
 const rowClickIndex = ref(null);
+const timer = ref(null)
+function rowClick(data) {
+  clearTimeout(timer.value);
+  timer.value = setTimeout(function () {
+    //执行你的单击事件
+    rowClickEvent(data)
+    console.log('执行你的单击事件', data);
+  }, 300);
+}
 
-
-function rowClick({ row, column, triggerCheckbox, rowIndex }) {
+function rowClickEvent({ row, column, triggerCheckbox, rowIndex }) {
   selectRow.value = row;
   selectColumn.value = column;
   if (props.tableCFG.treeID?.transform) {
@@ -872,11 +883,6 @@ function toolbarCustomEvent() {
 }
 
 function openDetail(row) {
-  // let giveParentData = {
-  //   clicktype: "detail",
-  //   data: row,
-  // };
-  // proxy.$emit("change", giveParentData);
   proxy.$emit("dbClick", row);
 }
 
@@ -978,7 +984,7 @@ const DateCtrl = ref("ExDate,ExDateTime,ExTime");
 // };
 
 const filterEvent = (data) => {
-  proxy.$emit("filterNameEvent",data);
+  proxy.$emit("filterNameEvent", data);
 };
 
 // 时间确认事件

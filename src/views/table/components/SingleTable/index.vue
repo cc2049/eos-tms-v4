@@ -2,11 +2,11 @@
  * @Author: cc2049
  * @Date: 2024-04-28 13:10:44
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-05-30 20:42:17
+ * @LastEditTime: 2024-05-30 23:29:31
  * @Description: 简介
 -->
 <template v-if="pageConfig">
-  <TopButton v-model:topButton="topButton" :currentData="currentData" @handleTopBtn="handleTopBtn" @reloadTableData="reloadTableData" />
+  <TopButton ref="topButtonRef" v-model:topButton="topButton" :currentData="currentData" @handleTopBtn="handleTopBtn" @reloadTableData="reloadTableData" />
   <div class="custom-query" ref="AdvancedQuery">
     <AdvanceQuery :queryConfig="pageConfig?.queryConfig" @updateHeight="queryHeight" :customPlan ref="advanceQueryRef" @handleCustomPlan="handleCustomPlan" />
   </div>
@@ -91,7 +91,7 @@ const props = defineProps({
 });
 
 const VxtableRef = ref(null);
-
+const topButtonRef = ref(null)
 const pageConfig = ref(null);
 const tableCFG = ref(null);
 const tableData = ref([]);
@@ -154,7 +154,7 @@ const changeTab = (e) => {
 // 表格内部的多选事件，顶部筛选排序事件, 超链接事件
 
 function tableChange(data) {
-  console.log("tableChange", data.data);
+  // console.log("tableChange", data.data);
   if (data.clicktype == "sort") {
     pageInfo.sortName = data.data.sortBy;
     pageInfo.sortOrder = data.data.sort;
@@ -347,7 +347,7 @@ watch(
   (value) => {
     if (value) {
       getConfig().then((res) => {
-        console.log(888, res);
+        // console.log(888, res);
         if (Array.isArray(res.pageConfig)) {
           multiMainTable.value = res.pageConfig;
           activeTabs.value = multiMainTable.value[0];
@@ -414,6 +414,7 @@ function resetConfig(data) {
 }
 
 function dbClickTable(data) {
+  topButtonRef.value.openDeatil([data])
   emit("dbClick", data);
 }
 

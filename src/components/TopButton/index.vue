@@ -2,7 +2,7 @@
  * @Author: cc2049
  * @Date: 2024-04-28 15:12:29
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-05-30 23:11:02
+ * @LastEditTime: 2024-05-31 00:03:05
  * @Description: 简介
 -->
 
@@ -88,7 +88,7 @@
         </span>
       </template>
       <template #default>
-        <FormPage :menuID="formID" @closeModal="closeModal" @refreshTable="refreshTable" :isGetDetail :currentData :activeBtn :topButton :isDetail />
+        <FormPage :menuID="formID" :currentData="currentData2" @closeModal="closeModal" @refreshTable="refreshTable" :isGetDetail :activeBtn :topButton :isDetail />
       </template>
     </vxe-modal>
 
@@ -123,6 +123,9 @@ const props = defineProps({
 const isDetail = ref(false);
 const isGetDetail = ref(false);
 const activeBtn = ref(null);
+
+const currentData2 = ref([]);
+
 function closeModal() {
   modalConfig.modalVisible = false;
 }
@@ -229,10 +232,9 @@ function refreshTable() {
 // proxy.$emit("handelEvent", { data, row: null });
 
 // 表格的顶部按钮操作
-function handleEvent(data) {
-  console.log("handelEvent22", data);
-  let selectRecords = props.currentData;
-
+function handleEvent(data, row) {
+  console.log("handelEvent22", data, row);
+  let selectRecords = row?.length ? row : props.currentData;
   activeBtn.value = data;
   // 表单中的按钮事件直接调
   if (props.sourceType == 2) {
@@ -257,7 +259,7 @@ function handleEvent(data) {
     data.VTYPE == 27
   ) {
     if (data.ACTION == "EDIT" || data.ACTION == "DTL") {
-      if (!props.currentData.length) {
+      if (!selectRecords.length) {
         return proxy.$message.warning("请先选择数据再操作");
       }
       isGetDetail.value = true;
@@ -265,7 +267,7 @@ function handleEvent(data) {
       isGetDetail.value = false;
     }
     isDetail.value = data.ACTION == "DTL";
-
+    currentData2.value = selectRecords;
     modalConfig.modalVisible = true;
     modalConfig.pageTitle = data.VNAME;
     formID.value = {
@@ -379,6 +381,14 @@ function submitEvent(URL, sdata) {
   });
 }
 
+// 打开详情
+
+function openDeatil(data) {
+  let detailBtn = props.topButton.filter((i) => i.ACTION == "DTL")[0];
+  handleEvent(detailBtn, data);
+  console.log("openDeatil", data);
+}
+
 function evilFn(row, fn) {
   const DATA = JSON.parse(JSON.stringify(row)) || Object.create(null);
   let Fn = new Function("DATA", `return ${fn}`);
@@ -389,6 +399,8 @@ function evilFn(row, fn) {
   });
   return Fn(proxy);
 }
+
+defineExpose({ openDeatil });
 </script>
 
 <style lang="scss" scoped>
