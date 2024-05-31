@@ -175,7 +175,6 @@ const filterSeceletArrs = computed(() => props.filterConfig.filterSeceletArr);
 // const filterSeceletArrs1 = computed(() => props.filterConfig.filterSeceletArr1)
 const filterSeceletArrs1 = ref([]);
 const currentConfig = computed(() => props.filterVal);
-console.log("🚀 ~ currentConfig:", currentConfig.value)
 
 const selectvalue = ref(null);
 const selectvalue1 = ref(null);

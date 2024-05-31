@@ -104,7 +104,7 @@ const closeShowModal = () => {
   showModal.value = false;
 };
 
-const clickStatus = ref(""); // 1是点击外层查询  2 是点击设置的确定
+const clickStatus = ref(1); // 1是点击外层查询  2 是点击设置的确定
 
 const filterArr = ref([]);
 const defaultFilterArr = ref([]);
@@ -120,8 +120,11 @@ const clickRadio = (item) => {
   };
   // 查询方案里面的值
   axiosGet("/sys/queryprogUserDtl/getSubList", query).then((res) => {
-    console.log("🚀 ~ axiosGet ~ res:", res)
     filterArr.value = res.RESULT
+
+    querySaveList.value = JSON.parse(JSON.stringify(res.RESULT));
+    settingQueryList.value = JSON.parse(JSON.stringify(res.RESULT));
+
   });
 
   emit("handleCustomPlan", {
@@ -131,15 +134,44 @@ const clickRadio = (item) => {
 };
 // 查询按钮事件
 function searchBtn() {
+  clickStatus.value = 1
+  let QUERYS = []
+  if (clickStatus.value == 1) {
+    QUERYS = querySaveList.value.map(ele => {
+      return {
+        FIELD: ele.FIELD,
+        QUERYTYPE: ele.QUERYTYPE,
+        DEFAULTVAL: ele.DEFAULTVAL,
+        DEFAULTVAL2: ele.DEFAULTVAL2,
+        SORTCODE: ele.SORTCODE,
+        DEFAULTVALArr: ele.DEFAULTVALArr,
+        QRYCONT: ele.QRYCONT,
+        QRYPRE: ele.QRYPRE,
+        QRYSUF: ele.QRYSUF,
+      }
+    })
+  } else{
+    QUERYS = settingQueryList.value.map(ele => {
+      return {
+        FIELD: ele.FIELD,
+        QUERYTYPE: ele.QUERYTYPE,
+        DEFAULTVAL: ele.DEFAULTVAL,
+        DEFAULTVAL2: ele.DEFAULTVAL2,
+        SORTCODE: ele.SORTCODE,
+        DEFAULTVALArr: ele.DEFAULTVALArr,
+        QRYCONT: ele.QRYCONT,
+        QRYPRE: ele.QRYPRE,
+        QRYSUF: ele.QRYSUF,
+      }
+    })
+  }
+
+
+console.log(QUERYS)
   emit("handleCustomPlan", {
     type: "2",
     PROGRAMID: chooseRadioVal.value,
-    QUERYS:
-      clickStatus.value == 1
-        ? querySaveList.value
-        : clickStatus.value == 2
-          ? settingQueryList.value
-          : [],
+    QUERYS: QUERYS
   });
 }
 
@@ -182,12 +214,12 @@ watch(
 
 const querySaveList = ref([]);
 const changeCurrentQueryList = (val) => {
-  console.log("🚀 ~ changeCurrentQueryList ~ val:", val)
   clickStatus.value = 1;
   querySaveList.value = JSON.parse(JSON.stringify(val));
 };
 const settingQueryList = ref([]);
 const settingChangeCurrentQueryList = (val) => {
+  console.log("🚀 ~ settingChangeCurrentQueryList ~ val:", val)
   clickStatus.value = 2;
   settingQueryList.value = JSON.parse(JSON.stringify(val));
   // querySaveList.value = JSON.parse(JSON.stringify(val));

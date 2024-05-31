@@ -396,6 +396,7 @@ function queryHeight() {
 
 //
 function handleCustomPlan(data) {
+  console.log("🚀 ~ handleCustomPlan ~ data:", data)
   queryJSON.value.PROGRAMID = data.PROGRAMID;
   queryJSON.value.QUERYS = data.QUERYS || [];
   pageConfig.value.hasTree ? getTreeData() : getTableData();
