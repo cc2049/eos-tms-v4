@@ -256,8 +256,13 @@ const clickUpdate = () => {
 }
 
 const clickDelete = () => {
-    const protData = {
-        CHOOSEDATA: [choosePlanObj.value],
+    // const protData = {
+    //     // CHOOSEDATA: [choosePlanObj.value],
+    //     // ...MenuID.value
+    //     [choosePlanObj.value]
+    // }
+    const protData={
+        data:[choosePlanObj.value.BILLNO],
         ...MenuID.value
     }
 
