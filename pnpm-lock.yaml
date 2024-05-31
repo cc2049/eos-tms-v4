@@ -12,8 +12,8 @@ importers:
         specifier: 2.3.1
         version: 2.3.1(vue@3.4.27)
       '@eosine/form':
-        specifier: ^0.0.59
-        version: 0.0.59
+        specifier: ^0.0.64
+        version: 0.0.64
       '@visactor/vchart':
         specifier: ^1.10.5
         version: 1.11.0
@@ -283,6 +283,10 @@ packages:
     resolution: {integrity: sha512-Nms86NXrsaeU9vbBJKni6gXiEXZ4CVpYVzEjDH9Sb8vmZ3UljyA1GSOJl/6LGPO8EHLuSF9H+IxNXHPX8QHJ4g==}
     engines: {node: '>=6.9.0'}
 
+  '@babel/runtime@7.24.6':
+    resolution: {integrity: sha512-Ja18XcETdEl5mzzACGd+DKgaGJzPTCow7EglgwTmHdwokzDFYh/MHua6lU6DV/hjF2IaOJ4oX2nqnjG7RElKOw==}
+    engines: {node: '>=6.9.0'}
+
   '@babel/template@7.24.0':
     resolution: {integrity: sha512-Bkf2q8lMB0AFpX0NFEqSbx1OkTHf0f+0j82mkw+ZpzBnkk7e9Ql0891vlfgi+kHwOk8tQjiQHpqh4LaSa0fKEA==}
     engines: {node: '>=6.9.0'}
@@ -304,8 +308,8 @@ packages:
     peerDependencies:
       vue: ^3.2.0
 
-  '@eosine/form@0.0.59':
-    resolution: {integrity: sha512-4cm0gbefj8z2ri2WuGhd0HS3b7dk4WYDNVlu4S9ltaUbeHCMd5e14lY9pI6uN7A0+dNyfUuYS4iRMwbURIMaAA==}
+  '@eosine/form@0.0.64':
+    resolution: {integrity: sha512-nym66vw2ZS9GggOs0vnZarEkPD/si4+ZLR8cdaJaafjN+bI6JDGMlsTv/7MJiNWgg2MVyGf3Dy9glbOWXDmUUg==}
 
   '@esbuild/aix-ppc64@0.19.12':
     resolution: {integrity: sha512-bmoCYyWdEL3wDQIVbcyzRyeKLgk2WtWLTWz1ZIAZF/EGbNOwSA6ew3PftJ1PqMiOOGu0OyFMzG53L0zqIpPeNA==}
@@ -3019,8 +3023,8 @@ packages:
     peerDependencies:
       vue: ^3.2.28
 
-  vxe-table@4.6.16:
-    resolution: {integrity: sha512-Svm2FE5PNYpTPyUP33OBiJesvk+RCpKfD/92mvwFY9ImMz0wQKTAFDmV//OoRFPRSLCMgIu/yOUODuvvSFyUvQ==}
+  vxe-table@4.6.17:
+    resolution: {integrity: sha512-K9A0qJuV33Xh2NK6L1tXXEXueGyOoRVz7eFvFFpTbLVtm3oCoYl6+BOqD6YTw70R8NKdZZNH+ylmEJug+Qjrrg==}
     peerDependencies:
       vue: ^3.2.28
 
@@ -3251,6 +3255,10 @@ snapshots:
     dependencies:
       regenerator-runtime: 0.14.1
 
+  '@babel/runtime@7.24.6':
+    dependencies:
+      regenerator-runtime: 0.14.1
+
   '@babel/template@7.24.0':
     dependencies:
       '@babel/code-frame': 7.24.2
@@ -3284,19 +3292,19 @@ snapshots:
     dependencies:
       vue: 3.4.27
 
-  '@eosine/form@0.0.59':
+  '@eosine/form@0.0.64':
     dependencies:
       '@element-plus/icons-vue': 2.3.1(vue@3.4.27)
       '@wangeditor/editor': 5.1.23
       '@wangeditor/editor-for-vue': 5.1.12(@wangeditor/editor@5.1.23)(vue@3.4.27)
       element-plus: 2.7.3(vue@3.4.27)
-      lodash: 4.17.21
+      lodash-es: 4.17.21
       pinia: 2.1.7(vue@3.4.27)
       pinia-plugin-persist: 1.0.0(pinia@2.1.7(vue@3.4.27))(vue@3.4.27)
       vue: 3.4.27
       vue3-json-viewer: 2.2.2(vue@3.4.27)
-      vxe-table: 4.6.16(vue@3.4.27)
-      vxe-table-plugin-element: 4.0.2(vxe-table@4.6.16(vue@3.4.27))
+      vxe-table: 4.6.17(vue@3.4.27)
+      vxe-table-plugin-element: 4.0.2(vxe-table@4.6.17(vue@3.4.27))
     transitivePeerDependencies:
       - '@vue/composition-api'
       - typescript
@@ -5119,7 +5127,7 @@ snapshots:
 
   i18next@20.6.1:
     dependencies:
-      '@babel/runtime': 7.24.5
+      '@babel/runtime': 7.24.6
 
   iconv-lite@0.4.24:
     dependencies:
@@ -6361,9 +6369,9 @@ snapshots:
     dependencies:
       vxe-table: 4.6.12(vue@3.4.27)
 
-  vxe-table-plugin-element@4.0.2(vxe-table@4.6.16(vue@3.4.27)):
+  vxe-table-plugin-element@4.0.2(vxe-table@4.6.17(vue@3.4.27)):
     dependencies:
-      vxe-table: 4.6.16(vue@3.4.27)
+      vxe-table: 4.6.17(vue@3.4.27)
 
   vxe-table@4.6.12(vue@3.4.27):
     dependencies:
@@ -6371,7 +6379,7 @@ snapshots:
       vue: 3.4.27
       xe-utils: 3.5.26
 
-  vxe-table@4.6.16(vue@3.4.27):
+  vxe-table@4.6.17(vue@3.4.27):
     dependencies:
       dom-zindex: 1.0.4
       vue: 3.4.27

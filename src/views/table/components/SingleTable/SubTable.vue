@@ -2,7 +2,7 @@
  * @Author: cc2049
  * @Date: 2024-05-22 08:30:20
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-05-22 18:59:54
+ * @LastEditTime: 2024-05-30 20:24:49
  * @Description: 简介
 -->
 
@@ -16,7 +16,6 @@
       <Vxtable ref="VxtableRef" class="bg-white" :tableCFG :tableData @change="tableChange" @queryEvent="queryEvent" @resetConfig="resetConfig">
       </Vxtable>
     </template>
-
   </div>
 </template>
 
@@ -34,6 +33,11 @@ const props = defineProps({
     type: Array,
     default: () => [],
   },
+  subLayout: {
+    type: String,
+    default: "0",
+  },
+  height: {},
 });
 
 const tableData = ref([]);
@@ -71,12 +75,20 @@ const tableCFG = reactive({
   }, // 分页配置
 });
 
-
 onMounted(() => {
-  const { COLUMNS  ,TABLEHEIGHT } = props.SubTableConfig[0]
-  tableCFG.tableColumns = COLUMNS
-  tableCFG.height = TABLEHEIGHT
+  const { COLUMNS,  TABLEHEIGHT } = props.SubTableConfig[0];
+   tableCFG.height = props.subLayout == 1 ? props.height : TABLEHEIGHT;
+  tableCFG.tableColumns = COLUMNS;
 });
+
+watch(
+  () => props.height,
+  (value) => {
+    const { TABLEHEIGHT } = props.SubTableConfig[0];
+    tableCFG.height = props.subLayout == 1 ? props.height : TABLEHEIGHT;
+    console.log(666, props.subLayout ,  tableCFG.height );
+  }
+);
 
 const tableChange = (data) => {
   console.log("tableChange", data);

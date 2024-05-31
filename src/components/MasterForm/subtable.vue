@@ -58,31 +58,32 @@ export default {
 }
 </script>
 <script setup>
+import { ref, reactive, computed, toRefs, getCurrentInstance, watch, onMounted } from "vue";
 import ETable from "@/components/Vxtable/edit";
 import VTable from "@/components/Vxtable";
 import { getFormValue, getFormRule, deepClone } from "@/utils/index";
 import { Plus, Delete, Edit, Notification } from "@element-plus/icons-vue";
 
 const props = defineProps({
+  modelValue: [Array, Object],
   config: Object,
   title: String,
   detail: Boolean,
-  data: [Array, Object],
   mainFormData: Object,
   othConfig: Object,
   othTabCFG: Object
 })
-const emit = defineEmits(["update:data", "update:mainFormData", "change"])
+const emit = defineEmits(["update:modelValue", "update:mainFormData", "change"])
 const { proxy } = getCurrentInstance();
 
 /** 公用 */
-const { data, config, detail, mainFormData, othConfig, othTabCFG } = toRefs(props)
+const { config, detail, mainFormData, othConfig, othTabCFG } = toRefs(props)
 const subFormRef = ref(null)
 const xEditTable = computed(() => subFormRef.value.xEditTable)
 const editFormRef = ref(null)
 const newData = computed({
-  get: () => props.data,
-  set: val => emit("update:data", val)
+  get: () => props.modelValue,
+  set: val => emit("update:modelValue", val)
 })
 const Field = ref(null)
 
@@ -151,7 +152,7 @@ const updateTable = (data = null, clear = false) => {
 };
 
 /** 新增行 */
-const plusRow = () => {
+const plusRow = (checkData = false) => {
   form.value = deepClone(BaseRowData.value)
   if (ShowType.value != 'row') {
     let config = ButtonConfig.value.find(el => el.ACTION == 'ADD')
@@ -322,12 +323,11 @@ const InitConfig = () => {
   BaseRowData.value = deepClone(form)
   form.value = deepClone(BaseRowData.value)
   Rules.value = getFormRule(COLUMNS)
-  if (!props.detail && ShowType.value == 'row' && props.data.length == '0') {
-    setTimeout(() => {
-      plusRow(true)
-    }, 200)
+  if (!props.detail && ShowType.value == 'row' && newData.value.length == 0) {
+    newData.value = [deepClone(form)]
   }
 };
+
 onMounted(() => {
   InitConfig();
 })
