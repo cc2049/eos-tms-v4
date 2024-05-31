@@ -818,16 +818,16 @@ function openDrawer() {
 //  行点击事件触发单选功能
 const rowClickIndex = ref(null);
 const timer = ref(null)
-function rowClick(data) {
-  clearTimeout(timer.value);
-  timer.value = setTimeout(function () {
-    //执行你的单击事件
-    rowClickEvent(data)
-    console.log('执行你的单击事件', data);
-  }, 300);
-}
+// function rowClick(data) {
+//   clearTimeout(timer.value);
+//   timer.value = setTimeout(function () {
+//     //执行你的单击事件
+//     rowClickEvent(data)
+//     console.log('执行你的单击事件', data);
+//   }, 300);
+// }
 
-function rowClickEvent({ row, column, triggerCheckbox, rowIndex }) {
+function rowClick({ row, column, triggerCheckbox, rowIndex }) {
   selectRow.value = row;
   selectColumn.value = column;
   if (props.tableCFG.treeID?.transform) {

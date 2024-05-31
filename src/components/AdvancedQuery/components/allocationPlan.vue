@@ -84,6 +84,8 @@
                             <div class="rightBorder"></div>
                         </div>
                         <el-checkbox v-model="checked1" label="共享给他人" size="large" />
+                        <el-checkbox v-model="checked12" label="系统预设" size="large" />
+
                         <el-radio-group v-model="radio2" class="ml-4">
                             <el-radio value="1">共享所有用户</el-radio>
                             <el-radio value="2">
@@ -116,7 +118,7 @@ const rightMenu = ref([
     '条件', '高级', '排序', '显示隐藏列'
 ])
 const MenuID = inject("menuID");
-
+const checked12 = ref(null)
 const props = defineProps({
     showModal: {
         type: Boolean,
