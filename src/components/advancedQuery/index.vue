@@ -175,7 +175,7 @@ watch(
       (el) => el.ISSHOW != 0
     );
 
-    filterArr.value = JSON.parse(JSON.stringify(defaultFilterArr.value));
+    // filterArr.value = JSON.parse(JSON.stringify(defaultFilterArr.value));
   },
   { immediate: true }
 );
