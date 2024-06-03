@@ -123,7 +123,7 @@ function filterAsyncRouter(asyncRouterMap, lastRouter = false, type = false, par
         // route.component = () => import('@/views/sontable/sontable');
         route.component = () => import('@/views/table/index');
       } else if (route.COMPONENT === "VForm") {
-        route.component = () => import('@/views/table/index');
+        route.component = () => import('@/views/formPage/home');
       } else if (route.COMPONENT === "Link") {
         route.component = () => import('@/views/table/index');
       } else if (route.COMPONENT === "dashboard") {

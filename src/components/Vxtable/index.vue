@@ -597,6 +597,9 @@ function openDrawer() {
   proxy.$emit("change", giveParentData);
 }
 
+
+
+const rowClickIndex = ref(null)
 function rowClick({ row, column, triggerCheckbox, rowIndex }) {
   selectRow.value = row;
   selectColumn.value = column;
