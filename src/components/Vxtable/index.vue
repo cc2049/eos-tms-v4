@@ -1,40 +1,40 @@
 <template>
   <div class="val_table bg-white">
-    <!-- checkStrictly:  !tableCFG.treeID?true:false  控制多选框是否级联 -->
-    <!-- @header-cell-click="headerCellClickEvent" @header-cell-dblclick="headerCellClickEvent" -->
 
-    <vxe-table class="mytable-scrollbar mytable-footer" resizable round show-overflow ref="xTable" :edit-rules="validRules" size="mini" highlight-hover-row header-row-class-name="bg-blue" width="100%" :show-footer="tableCFG.mergeCFG && tableCFG.mergeCFG.length" border :loading="tableCFG.loading"
-      :cell-class-name="cellClassName" :height=" showMoreQuery? tableCFG.height-50 : tableCFG.height  " :column-config="{ isCurrent: false, isHover: true }" :row-config="{
+    <vxe-table class="mytable-scrollbar mytable-footer" resizable round show-overflow ref="xTable" size="mini" highlight-hover-row header-row-class-name="bg-blue" width="100%" :show-footer="tableCFG.mergeCFG && tableCFG.mergeCFG.length" border :loading="tableCFG.loading"
+      :cell-class-name="cellClassName" 
+      :height="tableCFG.height"
+      :scroll-y="{enabled: true, gt: 0}"
+      :column-config="{ isCurrent: false, isHover: true }" :row-config="{
         isCurrent: true,
         isHover: true,
         height:  34 ,
-      }" :data="tableData" :span-method="mergeRowMethod" :radio-config="
-        tableCFG.SelectType == 'radio'
-          ? { highlight: true, trigger: 'row' }
-          : null
-      " :checkbox-config="
-        !tableCFG.SelectType || tableCFG.SelectType != 'radio'
-          ? { highlight: true   }
-          : null
-      " :sort-config="{ showIcon: false }" :footer-method="footerMethod" :expand-config="{ labelField: tableCFG.expandID }" :tree-config="{transform: tableCFG.treeID?.transform ==1 ? true :false , rowField: tableCFG.treeID?.rowField , parentField: tableCFG.treeID?.parentField }"
-      :row-class-name="rowClassName" @toggle-row-expand="toggleExpandChangeEvent" @sort-change="sortChange" @radio-change="radioChangeEvent" @checkbox-change="checkboxChange" @checkbox-all="checkboxChange" @custom="toolbarCustomEvent" @cell-click="rowClick" @cell-dblclick="
+      }" 
+      :data="tableData" 
+      :span-method="mergeRowMethod" 
+      :checkbox-config="{highlight: true}" 
+      :sort-config="{ showIcon: false }" 
+      :footer-method="footerMethod" 
+      :row-class-name="rowClassName" 
+      @toggle-row-expand="toggleExpandChangeEvent" 
+      @sort-change="sortChange" 
+      @radio-change="radioChangeEvent"
+      @checkbox-change="checkboxChange" 
+      @checkbox-all="checkboxChange" 
+      @custom="toolbarCustomEvent" 
+      @cell-click="rowClick" 
+      @cell-dblclick="
         (e) => {
           openDetail(e.row);
         }
-      " :table-props="{borderColor:'red' }">
-
-      <!-- <vxe-column width="50" field="drag" align="center" v-if="tableCFG.hasDragRow" fixed="left">
-        <template #default>
-          <div class="drag-btn">
-            <i class="vxe-icon-sort"></i>
-          </div>
-        </template>
-      </vxe-column> -->
+      " >
 
       <template v-for="(config, indexC) in tableCFG.tableColumns" :key="indexC">
 
-        <vxe-column field="name" title=" " width="40" type="seq" align="center" v-if="config.VTYPE == 'seq'" fixed="left">
-        </vxe-column>
+        <template v-if="config.VTYPE == 'seq'">
+          <vxe-column field="name" title=" " width="40" type="seq" align="center" fixed="left">
+          </vxe-column>
+        </template>
 
         <template v-else-if="config.VTYPE == 'radio'">
           <vxe-column type="radio" align="center" width="40" fixed="left"></vxe-column>
@@ -44,245 +44,26 @@
           <vxe-column type="checkbox" align="center" width="40" fixed="left"></vxe-column>
         </template>
 
-        <template v-else-if="config.VTYPE == 'expand'">
-          <vxe-column type="expand" align="left" :width="config.WIDTH" :title="config.LABEL">
-            <template #content="{ row }">
-              <slot name="expand" :row="row"></slot>
-            </template>
-          </vxe-column>
-        </template>
-
-        <!-- :filters="nameOptions" :filter-render="{name: 'FilterInput'}" -->
-
         <template v-else>
-
           <vxe-column :field="config.FIELD" :align="config.ALIGN" :width="setColWidth(config)" :title=" setColTitle(config)  " :fixed="config.ISFIXED=='left'?'left':null" :height="30" :resizable="true" :key="i" :tree-node=" tableCFG.treeID?.treenodeId == config.FIELD "
             :visible="setTableColShow(config)" :sortable="config.ISSORT == 1">
             <template #header="{ column }">
               <Header :column="column" :config="config" :tableData="sourceTableData" :sortCFG :tableCFG="tableCFG" @filterEvent="filterEvent" @handleSortEvent="headerCellClickEvent" @rightClick="rightClickEvent" @setColShowEvent="setColShowEvent" />
             </template>
-
             <template #default="{ row }">
-              <template v-if="tableStyle == 1 ">
-                <!-- 线性风格 -->
-                <div class="line-style-wrap">
-                  <template v-if="!config.LINESTYLE">
-                    {{ row[config.FIELD] }}
-                  </template>
-                  <template v-else>
-                    <el-row>
-                      <el-col class="line-style-cell" :span="itemHtml.col*1 " v-for="(itemHtml, htminIn) in lineStyleCFG(config).list " :key="htminIn">
-                        <span class="cell-label">{{ itemHtml.label  }}： </span>
-
-                        <template v-if="itemHtml.isImg==1 ">
-                          <ImagePreview class="line-style-img" :src="row[itemHtml.id]" :width="20" :height="20" />
-                        </template>
-
-                        <template v-else-if="itemHtml.isLink">
-                          <el-link type="primary" @click.stop="linkEvent(itemHtml, row)">
-                            {{  resetCellVal( row, itemHtml ).name }}
-                          </el-link>
-                        </template>
-
-                        <template v-else-if="resetCellVal( row, itemHtml ).color">
-                          <el-tag :type="resetCellVal( row, itemHtml ).color" effect="light" round>
-                            {{  resetCellVal( row, itemHtml ).name }}
-                          </el-tag>
-                        </template>
-                        <span class="cell-value" v-else> {{ resetCellVal( row, itemHtml ).name   }} </span>
-                      </el-col>
-                    </el-row>
-                  </template>
-                </div>
-              </template>
-
-              <template v-else-if="config.CONTROLS == 'ExUploadFile'">
-                <el-link type="primary" v-if="row[config.FIELD]" @click.stop="handleFileList(row, config)">{{ getFileLength(row,[config.FIELD]) }}个文件</el-link>
-              </template>
-
-              <!-- <template v-else-if="tableCFG.treeID?.treenodeId == config.FIELD">
-                <template v-if="tableCFG.treeID.groupName">
-                  {{ row[tableCFG.treeID.groupName] || '' }}
-                </template>
-                <template v-else-if="tableCFG.treeID.treenodeId">
-                  {{ row[tableCFG.treeID.treenodeId] || '' }}
-                </template>
-              </template> -->
-
-              <!-- 超链接 -->
-              <template v-else-if="config.VTYPE == 'link'">
-                <el-link style="color:#0000ff;" type="primary" @click.stop="openLink(config, row)">{{row[config.FIELD]}}</el-link>
-              </template>
-
-              <!-- 插槽 -->
-              <template v-else-if="config.VTYPE == 'ExNumberTh'">
-                {{  toThousands(row[config.FIELD])  }}
-              </template>
-
-              <!-- 插槽 -->
-              <template v-else-if="config.VTYPE == 'slot'">
-                <slot :name="config.FIELD" :row="row"></slot>
-              </template>
-
-              <!-- 单元格拼接 -->
-
-              <div v-else-if="config.VTYPE == 'ExJoint'" class="ExJoint-wrap">
-                <template v-for="(itemHtml, htminIn) in formatHTML(row, config)" :key="htminIn">
-                  <div v-if="itemHtml.row == 1">
-                    <span v-html="itemHtml.label" v-if="itemHtml.label"> </span>
-                    <span :style="{
-                      color: htmlColor(row[itemHtml.value], itemHtml.color),
-                    }" @click.stop="
-                      itemHtml.isLink
-                        ? openLinkByHtml(row, itemHtml.isLink)
-                        : null
-                    ">
-                      {{
-                      itemHtml.isDict == 1
-                        ? htmlDictName(row[itemHtml.value], itemHtml.value)
-                        : row[itemHtml.value]
-                    }}
-                    </span>
-                  </div>
-                  <template v-else>
-                    <span v-html="itemHtml.label" v-if="itemHtml.label"> </span>
-                    <template v-if="itemHtml.isTag == 1">
-                      <el-tag class="ml-2" :type="htmlDictColor(row[itemHtml.value], itemHtml.value)" effect="dark" round v-if="htmlDictName(row[itemHtml.value], itemHtml.value) != '-'">
-                        {{
-                        itemHtml.isDict == 1
-                        ? htmlDictName(row[itemHtml.value], itemHtml.value)
-                        : row[itemHtml.value]
-                      }}
-                      </el-tag>
-                    </template>
-
-                    <text v-else :style="{
-                      color: htmlColor(row[itemHtml.value], itemHtml.color)? '#fff' : '#333',
-                      background: htmlColor(row[itemHtml.value], itemHtml.color) ,
-                    }" @click.stop="
-                      itemHtml.isLink
-                        ? openLinkByHtml(row, itemHtml.isLink)
-                        : null
-                    ">
-                      {{
-                      itemHtml.isDict == 1
-                        ? htmlDictName(row[itemHtml.value], itemHtml.value)
-                        : row[itemHtml.value]
-                    }}
-                    </text>
-                  </template>
-                </template>
-              </div>
-
-              <!-- 富文本内容提取 -->
-              <template v-else-if="config.VTYPE == 'ExEditor'">
-                {{ getSimpleText(row[config.FIELD]) }}
-              </template>
-
-              <!-- 图片预览 -->
-              <template v-else-if="config.VTYPE == 'ExImg'">
-                <div class="img-box" v-if="row[config.FIELD]">
-                  <ImagePreview :src="row[config.FIELD]" :width="20" :height="20" />
-                </div>
-                <div></div>
-              </template>
-              <template v-else-if="config.VTYPE == 'exNumLink'">
-                <el-link :type="dict2name(config.OTHER, row[config.FIELD]).color" @click.stop="openLink(config, row)">
-                  {{ setArrToDictLabel(config.OTHER, row[config.FIELD]) }}
-                </el-link>
-              </template>
-
-              <!-- 枚举转译 -->
-              <template v-else-if="config.VTYPE == 'exNum'">
-                <!-- <el-tag class="ml-2" v-if="config.SLOT == 'tags' && row[config.FIELD]" :type="dict2name(config.OTHER, row[config.FIELD]).color" effect="dark">
-                  {{ setArrToDictLabel(config.OTHER, row[config.FIELD]) }}
-                </el-tag>
-                <el-switch v-else-if="config.SLOT == 'switch'" v-model="row[config.FIELD]" disabled inline-prompt active-value="1" inactive-value="0" active-text="是" inactive-text="否" />
-                <div class="disflex" v-else-if="config.SLOT == 'statusNode'">
-                  <div class="img-circle mr5 dots" :style="{
-                    backgroundColor: setStatusNodes(
-                      config.OTHER,
-                      row[config.FIELD]
-                    ).color,
-                  }"></div>
-                  <span :style="{
-                    color: setStatusNodes(config.OTHER, row[config.FIELD])
-                      .color,
-                  }">{{
-                    setStatusNodes(config.OTHER, row[config.FIELD]).LABEL
-                  }}</span>
-                </div>
-                <span v-else>
-                  {{ setArrToDictLabel(config.OTHER, row[config.FIELD]) }}
-                </span> -->
-
-                <span>
-                  {{ setArrToDictLabel(config.OTHER, row[config.FIELD]) }}
-                </span>
-              </template>
-
-              <template v-else-if="config.VTYPE == 'ExSelectIcon'">
-                <img :src="  getNumIcon( setArrToDictLabel(config.OTHER, row[config.FIELD]) )" alt="" srcset="" class="exnum-icon">
-              </template>
-              <template v-else-if="
-                config.CONTROLS == 'ExSelectSearch' ||
-                config.CONTROLS == 'ExSelectMutiple' ||
-                config.CONTROLS == 'ExSelectGroup' ||
-                config.CONTROLS == 'ExRegion' || 
-                config.CONTROLS == 'ExArea'
-              ">
-                {{ row[config.REVERFIELD] }}
-              </template>
-
-              <span v-else-if="config.SUFFIX && config.SUFFIX != ''">
-                {{ setSuffix(row, config) }}
-              </span>
-              <!-- 进度条 -->
-              <template v-else-if="config.VTYPE == 'progressBar'">
-                <el-progress :percentage="row[config.FIELD] || 0" :color="settimgProgress(config).colors" :stroke-width="settimgProgress(config).height" />
-              </template>
-              <template v-else-if="config.VTYPE == 'grade'">
-
-                <!-- <div>{{ row[config.FIELD] || '评分' }}</div> -->
-                <el-button type="primary" link @click="clickGrade(row,config)">{{ row[config.FIELD] || '评分' }}</el-button>
-              </template>
-              <!-- 类型内状态节点 -->
-              <!-- <template v-else-if="config.VTYPE == 'statusNode'">
-              <div class="disflex">
-                <div class="img-circle mr5 dots" :style="{backgroundColor:setStatusNode(config,row[config.FIELD]).bgColor}"></div>
-                <span :style="{color:setStatusNode(config,row[config.FIELD]).color}" >{{setStatusNode(config,row[config.FIELD]).label}}</span>
-              </div>
-            </template> -->
-
-              <span v-else>
-                {{ row[config.FIELD] }}
-              </span>
+              <Content :config :row />
             </template>
           </vxe-column>
-
         </template>
 
       </template>
-
-      <vxe-column title="" min-width="10px" v-if="tableCFG.hasFill  && (tableCFG.autoWidth=='0' || !tableCFG.autoWidth) ">
-      </vxe-column>
 
       <vxe-column title="操作" :width="actionBarWidth" fixed="right" v-if="actionBar">
         <template #default="{ row, rowIndex }">
           <slot name="actionBar" :rowIndex="rowIndex" :row="row"></slot>
         </template>
       </vxe-column>
-      <vxe-column title="操作" :width="setActionWidth()" fixed="right" v-if="tableToolsBTN.length">
-        <template #default="{ row }">
-          <el-row justify="center" :gutter="10">
-            <el-col :span="2.5" v-for="(itemB, indexB) in tableToolsBTN" :key="indexB">
-              <el-button :type="itemB.COLOR" plain v-if="setShowBtn(itemB, row)" :disabled="getButtonStatus(itemB, row)" @click.stop="handelEvent(itemB, row)">
-                {{ itemB.VNAME }}
-              </el-button>
-            </el-col>
-          </el-row>
-        </template>
-      </vxe-column>
+      
 
       <template #empty>
         <el-empty :image="emptyImg" description="很抱歉，暂时没有相关数据~" :image-size="150" />
@@ -371,7 +152,8 @@ import {
 import useSettingsStore from "@/store/modules/settings";
 import VueQr from "vue-qr/src/packages/vue-qr.vue";
 
-import Header from "./header.vue";
+import Header from "./components/header.vue";
+import Content from "./components/content.vue";
 
 import { axiosSave } from "@/api/system/page";
 
@@ -814,18 +596,6 @@ function openDrawer() {
   };
   proxy.$emit("change", giveParentData);
 }
-
-//  行点击事件触发单选功能
-const rowClickIndex = ref(null);
-const timer = ref(null)
-// function rowClick(data) {
-//   clearTimeout(timer.value);
-//   timer.value = setTimeout(function () {
-//     //执行你的单击事件
-//     rowClickEvent(data)
-//     console.log('执行你的单击事件', data);
-//   }, 300);
-// }
 
 function rowClick({ row, column, triggerCheckbox, rowIndex }) {
   selectRow.value = row;

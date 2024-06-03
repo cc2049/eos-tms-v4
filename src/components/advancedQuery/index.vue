@@ -112,11 +112,11 @@ const defaultFilterArr = ref([]);
 const chooseRadioVal = ref(null);
 const myPlanList = ref([]);
 const clickRadio = (item) => {
-  chooseRadioVal.value = item.BILLNO;
+  chooseRadioVal.value = item?.BILLNO;
 
   let query = {
     ...MenuID.value,
-    PKBILLNO: item.BILLNO,
+    PKBILLNO: item?.BILLNO,
   };
   // 查询方案里面的值
   axiosGet("/sys/queryprogUserDtl/getSubList", query).then((res) => {
