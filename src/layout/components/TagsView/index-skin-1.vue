@@ -2,7 +2,7 @@
  * @Author: cc2049
  * @Date: 2024-04-24 18:52:34
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-06-04 10:36:35
+ * @LastEditTime: 2024-06-04 17:02:17
  * @Description: 简介
 -->
 <!--
@@ -18,8 +18,8 @@
       <slot name="tags-left">
       </slot>
       <router-link v-for="tag in visitedViews" :key="tag.path" :data-path="tag.path" :class="isActive(tag) ? 'active' : ''" :to="{ path: tag.path, query: tag.query, fullPath: tag.fullPath }" class="tags-view-item" @click.middle="!isAffix(tag) ? closeSelectedTag(tag) : ''"
-        @contextmenu.prevent="openMenu(tag, $event)" @click="handleMenu">
-        {{ tag.title }}
+        @contextmenu.prevent="openMenu(tag, $event)" @click="handleMenu(tag)">
+        {{  resetTitle(tag) }}
         <span v-if="!isAffix(tag)" @click.prevent.stop="closeSelectedTag(tag)">
           <close class="el-icon-close" style="width: 1em; height: 1em;vertical-align: middle;" />
         </span>
@@ -70,7 +70,7 @@ const visitedViews = computed(() => useTagsViewStore().visitedViews);
 const routes = computed(() => usePermissionStore().routes);
 const theme = computed(() => useSettingsStore().theme);
 
-const emit = defineEmits(["closeAllMenu"])
+const emit = defineEmits(["closeAllMenu"]);
 
 watch(route, () => {
   addTags();
@@ -87,6 +87,31 @@ onMounted(() => {
   initTags();
   addTags();
 });
+
+/*
+ * 重置页签的名称， 根据参数 id ，type 0 新增，1编辑 ，2详情
+ */
+
+const resetTitle = (tag) => {
+  if (tag.params && tag.params.type) {
+    const { type } = tag.params;
+    let newTitle = removeWords(tag.title);
+    if (type == 0) {
+      return newTitle + "新增";
+    } else if (type == 1) {
+      return newTitle + "编辑";
+    } else if (type == 2) {
+      return newTitle + "详情";
+    }
+  } else {
+    return tag.title;
+  }
+};
+
+function removeWords(str) {
+  var result = str.match(/新增|编辑|详情/g);
+  return result ? str.replace(/新增|编辑|详情/g, "") : str;
+}
 
 function isActive(r) {
   return r.path === route.path;
@@ -250,11 +275,11 @@ function openMenu(tag, e) {
 }
 function closeMenu() {
   visible.value = false;
-  
 }
 
-function handleMenu(){
-  emit("closeAllMenu")
+function handleMenu(e) {
+  // console.log('点击页签', e);
+  emit("closeAllMenu");
 }
 function handleScroll() {
   closeMenu();

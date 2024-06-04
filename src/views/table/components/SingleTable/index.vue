@@ -2,7 +2,7 @@
  * @Author: cc2049
  * @Date: 2024-04-28 13:10:44
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-06-04 10:22:28
+ * @LastEditTime: 2024-06-04 17:12:11
  * @Description: 简介
 -->
 <template v-if="pageConfig">
@@ -88,10 +88,14 @@ const props = defineProps({
     default: "",
   },
   compType: {},
+  dbClickType: {
+    type: [String, Number],
+    default: 1,
+  },
 });
 
 const VxtableRef = ref(null);
-const topButtonRef = ref(null)
+const topButtonRef = ref(null);
 const pageConfig = ref(null);
 const tableCFG = ref(null);
 const tableData = ref([]);
@@ -175,7 +179,10 @@ function tableChange(data) {
     handelEvent({ data: detailBtnCFG.value, row: data.data });
   } else if (data.clicktype == "checkbox") {
     currentData.value = data.data;
-    if ((props.compType == "VTableZtree" || props.compType == "VTableSub") && SubTableConfig.value.length) {
+    if (
+      (props.compType == "VTableZtree" || props.compType == "VTableSub") &&
+      SubTableConfig.value.length
+    ) {
       SubTableRef.value.getSubData(currentData.value);
     }
     // let expandRow = getRowExpandRecords()
@@ -414,8 +421,12 @@ function resetConfig(data) {
 }
 
 function dbClickTable(data) {
-  topButtonRef.value.openDeatil([data])
-  emit("dbClick", data);
+  if (props.dbClickType == 1) {
+    topButtonRef.value.openDeatil([data]);
+  } else {
+    emit("dbClick", data);
+  }
+  console.log("dbClickTable", props.dbClickType , data);
 }
 
 function getCheckRows() {

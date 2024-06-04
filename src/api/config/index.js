@@ -122,6 +122,14 @@ export const ALIGN = [
   { LABEL: "居右", VALUE: "right" },
 ]
 
+/*
+* 查询的默认设置  1-过滤条件 0-快速查找
+*/
+export const BUSSTYPE = [
+  { LABEL: "快速查找", VALUE: "0" },
+  { LABEL: "过滤条件", VALUE: "1" },
+]
+
 // 加密
 export const ENCRY = [
   // { LABEL: "MD5加密", VALUE: "4" },
