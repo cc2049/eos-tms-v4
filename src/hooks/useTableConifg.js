@@ -2,7 +2,7 @@
  * @Author: cc2049
  * @Date: 2024-04-25 17:34:36
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-05-30 18:07:51
+ * @LastEditTime: 2024-06-04 16:14:41
  * @Description: 获取动态配置
  */
 
@@ -129,7 +129,7 @@ const useTableConifg = (menu) => {
         let subConfig = {
             subLayout: ISSUB || 0,
             subLayoutLeft: TABLEHEIGHT || '50%' ,
-            subLayoutRight:  percentageToNumber(TABLEHEIGHT )
+            subLayoutRight:  ISSUB ==1? percentageToNumber(TABLEHEIGHT ):''
         }
         copyPageConfig.subConfig = subConfig
         return copyPageConfig

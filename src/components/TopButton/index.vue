@@ -2,7 +2,7 @@
  * @Author: cc2049
  * @Date: 2024-04-28 15:12:29
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-06-03 22:08:30
+ * @LastEditTime: 2024-06-04 11:46:16
  * @Description: 简介
 -->
 
@@ -101,7 +101,6 @@ import { ElMessageBox } from "element-plus";
 import { axiosGet } from "#/common";
 import { inject, reactive } from "vue";
 import { getUrlParams } from "@/utils";
-
 
 import FormPage from "@/views/formPage/index.vue";
 
@@ -327,11 +326,27 @@ function handleEvent(data, row) {
   }
   //打开菜单
   if (data.VTYPE == 16) {
-    let newPath = data.ACTIONADDRESS.includes(':id') ? data.ACTIONADDRESS.replace(':id', selectRecords[0].BILLNO) : data.ACTIONADDRESS;
-    console.log(newPath);
-    
+    let doType = 0,
+      Bid = "-";
+    if (data.ACTION == "EDIT") {
+      doType = 1;
+      Bid = selectRecords[0].BILLNO;
+    } else if (data.ACTION == "DTL") {
+      doType = 2;
+      Bid = selectRecords[0].BILLNO;
+    } else {
+      doType = 0;
+      Bid = "-";
+    }
+
+    let newPath = data.ACTIONADDRESS.includes(":id")
+      ? data.ACTIONADDRESS.replace(":id", Bid)
+      : data.ACTIONADDRESS;
+    newPath = newPath.includes(":type")
+      ? newPath.replace(":type", doType)
+      : newPath;
     router.push({
-      path: newPath ,
+      path: newPath,
       // query: { billno: orderNos },
     });
   }
