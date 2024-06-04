@@ -73,7 +73,7 @@
               <el-button size="small" v-if="queryLeftForm.BILLSTATUS == 4">报名明细</el-button>
               <el-button size="small" type="primary" v-if="queryLeftForm.BILLSTATUS == 4">中标</el-button>
 
-              <el-button size="small" v-if="queryLeftForm.BILLSTATUS == 6">作废</el-button>
+              <el-button size="small" v-if="queryLeftForm.BILLSTATUS == 6" @click="clickCancellation">作废</el-button>
               <el-button size="small" v-if="queryLeftForm.BILLSTATUS == 6">报名明细</el-button>
               <el-button size="small" type="primary" v-if="queryLeftForm.BILLSTATUS == 6">查看公告</el-button>
 
@@ -391,7 +391,7 @@ import axios from "axios";
 import {
   getSignList, getBidSignCount, getCarrierDetail
   , getBidRunList, submitApprove, forceEnd, cancelSign, confirmSign
-  , getBidRecordCarrierList
+  , getBidRecordCarrierList,cancellation
 } from "#/system/biddingHall";
 
 
@@ -829,6 +829,14 @@ const confirmApply = () => {
     getPageList()
   });
 }
+
+const clickCancellation=()=>{
+
+
+
+  
+}
+
 
 const applyInfoRef = ref(null)
 const applyInfoRefChooseList = ref([])

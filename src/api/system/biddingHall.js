@@ -91,6 +91,16 @@ export function getBidRecordCarrierList(data) {
     })
 }
 
+// 作废
+export function cancellation(data) {
+    return request({
+        url: 'oms/bidRecord/bidWin/cancel',
+        method: 'post',
+        data: data
+    })
+}
+
+
 
 
 
