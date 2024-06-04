@@ -2,7 +2,7 @@
  * @Author: cc2049
  * @Date: 2024-04-28 13:10:44
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-05-30 23:29:31
+ * @LastEditTime: 2024-06-04 10:22:28
  * @Description: 简介
 -->
 <template v-if="pageConfig">
@@ -321,7 +321,7 @@ function getTreeData() {
 }
 
 const queryURL = ref(null);
-const queryJSON = ref(null);
+const queryJSON = ref({});
 const topButton = ref([]);
 const multiMainTable = ref([]);
 
@@ -396,7 +396,6 @@ function queryHeight() {
 
 //
 function handleCustomPlan(data) {
-  console.log("🚀 ~ handleCustomPlan ~ data:", data)
   queryJSON.value.PROGRAMID = data.PROGRAMID;
   queryJSON.value.QUERYS = data.QUERYS || [];
   pageConfig.value.hasTree ? getTreeData() : getTableData();

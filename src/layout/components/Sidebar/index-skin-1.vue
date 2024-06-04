@@ -2,7 +2,7 @@
  * @Author: cc2049
  * @Date: 2024-04-25 14:41:35
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-05-18 12:19:18
+ * @LastEditTime: 2024-06-04 10:27:26
  * @Description: 简介
 -->
 <template>
@@ -378,6 +378,7 @@ function handleMenu(itemS) {
   } else {
     let path = itemS.fullPath;
     showSidebarRight.value = false;
+    $emit("closeMenu");
     router.push({ path: path });
   }
 }
@@ -618,13 +619,12 @@ $new-menu-style-bgcolor: #fff;
       font-size: 20px;
       padding-bottom: 10px;
       border-bottom: 1px solid #e3e3e3;
-      &-right{
-        .el-icon:hover{
+      &-right {
+        .el-icon:hover {
           cursor: pointer;
           color: var(--el-color-primary);
         }
       }
-
     }
   }
 
