@@ -2,14 +2,17 @@
  * @Author: cc2049
  * @Date: 2024-04-23 11:35:41
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-06-04 09:48:19
+ * @LastEditTime: 2024-06-04 15:07:55
  * @Description: 大表单组件
 -->
 
 <template>
   <div class="form-container">
     <TopButton :topButton="topButton" sourceType="2" @handleBtnEvent="handleBtnEvent" />
-    <MasterForm ref="eosFormRef" v-model="formData" :formConfig="formConfig" :detail="isDetail" :tableConfig="tableConfig" />
+    <el-scrollbar :height="formHeight">
+      <MasterForm ref="eosFormRef" v-model="formData" :formConfig="formConfig" :detail="isDetail" :tableConfig="tableConfig" />
+    </el-scrollbar>
+
   </div>
 </template>
 
@@ -19,6 +22,7 @@ import MasterForm from "@/components/MasterForm/index.vue";
 import { getPageConfig } from "#/system/page.js";
 import { getFormValue, getQueryUrl } from "@/utils";
 import { axiosGet } from "#/common";
+import { onMounted } from "vue";
 
 const props = defineProps({
   menuID: {
@@ -47,6 +51,8 @@ const formData = ref({});
 const detail = ref(false);
 const labelWidth = ref("100px");
 const tableConfig = ref([]);
+const formHeight = ref(300);
+
 watch(
   () => props.menuID,
   (value) => {
@@ -74,10 +80,10 @@ watch(
 function resetButton(arr) {
   if (arr.length) {
     return arr;
-  }else if(!props.activeBtn){
+  } else if (!props.activeBtn) {
     return [];
   }
-  
+
   let copyBtn = JSON.parse(JSON.stringify(props.activeBtn));
   try {
     let customCF = JSON.parse(copyBtn.PAGEPATH);
@@ -127,6 +133,13 @@ function submitEvent(URL, sdata) {
     }
   });
 }
+
+onMounted(() => {
+  formHeight.value = window.innerHeight - 124;
+  window.onresize = function temp() {
+    formHeight.value = window.innerHeight - 124;
+  };
+});
 </script>
 
 <style lang="scss" scoped>
