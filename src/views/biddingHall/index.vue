@@ -41,12 +41,12 @@
       </el-col>
       <el-col :span="19">
 
-        <el-card class="box-card">
+        <el-card class="box-card" v-if="detailNoDynamic.BILLNO">
           <template #header>
             <div class="tr">
               <el-button size="small">编辑</el-button>
               <el-button size="small">发布公告</el-button>
-              <el-button size="small" type="primary">提交审核</el-button>
+              <el-button size="small" type="primary" @click="subCheck">提交审核</el-button>
               <!-- 
               <el-button size="small" type="danger">强制结束</el-button>
               <el-button size="small">查看公告</el-button>
@@ -105,7 +105,7 @@
                   </div>
                 </div>
               </div>
-              <div class="disflex" v-if="bidInfo.BILLSTATUS == 5" style="flex-shrink:0">
+              <div class="disflex" v-if="bidInfo.BILLSTATUS == 4 || bidInfo.BILLSTATUS == 5" style="flex-shrink:0">
                 <div class="mr-10">
                   <el-form ref="ruleFormRef" :model="ruleForm" label-width="50px" class="demo-ruleForm" size='small'
                     status-icon>
@@ -218,10 +218,10 @@
                     <div class="disflex flex-w mt10 pt-10" style="border-top: 1px dashed #ccc;">
                       <div v-for="(item, index) in cargoInfoList1" :key="index" class="disflex mr-20 mb-5">
                         <div class="">{{ item.title }}</div>
-                        <div v-if="item.flag">
+                        <div v-if="item.flag && compShow(detailNoDynamic, item)">
                           <div v-if="item.flag == 'select'" class="cargoInfo-top-content">
                             {{ computedCargoInfoSelect(item.selectList,
-        detailNoDynamic[item.text]) }}
+        detailNoDynamic[item.text]).label }}
                           </div>
                           <div class="cargoInfo-top-content" v-else-if="item.flag == 'sub'">
                             <span v-for="item in computedSub(detailNoDynamic.SUBLIST)" :key="item">{{ item
@@ -229,7 +229,10 @@
                             <!-- {{ computedSub(detailNoDynamic.SUBLIST) }} -->
                           </div>
                           <div class="cargoInfo-top-content" v-else-if="item.flag == 'joinBiddingTime'">
-                            {{ detailNoDynamic.BIDSTTIME }}-{{ detailNoDynamic.BIDEDTIME}}
+                            {{ detailNoDynamic.BIDSTTIME }}-{{ detailNoDynamic.BIDEDTIME }}
+                          </div>
+                          <div v-else-if="item.flag == 'isRadio'">
+                            {{ detailNoDynamic[item.text] == 1 ? '是' : '否' }}
                           </div>
                         </div>
                         <div v-else class="cargoInfo-top-content">{{ detailNoDynamic[item.text] }}
@@ -241,87 +244,47 @@
 
               </el-collapse-item>
             </el-collapse>
-            <div>
-              <div class="commonSmallTitle mt-10 disflex justify-sb">
-                <div class="disflex card-header">
-                  <div class="mr-20">出价信息</div>
-                  <div class="disflex">
-                    <div class="RoundBid">{{ detailNoDynamic.BIDTYPE == 1 ? '自由出价' : detailNoDynamic.BIDTYPE
-        ==
-        2 ? '公开竞价' : '轮次出价' }}</div>
-                    <div class="currentRound" v-if="detailNoDynamic.BIDTYPE == 0">当前轮次：<span class="currentRound-num">{{
-        detailNoDynamic.ROUNDNUM
-      }}次</span> </div>
-                  </div>
-
-                </div>
-                <div class="winBidding-topRight disflex">
-                  <div>在线人数</div>
-                  <div class="winBidding-topRight-num mr-10">{{ bidInfo.SIGNCOUNT }}个</div>
-
-                  <div>报名单位</div>
-                  <div class="winBidding-topRight-num mr-10">{{ bidInfo.SIGNCOUNT }}个</div>
-
-                  <div>出价单位</div>
-                  <div class="winBidding-topRight-num mr-10">{{ bidInfo.COMPANYCOUNT }}个</div>
-
-                  <div>出价次数</div>
-                  <div class="winBidding-topRight-num mr-10">{{ bidInfo.RECORDCOUNT }}次</div>
-
-                  <div v-if="userInfo.USERTYPE == 2 && bidInfo.CARRIERVISITRANK == 1">出价排名</div>
-                  <div v-if="userInfo.USERTYPE == 2 && bidInfo.CARRIERVISITRANK == 1"
-                    class="winBidding-topRight-num mr-10">{{
-        bidInfo.CHINESERANK }}</div>
-
-                </div>
-              </div>
-              <div class="mt10">
-                <el-table :data="bidInfo.SUBLIST" style="width: 100%">
-                  <el-table-column prop="BIDDERNAME" label="出价单位" width="180" />
-                  <el-table-column prop="BIDPRICE" label="出价金额" />
-                  <el-table-column prop="IPADDRESS" label="IP地址" />
-                  <el-table-column prop="BIDADDRESS" label="定位信息" />
-                  <el-table-column prop="BIDDATE" label="出价时间" />
-                  <el-table-column prop="BILLSTATUS" label="状态">
-                    <template #default="scope">
-                      {{ scope.row.BILLSTATUS == 1 ? '有效' : '无效' }}
-                    </template>
-                  </el-table-column>
-                </el-table>
-              </div>
-            </div>
             <!-- 报名信息 报名中 -->
-            <div>
+            <div v-if="detailNoDynamic.BILLSTATUS == 3">
               <div class="commonSmallTitle mt-10 disflex justify-sb">
                 <div class="disflex card-header">
                   <div class="mr-20">报名信息</div>
-                  <div>
-                    <div>报名状态</div>
-
+                  <div class="disflex">
+                    <div class="selectLeftText">报名状态</div>
+                    <el-select v-model="applyStatus" size="small" style="width: 120px" @change="changeApplyStatus">
+                      <el-option label="全部" value="" />
+                      <el-option label="已确认" value="1" />
+                      <el-option label="未确认" value="0" />
+                    </el-select>
                   </div>
                 </div>
                 <div class="winBidding-topRight disflex">
                   <div>报名人数</div>
-                  <div class="winBidding-topRight-num mr-10">{{ bidInfo.SIGNCOUNT }}</div>
+                  <div class="winBidding-topRight-num mr-10">{{ applyInfoData.TOTAL }}</div>
 
                   <div>已确认</div>
-                  <div class="winBidding-topRight-num mr-10">{{ bidInfo.SIGNCOUNT }}</div>
+                  <div class="winBidding-topRight-num mr-10">{{ applyInfoData.CONFIRMED }}</div>
 
                   <div>未确认</div>
-                  <div class="winBidding-topRight-num mr-10">{{ bidInfo.COMPANYCOUNT }}</div>
+                  <div class="winBidding-topRight-num mr-10">{{ applyInfoData.UNCONFIRM }}</div>
                 </div>
               </div>
               <div class="mt10">
-                <el-table :data="bidInfo.SUBLIST" style="width: 100%">
-                  <el-table-column prop="BIDDERNAME" label="报名状态" width="180" />
-                  <el-table-column prop="BIDPRICE" label="报名单位" />
-                  <el-table-column prop="IPADDRESS" label="报名时间" />
-                  <el-table-column prop="BIDADDRESS" label="报名用户" />
-                  <el-table-column prop="BIDDATE" label="确认人" />
-                  <el-table-column prop="BIDDATE" label="确认时间" />
+                <el-table :data="applyInfoList" style="width: 100%">
+                  <el-table-column prop="BILLSTATUS" label="报名状态">
+                    <template #default="scope">
+                      <span>{{ scope.row.BILLSTATUS == 0 ? '未确认' : '已确认' }}</span>
+                    </template>
+                  </el-table-column>
+                  <el-table-column prop="CARRIERNAME" label="报名单位" />
+                  <el-table-column prop="CREATIONTIME" label="报名时间" />
+                  <el-table-column prop="CREATORNAME" label="报名用户" />
+                  <el-table-column prop="APPROVER" label="确认人" />
+                  <el-table-column prop="APPROVERTIME" label="确认时间" />
                   <el-table-column prop="BILLSTATUS" label="资质审查">
                     <template #default="scope">
-                      el
+                      <!-- 调用 13 -->
+                      <el-button type="primary" text @click="checkCertification(scope.row)">查看资质</el-button>
                     </template>
                   </el-table-column>
                 </el-table>
@@ -329,36 +292,49 @@
             </div>
 
             <!-- 竞价信息 竞价中 -->
-            <div>
+            <div
+              v-else-if="detailNoDynamic.BILLSTATUS == 4 || detailNoDynamic.BILLSTATUS == 5 || detailNoDynamic.BILLSTATUS == 6 || detailNoDynamic.BILLSTATUS == 7">
               <div class="commonSmallTitle mt-10 disflex justify-sb">
                 <div class="disflex card-header">
                   <div class="mr-20">竞价信息</div>
-                  <div>
-                    <div>出价单位</div>
+                  <div class="disflex">
+                    <div class="disflex">
+                      <div class="selectLeftText">出价单位</div>
+                      <!-- <el-select v-model="applyStatus" size="small" style="width: 120px" @change="changeApplyStatus">
+                      <el-option label="全部" value="" />
+                      <el-option label="已确认" value="1" />
+                      <el-option label="未确认" value="0" />
+                    </el-select> -->
+                    </div>
+                    <div v-if="detailNoDynamic.BILLSTATUS == 6 || detailNoDynamic.BILLSTATUS == 7">
+                      <div>是否中标</div>
+                    </div>
                   </div>
-                  <div>
-                    <div>是否中标</div>
-                  </div>
+
                 </div>
               </div>
               <div class="mt10">
-                <el-table :data="bidInfo.SUBLIST" style="width: 100%">
-                  <el-table-column prop="BIDDERNAME" label="排名" width="180" />
-                  <el-table-column prop="BIDPRICE" label="联系方式" />
-                  <el-table-column prop="IPADDRESS" label="出价金额" />
-                  <el-table-column prop="BIDADDRESS" label="出量" />
-                  <el-table-column prop="BIDDATE" label="IP地址" />
-                  <el-table-column prop="BIDDATE" label="定位信息" />
-                  <el-table-column prop="BIDDATE" label="出价时间" />
-                  <el-table-column prop="BIDDATE" label="中标" />
+                <el-table :data="bidRunList" style="width: 100%">
+                  <el-table-column type="index" width="50" label="排名" />
+                  <el-table-column prop="CONTACTTEL" label="联系方式" />
+                  <el-table-column prop="BIDPRICE" label="出价金额" />
+                  <el-table-column prop="EXPECTVALUE" label="出量" />
+                  <el-table-column prop="UIPADDRESS" label="IP地址" />
+                  <el-table-column prop="BIDADDRESS" label="定位信息" />
+                  <el-table-column prop="BIDTIME" label="出价时间" />
+                  <el-table-column prop="IS_BID" label="中标">
+                    <template #default="scope">
+                      <span>{{ scope.row.IS_BID == 0 ? '否' : scope.row.IS_BID == 1? '是' :''}}</span>
+                    </template>
+                  </el-table-column>
                   <el-table-column prop="BIDDATE" label="物料" />
                   <el-table-column prop="BILLSTATUS" label="分配量">
                     <template #default="scope">
 
                     </template>
                   </el-table-column>
-                  <el-table-column prop="BIDDATE" label="中标时间" />
-                  <el-table-column prop="BIDDATE" label="中标确认人" />
+                  <el-table-column prop="SURETIME" label="中标时间" />
+                  <el-table-column prop="SURENAME" label="中标确认人" />
                 </el-table>
               </div>
             </div>
@@ -371,6 +347,9 @@
           </el-scrollbar>
 
         </el-card>
+        <el-card v-else>
+          <el-empty :image="emptyImg" description="很抱歉，暂时没有相关数据~" :image-size="350" />
+        </el-card>
         <!-- </el-scrollbar> -->
 
       </el-col>
@@ -379,30 +358,24 @@
 </template>
 
 <script setup>
-// const sideIndex = ref();
 
 const leftHight = window.innerHeight - 240;
 const Hight = window.innerHeight - 154;
 const { proxy } = getCurrentInstance();
 const MenuID = inject("menuID");
-
+const emptyImg = proxy.getAssetsFile("icon_task_NoData.png");
 import { onMounted, onUnmounted, ref, } from "vue";
 
 import { Search } from "@element-plus/icons-vue";
-// import { getGfLeftList, getGfRightList } from "#/system/log";
 import { getTableData } from "@/api/system/page";
-// import biddingHall1 from "@/assets/images/WZC/biddingHall1.png";
-// import biddingHall2 from "@/assets/images/WZC/biddingHall2.png";
-// import biddingHall3 from "@/assets/images/WZC/biddingHall3.png";
 import countDown from "@/components/countDown/index";
 
 import axios from "axios";
 
-// const route = useRoute();
-// const searchValue = ref("");
-// const textContent = ref("");
-// const Description = ref("");
-// const vname = ref("");
+import { getSignList, getBidSignCount, getCarrierDetail, getBidRunList,submitApprove } from "#/system/biddingHall";
+
+
+
 const ruleForm = ref({
   BIDPRICE: null,
   EXPECTVALUE: null,
@@ -416,14 +389,12 @@ import useUserStore from "@/store/modules/user";
 const userStore = useUserStore();
 
 const userInfo = computed(() => userStore.userInfo);
-// BILLSTATUS 项目状态0-未开始 1-待发公告 2-待报名 3-报名中 4-待竞价 5-竞价中 6-竞价结束
-
+// BILLSTATUS  0未开始(待提交、审核中、未通过)、1待发公告、2报名中(无需报名的没有这个状态)、3待竞价(报名结束)、4竞价中、5竞价结束、6已完成/已结束(已中标、未中标、已作废)、7强制结束
 const statusList = ref(['未开始', '待发公告', '报名中', '待竞价', '竞价中', '竞价结束', '已完成', '强制结束'])
 
 const computedCargoInfoSelect = computed((list, val) => {
   return (list, val) => {
     if (!list || !val) return "暂无数据";
-    // console.log(detailNoDynamic.value.WINNUM)
     for (const key in list) {
       if (val == key) {
         return list[key];
@@ -530,7 +501,7 @@ const cargoInfoList1 = ref([
   {
     title: "竞价时间",
     // text: "BIDSTARTTIME",
-    flag:'joinBiddingTime'
+    flag: 'joinBiddingTime'
   },
   {
     title: "延期时长",
@@ -538,76 +509,118 @@ const cargoInfoList1 = ref([
   },
   {
     title: "报名确认",
-    text: "BIDSTARTTIME",
+    text: "IS_SIGNQR",
+    flag: 'select',
+    selectList: [
+      {
+        label: '人工确认',
+        value: 0,
+      },
+      {
+        label: '自动确认',
+        value: 1,
+      },
+    ]
   },
   {
     title: "保证金额",
-    text: "BIDSTARTTIME",
+    text: "BONDAMT",
   },
   {
     title: "报名时间",
-    text: "BIDSTARTTIME",
+    text: "SIGNSTTIME",
   },
   {
     title: "运费上限",
-    text: "BIDSTARTTIME",
+    text: "FLOORPRICE",
   },
   {
     title: "确标方式",
-    text: "BIDSTARTTIME",
+    text: "IS_SURE",
+    flag: 'isRadio',
   },
   {
     title: "中标分配",
-    text: "BIDSTARTTIME",
+    text: "DEVIDETYPE",
+    flag: 'select',
+    selectList: [
+      {
+        label: '平均分配',
+        value: 0,
+      },
+      {
+        label: '货主分配',
+        value: 1,
+      },
+      {
+        label: '承运商出量',
+        value: 2,
+      },
+    ]
   },
   {
     title: "中标名次",
-    text: "BIDSTARTTIME",
+    text: "WINNUM",
+    flag: 'select',
+    selectList: [
+      {
+        label: ' 第一名中标',
+        value: 1,
+      },
+      {
+        label: '前两名中标',
+        value: 2,
+      },
+      {
+        label: '前三名中标',
+        value: 3,
+      },
+      {
+        label: '前四名中标',
+        value: 4,
+      },
+      {
+        label: '前五名中标',
+        value: 5,
+      },
+    ]
   },
   {
     title: "第一名量",
-    text: "BIDSTARTTIME",
+    text: "ONEZBNUM",
+    flag: 'isShow',
+    isShow: "DATA.WINNUM >= 1"
   },
   {
     title: "第二名量",
-    text: "BIDSTARTTIME",
+    text: "TWOZBNUM",
+    flag: 'isShow',
+    isShow: "DATA.WINNUM >= 2"
+  },
+  {
+    title: "第三名量",
+    text: "THREEZBNUM",
+    flag: 'isShow',
+    isShow: "DATA.WINNUM >= 3"
+  },
+  {
+    title: "第四名量",
+    text: "FOURZBNUM",
+    flag: 'isShow',
+    isShow: "DATA.WINNUM >= 4"
+  },
+  {
+    title: "第五名量",
+    text: "FIVEZBNUM",
+    flag: 'isShow',
+    isShow: "DATA.WINNUM >= 5"
   },
   {
     title: "降价幅度",
-    text: "BIDSTARTTIME",
+    text: "PRICECUT",
   },
 ])
-// const winBiddingList = ref([
-//   {
-//     title: "第一名分配",
-//     num: "ONEPRESENDCARNUM",
-//     // img: biddingHall1,
-//   },
-//   {
-//     title: "第二名分配",
-//     num: "TWOPRESENDCARNUM",
-//     // img: biddingHall2,
-//     colorClass: "two",
-//   },
-//   {
-//     title: "第三名分配",
-//     num: "THREEPRESENDCARNUM",
-//     // img: biddingHall3,
-//     colorClass: "tree",
-//   },
-//   {
-//     title: "第四名分配",
-//     num: "FOURPRESENDCARNUM",
-//     // img: biddingHall3,
-//     colorClass: "four",
-//   },
-//   {
-//     title: "第五名分配",
-//     num: "FIVEPRESENDCARNUM",
-//     // img: biddingHall3,
-//     colorClass: "five",
-//   },
-// ]);
+
 // 0-未开始 1-待发公告 2-待报名 3-报名中 4-待竞价 5-竞价中 6-竞价结束 7-竞价完
 const BILLSTATUSList = ref([
   "未开始",
@@ -632,6 +645,14 @@ onMounted(() => {
   //   queryPosition();
   // }
 });
+
+const compShow = (DATA, config) => {
+  if (!config.isShow) return
+  try {
+    eval(config.isShow)
+  } catch (error) { }
+}
+
 
 const priceBlur = (num, field) => {
   ruleForm.value[field] = Number(ruleForm.value[field]).toFixed(num);
@@ -667,7 +688,6 @@ const quantityData = ref({})
 const getProjectStatusCount = () => {
   getTableData("oms/omsBidProject/getProjectStatusCount", {
   }).then((res) => {
-    console.log("🚀 ~ getProjectStatusCount ~ res:", res)
     quantityData.value = res.RESULT
   });
 }
@@ -707,8 +727,89 @@ const getDetailNoDynamic = () => {
   }).then((res) => {
     // countDownRef.value ? countDownRef.value.countDownClearInterval() : ''
     detailNoDynamic.value = res.RESULT;
+
+    const { BILLSTATUS } = res.RESULT
+
+    switch (BILLSTATUS) {
+      case "3":
+        queryApplyInfo(menuVal.value)
+        getGetBidSignCount(menuVal.value)
+        break;
+      case "4":
+        getGetBidRunList(menuVal.value);
+        break;
+      case "5":
+        getGetBidRunList(menuVal.value);
+        break;
+      case "6":
+
+        break;
+      case "7":
+
+        break;
+      default:
+        break;
+    }
+
+
+
+
+
+
   });
 };
+
+const applyStatus = ref('')
+const applyInfoList = ref([])
+const queryApplyInfo = (PK_PROJECT) => {
+  const protData = {
+    PK_PROJECT,
+    // PK_PROJECT: 1,
+    BILLSTATUS: applyStatus.value,
+    // ...MenuID.value
+  }
+  getSignList(protData).then((res) => {
+    applyInfoList.value = res.RESULT
+
+  });
+}
+
+const changeApplyStatus = (e) => {
+  queryApplyInfo(menuVal.value)
+}
+const applyInfoData = ref({})
+const getGetBidSignCount = (PK_PROJECT) => {
+  const protData = {
+    PK_PROJECT: PK_PROJECT,
+    BILLSTATUS: applyStatus.value,
+  }
+  getBidSignCount(protData).then((res) => {
+    applyInfoData.value = res.RESULT
+  });
+}
+
+const checkCertification = (val) => {
+  console.log("🚀 ~ checkCertification ~ val:", val)
+
+}
+
+const bidRunList = ref([])
+const getGetBidRunList = (PK_PROJECT) => {
+  const protData = {
+    // PK_PROJECT,
+    PK_PROJECT: 1,
+    CARRIERNAME: "",
+  }
+  getBidRunList(protData).then((res) => {
+    bidRunList.value = res.RESULT
+  });
+
+}
+
+
+
+
+
 const bidInfo = ref({});
 const getPermissDetail = () => {
   // countDownRef.value ? countDownRef.value.countDownClearInterval() : ''
@@ -732,6 +833,12 @@ const getPermissDetail = () => {
       bidInfo.value = {};
     });
 };
+
+const subCheck=()=>{
+  submitApprove
+
+
+}
 
 const queryShowList = (dictCode) => {
   proxy
@@ -790,7 +897,6 @@ const clickBidPrice = () => {
 };
 
 const Verification = () => {
-  console.log(timer.value)
   if (timer.value) return
 
   timer.value = setInterval(() => {
@@ -1243,6 +1349,11 @@ onUnmounted(() => {
 
   :deep(.el-collapse-item__content) {
     padding-bottom: 10px;
+  }
+
+  .selectLeftText {
+    margin-right: 10px;
+    font-size: 14px;
   }
 }
 </style>
