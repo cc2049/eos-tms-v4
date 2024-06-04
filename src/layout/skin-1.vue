@@ -2,7 +2,7 @@
  * @Author: cc2049
  * @Date: 2024-04-24 12:47:35
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-04-25 16:35:11
+ * @LastEditTime: 2024-06-04 10:32:50
  * @Description: 主题风格一 金蝶云
 -->
 <template>
@@ -22,7 +22,7 @@
               </el-icon>
             </span>
             <div class="tags-content">
-              <TagsViewSkin1 />
+              <TagsViewSkin1 @closeAllMenu="closeMenu" />
             </div>
           </div>
           <div class="tags-view-right">

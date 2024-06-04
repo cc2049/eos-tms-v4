@@ -2,7 +2,7 @@
  * @Author: cc2049
  * @Date: 2024-04-24 18:52:34
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-05-15 15:21:02
+ * @LastEditTime: 2024-06-04 10:36:35
  * @Description: 简介
 -->
 <!--
@@ -18,7 +18,7 @@
       <slot name="tags-left">
       </slot>
       <router-link v-for="tag in visitedViews" :key="tag.path" :data-path="tag.path" :class="isActive(tag) ? 'active' : ''" :to="{ path: tag.path, query: tag.query, fullPath: tag.fullPath }" class="tags-view-item" @click.middle="!isAffix(tag) ? closeSelectedTag(tag) : ''"
-        @contextmenu.prevent="openMenu(tag, $event)">
+        @contextmenu.prevent="openMenu(tag, $event)" @click="handleMenu">
         {{ tag.title }}
         <span v-if="!isAffix(tag)" @click.prevent.stop="closeSelectedTag(tag)">
           <close class="el-icon-close" style="width: 1em; height: 1em;vertical-align: middle;" />
@@ -69,6 +69,8 @@ const router = useRouter();
 const visitedViews = computed(() => useTagsViewStore().visitedViews);
 const routes = computed(() => usePermissionStore().routes);
 const theme = computed(() => useSettingsStore().theme);
+
+const emit = defineEmits(["closeAllMenu"])
 
 watch(route, () => {
   addTags();
@@ -241,15 +243,18 @@ function openMenu(tag, e) {
   } else {
     left.value = l;
   }
-
   // top.value = e.clientY
   top.value = 36;
-
   visible.value = true;
   selectedTag.value = tag;
 }
 function closeMenu() {
   visible.value = false;
+  
+}
+
+function handleMenu(){
+  emit("closeAllMenu")
 }
 function handleScroll() {
   closeMenu();
