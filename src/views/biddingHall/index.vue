@@ -80,7 +80,7 @@
             </div>
           </template>
           <el-scrollbar :height="Hight">
-            <div class="card-header" v-if="userInfo.USERTYPE == 0">
+            <div class="card-header">
               <div>
                 <div class="disflex">
                   <div class="card-header-title">{{ detailNoDynamic.VNAME }}</div>
@@ -90,64 +90,18 @@
                 <div class="disflex">
                   <div class="card-header-tag">
                     <div class="card-header-tag-text">
-                      {{ BILLSTATUSList[bidInfo.BILLSTATUS] || '暂无状态' }}
+                      <!-- {{ BILLSTATUSList[detailNoDynamic.BILLSTATUS] || '暂无状态' }} -->
+                      {{ detailNoDynamic.STATUSNAME }}
                     </div>
                   </div>
-                  <!-- <countDown ref="countDownRef" v-if="bidInfo.BILLSTATUS == 5" :time="bidInfo.BIDENDTIME" /> -->
+                  <countDown ref="countDownRef" v-if="queryLeftForm.BILLSTATUS == 4"
+                    :time="detailNoDynamic.BIDEDTIME" />
                   <!-- <countDown ref="countDownRef"
                     v-if="bidInfo.BILLSTATUS == 5 || bidInfo.BILLSTATUS == 4 || bidInfo.BILLSTATUS == 3"
                     :time="bidInfo.BILLSTATUS == 5 ? bidInfo.BIDENDTIME : bidInfo.BILLSTATUS == 4 ? bidInfo.BIDSTARTTIME : bidInfo.BILLSTATUS == 3 ? bidInfo.SIGNENDTIME : ''" /> -->
                 </div>
               </div>
             </div>
-            <div class="card-header" v-else-if="userInfo.USERTYPE == 2">
-              <div>
-                <div class="disflex">
-
-                  <div class="card-header-title" :style="{
-        maxWidth: bidInfo.BILLSTATUS == 5 ? '370px' : '500px'
-
-      }">{{ detailNoDynamic.VNAME }}</div>
-                  <div class="disflex">
-                    <div class="card-header-tag">
-                      <div class="card-header-tag-text">
-                        {{ BILLSTATUSList[bidInfo.BILLSTATUS] || '暂无状态' }}
-                      </div>
-                    </div>
-                    <countDown ref="countDownRef"
-                      v-if="bidInfo.BILLSTATUS == 5 || bidInfo.BILLSTATUS == 4 || bidInfo.BILLSTATUS == 3"
-                      :time="bidInfo.BILLSTATUS == 5 ? bidInfo.BIDENDTIME : bidInfo.BILLSTATUS == 4 ? bidInfo.BIDSTARTTIME : bidInfo.BILLSTATUS == 3 ? bidInfo.SIGNENDTIME : ''" />
-                  </div>
-                </div>
-              </div>
-              <div class="disflex" v-if="bidInfo.BILLSTATUS == 4 || bidInfo.BILLSTATUS == 5" style="flex-shrink:0">
-                <div class="mr-10">
-                  <el-form ref="ruleFormRef" :model="ruleForm" label-width="50px" class="demo-ruleForm" size='small'
-                    status-icon>
-                    <el-form-item label="出价" prop="name">
-                      <el-input v-model="ruleForm.BIDPRICE" style="width: 120px;" type="number"
-                        @blur="priceBlur(2, 'BIDPRICE')">
-                        <template #append>元</template>
-                      </el-input>
-                    </el-form-item>
-                    <el-form-item label="出量" prop="desc" class="noMargin" v-if="detailNoDynamic.ISEXPECTTYPE == 1">
-                      <el-input v-model="ruleForm.EXPECTVALUE" style="width: 120px;" type="number"
-                        @blur="priceBlur(0, 'EXPECTVALUE')">
-                        <template #append>{{ detailNoDynamic.TRANSUNITSTUNIT }}</template>
-                      </el-input>
-                    </el-form-item>
-                  </el-form>
-                </div>
-                <div class="degree" @click="clickBidPrice">
-                  <div>出价</div>
-                  <div v-if="detailNoDynamic.BIDTYPE == 1 || detailNoDynamic.BIDTYPE == 0">
-                    <span v-if="bidInfo.REMAINNUM == '不限制'">({{ bidInfo.REMAINNUM }})</span>
-                    <span v-else>(剩余{{ bidInfo.REMAINNUM }}次)</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-
             <el-collapse v-model="activeName" class="">
               <el-collapse-item name="1">
                 <template #title>
@@ -158,7 +112,7 @@
                     <div class="disflex mb-10">
                       <div>需求编号：</div>
                       <div>{{ detailNoDynamic.VCODE }}</div>
-                      <div class="ml-10">复制</div>
+                      <el-button type="primary" class="ml-10" link @click="copyVCODE">复制</el-button>
                     </div>
                     <div class="cargoInfo-top">
                       <div class="disflex justify-sb ">
@@ -203,6 +157,13 @@
                             元</span>
                         </div>
                       </div> -->
+                      <div>
+                        <div v-for="item in detailNoDynamic.SUBLIST" :key="item.BILLNO" class="disflex">
+                          <div>{{ item.MATERIALNAME }}/</div>
+                          <div>{{ item.TWEIGHT }}</div>
+                          <div>{{ item.VUNIT }}</div>
+                        </div>
+                      </div>
                     </div>
                     <div class="disflex flex-w mt10">
                       <div v-for="(item, index) in cargoInfoList" :key="index" class="disflex mr-20 mb-5">
@@ -391,7 +352,7 @@ import axios from "axios";
 import {
   getSignList, getBidSignCount, getCarrierDetail
   , getBidRunList, submitApprove, forceEnd, cancelSign, confirmSign
-  , getBidRecordCarrierList,cancellation
+  , getBidRecordCarrierList, cancellation
 } from "#/system/biddingHall";
 
 
@@ -426,6 +387,17 @@ const computedCargoInfoSelect = computed((list, val) => {
     // return obj?.value || '暂无数据'
   };
 });
+
+const copyVCODE = () => {
+  let input = document.createElement("input"); // 创建input对象
+  input.value = detailNoDynamic.value.VCODE; // 设置复制内容
+  document.body.appendChild(input); // 添加临时实例
+  input.select(); // 选择实例内容
+  document.execCommand("Copy"); // 执行复制
+  document.body.removeChild(input); // 删除临时实例
+  proxy.$modal.msgSuccess("复制成功");
+}
+
 const computedSub = computed((list) => {
   return (list) => {
     if (!list) return "暂无数据";
@@ -830,11 +802,11 @@ const confirmApply = () => {
   });
 }
 
-const clickCancellation=()=>{
+const clickCancellation = () => {
 
 
 
-  
+
 }
 
 
