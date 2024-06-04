@@ -44,7 +44,7 @@
       <span> {{ pageConfig.modelTitle }} </span>
     </template>
     <template #default>
-      <eos-form ref="editFormRef" mod="subForm" v-model="form" v-model:mainFormData="mainFormData" :config="tableCFG.tableColumns" :rules="Rules" />
+      <eos-form ref="editFormRef" mod="subForm" v-model="form" v-model:mainFormData="mainFormData" :config="tableCFG.tableColumns" :rules="Rules" @openModal="openModal" />
     </template>
     <template #footer>
       <el-button size="default" @click="formSubmit">保存</el-button>
@@ -73,7 +73,7 @@ const props = defineProps({
   othConfig: Object,
   othTabCFG: Object
 })
-const emit = defineEmits(["update:modelValue", "update:mainFormData", "change"])
+const emit = defineEmits(["update:modelValue", "update:mainFormData", "change", "openModal"])
 const { proxy } = getCurrentInstance();
 
 /** 公用 */
@@ -327,6 +327,10 @@ const InitConfig = () => {
     newData.value = [deepClone(form)]
   }
 };
+
+const openModal = val => {
+  emit("openModal", val)
+}
 
 onMounted(() => {
   InitConfig();
