@@ -2,7 +2,7 @@
  * @Author: cc2049
  * @Date: 2024-06-03 20:55:06
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-06-04 11:54:35
+ * @LastEditTime: 2024-06-04 18:10:19
  * @Description: 简介
 -->
 <template>
@@ -37,3 +37,11 @@ console.log(888, id , currentData.value );
 }
 
 </script>
+
+
+<style scoped>
+.home{
+  padding: 0 20px;
+  background-color: #fff;
+}
+</style>

@@ -213,6 +213,7 @@ export const TableConfig_Table = [
   { FIELD: "REVERFIELD", LABEL: "映射", WIDTH: "100", ALIGN: "left", CONTROLS: "ExTextBox", EDITTABLE: 1, OTHER: '', DEFAULTVAL: "", ISSHOW: 1, COL: 8 },
   { FIELD: "LINKAGE", LABEL: "级联", WIDTH: "100", ALIGN: "left", CONTROLS: "ExTextBox", EDITTABLE: 1, DEFAULTVAL: "", ISSHOW: 1, COL: 8 },
   { FIELD: "ISAES", LABEL: "加密", WIDTH: "100", ALIGN: "", VTYPE: "exNum", CONTROLS: "ExSelect", OTHER: JSON.stringify(ENCRY), EDITTABLE: 1, DEFAULTVAL: "-", ISSHOW: 1, COL: 8 },
+  { FIELD: "GROUPID", LABEL: "分组", WIDTH: "80", ALIGN: "", CONTROLS: "ExSwitch", EDITTABLE: 1, DEFAULTVAL: "0", ISSHOW: 1, COL: 8 },
   { FIELD: "SLOT", LABEL: "插槽", WIDTH: "100", ALIGN: "left", VTYPE: "exNum", CONTROLS: "ExSelect", OTHER: JSON.stringify(SLOT), EDITTABLE: 1, DEFAULTVAL: "", ISSHOW: 1, COL: 8 },
   { FIELD: "SLOTCFG", LABEL: "插槽配置", WIDTH: "100", ALIGN: "left", CONTROLS: "ExTextBox", EDITTABLE: 1, DEFAULTVAL: "", ISSHOW: 1, COL: 8 },
   { FIELD: "ISREQUIRE", LABEL: "必填", WIDTH: "80", ALIGN: "", CONTROLS: "ExSwitch", EDITTABLE: 1, DEFAULTVAL: "0", ISSHOW: 1, COL: 8 },

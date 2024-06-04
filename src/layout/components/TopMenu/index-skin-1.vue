@@ -4,13 +4,20 @@
       <div class="logo-wrap">
         <img :src="logoUrl" alt="" />
       </div>
+
+      <div class="version mr-20 ">
+        企业版
+      </div>
+
       <div class="system-name">
-        {{ systemName || "易运帮" }}
+        {{ systemName || "集团公司" }}
       </div>
       <el-divider direction="vertical" />
 
       <div class="complany-select">
         太原易思软件技术有限公司
+        <el-icon style="top:3px"><ArrowDownBold /></el-icon>
+       
       </div>
     </div>
 
@@ -203,6 +210,15 @@ function setLayout() {
       }
       margin-right: 10px;
     }
+    .version{
+      background-color: #fff;
+      color: var(--el-color-primary);
+      font-size: .7rem;
+      font-weight: 600;
+      transform: skewX(-15deg);
+      padding: 2px 4px;
+      border-radius: 2px;
+    }
     .tag-version {
       margin: 0 8px;
       background-color: rgba($color: #fff, $alpha: 0.3);
@@ -213,7 +229,6 @@ function setLayout() {
     }
     .system-name {
       white-space: nowrap;
-      font-weight: 600;
       color: #fff;
     }
     img {
