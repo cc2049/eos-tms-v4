@@ -70,7 +70,7 @@
               <el-button size="small" :disabled="applyInfoRefChooseList.length > 0 ? false : true" type="primary"
                 v-if="queryLeftForm.BILLSTATUS == 2" @click="confirmApply">确认报名</el-button>
 
-              <el-button size="small" v-if="queryLeftForm.BILLSTATUS == 4">报名明细</el-button>
+              <el-button size="small" v-if="queryLeftForm.BILLSTATUS == 4" @click="clickApplyDetail">报名明细</el-button>
               <el-button size="small" type="primary" v-if="queryLeftForm.BILLSTATUS == 4">中标</el-button>
 
               <el-button size="small" v-if="queryLeftForm.BILLSTATUS == 6" @click="clickCancellation">作废</el-button>
@@ -91,7 +91,7 @@
                   <div class="card-header-tag">
                     <div class="card-header-tag-text">
                       <!-- {{ BILLSTATUSList[detailNoDynamic.BILLSTATUS] || '暂无状态' }} -->
-                      {{ detailNoDynamic.STATUSNAME }}
+                      {{ queryLeftForm.BILLSTATUS == 6 ? detailNoDynamic.STATUSNAME : detailNoDynamic.STATUSNAME }}
                     </div>
                   </div>
                   <countDown ref="countDownRef" v-if="queryLeftForm.BILLSTATUS == 4"
@@ -301,7 +301,7 @@
                   <el-table-column prop="BIDTIME" label="出价时间" />
                   <el-table-column prop="IS_BID" label="中标">
                     <template #default="scope">
-                      <span>{{ scope.row.IS_BID == 0 ? '否' : scope.row.IS_BID == 1? '是' :''}}</span>
+                      <span>{{ scope.row.IS_BID == 0 ? '否' : scope.row.IS_BID == 1 ? '是' : '' }}</span>
                     </template>
                   </el-table-column>
                   <el-table-column prop="BIDDATE" label="物料" />
@@ -331,6 +331,33 @@
 
       </el-col>
     </el-row>
+
+    <vxe-modal destroy-on-close v-model="applyDetailModal" id="formModal" width="800" height="400" resize storage transfer show-zoom>
+      <template #title>
+        <span class="modal-title"> 报名明细
+        </span>
+      </template>
+      <template #default>
+        <el-table ref="applyInfoRef" :data="applyInfoList" style="width: 100%">
+          <el-table-column prop="BILLSTATUS" label="报名状态">
+            <template #default="scope">
+              <span>{{ scope.row.BILLSTATUS == 0 ? '未确认' : '已确认' }}</span>
+            </template>
+          </el-table-column>
+          <el-table-column prop="CARRIERNAME" label="报名单位" />
+          <el-table-column prop="CREATIONTIME" label="报名时间" />
+          <el-table-column prop="CREATORNAME" label="报名用户" />
+          <el-table-column prop="APPROVER" label="确认人" />
+          <el-table-column prop="APPROVERTIME" label="确认时间" />
+          <el-table-column prop="BILLSTATUS" label="资质审查">
+            <template #default="scope">
+              <!-- 调用 13 -->
+              <el-button type="primary" text @click="checkCertification(scope.row)">查看资质</el-button>
+            </template>
+          </el-table-column>
+        </el-table>
+      </template>
+    </vxe-modal>
   </div>
 </template>
 
@@ -387,7 +414,7 @@ const computedCargoInfoSelect = computed((list, val) => {
     // return obj?.value || '暂无数据'
   };
 });
-
+const applyDetailModal = ref(false)
 const copyVCODE = () => {
   let input = document.createElement("input"); // 创建input对象
   input.value = detailNoDynamic.value.VCODE; // 设置复制内容
@@ -806,6 +833,12 @@ const clickCancellation = () => {
 
 
 
+
+}
+
+const clickApplyDetail = () => {
+  applyDetailModal.value = true
+  queryApplyInfo(menuVal.value)
 
 }
 
