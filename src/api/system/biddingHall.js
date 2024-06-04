@@ -55,6 +55,45 @@ export function submitApprove(data) {
     })
 }
 
+// 强制结束
+export function forceEnd(data) {
+    return request({
+        url: 'oms/bidProject/forceEnd',
+        method: 'post',
+        data: data
+    })
+}
+
+// 取消确认
+export function cancelSign(data) {
+    return request({
+        url: 'oms/bidSign/cancelSign',
+        method: 'post',
+        data: data
+    })
+}
+
+// 确认报名
+export function confirmSign(data) {
+    return request({
+        url: 'oms/bidSign/confirmSign',
+        method: 'post',
+        data: data
+    })
+}
+
+// 出价中的承运商下拉
+export function getBidRecordCarrierList(data) {
+    return request({
+        url: 'oms/bidRecord/getBidRecordCarrierList',
+        method: 'post',
+        data: data
+    })
+}
+
+
+
+
 
 
 
