@@ -65,7 +65,6 @@ const props = defineProps({
 
 });
 
-console.log(props.filterConfig)
 
 const currentQueryList = ref([])
 const newFilterArr = ref([])

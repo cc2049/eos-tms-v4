@@ -71,7 +71,6 @@ const filterSeceletArr = computed(() => props.filterConfig.filterSeceletArr)
 const conditionValue = ref(null)
 const changeCondition = (e) => {
     let newArr = filterSeceletArr.value.filter(ele => ele.BILLNO == e)
-    console.log("🚀 ~ changeCondition ~ newArr:", newArr)
     emit('changeCondition', newArr[0] || {})
 }
 
@@ -90,10 +89,8 @@ const changeFilter = (val, item, index) => {
 
 // const newfilterArrs = ref([])
 watch(() => props.filterArr, nArr => {
-    console.log("🚀 ~ watch ~ value:", nArr)
 
     nArr.forEach((item, index) => {
-        console.log(currentQueryList.value[index])
         if(currentQueryList.value[index]){
             currentQueryList.value[index].FIELD = nArr[index].FIELD
         }else{
@@ -130,7 +127,6 @@ watch(() => props.filterArr, nArr => {
 }, { immediate: true })
 
 watch(() => currentQueryList.value, value => {
-    console.log("🚀 ~ watch ~ value:", value)
     emit('changeCurrentQueryList', value)
 
 }, { immediate: true, deep: true })
