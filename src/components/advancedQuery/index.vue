@@ -150,7 +150,7 @@ function searchBtn() {
         QRYSUF: ele.QRYSUF,
       }
     })
-  } else{
+  } else {
     QUERYS = settingQueryList.value.map(ele => {
       return {
         FIELD: ele.FIELD,
@@ -167,7 +167,7 @@ function searchBtn() {
   }
 
 
-console.log(QUERYS)
+  console.log(QUERYS)
   emit("handleCustomPlan", {
     type: "2",
     PROGRAMID: chooseRadioVal.value,
@@ -276,9 +276,12 @@ const getPlanList = () => {
       //     ? newArr[0].BILLNO
       //     : myPlanList.value[0].BILLNO)
       //   : "";
-
       if (!chooseRadioVal.value) {
-        clickRadio(newArr[0])
+        chooseRadioVal.value = newArr.length
+          ? newArr[0].BILLNO
+          : myPlanList.value[0].BILLNO
+
+        clickRadio(newArr.length ? newArr[0] : myPlanList.value[0])
       }
 
 
