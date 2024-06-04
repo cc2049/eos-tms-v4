@@ -1,7 +1,7 @@
 <template>
   <div class="val_table bg-white">
 
-    <vxe-table class="mytable-scrollbar mytable-footer" resizable round show-overflow ref="xTable" size="mini" highlight-hover-row header-row-class-name="bg-blue" width="100%" :show-footer="tableCFG.mergeCFG && tableCFG.mergeCFG.length" border :loading="tableCFG.loading"
+    <vxe-table class="mytable-scrollbar mytable-footer" resizable round show-overflow ref="xTable" size="mini" highlight-hover-row  width="100%" :show-footer="tableCFG.mergeCFG && tableCFG.mergeCFG.length" border :loading="tableCFG.loading"
       :cell-class-name="cellClassName" 
       :height="tableCFG.height"
       :scroll-y="{enabled: true, gt: 0}"
