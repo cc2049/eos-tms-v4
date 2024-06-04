@@ -48,7 +48,7 @@ defineProps({
 let emits = defineEmits(['del'])
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .select-result {
   width: 276px;
   height: 100%;
