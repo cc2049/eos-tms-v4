@@ -253,12 +253,7 @@ const ExSelectModalInput = (e, config) => {
     let ids = SLOTCFG.split(",");
     if (ids.length < 2) return console.error("Error: 配置错误");
     let { url, data, importantData } = ParseOtherConfig(OTHER);
-    console.log(
-      "🚀 ~ ExSelectModalInput ~ data, importantData:",
-      url,
-      data,
-      importantData
-    );
+
 
     let MODULEID = ids[0];
     let PAGEID = ids[1];
@@ -292,7 +287,6 @@ const loadExSelectModalTable = () => {
 const queryData = (url, portData) => {
   getTableData(url, portData)
     .then((res) => {
-      console.log("🚀 ~ getTableData ~ res:", res);
       const { RECORDS, SIZE, TOTAL, CURRENT, PAGES } = res.RESULT;
       if (tableData.value.length == 0) {
         tableData.value = RECORDS;

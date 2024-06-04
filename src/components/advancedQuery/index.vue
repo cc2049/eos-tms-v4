@@ -167,7 +167,6 @@ function searchBtn() {
   }
 
 
-  console.log(QUERYS)
   emit("handleCustomPlan", {
     type: "2",
     PROGRAMID: chooseRadioVal.value,
@@ -219,7 +218,6 @@ const changeCurrentQueryList = (val) => {
 };
 const settingQueryList = ref([]);
 const settingChangeCurrentQueryList = (val) => {
-  console.log("🚀 ~ settingChangeCurrentQueryList ~ val:", val)
   clickStatus.value = 2;
   settingQueryList.value = JSON.parse(JSON.stringify(val));
   // querySaveList.value = JSON.parse(JSON.stringify(val));

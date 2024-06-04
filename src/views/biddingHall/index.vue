@@ -47,7 +47,7 @@
               <el-button size="small">编辑</el-button>
               <el-button size="small">发布公告</el-button>
               <el-button size="small" type="primary">提交审核</el-button>
-<!-- 
+              <!-- 
               <el-button size="small" type="danger">强制结束</el-button>
               <el-button size="small">查看公告</el-button>
               <el-button size="small">取消确认</el-button>
@@ -207,6 +207,9 @@
                             }}*{{
         detailNoDynamic.CARMINHEIGHT }}
                           </div>
+                          <div v-else-if="item.flag == 'isRadio'">
+                            {{ detailNoDynamic[item.text] == 1 ? '是' : '否' }}
+                          </div>
                         </div>
                         <div v-else class="cargoInfo-top-content">{{ detailNoDynamic[item.text] }}
                         </div>
@@ -225,10 +228,8 @@
                               }}</span>
                             <!-- {{ computedSub(detailNoDynamic.SUBLIST) }} -->
                           </div>
-                          <div class="cargoInfo-top-content" v-else-if="item.flag == 'joint'">
-                            {{ detailNoDynamic.CARMINLENGTH }}*{{ detailNoDynamic.CARMINWIDTH
-                            }}*{{
-        detailNoDynamic.CARMINHEIGHT }}
+                          <div class="cargoInfo-top-content" v-else-if="item.flag == 'joinBiddingTime'">
+                            {{ detailNoDynamic.BIDSTTIME }}-{{ detailNoDynamic.BIDEDTIME}}
                           </div>
                         </div>
                         <div v-else class="cargoInfo-top-content">{{ detailNoDynamic[item.text] }}
@@ -469,12 +470,13 @@ const cargoInfoList = ref([
   },
   {
     title: "车辆类型",
-    text: "BIDSTARTTIME",
+    text: "CARTYPE",
+    flag: 'isRadio',
   },
-  {
-    title: "车辆要求",
-    text: "BIDSTARTTIME",
-  },
+  // {
+  //   title: "车辆要求",
+  //   text: "BIDSTARTTIME",
+  // },
   {
     title: "提供装货",
     text: "IS_LOAD",
@@ -527,11 +529,12 @@ const cargoInfoList = ref([
 const cargoInfoList1 = ref([
   {
     title: "竞价时间",
-    text: "BIDSTARTTIME",
+    // text: "BIDSTARTTIME",
+    flag:'joinBiddingTime'
   },
   {
     title: "延期时长",
-    text: "BIDSTARTTIME",
+    text: "DELAYTIME",
   },
   {
     title: "报名确认",
