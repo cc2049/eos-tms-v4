@@ -2,14 +2,14 @@
  * @Author: cc2049
  * @Date: 2024-04-23 11:35:41
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-06-04 15:07:55
+ * @LastEditTime: 2024-06-04 19:13:31
  * @Description: 大表单组件
 -->
 
 <template>
   <div class="form-container">
     <TopButton :topButton="topButton" sourceType="2" @handleBtnEvent="handleBtnEvent" />
-    <el-scrollbar :height="formHeight">
+    <el-scrollbar :height="formHeight" class="eos-scrollbar">
       <MasterForm ref="eosFormRef" v-model="formData" :formConfig="formConfig" :detail="isDetail" :tableConfig="tableConfig" />
     </el-scrollbar>
 
