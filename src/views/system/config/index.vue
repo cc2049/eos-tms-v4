@@ -1,5 +1,5 @@
 <template>
-  <div class="">
+  <div class="page-config">
     <el-row>
       <el-col :span="4">
         <div class="group">
@@ -700,13 +700,14 @@ const DictLabel = (arr, data) => {
 //   overflow: hidden;
 // }
 :deep(.el-tabs__nav-wrap) {
-  width: calc(100% - 350px);
+  width: calc(100% - 404px);
   .el-tabs__nav-prev {
     left: 4px;
   }
   .el-tabs__nav-next,
   .el-tabs__nav-prev {
-    line-height: 33px;
+    line-height: 40px;
+    font-weight: 400;
   }
 }
 :deep(.el-tabs__content) {
