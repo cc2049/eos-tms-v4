@@ -2,7 +2,7 @@
 import request from '@/utils/request'
 
 
-
+// 货主================================================
 //  报名信息列表
 
 // "MODULEID": "MU240322931850",
@@ -99,6 +99,97 @@ export function cancellation(data) {
         data: data
     })
 }
+
+
+// 获取公告信息
+
+export function getNoticDetail(data) {
+    return request({
+        url: 'oms/bidNotice/getDetail',
+        method: 'post',
+        data: data
+    })
+}
+
+// ===================================
+
+
+
+// 承运商=================================
+
+//获取竞价左侧列表
+export function getCarrierPageList(data) {
+    return request({
+        url: 'oms/bidProject/getCarrierPageList',
+        method: 'post',
+        data: data
+    })
+}
+
+// 获取竞价详情
+export function getCarrierDetailss(data) {
+    return request({
+        url: 'oms/bidProject/getCarrierDetail',
+        method: 'post',
+        data: data
+    })
+}
+// 3.标识竞价接口
+export function collectBid(data) {
+    return request({
+        url: 'oms/bidSign/collectBid',
+        method: 'post',
+        data: data
+    })
+}
+// 4.报名接口
+export function carrierSign(data) {
+    return request({
+        url: 'oms/bidSign/sign',
+        method: 'post',
+        data: data
+    })
+}
+
+// 4.竞价中出价信息列表
+export function getBidRecordList(data) {
+    return request({
+        url: 'oms/bidRecord/getBidRecordList',
+        method: 'post',
+        data: data
+    })
+}
+// 最后一名可中标价格接口
+export function getLastPlacePrice(data) {
+    return request({
+        url: 'oms/bidRecord/getLastPlacePrice',
+        method: 'post',
+        data: data
+    })
+}
+
+
+// 出价
+export function offerPrice(data) {
+    return request({
+        url: 'oms/bidRecord/offerPrice',
+        method: 'post',
+        data: data
+    })
+}
+
+// 8.已结束出价信息列表接口
+
+export function getCarrierEndList(data) {
+    return request({
+        url: 'oms/bidRecord/getCarrierEndList',
+        method: 'post',
+        data: data
+    })
+}
+
+
+
 
 
 
