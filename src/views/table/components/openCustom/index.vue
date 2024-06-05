@@ -1,8 +1,8 @@
 <!--
  * @Author: cc2049
  * @Date: 2024-05-27 17:02:11
- * @LastEditors: PiPin 33947354+p1Master@users.noreply.github.com
- * @LastEditTime: 2024-06-05 19:26:31
+ * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2024-06-05 19:51:02
  * @Description: 简介
 -->
 <template>
@@ -32,16 +32,21 @@
       </div>
     </div>
     <div class="form-page-content mt20">
-      <!-- <template v-if="formModalTableCFG.PAGE == 'slot'"> -->
-      <slotCustemPage :config="{}" :currentData="currentData" @close="closeCustemPage" />
-      <!-- </template> -->
+      <template v-if="pageCFG.PAGE == 'slot'">
+        <slotCustemPage :config="{}" :currentData="currentData" @close="closeCustemPage" />
+      </template>
+      <template v-else-if="pageCFG.PAGE == 'form'">
+        <FormPage :menuID="menuParams" :currentData @closeModal="closeModal" @refreshTable="refreshTable" :isGetDetail :activeBtn :topButton :isDetail />
+      </template>
     </div>
   </div>
 </template>
 <script setup>
-const route = useRoute();
+import FormPage from "@/views/formPage/index.vue";
+
 import pageAutoComponent from "@/pageToComponents";
-import { onMounted } from "vue";
+const route = useRoute();
+
 const props = defineProps({
   activeBtn: Object,
   slotCustemPagePath: String,
@@ -54,7 +59,6 @@ const formModalTableCFG = ref({
   tableBillNo: "",
   ListtableData: {},
 });
-console.log(888, route);
 const formConfig = reactive({
   formBase: {}, // 表单源数据
   formValue: {}, // form数据
@@ -67,12 +71,25 @@ const formConfig = reactive({
 
 const currentData = ref([]);
 
+const btnConfig = ref({});
+const menuParams = ref({});
+const pageCFG = ref({})
+
 /** 动态自定义组件 */
 const slotCustemPage = ref();
 const openCustemPage = (type) => {
+  // console.log(888, props.activeBtn);
+
   try {
+    btnConfig.value = props.activeBtn.data.btnConf;
+    pageCFG.value.PAGE = "form";
+    menuParams.value = {
+      MODULEID: btnConfig.value.PK_MODULE || "-",
+      PAGEID: btnConfig.value.PK_PAGE || "-",
+    };
+
     // visibleFormPage.value = true;
-    const path = props.slotCustemPagePath
+    const path = props.slotCustemPagePath;
     // type == 1 ? (visibleFormPage.value = true) : (pageConfig.modalVisible = true);
     slotCustemPage.value = pageAutoComponent(path);
   } catch (err) {
@@ -81,8 +98,8 @@ const openCustemPage = (type) => {
 };
 
 onMounted(() => {
-  openCustemPage()
-})
+  openCustemPage();
+});
 
 function backEvent() {
   // treeKeyword.value = "";

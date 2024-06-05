@@ -2,7 +2,7 @@
  * @Author: cc2049
  * @Date: 2024-04-23 11:33:59
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-06-05 18:20:04
+ * @LastEditTime: 2024-06-05 19:40:30
  * @Description: 简介
 -->
 <template>
@@ -44,8 +44,6 @@ const backEvent = () => {
 /** 动态自定义组件 */
 const slotCustemPagePath = ref();
 const openCustemPage = (data) => {
-console.log(123, data);
-
   activeBtn.value = data
   try {
     visibleFormPage.value = true;
