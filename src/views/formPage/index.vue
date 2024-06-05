@@ -2,17 +2,16 @@
  * @Author: cc2049
  * @Date: 2024-04-23 11:35:41
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-06-04 15:07:55
+ * @LastEditTime: 2024-06-05 14:45:01
  * @Description: 大表单组件
 -->
 
 <template>
   <div class="form-container">
     <TopButton :topButton="topButton" sourceType="2" @handleBtnEvent="handleBtnEvent" />
-    <el-scrollbar :height="formHeight">
-      <MasterForm ref="eosFormRef" v-model="formData" :formConfig="formConfig" :detail="isDetail" :tableConfig="tableConfig" />
+    <el-scrollbar :height="formHeight" class="eos-scrollbar">
+      <MasterForm ref="eosFormRef" v-model="formData" :formConfig="formConfig" :detail="isDetail" :tableConfig="tableConfig" :loading="formLoading" />
     </el-scrollbar>
-
   </div>
 </template>
 
@@ -52,6 +51,7 @@ const detail = ref(false);
 const labelWidth = ref("100px");
 const tableConfig = ref([]);
 const formHeight = ref(300);
+const formLoading = ref(false);
 
 watch(
   () => props.menuID,
@@ -64,11 +64,13 @@ watch(
         formData.value = getFormValue(COLUMNS);
         labelWidth.value = VDEF2 || "100px";
         tableConfig.value = SUBTABLE;
+        formLoading.value = true;
         if (props.isGetDetail) {
           let detailURL = SLOTCFG || getQueryUrl(props.topButton);
           getDetail(detailURL);
+        }else{
+          formLoading.value = false;
         }
-        nextTick(() => {});
       });
     }
   },
@@ -103,6 +105,7 @@ function getDetail(URL) {
     let queryDetail = { ...props.menuID, ...props.currentData[0] };
     axiosGet(URL, queryDetail).then((res) => {
       formData.value = Object.assign(formData.value, res.RESULT);
+      formLoading.value = false;
     });
   }
   console.log("formData.value", formData.value);

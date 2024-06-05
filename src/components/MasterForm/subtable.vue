@@ -1,6 +1,6 @@
 <template>
   <div class="formTable-title">
-    <div class="title">{{title}}</div>
+    <div class="title" v-if="showTitle">{{title}}</div>
     <template v-if="!detail">
       <div class="saveAndAdd" v-if="ShowType == 'form'">
         <eos-form ref="editFormRef" class="subForm" v-model="form" v-model:mainFormData="mainFormData" :config="tableCFG.tableColumns" :rules="Rules" />
@@ -68,6 +68,10 @@ const props = defineProps({
   modelValue: [Array, Object],
   config: Object,
   title: String,
+  showTitle: {
+    type: Boolean,
+    default: false
+  },
   detail: Boolean,
   mainFormData: Object,
   othConfig: Object,

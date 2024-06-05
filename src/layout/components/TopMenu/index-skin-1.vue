@@ -4,13 +4,22 @@
       <div class="logo-wrap">
         <img :src="logoUrl" alt="" />
       </div>
+
+      <div class="version mr-20 ">
+        企业版
+      </div>
+
       <div class="system-name">
-        {{ systemName || "易运帮" }}
+        {{ systemName || "集团公司" }}
       </div>
       <el-divider direction="vertical" />
 
       <div class="complany-select">
         太原易思软件技术有限公司
+        <el-icon style="top:3px">
+          <ArrowDownBold />
+        </el-icon>
+
       </div>
     </div>
 
@@ -33,18 +42,15 @@
       <div class="avatar-container">
         <el-dropdown @command="handleCommand" class="right-menu-item hover-effect" trigger="click" size="def">
           <div class="avatar-wrapper">
-            <avatar :avatar="avatarUrl" :name="username" />
-            <div class="user-wrap">
-              <div class="user-text">
-                {{ userInfo.VNAME || 'adminadmin' }}
-              </div>
+            <el-avatar :size="22" :src="avatarUrl" />
+            <div class="user-text">
+              {{ userInfo.VNAME || 'adminadmin' }}
+            </div>
+            <!-- <div class="">
               <div class="user-role">
                 {{ userInfo.ROLENAME || '超级管理员' }}
               </div>
-            </div>
-            <el-icon :size="18" color="#666">
-              <CaretBottom />
-            </el-icon>
+            </div> -->
           </div>
 
           <template #dropdown>
@@ -203,6 +209,15 @@ function setLayout() {
       }
       margin-right: 10px;
     }
+    .version {
+      background-color: #fff;
+      color: var(--el-color-primary);
+      font-size: 0.7rem;
+      font-weight: 600;
+      transform: skewX(-15deg);
+      padding: 2px 4px;
+      border-radius: 2px;
+    }
     .tag-version {
       margin: 0 8px;
       background-color: rgba($color: #fff, $alpha: 0.3);
@@ -213,7 +228,6 @@ function setLayout() {
     }
     .system-name {
       white-space: nowrap;
-      font-weight: 600;
       color: #fff;
     }
     img {
@@ -279,7 +293,6 @@ function setLayout() {
 
       .avatar-wrapper {
         position: relative;
-        top: 6px;
         .user-avatar {
           cursor: pointer;
           width: 24px;
@@ -300,36 +313,15 @@ function setLayout() {
 }
 
 .avatar-wrapper {
-  height: 30px;
-  text-align: center;
-  overflow: hidden;
-  color: #fff;
   display: flex;
-  img {
-    width: 100%;
-    height: 100%;
-  }
-  .user-wrap {
-    text-align: left;
-    margin-left: 10px;
-    color: #fff;
-  }
+  align-items: center;
   .user-text {
     text-align: center;
     font-size: 14px;
     white-space: nowrap;
     min-width: 40px;
   }
-  .user-role {
-    padding: 2px 4px;
-    font-size: 8px;
-    font-weight: 500;
-    margin-top: 2px;
-    color: var(--el-color-primary);
-    background-color: var(--el-color-primary-light-9);
-  }
 }
-
 
 .userinfo-wrap {
   display: flex;
