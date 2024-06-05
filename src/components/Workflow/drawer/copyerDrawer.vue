@@ -1,11 +1,11 @@
 <!--
  * @Date: 2022-08-25 14:05:59
- * @LastEditors: StavinLi 495727881@qq.com
- * @LastEditTime: 2022-09-21 14:36:45
+ * @LastEditors: PiPin 33947354+p1Master@users.noreply.github.com
+ * @LastEditTime: 2024-06-05 17:46:58
  * @FilePath: /Workflow-Vue3/src/components/drawer/copyerDrawer.vue
 -->
 <template>
-  <el-drawer :append-to-body="true" title="抄送人设置" v-model="visible" direction="rtl" custom-class="set_copyer" size="550px" :before-close="saveCopyer">
+  <el-drawer :append-to-body="true" title="抄送人设置" v-model="visible" direction="rtl" class="set_copyer" size="550px" :before-close="saveCopyer">
     <div class="demo-drawer__content">
       <div class="copyer_content drawer_content">
         <el-button type="primary" @click="addCopyer">添加成员</el-button>
@@ -28,6 +28,7 @@
   </el-drawer>
 </template>
 <script setup>
+import { ref, watch, computed } from 'vue'
 import employeesRoleDialog from '../dialog/employeesRoleDialog.vue'
 import $func from '../plugins/preload'
 import { mapState } from '../plugins/lib.js'
@@ -36,7 +37,6 @@ const workflowStore = useworkflowStore();
 let { copyerDrawer, copyerConfig1 } = mapState()
 let { setCopyerConfig, setCopyer } = workflowStore
 
-// import { ref, watch, computed } from 'vue'
 let copyerConfig = ref({})
 let ccSelfSelectFlag = ref([])
 let copyerVisible = ref(false)

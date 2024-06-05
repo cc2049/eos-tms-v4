@@ -1,5 +1,5 @@
 <template>
-  <el-dialog title="选择成员" v-model="visibleDialog" width="900px" append-to-body custom-class="promoter_person">
+  <el-dialog title="选择成员" v-model="visibleDialog" width="900px" append-to-body class="promoter_person">
     <div class="person_body clear">
       <div class="deptbox">
         <div class="head-container">
@@ -36,10 +36,10 @@
 </template>
 
 <script setup>
+import { ref, computed, watch } from 'vue';
 import selectBox from '../selectBox.vue';
 import selectResult from '../selectResult.vue';
 import { UserList, deptTreeSelect } from "#/system/user";
-// import { computed, watch, ref } from 'vue';
 import { departments, getDebounceData, getDepartmentList, searchVal } from './common'
 import $func from '../plugins/preload.js'
 let props = defineProps({

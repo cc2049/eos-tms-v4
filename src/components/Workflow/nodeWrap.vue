@@ -88,8 +88,10 @@
   <nodeWrap :detail="detail" v-if="nodeConfig.childNode" v-model:nodeConfig="nodeConfig.childNode" />
 </template>
 <script setup>
+import { ref, watch, computed, onMounted, getCurrentInstance } from "vue";
 import $func from "./plugins/preload";
 import { mapState } from "./plugins/lib.js";
+import addNode from "./addNode.vue";
 import useworkflowStore from "@/store/modules/workflow"
 const workflowStore = useworkflowStore();
 
@@ -315,7 +317,7 @@ const arrTransfer = (index, type = 1) => {
 }
 
 .promoter_person .el-dialog__body {
-  padding: 10px 20px 14px 20px;
+  /* padding: 10px 20px 14px 20px; */
 }
 
 .selected_list {
