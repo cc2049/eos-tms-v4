@@ -2,15 +2,15 @@
  * @Author: cc2049
  * @Date: 2024-04-23 11:33:59
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-06-05 15:25:07
+ * @LastEditTime: 2024-06-05 18:20:04
  * @Description: 简介
 -->
 <template>
   <div class="page-container">
-    <SingleTable v-if="!visibleFormPage" ref="listTableRef" :menuID="menuParams" :compType="routerParams.COMP" @openCustemPage="openCustemPages" />
+    <SingleTable v-if="!visibleFormPage" ref="listTableRef" :menuID="menuParams" :compType="routerParams.COMP" @openCustemPage="openCustemPage" />
 
     <template v-else>
-      <OpenCustom :slotCustemPagePath="slotCustemPagePath" @backEvents="backEvent" />
+      <OpenCustom :activeBtn :slotCustemPagePath="slotCustemPagePath" @backEvents="backEvent" />
     </template>
 
   </div>
@@ -35,11 +35,7 @@ const menuParams = ref({
 });
 const visibleFormPage = ref(false);
 
-const openCustemPages = (acceptData) => {
-  const { data, row } = acceptData;
-  openCustemPage(data.btnConf.VTYPE, data.btnConf.PAGEPATH); // 打开自定义页面
-};
-
+const activeBtn = ref({})
 const backEvent = () => {
   // 目前不行，这样的话 财旺写的组件会报错
   visibleFormPage.value = false;
@@ -47,15 +43,17 @@ const backEvent = () => {
 
 /** 动态自定义组件 */
 const slotCustemPagePath = ref();
-const openCustemPage = (type, path) => {
+const openCustemPage = (data) => {
+console.log(123, data);
+
+  activeBtn.value = data
   try {
     visibleFormPage.value = true;
-    slotCustemPagePath.value = path;
+    slotCustemPagePath.value = data.path;
   } catch (err) {
     console.error("打开自定义页面", err);
   }
 };
-// console.log(123, routerParams);
 provide("menuID", menuParams);
 provide("key17Status", key17Status);
 
