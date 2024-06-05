@@ -25,7 +25,7 @@
               <Icon icon="iconamoon:search"></Icon>
             </el-icon>
           </el-button>
-          <el-popover placement="bottom" :width="600" trigger="click" :visible="visible">
+          <el-popover placement="bottom" :width="510" trigger="click" :visible="visible">
             <template #reference>
               <el-button @click="visible = true">
                 <el-icon :size="20">
