@@ -315,9 +315,9 @@ const arrTransfer = (index, type = 1) => {
   font-size: 24px;
 }
 
-.promoter_person .el-dialog__body {
-  /* padding: 10px 20px 14px 20px; */
-}
+/* .promoter_person .el-dialog__body {
+  padding: 10px 20px 14px 20px;
+} */
 
 .selected_list {
   margin-bottom: 20px;
