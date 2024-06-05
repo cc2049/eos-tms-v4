@@ -128,3 +128,12 @@ docker-compose restart etmsnginx
 
 ## 表单详情数据来源于表格的单条数据时，单据设计，中的插槽配置 写入  CurrentData 即可
 
+
+
+## 图标使用案例
+
+```
+<el-icon color="#949eb5" :size="26">
+  <Icon icon="uiw:setting" />
+</el-icon>
+```

@@ -2,7 +2,7 @@
  * @Author: cc2049
  * @Date: 2024-04-28 13:10:44
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-06-05 15:08:37
+ * @LastEditTime: 2024-06-05 18:18:06
  * @Description: 简介
 -->
 <template v-if="pageConfig">
@@ -234,10 +234,10 @@ function reloadTableData() {
 }
 const advanceQueryRef = ref(null);
 function handleTopBtn(data) {
-  console.log('handleTopBtn', data);
   if (data.type == "openCustomPlan") {
     advanceQueryRef.value.openShowModal();
   } else if (data.type == "openCustemPage") {
+    console.log('handleTopBtn', data);
     emit("openCustemPage", { data: data, row: currentData.value });
   } else {
     handelEvent({ data: data, row: currentData.value });
