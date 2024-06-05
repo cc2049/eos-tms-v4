@@ -105,7 +105,6 @@
             <el-button @click="plusTabs">去新建</el-button>
           </el-empty>
 
-
         </div>
       </el-col>
     </el-row>
@@ -341,19 +340,17 @@ const setTableConfig = () => {
 
 // 一键生成配置
 const createConfig = () => {
-  TableForm.value.submitForm().then((valid) => {
-    if (!valid) return;
-    proxy.$modal.confirm("是否生成配置？").then((res) => {
-      let data = configForm.formValue;
-      createdConfig({
-        BILLNO: data.BILLNO,
-        PK_MODULE: data.PK_MODULE,
-        GROUPNO: data.GROUPNO,
-        TBVWID: data.TBVWID,
-        VCODE: data.VCODE,
-      }).then((res) => {
-        getTabsList(TreeActive.value);
-      });
+  let data = configForm.formValue;
+  if (!data.TBVWID || !data.VCODE) return proxy.$modal.msgWarning("请选择维护关联表及编码");
+  proxy.$modal.confirm("是否一键生成配置？").then((res) => {
+    createdConfig({
+      BILLNO: data.BILLNO,
+      PK_MODULE: data.PK_MODULE,
+      GROUPNO: data.GROUPNO,
+      TBVWID: data.TBVWID,
+      VCODE: data.VCODE,
+    }).then((res) => {
+      getTabsList(TreeActive.value);
     });
   });
 };
