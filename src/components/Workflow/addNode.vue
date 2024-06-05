@@ -38,6 +38,7 @@
   </div>
 </template>
 <script setup>
+import { ref } from 'vue'
 let props = defineProps({
   detail: Boolean,
   childNodeP: {
@@ -111,7 +112,7 @@ const addType = (type) => {
   }
 }
 </script>
-<style scoped lang="scss">
+<style  lang="scss" scoped>
 .add-node-btn-box {
   width: 240px;
   min-height: 40px;

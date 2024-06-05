@@ -31,7 +31,8 @@
       </el-select>
     </div>
 
-    <div style="width: 260px">
+    <!-- <div style="width: 260px"> -->
+    <div style="width: 170px">
       <!-- ExDate 日期选择 -->
       <template v-if="currentConfig.CONTROLS == 'ExDate'">
         <el-date-picker v-model="formData.DEFAULTVAL" clearable style="width: 100%" placeholder="请选择"

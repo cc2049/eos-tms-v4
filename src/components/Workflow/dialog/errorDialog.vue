@@ -1,7 +1,7 @@
 <!--
  * @Date: 2022-08-25 14:05:59
- * @LastEditors: StavinLi 495727881@qq.com
- * @LastEditTime: 2022-09-21 14:36:40
+ * @LastEditors: PiPin 33947354+p1Master@users.noreply.github.com
+ * @LastEditTime: 2024-06-05 17:45:45
  * @FilePath: /Workflow-Vue3/src/components/dialog/errorDialog.vue
 -->
 <template>
@@ -29,7 +29,7 @@
 </template>
 
 <script setup>
-// import { computed } from 'vue'
+import { computed } from 'vue'
 let props = defineProps({
   list: {
     type: Array,

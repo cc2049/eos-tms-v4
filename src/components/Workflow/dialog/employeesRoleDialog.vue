@@ -1,5 +1,5 @@
 <template>
-  <el-dialog title="选择成员" v-model="visibleDialog" width="600px" append-to-body custom-class="promoter_person">
+  <el-dialog title="选择成员" v-model="visibleDialog" width="600px" append-to-body class="promoter_person">
       <div class="person_body clear">
           <div class="person_tree l">
               <input type="text" placeholder="搜索成员" v-model="searchVal" @input="getDebounceData($event,activeName)">
@@ -24,9 +24,9 @@
 </template>
 
 <script setup>
+import { computed, ref, watch } from 'vue'
 import selectBox from '../selectBox.vue';
 import selectResult from '../selectResult.vue';
-// import { computed, watch, ref } from 'vue'
 import $func from '../plugins/preload.js'
 import { departments, roles, getDebounceData, getRoleList, getDepartmentList, searchVal } from './common'
 let props = defineProps({

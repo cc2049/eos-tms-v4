@@ -1,5 +1,5 @@
 <template>
-  <el-drawer :append-to-body="true" title="条件设置" v-model="visible" direction="rtl" custom-class="condition_copyer set_promoter" size="550px" :before-close="saveCondition">
+  <el-drawer :append-to-body="true" title="条件设置" v-model="visible" direction="rtl" class="condition_copyer set_promoter" size="550px" :before-close="saveCondition">
     <template #header="{ titleId, titleClass }">
       <h3 :id="titleId" :class="titleClass">条件设置</h3>
       <select v-model="conditionConfig.priorityLevel" class="priority_level">
@@ -64,7 +64,7 @@
         </ul>
         <el-button v-if="false" type="primary" @click="addCondition">添加条件</el-button>
 
-        <el-dialog v-if="false" title="选择条件" v-model="conditionVisible" width="480px" append-to-body custom-class="condition_list">
+        <el-dialog v-if="false" title="选择条件" v-model="conditionVisible" width="480px" append-to-body class="condition_list">
           <p>请选择用来区分审批流程的条件字段</p>
           <p class="check_box">
             <a :class="$func.toggleClass(conditionList,{columnId:0},'columnId')&&'active'" @click="$func.toChecked(conditionList,{columnId:0},'columnId')">发起人</a>
@@ -86,6 +86,7 @@
   </el-drawer>
 </template>
 <script setup>
+import { ref, computed, watch } from 'vue'
 import employeesRoleDialog from '../dialog/employeesRoleDialog.vue'
 import $func from '../plugins/preload'
 import { mapState } from '../plugins/lib.js'
@@ -94,9 +95,6 @@ const workflowStore = useworkflowStore();
 let { tableId, conditionsConfig1, conditionDrawer } = mapState()
 let { setCondition, setConditionsConfig } = workflowStore
 
-
-// import { getConditions } from '../plugins/api.js'
-// import { ref, watch, computed } from 'vue'
 let conditionVisible = ref(false)
 let conditionsConfig = ref({
   conditionNodes: [],

@@ -1,5 +1,5 @@
 <template>
-  <div class="">
+  <div class="page-config">
     <el-row>
       <el-col :span="4">
         <div class="group">
@@ -267,6 +267,7 @@ const plusTabs = () => {
   formConfig.formBase = formData;
   formConfig.formValue = JSON.parse(JSON.stringify(formData));
   formConfig.formValue.PK_MODULE = TreeActive.value;
+  formConfig.formValue.MODULENAME = treeFind(menuOptions.value, (el) => el.VALUE == activeTabRow.value.PK_MODULE).LABEL;
   formConfig.formRules = getFormRule(FormConfig);
   pageConfig.modelTitle = "新增自定义页面";
   formType.value = "add";
@@ -276,10 +277,7 @@ const EditTabs = () => {
   let formData = getFormValue(FormConfig);
   formConfig.formColumns = FormConfig;
   formConfig.formBase = formData;
-  formData.MODULENAME = treeFind(
-    menuOptions.value,
-    (el) => el.VALUE == activeTabRow.value.PK_MODULE
-  ).LABEL;
+  formData.MODULENAME = treeFind(menuOptions.value, (el) => el.VALUE == activeTabRow.value.PK_MODULE).LABEL;
   formConfig.formValue = { ...formData, ...activeTabRow.value };
   formConfig.formRules = getFormRule(FormConfig);
   pageConfig.modelTitle = "编辑自定义页面";
@@ -700,13 +698,14 @@ const DictLabel = (arr, data) => {
 //   overflow: hidden;
 // }
 :deep(.el-tabs__nav-wrap) {
-  width: calc(100% - 350px);
+  width: calc(100% - 404px);
   .el-tabs__nav-prev {
     left: 4px;
   }
   .el-tabs__nav-next,
   .el-tabs__nav-prev {
-    line-height: 33px;
+    line-height: 40px;
+    font-weight: 400;
   }
 }
 :deep(.el-tabs__content) {

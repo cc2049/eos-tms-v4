@@ -1,11 +1,11 @@
 <!--
  * @Date: 2022-08-25 14:05:59
- * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-05-23 08:29:46
+ * @LastEditors: PiPin 33947354+p1Master@users.noreply.github.com
+ * @LastEditTime: 2024-06-05 17:47:08
  * @FilePath: /Workflow-Vue3/src/components/drawer/promoterDrawer.vue
 -->
 <template>
-  <el-drawer :append-to-body="true" title="发起人" v-model="visible" direction="rtl" custom-class="set_promoter" size="550px" :before-close="savePromoter">
+  <el-drawer :append-to-body="true" title="发起人" v-model="visible" direction="rtl" class="set_promoter" size="550px" :before-close="savePromoter">
     <div class="demo-drawer__content">
       <div class="promoter_content drawer_content">
         <p>{{ $func.arrToStr(flowPermission) || '所有人' }}</p>
@@ -20,6 +20,7 @@
   </el-drawer>
 </template>
 <script setup>
+import { ref, computed, watch } from 'vue'
 import employeesDialog from '../dialog/employeesDialog.vue'
 import $func from '../plugins/preload'
 import { mapState } from '../plugins/lib'

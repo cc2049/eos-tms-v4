@@ -1,11 +1,11 @@
 <!--
  * @Date: 2022-08-25 14:05:59
- * @LastEditors: StavinLi 495727881@qq.com
- * @LastEditTime: 2022-09-21 14:35:49
+ * @LastEditors: PiPin 33947354+p1Master@users.noreply.github.com
+ * @LastEditTime: 2024-06-05 17:45:50
  * @FilePath: /Workflow-Vue3/src/components/dialog/roleDialog.vue
 -->
 <template>
-  <el-dialog title="选择角色" v-model="visibleDialog" width="600px" append-to-body custom-class="promoter_person">
+  <el-dialog title="选择角色" v-model="visibleDialog" width="600px" append-to-body class="promoter_person">
     <div class="person_body clear">
       <div class="person_tree l">
         <input type="text" placeholder="搜索角色" v-model="searchVal" @input="getDebounceData($event,2)">
@@ -20,6 +20,7 @@
   </el-dialog>
 </template>
 <script setup>
+import { ref, computed, watch } from 'vue'
 import selectBox from '../selectBox.vue';
 import selectResult from '../selectResult.vue';
 // import { computed, watch, ref } from 'vue'

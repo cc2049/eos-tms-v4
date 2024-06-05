@@ -95,7 +95,8 @@ watch(() => props.settingArr, value => {
 
     &-left {
         &-alone {
-            width: 500px;
+            // width: 500px;
+            width: 410px;
             float: left;
 
             margin-right: 20px;

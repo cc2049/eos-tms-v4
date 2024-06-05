@@ -88,15 +88,16 @@
   <nodeWrap :detail="detail" v-if="nodeConfig.childNode" v-model:nodeConfig="nodeConfig.childNode" />
 </template>
 <script setup>
+import { ref, watch, computed, onMounted, getCurrentInstance } from "vue";
 import $func from "./plugins/preload";
 import { mapState } from "./plugins/lib.js";
+import addNode from "./addNode.vue";
 import useworkflowStore from "@/store/modules/workflow"
 const workflowStore = useworkflowStore();
 
 let { isTried, flowPermission1, approverConfig1, copyerConfig1, conditionsConfig1 } = mapState();
 let { setPromoter, setApprover, setCopyer, setCondition, setFlowPermission, setApproverConfig, setCopyerConfig, setConditionsConfig } = workflowStore;
 
-import { onMounted, ref, watch, getCurrentInstance, computed } from "vue";
 let _uid = getCurrentInstance().uid;
 let bgColors = ['87, 106, 149', '255, 148, 62', '50, 150, 250']
 let placeholderList = ["发起人", "审核人", "抄送人"];
@@ -314,9 +315,9 @@ const arrTransfer = (index, type = 1) => {
   font-size: 24px;
 }
 
-.promoter_person .el-dialog__body {
+/* .promoter_person .el-dialog__body {
   padding: 10px 20px 14px 20px;
-}
+} */
 
 .selected_list {
   margin-bottom: 20px;

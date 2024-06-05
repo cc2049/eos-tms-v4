@@ -1,5 +1,5 @@
 <template>
-  <el-drawer :append-to-body="true" title="审批人设置" v-model="visible" direction="rtl" custom-class="set_promoter" size="550px" :before-close="saveApprover">
+  <el-drawer :append-to-body="true" title="审批人设置" v-model="visible" direction="rtl" class="set_promoter" size="550px" :before-close="saveApprover">
     <div class="demo-drawer__content">
       <div class="drawer_content">
         <div class="approver_content">
@@ -97,6 +97,7 @@
   </el-drawer>
 </template>
 <script setup>
+import { ref, watch, computed } from 'vue'
 import employeesDialog from '../dialog/employeesDialog.vue'
 import roleDialog from '../dialog/roleDialog.vue'
 import $func from '../plugins/preload.js'
@@ -106,7 +107,6 @@ const workflowStore = useworkflowStore();
 let { approverConfig1, approverDrawer } = mapState()
 let { setApproverConfig, setApprover } = workflowStore
 
-// import { ref, watch, computed } from 'vue'
 let props = defineProps({
   directorMaxLevel: {
     type: Number,
@@ -180,66 +180,66 @@ const closeDrawer = () => {
 </script>
 
 <style lang="scss" scoped>
-.set_promoter {
-  .approver_content {
-    padding-bottom: 10px;
-    border-bottom: 1px solid #f2f2f2;
-  }
-  .approver_self_select,
-  .approver_content {
-    .el-button {
-      margin-bottom: 20px;
-    }
-  }
-  .approver_content,
-  .approver_some,
-  .approver_self_select {
-    .el-radio-group {
-      display: unset;
-    }
-    .el-radio {
-      width: 27%;
-      margin-bottom: 20px;
-      height: 16px;
-    }
-  }
-  .approver_manager p {
-    line-height: 32px;
-  }
-  .approver_manager select {
-    width: 420px;
-    height: 32px;
-    background: rgba(255, 255, 255, 1);
-    border-radius: 4px;
-    border: 1px solid rgba(217, 217, 217, 1);
-  }
-  .approver_manager p.tip {
-    margin: 10px 0 22px 0;
-    font-size: 12px;
-    line-height: 16px;
-    color: #f8642d;
-  }
-  .approver_self {
-    padding: 28px 20px;
-    font-size: 14px;
-  }
-  .approver_self_select,
-  .approver_manager,
-  .approver_content,
-  .approver_some {
-    padding: 20px 20px 0;
-  }
-  .approver_manager p:first-of-type,
-  .approver_some p {
-    line-height: 19px;
-    font-size: 14px;
-    margin-bottom: 14px;
-  }
-  .approver_self_select h3 {
-    margin: 5px 0 20px;
-    font-size: 14px;
-    font-weight: bold;
-    line-height: 19px;
+// .set_promoter {
+.approver_content {
+  padding-bottom: 10px;
+  border-bottom: 1px solid #f2f2f2;
+}
+.approver_self_select,
+.approver_content {
+  .el-button {
+    margin-bottom: 20px;
   }
 }
+.approver_content,
+.approver_some,
+.approver_self_select {
+  .el-radio-group {
+    display: unset;
+  }
+  .el-radio {
+    width: 27%;
+    margin-bottom: 20px;
+    height: 16px;
+  }
+}
+.approver_manager p {
+  line-height: 32px;
+}
+.approver_manager select {
+  width: 420px;
+  height: 32px;
+  background: rgba(255, 255, 255, 1);
+  border-radius: 4px;
+  border: 1px solid rgba(217, 217, 217, 1);
+}
+.approver_manager p.tip {
+  margin: 10px 0 22px 0;
+  font-size: 12px;
+  line-height: 16px;
+  color: #f8642d;
+}
+.approver_self {
+  padding: 28px 20px;
+  font-size: 14px;
+}
+.approver_self_select,
+.approver_manager,
+.approver_content,
+.approver_some {
+  padding: 20px 20px 0;
+}
+.approver_manager p:first-of-type,
+.approver_some p {
+  line-height: 19px;
+  font-size: 14px;
+  margin-bottom: 14px;
+}
+.approver_self_select h3 {
+  margin: 5px 0 20px;
+  font-size: 14px;
+  font-weight: bold;
+  line-height: 19px;
+}
+// }
 </style>
