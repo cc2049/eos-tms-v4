@@ -91,7 +91,8 @@
                   <div class="card-header-tag">
                     <div class="card-header-tag-text">
                       <!-- {{ BILLSTATUSList[detailNoDynamic.BILLSTATUS] || '暂无状态' }} -->
-                      {{ queryLeftForm.BILLSTATUS == 6 ? detailNoDynamic.STATUSNAME : detailNoDynamic.STATUSNAME }}
+                      <!-- {{ queryLeftForm.BILLSTATUS == 6 ? detailNoDynamic.STATUSNAME : detailNoDynamic.STATUSNAME }} -->
+                      {{ chooseLeftData.STATUSNAME }}
                     </div>
                   </div>
                   <countDown ref="countDownRef" v-if="queryLeftForm.BILLSTATUS == 4"
@@ -668,9 +669,10 @@ const getPageList = () => {
   });
 };
 
-
+const chooseLeftData = ref({})
 const chooeseMune = (item) => {
   menuVal.value = item.BILLNO;
+  chooseLeftData.value = item;
   ruleForm.value = {
     BIDPRICE: null,
     EXPECTVALUE: null,

@@ -79,8 +79,8 @@ const resetCondition = () => {
     emit("resetCondition")
 }
 const delFilterArr = (item, index) => {
+    currentQueryList.value.splice(index, 1);
     emit("delFilterArr", index)
-
 }
 
 const changeFilter = (val, item, index) => {

@@ -170,6 +170,15 @@ export function getLastPlacePrice(data) {
 
 
 // 出价
+  //       "BILLFROM": "1",   //数据来源   0平台、1手机APP、2-小程序、3第三方系统 
+    //             "PK_PROJECT": "1",  //竞价项目ID
+    //             "PROJECTNAME": "1",  //竞价项目名称
+    //             "EXPECTVALUE": 1,   //出量
+    //             "BIDPRICE": 1,    //出价金额   
+    //             "ULON": "1",   //经度
+    //             "ULAT": "1",   //纬度
+    //          "UIPADDRESS":"1",   //IP地址
+    //          "BIDADDRESS":"1"   //出价地址
 export function offerPrice(data) {
     return request({
         url: 'oms/bidRecord/offerPrice',
