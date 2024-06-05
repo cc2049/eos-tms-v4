@@ -267,6 +267,7 @@ const plusTabs = () => {
   formConfig.formBase = formData;
   formConfig.formValue = JSON.parse(JSON.stringify(formData));
   formConfig.formValue.PK_MODULE = TreeActive.value;
+  formConfig.formValue.MODULENAME = treeFind(menuOptions.value, (el) => el.VALUE == activeTabRow.value.PK_MODULE).LABEL;
   formConfig.formRules = getFormRule(FormConfig);
   pageConfig.modelTitle = "新增自定义页面";
   formType.value = "add";
@@ -276,10 +277,7 @@ const EditTabs = () => {
   let formData = getFormValue(FormConfig);
   formConfig.formColumns = FormConfig;
   formConfig.formBase = formData;
-  formData.MODULENAME = treeFind(
-    menuOptions.value,
-    (el) => el.VALUE == activeTabRow.value.PK_MODULE
-  ).LABEL;
+  formData.MODULENAME = treeFind(menuOptions.value, (el) => el.VALUE == activeTabRow.value.PK_MODULE).LABEL;
   formConfig.formValue = { ...formData, ...activeTabRow.value };
   formConfig.formRules = getFormRule(FormConfig);
   pageConfig.modelTitle = "编辑自定义页面";
