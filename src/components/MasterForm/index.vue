@@ -4,8 +4,7 @@
       <eos-form ref="FormRef" v-model="formData" :config="formConfig" :detail="detail" @openModal="openModal">
         <template #SubTable="{ config }" v-if="tableConfig.length > 0">
           <div class="formTable" :style="`margin-left:-${labelWidth}`">
-            <SubTableCom :ref="config.FIELD+'Ref'" :key="config.FIELD" :detail="detail || config.ISDISABLED == '1'" :title="config.LABEL" :config="GET_TableConfig(config)" v-model="formData[config.FIELD]" v-model:mainFormData="formData" :othConfig="othConfig" @EtbaleLinkChange="EtbaleLinkChange"
-              @updateTableData="UPDATA_TableData" @openModal="openModal">
+            <SubTableCom :ref="config.FIELD+'Ref'" :key="config.FIELD" :detail="detail || config.ISDISABLED == '1'" :title="config.LABEL" :config="GET_TableConfig(config)" v-model="formData[config.FIELD]" v-model:mainFormData="formData" :othConfig="othConfig" @EtbaleLinkChange="EtbaleLinkChange" @updateTableData="UPDATA_TableData" @openModal="openModal">
               <template #modalBtnAfter>
                 <slot name="modalBtnAfter" />
               </template>
@@ -54,7 +53,7 @@ const props = defineProps({
   },
   formConfig: {
     type: Object,
-    default: () => {},
+    default: () => { },
   },
   labelWidth: {
     type: [String, Number],
@@ -107,19 +106,14 @@ const validate = () => {
     FormRef.value.validate().then((valid) => {
       if (!valid) return;
       // 需要验证的子表 和 需要验证的信息块 合并
-      let SubHasValid = props.tableConfig
-        .filter((el) => el.ISDISABLED != "1")
-        .map((el) => {
-          return {
-            TYPE: "subRef",
-            FIELD: el.FIELD,
-            GROUPNO: el.GROUPNO,
-            HASONLY:
-              el.GROUPNO === "TAB"
-                ? el.COLUMNS.filter((al) => al.ISONLY == "1")
-                : [],
-          };
-        });
+      let SubHasValid = props.tableConfig.filter((el) => el.ISDISABLED != "1").map((el) => {
+        return {
+          TYPE: "subRef",
+          FIELD: el.FIELD,
+          GROUPNO: el.GROUPNO,
+          HASONLY: el.GROUPNO === "TAB" ? el.COLUMNS.filter((al) => al.ISONLY == "1") : [],
+        };
+      });
       const HasValid = [...SubHasValid];
       if (HasValid.length == 0) {
         resolve(true);

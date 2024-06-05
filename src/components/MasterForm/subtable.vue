@@ -148,7 +148,8 @@ const updateTable = (data = null, clear = false) => {
       }
     }
     subFormRef.value?.xEditTable.loadData(updata)
-    emit("update:data", updata)
+    emit("update:modelValue", updata)
+    // emit("update:data", updata)
     setTimeout(() => {
       resolve();
     }, 1);
