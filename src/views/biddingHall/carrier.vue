@@ -200,17 +200,17 @@
 
                         <!-- 竞价信息 -->
                         <div
-                            v-if="detailNoDynamic.STATUSNAME == 4 || detailNoDynamic.STATUSNAME == 5 || detailNoDynamic.STATUSNAME == 6 || detailNoDynamic.STATUSNAME == 7">
+                            v-if="detailNoDynamic.BILLSTATUS == 4 || detailNoDynamic.BILLSTATUS == 5 || detailNoDynamic.BILLSTATUS == 6 || detailNoDynamic.BILLSTATUS == 7">
                             <div class="commonSmallTitle mt-10 disflex justify-sb">
                                 <div class="disflex card-header">
                                     <div class="mr-20">竞价信息</div>
-                                    <div class="disflex" v-if="detailNoDynamic.STATUSNAME == 4">
+                                    <div class="disflex" v-if="detailNoDynamic.BILLSTATUS == 4">
                                         <div class="lastPlaceClass">最后一名可中标价格为{{ lastPlaceObj.LAST_PLACE_PRICE || 0 }}元
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="disflex justify-between offerPriceClass" v-if="detailNoDynamic.STATUSNAME == 4">
+                            <div class="disflex justify-between offerPriceClass" v-if="detailNoDynamic.BILLSTATUS == 4">
                                 <div class="disflex">
                                     <div class="disflex mr-20">
                                         <div>出价金额：</div>
@@ -709,6 +709,8 @@ const offerPriceObj = ref({
     EXPECTVALUE: ''
 })
 const clickOfferPrice = () => {
+    if(!offerPriceObj.value.BIDPRICE) return proxy.$modal.msgError('请输入出价金额');
+    if(!offerPriceObj.value.EXPECTVALUE) return proxy.$modal.msgError('请输入出量');
     const protData = {
         BILLFROM: 0,
         PK_PROJECT: detailNoDynamic.value.BILLNO,
@@ -803,7 +805,7 @@ const Verification = () => {
     }, 1000);
 };
 
-onUnmounted(() => {
+onMounted(() => {
     queryPosition();
 
 });
