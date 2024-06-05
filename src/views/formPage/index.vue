@@ -1,14 +1,17 @@
 <!--
  * @Author: cc2049
  * @Date: 2024-04-23 11:35:41
- * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-06-05 14:45:01
+ * @LastEditors: PiPin 33947354+p1Master@users.noreply.github.com
+ * @LastEditTime: 2024-06-05 17:04:03
  * @Description: 大表单组件
 -->
 
 <template>
   <div class="form-container">
-    <TopButton :topButton="topButton" sourceType="2" @handleBtnEvent="handleBtnEvent" />
+    <div class="form-affix">
+      <TopButton :topButton="topButton" sourceType="2" @handleBtnEvent="handleBtnEvent" />
+      <div id="eos-form-tabs"></div>
+    </div>
     <el-scrollbar :height="formHeight" class="eos-scrollbar">
       <MasterForm ref="eosFormRef" v-model="formData" :formConfig="formConfig" :detail="isDetail" :tableConfig="tableConfig" :loading="formLoading" />
     </el-scrollbar>
@@ -68,7 +71,7 @@ watch(
         if (props.isGetDetail) {
           let detailURL = SLOTCFG || getQueryUrl(props.topButton);
           getDetail(detailURL);
-        }else{
+        } else {
           formLoading.value = false;
         }
       });
@@ -90,7 +93,7 @@ function resetButton(arr) {
   try {
     let customCF = JSON.parse(copyBtn.PAGEPATH);
     copyBtn.VNAME = customCF.sName;
-  } catch (error) {}
+  } catch (error) { }
 
   let newBtn = [copyBtn];
   return newBtn;
@@ -146,4 +149,9 @@ onMounted(() => {
 </script>
 
 <style lang="scss" scoped>
+.form-affix {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
 </style>
