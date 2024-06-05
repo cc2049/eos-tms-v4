@@ -1,8 +1,8 @@
 <!--
  * @Author: cc2049
  * @Date: 2024-05-27 17:02:11
- * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-06-05 17:48:03
+ * @LastEditors: PiPin 33947354+p1Master@users.noreply.github.com
+ * @LastEditTime: 2024-06-05 19:26:31
  * @Description: 简介
 -->
 <template>
@@ -21,10 +21,7 @@
         </span>
       </div>
       <div class="form-title-btn">
-        <div id="custemPageBtn" v-if="
-                  formModalTableCFG.PAGE == 'slot' ||
-                  formModalTableCFG.TYPE == 'STEP'
-                "></div>
+        <div id="custemPageBtn"></div>
         <template>
           <template v-for="itemB in formConfig.buttonList" :key="itemB.BILLNO">
             <el-button type="primary" size="default" @click="formBtnEvent(itemB,1)" v-if="setShowBtn(itemB)">
@@ -35,7 +32,6 @@
       </div>
     </div>
     <div class="form-page-content mt20">
-     
       <!-- <template v-if="formModalTableCFG.PAGE == 'slot'"> -->
       <slotCustemPage :config="{}" :currentData="currentData" @close="closeCustemPage" />
       <!-- </template> -->
@@ -44,7 +40,13 @@
 </template>
 <script setup>
 const route = useRoute();
-
+import pageAutoComponent from "@/pageToComponents";
+import { onMounted } from "vue";
+const props = defineProps({
+  activeBtn: Object,
+  slotCustemPagePath: String,
+});
+const emit = defineEmits(["treeClick", "backEvents"]);
 const formModalTableCFG = ref({
   MODULE: "",
   PAGE: "",
@@ -52,7 +54,7 @@ const formModalTableCFG = ref({
   tableBillNo: "",
   ListtableData: {},
 });
-console.log(888,route);
+console.log(888, route);
 const formConfig = reactive({
   formBase: {}, // 表单源数据
   formValue: {}, // form数据
@@ -65,10 +67,22 @@ const formConfig = reactive({
 
 const currentData = ref([]);
 
-const emit = defineEmits(["treeClick", "backEvents"]);
+/** 动态自定义组件 */
+const slotCustemPage = ref();
+const openCustemPage = (type) => {
+  try {
+    // visibleFormPage.value = true;
+    const path = props.slotCustemPagePath
+    // type == 1 ? (visibleFormPage.value = true) : (pageConfig.modalVisible = true);
+    slotCustemPage.value = pageAutoComponent(path);
+  } catch (err) {
+    console.error("Err:打开自定义页面", err);
+  }
+};
 
-
-
+onMounted(() => {
+  openCustemPage()
+})
 
 function backEvent() {
   // treeKeyword.value = "";

@@ -1,70 +1,70 @@
 <!--
  * @Author: cc2049
  * @Date: 2024-04-28 13:10:44
- * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-06-05 18:18:06
+ * @LastEditors: PiPin 33947354+p1Master@users.noreply.github.com
+ * @LastEditTime: 2024-06-05 19:19:27
  * @Description: 简介
 -->
 <template v-if="pageConfig">
-    <TopButton ref="topButtonRef" v-model:topButton="topButton" :currentData="currentData" @handleTopBtn="handleTopBtn" @reloadTableData="reloadTableData" />
-    <div class="custom-query" ref="AdvancedQuery">
-      <AdvanceQuery :queryConfig="pageConfig?.queryConfig" @updateHeight="queryHeight" :customPlan ref="advanceQueryRef" @handleCustomPlan="handleCustomPlan" />
-    </div>
+  <TopButton ref="topButtonRef" v-model:topButton="topButton" :currentData="currentData" @handleTopBtn="handleTopBtn" @reloadTableData="reloadTableData" />
+  <div class="custom-query" ref="AdvancedQuery">
+    <AdvanceQuery :queryConfig="pageConfig?.queryConfig" @updateHeight="queryHeight" :customPlan ref="advanceQueryRef" @handleCustomPlan="handleCustomPlan" />
+  </div>
 
-    <div class="table-content">
-      <!-- 左侧树模块 -->
-      <template v-if="pageConfig?.hasTree">
-        <div class="tree-wrap" v-show="showZtree">
-          <Ztree :treeData :height="tableCFG.height - 50 " :defaultExpandedKeys="defaultExpandedKeys" @treeClick="treeClick" />
-        </div>
-        <div class="splitbar-wrap">
-          <div class="btn-icon left" @click="handleSplitbar('left')" v-if="showZtree">
-            <el-icon :size="18">
-              <CaretLeft />
-            </el-icon>
-          </div>
-          <div class="btn-icon right" @click="handleSplitbar('right')">
-            <el-icon :size="18">
-              <CaretRight />
-            </el-icon>
-          </div>
-        </div>
-      </template>
-      <!-- 表格主体 -->
-      <div class="table-wrap" :class="pageConfig?.hasTree && showZtree ? 'has-tree-table' :'' " v-if="tableCFG">
-
-        <!-- 多主表的页签 -->
-        <template v-if="multiMainTable.length">
-          <EosTabs :tabsList="multiMainTable" @change="changeTab" />
-        </template>
-
-        <div class="main-sub-table flex">
-          <div class="left-table " :style="{width: SubLayoutConfig.subLayout==1? SubLayoutConfig.subLayoutLeft : '100%'}">
-            <Vxtable ref="VxtableRef" class="bg-white" :tableCFG="tableCFG" :tableData="tableData" :sourceTableData="sourceTableData" @change="tableChange" @dragRow="dragTableRow" @queryEvent="queryEvent" @resetConfig="resetConfig" @filterNameEvent="filterNameEvent" @dbClick="dbClickTable">
-            </Vxtable>
-          </div>
-          <div class="right-table ml-6" :style="{width: SubLayoutConfig.subLayoutLeft }" v-if="SubLayoutConfig.subLayout==1 && SubTableConfig.length">
-            <SubTable ref="SubTableRef" :SubTableConfig :subLayout="SubLayoutConfig.subLayout" :height="tableCFG.height " />
-          </div>
-        </div>
-
-        <div class="pager-wrap flex flex-items-center" :class=" compType=='VTableSub'?'justify-between':'justify-end' ">
-          <EosTabs :tabsList="SubTableConfig" @change="changeTab" v-if="compType=='VTableSub' && SubTableConfig.length" />
-          <vxe-pager size="mini" class-name="vxe-page-wrap " :page-size="pageInfo.pageSize" :page-sizes="ListPageSize" :current-page="pageInfo.currentPage" :total="pageInfo.totalResult" :layouts="pagerLayouts" @page-change="handlePageChange">
-            <template #left>
-              <div class="check-acount">
-                已选 <span class="waring-color"> {{ currentData.length }} </span> 行
-              </div>
-            </template>
-          </vxe-pager>
-        </div>
-
-        <template v-if="compType=='VTableSub' && SubTableConfig.length">
-          <SubTable ref="SubTableRef" :SubTableConfig />
-        </template>
-
+  <div class="table-content">
+    <!-- 左侧树模块 -->
+    <template v-if="pageConfig?.hasTree">
+      <div class="tree-wrap" v-show="showZtree">
+        <Ztree :treeData :height="tableCFG.height - 50 " :defaultExpandedKeys="defaultExpandedKeys" @treeClick="treeClick" />
       </div>
+      <div class="splitbar-wrap">
+        <div class="btn-icon left" @click="handleSplitbar('left')" v-if="showZtree">
+          <el-icon :size="18">
+            <CaretLeft />
+          </el-icon>
+        </div>
+        <div class="btn-icon right" @click="handleSplitbar('right')">
+          <el-icon :size="18">
+            <CaretRight />
+          </el-icon>
+        </div>
+      </div>
+    </template>
+    <!-- 表格主体 -->
+    <div class="table-wrap" :class="pageConfig?.hasTree && showZtree ? 'has-tree-table' :'' " v-if="tableCFG">
+
+      <!-- 多主表的页签 -->
+      <template v-if="multiMainTable.length">
+        <EosTabs :tabsList="multiMainTable" @change="changeTab" />
+      </template>
+
+      <div class="main-sub-table flex">
+        <div class="left-table " :style="{width: SubLayoutConfig.subLayout==1? SubLayoutConfig.subLayoutLeft : '100%'}">
+          <Vxtable ref="VxtableRef" class="bg-white" :tableCFG="tableCFG" :tableData="tableData" :sourceTableData="sourceTableData" @change="tableChange" @dragRow="dragTableRow" @queryEvent="queryEvent" @resetConfig="resetConfig" @filterNameEvent="filterNameEvent" @dbClick="dbClickTable">
+          </Vxtable>
+        </div>
+        <div class="right-table ml-6" :style="{width: SubLayoutConfig.subLayoutLeft }" v-if="SubLayoutConfig.subLayout==1 && SubTableConfig.length">
+          <SubTable ref="SubTableRef" :SubTableConfig :subLayout="SubLayoutConfig.subLayout" :height="tableCFG.height " />
+        </div>
+      </div>
+
+      <div class="pager-wrap flex flex-items-center" :class=" compType=='VTableSub'?'justify-between':'justify-end' ">
+        <EosTabs :tabsList="SubTableConfig" @change="changeTab" v-if="compType=='VTableSub' && SubTableConfig.length" />
+        <vxe-pager size="mini" class-name="vxe-page-wrap " :page-size="pageInfo.pageSize" :page-sizes="ListPageSize" :current-page="pageInfo.currentPage" :total="pageInfo.totalResult" :layouts="pagerLayouts" @page-change="handlePageChange">
+          <template #left>
+            <div class="check-acount">
+              已选 <span class="waring-color"> {{ currentData.length }} </span> 行
+            </div>
+          </template>
+        </vxe-pager>
+      </div>
+
+      <template v-if="compType=='VTableSub' && SubTableConfig.length">
+        <SubTable ref="SubTableRef" :SubTableConfig />
+      </template>
+
     </div>
+  </div>
 </template>
 
 
@@ -238,7 +238,7 @@ function handleTopBtn(data) {
     advanceQueryRef.value.openShowModal();
   } else if (data.type == "openCustemPage") {
     console.log('handleTopBtn', data);
-    emit("openCustemPage", { data: data, row: currentData.value });
+    emit("openCustemPage", { data: data, path: data.btnConf.PAGEPATH, row: currentData.value });
   } else {
     handelEvent({ data: data, row: currentData.value });
   }
