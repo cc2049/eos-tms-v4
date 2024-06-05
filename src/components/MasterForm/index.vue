@@ -87,7 +87,11 @@ const { modalRef, modalConfig, openModal, closeModal } = useModalHook();
 
 /** 表格页面 双击 */
 const TablePagedbClick = (row) => {
-  FormRef.value.update(modalConfig.value._config, row);
+  if (Object.hasOwn(modalConfig.value, '$formRef')) {
+    modalConfig.value.$formRef.update(modalConfig.value._config, row);
+  } else {
+    FormRef.value.update(modalConfig.value._config, row);
+  }
   closeModal();
 };
 const handleConfirm = () => {

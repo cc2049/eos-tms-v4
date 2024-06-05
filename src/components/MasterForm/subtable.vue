@@ -3,7 +3,7 @@
     <div class="title" v-if="showTitle">{{title}}</div>
     <template v-if="!detail">
       <div class="saveAndAdd" v-if="ShowType == 'form'">
-        <eos-form ref="editFormRef" class="subForm" v-model="form" v-model:mainFormData="mainFormData" :config="tableCFG.tableColumns" :rules="Rules" />
+        <eos-form ref="editFormRef" class="subForm" v-model="form" v-model:mainFormData="mainFormData" :config="tableCFG.tableColumns" :rules="Rules" @openModal="openModal" />
         <el-button class="mb10" type="primary" plain size="default" @click="formSubmit">保存并新增</el-button>
       </div>
       <div class="btn" v-if="ShowType == 'modal'">
@@ -273,7 +273,9 @@ const formSubmit = () => {
       updateTable();
     }
     pageConfig.modalVisible = false;
-  });
+  }).finally(() => {
+    editFormRef.value.resetFields();
+  })
 };
 
 /** 按钮展示类型
@@ -334,6 +336,7 @@ const InitConfig = () => {
 };
 
 const openModal = val => {
+  val.$formRef = editFormRef.value
   emit("openModal", val)
 }
 
