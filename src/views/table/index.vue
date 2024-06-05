@@ -2,13 +2,17 @@
  * @Author: cc2049
  * @Date: 2024-04-23 11:33:59
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-06-04 15:06:17
+ * @LastEditTime: 2024-06-05 15:25:07
  * @Description: 简介
 -->
 <template>
   <div class="page-container">
-    <SingleTable v-if="!visibleFormPage" ref="listTableRef" :menuID="menuParams" :compType="routerParams.COMP" @openCustemPage="openCustemPages"  />
-    <OpenCustom v-else :slotCustemPagePath="slotCustemPagePath" @backEvents="backEvent" />
+    <SingleTable v-if="!visibleFormPage" ref="listTableRef" :menuID="menuParams" :compType="routerParams.COMP" @openCustemPage="openCustemPages" />
+
+    <template v-else>
+      <OpenCustom :slotCustemPagePath="slotCustemPagePath" @backEvents="backEvent" />
+    </template>
+
   </div>
 </template>
 
@@ -17,8 +21,8 @@ import SingleTable from "./components/SingleTable/index.vue";
 import MultiTable from "./components/MultiTable/index.vue";
 import OpenCustom from "./components/openCustom/index.vue";
 
-import useKey17Status from '@/hooks/useKey17Status'
-const { key17Status } = useKey17Status()
+import useKey17Status from "@/hooks/useKey17Status";
+const { key17Status } = useKey17Status();
 
 /*
  * 解析路由获取菜单id
@@ -31,19 +35,18 @@ const menuParams = ref({
 });
 const visibleFormPage = ref(false);
 
-const openCustemPages=(acceptData) => {
-  const {data,row} = acceptData
+const openCustemPages = (acceptData) => {
+  const { data, row } = acceptData;
   openCustemPage(data.btnConf.VTYPE, data.btnConf.PAGEPATH); // 打开自定义页面
-}
+};
 
-const backEvent=()=>{
+const backEvent = () => {
   // 目前不行，这样的话 财旺写的组件会报错
-  // visibleFormPage.value = false
-}
-
+  visibleFormPage.value = false;
+};
 
 /** 动态自定义组件 */
-const slotCustemPagePath=ref()
+const slotCustemPagePath = ref();
 const openCustemPage = (type, path) => {
   try {
     visibleFormPage.value = true;

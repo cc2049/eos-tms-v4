@@ -51,6 +51,11 @@ $vxe-primary-color: #1761FF !important;
   color: $vxe-primary-color;
 }
 
+.vxe-table--render-default .vxe-cell{
+  padding-left: 2px !important;
+  padding-right: 2px !important;
+}
+
 
 
 // the :export directive is the magic sauce for webpack

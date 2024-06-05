@@ -2,7 +2,7 @@
  * @Author: cc2049
  * @Date: 2024-04-24 18:52:34
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-06-04 17:23:03
+ * @LastEditTime: 2024-06-05 14:37:33
  * @Description: 简介
 -->
 <!--
@@ -97,11 +97,11 @@ const resetTitle = (tag) => {
     const { type } = tag.params;
     let newTitle = removeWords(tag.title);
     if (type == 0 || type == ':type' ) {
-      return newTitle + "新增";
+      return newTitle + "-新增";
     } else if (type == 1) {
-      return newTitle + "编辑";
+      return newTitle + "-编辑";
     } else if (type == 2) {
-      return newTitle + "详情";
+      return newTitle + "-详情";
     }else{
       return tag.title;
     }

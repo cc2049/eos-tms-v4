@@ -2,7 +2,7 @@
  * @Author: cc2049
  * @Date: 2024-04-28 15:12:29
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-06-04 11:46:16
+ * @LastEditTime: 2024-06-05 14:49:23
  * @Description: 简介
 -->
 
@@ -248,9 +248,7 @@ function handleEvent(data, row) {
   }
 
   if (data.VTYPE == 1) {
-    if (data.PK_PAGE && data?.PK_PAGE == "slot") {
-      emit("handleTopBtn", { type: "openCustemPage", btnConf: data });
-    }
+    emit("handleTopBtn", { type: "openCustemPage", btnConf: data });
   } else if (
     // 打开弹窗
     data.VTYPE == 2 ||
