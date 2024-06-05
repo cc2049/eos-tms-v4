@@ -31,7 +31,7 @@
                 </div>
                 <!-- <div class="leftMenu-status" :class="`leftMenu-status${item.BILLSTATUS}`">{{
         statusList[item.BILLSTATUS] }}</div> -->
-                <div class="leftMenu-status">
+                <div class="leftMenu-status" :class="`leftMenu-status${item.BILLSTATUS}`">
                   {{ item.STATUSNAME }}
                 </div>
 
@@ -167,7 +167,7 @@
                     </div>
                     <div class="disflex flex-w mt10">
                       <div v-for="(item, index) in cargoInfoList" :key="index" class="disflex mr-20 mb-5">
-                        <div class="">{{ item.title }}</div>
+                        <div class="mr-5">{{ item.title }}</div>
                         <div v-if="item.flag">
                           <div v-if="item.flag == 'select'" class="cargoInfo-top-content">
                             {{ computedCargoInfoSelect(item.selectList,
@@ -193,7 +193,7 @@
                     </div>
                     <div class="disflex flex-w mt10 pt-10" style="border-top: 1px dashed #ccc;">
                       <div v-for="(item, index) in cargoInfoList1" :key="index" class="disflex mr-20 mb-5">
-                        <div class="">{{ item.title }}</div>
+                        <div class="mr-5">{{ item.title }}</div>
                         <div v-if="item.flag && compShow(detailNoDynamic, item)">
                           <div v-if="item.flag == 'select'" class="cargoInfo-top-content">
                             {{ computedCargoInfoSelect(item.selectList,
@@ -1037,6 +1037,7 @@ onUnmounted(() => {
         &-status {
           font-weight: 400;
           font-size: 14px;
+          flex-shrink: 0;
         }
 
         &-status0 {
@@ -1362,6 +1363,10 @@ onUnmounted(() => {
     margin-right: 10px;
     font-size: 14px;
   }
+}
+
+:deep(.el-tabs__item){
+  padding: 0 6px;
 }
 </style>
 <!-- <style scoped>
