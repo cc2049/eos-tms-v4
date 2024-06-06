@@ -2,7 +2,7 @@
  * @Author: cc2049
  * @Date: 2024-05-27 17:02:11
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-06-06 12:47:20
+ * @LastEditTime: 2024-06-06 12:50:39
  * @Description: 简介
 -->
 <template>
@@ -111,6 +111,7 @@ function backEvent() {
 
 <style lang="scss" scoped>
 .open-page {
+  min-height: calc(100vh - 78px);
   .page-title {
     padding: 10px;
     border-bottom: 1px solid var(--el-border-color-light);
