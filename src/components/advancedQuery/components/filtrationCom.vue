@@ -57,6 +57,7 @@ const changeFilter = (val, item, index) => {
 
 // const newfilterArrs = ref([])
 watch(() => props.filterArr, value => {
+    console.log("🚀 ~ watch ~ value:", value)
     // newfilterArrs.value = value
     currentQueryList.value = value.map(ele => {
 
@@ -75,7 +76,7 @@ watch(() => props.filterArr, value => {
 
     })
 
-}, { immediate: true })
+}, { immediate: true, deep: true  })
 
 watch(() => currentQueryList.value, value => {
     emit('changeCurrentQueryList', value)
