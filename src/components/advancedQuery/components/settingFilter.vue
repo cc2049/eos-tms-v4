@@ -80,6 +80,7 @@ const resetCondition = () => {
 }
 const delFilterArr = (item, index) => {
     currentQueryList.value.splice(index, 1);
+
     emit("delFilterArr", index)
 }
 

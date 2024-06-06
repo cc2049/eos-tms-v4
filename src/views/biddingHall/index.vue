@@ -369,6 +369,12 @@ const Hight = window.innerHeight - 154;
 const { proxy } = getCurrentInstance();
 const MenuID = inject("menuID");
 const emptyImg = proxy.getAssetsFile("icon_task_NoData.png");
+
+const route = useRoute();
+console.log("🚀 ~ route:", route)
+const router = useRouter();
+
+
 import { onMounted, onUnmounted, ref, } from "vue";
 
 import { Search } from "@element-plus/icons-vue";
