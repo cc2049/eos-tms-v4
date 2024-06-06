@@ -253,6 +253,7 @@ function handleEvent(data, row) {
   console.log("handelEvent22", data, row);
   let selectRecords = row?.length ? row : props.currentData;
   activeBtn.value = data;
+
   // 表单中的按钮事件直接调
   if (props.sourceType == 2) {
     return emit("handleBtnEvent", data);
@@ -282,13 +283,19 @@ function handleEvent(data, row) {
       isGetDetail.value = false;
     }
     isDetail.value = data.ACTION == "DTL";
+  console.log("🚀 ~ handleEvent ~ selectRecords:", selectRecords)
+
     currentData2.value = selectRecords;
+    console.log("🚀 ~ handleEvent ~ currentData2.value:", currentData2.value)
+    
     modalConfig.modalVisible = true;
     modalConfig.pageTitle = data.VNAME;
     formID.value = {
       MODULEID: data.PK_MODULE,
       PAGEID: data.PK_PAGE,
     };
+    console.log('执行到了这里',data)
+
   } else if (data.VTYPE == 3) {
     //  选中数据并提交
     let dataChoose = props.currentData;
@@ -441,7 +448,7 @@ function evilFn(row, fn) {
   return Fn(proxy);
 }
 
-defineExpose({ openDeatil });
+defineExpose({ openDeatil,handleEvent});
 </script>
 
 <style lang="scss" scoped>

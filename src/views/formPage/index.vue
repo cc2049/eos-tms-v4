@@ -23,7 +23,7 @@
 import TopButton from "@/components/TopButton";
 import MasterForm from "@/components/MasterForm/index.vue";
 import { getPageConfig } from "#/system/page.js";
-import { getFormValue, getQueryUrl } from "@/utils";
+import { getFormValue, getQueryUrl,getUrlParams } from "@/utils";
 import { axiosGet } from "#/common";
 import { onMounted } from "vue";
 
@@ -44,6 +44,7 @@ const props = defineProps({
   activeBtn: {},
   topButton: {},
 });
+console.log(props.currentData)
 const emit = defineEmits(["closeModal", "refreshTable"]);
 
 const { proxy } = getCurrentInstance();
@@ -125,8 +126,11 @@ const quitPage =()=>{
 
 function handleBtnEvent(btn) {
   let URL = btn.ACTIONADDRESS;
+
+  let params = getUrlParams(URL)
+
   let MenuID = { MODULEID: btn.PK_MODULE, PAGEID: btn.PK_PAGE };
-  let sdata = { ...formData.value, ...MenuID };
+  let sdata = { ...formData.value, ...MenuID,...params };
   eosFormRef.value.validate().then((valid) => {
     if (valid) {
       submitEvent(URL, sdata);

@@ -55,42 +55,46 @@
 
               <!-- <TopButton :topButton="allPageCon.BUTTON" sourceType="2" @handleBtnEvent="clickCommonBtn"  /> -->
 
-              <TopButton sourceType="2" :isCurrentBtn="true" ref="topBtnRef">
+              <TopButton :isCurrentBtn="true" ref="topBtnRef">
                 <template #currentBtn>
-                  <el-button size="small" :type="btn.COLOR" v-for="(btn, btnIndex) in allPageCon.BUTTON"
-                    @click="clickCommonBtn(btn)" :key="btn.BILLNO">{{ btn.VNAME }}</el-button>
+                  <!-- 走了财旺的按钮方法 -->
+                  <template v-for="(btn, btnIndex) in allPageCon.BUTTON" :key="btn.BILLNO">
+                    <el-button v-if="setShowBtn(btn)" size="small" :type="btn.COLOR" @click="clickCommonBtn(btn)">{{
+        btn.VNAME }}</el-button>
+                  </template>
+
+                  <!-- 走的自己写的 -->
+                  <el-button size="small" v-if="detailNoDynamic.BILLSTATUS == 0" type="primary"
+                    @click="subCheck">提交审核</el-button>
+                  <el-popconfirm title="确定要结束?" @confirm="constraintEnd">
+                    <template #reference>
+                      <el-button size="small" type="danger"
+                        v-if="detailNoDynamic.BILLSTATUS == 2 || queryLeftForm.BILLSTATUS == 5">强制结束</el-button>
+                    </template>
+                  </el-popconfirm>
+                  <el-button size="small" :disabled="applyInfoRefChooseList.length > 0 ? false : true"
+                    v-if="detailNoDynamic.BILLSTATUS == 2" @click="cancalSure">取消确认</el-button>
+                  <el-button size="small" :disabled="applyInfoRefChooseList.length > 0 ? false : true" type="primary"
+                    v-if="detailNoDynamic.BILLSTATUS == 2" @click="confirmApply">确认报名</el-button>
+                  <el-button size="small"
+                    v-if="detailNoDynamic.BILLSTATUS == 5 || detailNoDynamic.BILLSTATUS == 6 || detailNoDynamic.BILLSTATUS == 7"
+                    @click="clickApplyDetail">报名明细</el-button>
+                  <el-button size="small" v-if="detailNoDynamic.BILLSTATUS == 6"
+                    @click="clickCancellation">作废</el-button>
                 </template>
               </TopButton>
 
 
-              <el-button size="small" v-if="queryLeftForm.BILLSTATUS == 0">编辑</el-button>
-              <el-button size="small" v-if="queryLeftForm.BILLSTATUS == 0">发布公告</el-button>
-              <el-button size="small" v-if="queryLeftForm.BILLSTATUS == 0" type="primary"
-                @click="subCheck">提交审核</el-button>
+              <!-- <el-button size="small" v-if="queryLeftForm.BILLSTATUS == 0">编辑</el-button> -->
 
-              <!-- <el-button size="small" type="danger"
-                v-if="queryLeftForm.BILLSTATUS == 2 || queryLeftForm.BILLSTATUS == 4" @click="constraintEnd">强制结束</el-button> -->
 
-              <el-popconfirm title="确定要结束?" @confirm="constraintEnd">
-                <template #reference>
-                  <el-button size="small" type="danger"
-                    v-if="queryLeftForm.BILLSTATUS == 2 || queryLeftForm.BILLSTATUS == 4">强制结束</el-button>
-                </template>
-              </el-popconfirm>
+              <!-- <el-button size="small"
+                v-if="detailNoDynamic.BILLSTATUS == 2 || detailNoDynamic.BILLSTATUS == 5 || detailNoDynamic.BILLSTATUS == 6 || detailNoDynamic.BILLSTATUS == 7">查看公告</el-button> -->
 
-              <el-button size="small"
-                v-if="queryLeftForm.BILLSTATUS == 2 || queryLeftForm.BILLSTATUS == 4">查看公告</el-button>
-              <el-button size="small" :disabled="applyInfoRefChooseList.length > 0 ? false : true"
-                v-if="queryLeftForm.BILLSTATUS == 2" @click="cancalSure">取消确认</el-button>
-              <el-button size="small" :disabled="applyInfoRefChooseList.length > 0 ? false : true" type="primary"
-                v-if="queryLeftForm.BILLSTATUS == 2" @click="confirmApply">确认报名</el-button>
 
-              <el-button size="small" v-if="queryLeftForm.BILLSTATUS == 4" @click="clickApplyDetail">报名明细</el-button>
-              <el-button size="small" type="primary" v-if="queryLeftForm.BILLSTATUS == 4">中标</el-button>
 
-              <el-button size="small" v-if="queryLeftForm.BILLSTATUS == 6" @click="clickCancellation">作废</el-button>
-              <el-button size="small" v-if="queryLeftForm.BILLSTATUS == 6">报名明细</el-button>
-              <el-button size="small" type="primary" v-if="queryLeftForm.BILLSTATUS == 6">查看公告</el-button>
+              <!-- <el-button size="small" type="primary" v-if="detailNoDynamic.BILLSTATUS == 5">中标</el-button> -->
+
 
             </div>
           </template>
@@ -350,7 +354,11 @@
                       </el-select>
                     </div>
                     <div v-if="detailNoDynamic.BILLSTATUS == 6 || detailNoDynamic.BILLSTATUS == 7">
-                      <div>是否中标</div>
+                      <div class="selectLeftText">是否中标</div>
+                      <el-select v-model="IS_BID" size="small" style="width: 120px" @change="changeIS_BID">
+                        <el-option label="是" value="1" />
+                        <el-option label="否" value="0" />
+                      </el-select>
                     </div>
                   </div>
 
@@ -433,11 +441,21 @@
 const leftHight = window.innerHeight - 240;
 const Hight = window.innerHeight - 154;
 const { proxy } = getCurrentInstance();
-const MenuID = inject("menuID");
-const emptyImg = proxy.getAssetsFile("icon_task_NoData.png");
+// const MenuID = inject("menuID");
+// console.log("🚀 ~ MenuID:", MenuID)
 
 const route = useRoute();
+
 const router = useRouter();
+const routerParams = router.currentRoute.value.meta;
+const menuParams = ref({
+  MODULEID: routerParams.BILLNO || "-",
+  PAGEID: routerParams.ACTION || "-",
+});
+provide("menuID", menuParams);
+
+const emptyImg = proxy.getAssetsFile("icon_task_NoData.png");
+
 
 import TopButton from "@/components/TopButton";
 
@@ -635,7 +653,7 @@ const bidRunList = ref([])
 const getGetBidRunList = (PK_PROJECT) => {
   const protData = {
     // PK_PROJECT,
-    PK_PROJECT: 1,
+    PK_PROJECT,
     PK_CARRIER: PK_CARRIER.value,
   }
   getBidRunList(protData).then((res) => {
@@ -646,7 +664,7 @@ const getGetBidRunList = (PK_PROJECT) => {
 const carrierList = ref([])
 const querygetBidRecordCarrierList = () => {
   const protData = {
-    PK_PROJECT: 1
+    PK_PROJECT: detailNoDynamic.value.BILLNO
   }
   getBidRecordCarrierList(protData).then((res) => {
     carrierList.value = res.RESULT
@@ -657,6 +675,10 @@ const changePK_CARRIER = (e) => {
   getGetBidRunList(menuVal.value);
 }
 
+const changeIS_BID=()=>{
+
+  
+}
 
 const subCheck = () => {
   const protData = {
@@ -760,16 +782,40 @@ const Verification = () => {
   }, 1000);
 };
 
-const topBtnRef=ref(null)
+const topBtnRef = ref(null)
 const clickCommonBtn = (btn) => {
-
-  
-
-
-
+  btn.ACTIONADDRESS = btn.ACTIONADDRESS.concat(`?PK_PROJECT=${detailNoDynamic.value.BILLNO}`)
+  topBtnRef.value.handleEvent(btn, [detailNoDynamic.value])
 }
 
+const setShowBtn = (btn) => {
+  if (btn.ISSHOW == 0) return false;
+  if (btn.ISSHOW == 2 && btn.OTHER) {
+    try {
+      let DATA = detailNoDynamic.value;
+      // console.error(evilFn( DATA, btn.OTHER));
+      if (!evilFn(DATA, btn.OTHER)) {
+        return false;
+      }
+    } catch (error) {
+      console.error(error);
+    }
+    return true;
+  } else if (!btn.CHILDREN || !btn.CHILDREN.length) {
+    return true;
+  }
+};
 
+function evilFn(row, fn) {
+  const DATA = JSON.parse(JSON.stringify(row)) || Object.create(null);
+  let Fn = new Function("DATA", `return ${fn}`);
+  const proxy = new Proxy(DATA, {
+    has(target, key) {
+      return true;
+    },
+  });
+  return Fn(proxy);
+}
 
 
 const allPageCon = ref({})

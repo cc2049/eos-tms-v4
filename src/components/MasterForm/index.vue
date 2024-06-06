@@ -15,7 +15,7 @@
 
       <eos-modal ref="modalRef">
         <template #default>
-          <TablePage ref="TablePageRef" :menuID="modalConfig.page" dbClickType="emit" @dbClick="TablePagedbClick" />
+          <TablePage ref="TablePageRef" :menuID="modalConfig?.page" dbClickType="emit" @dbClick="TablePagedbClick" />
         </template>
         <template #footer>
           <el-button type="info" size="default" @click="closeModal">取消</el-button>
