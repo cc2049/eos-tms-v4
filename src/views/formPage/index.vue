@@ -1,15 +1,16 @@
 <!--
  * @Author: cc2049
  * @Date: 2024-04-23 11:35:41
- * @LastEditors: PiPin 33947354+p1Master@users.noreply.github.com
- * @LastEditTime: 2024-06-06 11:44:46
+ * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2024-06-06 12:48:34
  * @Description: 大表单组件
 -->
 
 <template>
+
   <div class="form-container" ref="formBoxRef">
     <div class="form-affix" ref="affixRef">
-      <TopButton :topButton="topButton" sourceType="2" @handleBtnEvent="handleBtnEvent" />
+      <TopButton :topButton="topButton" sourceType="2" @handleBtnEvent="handleBtnEvent"  @quitPage="quitPage"/>
       <div id="eos-form-tabs"></div>
     </div>
     <el-scrollbar :height="formHeight" class="eos-scrollbar">
@@ -118,6 +119,10 @@ function getDetail(URL) {
   console.log("formData.value", formData.value);
 }
 
+const quitPage =()=>{
+  emit('closeModal')
+}
+
 function handleBtnEvent(btn) {
   let URL = btn.ACTIONADDRESS;
   let MenuID = { MODULEID: btn.PK_MODULE, PAGEID: btn.PK_PAGE };
@@ -144,12 +149,6 @@ function submitEvent(URL, sdata) {
   });
 }
 
-// onMounted(() => {
-//   formHeight.value = window.innerHeight - 124;
-//   window.onresize = function temp() {
-//     formHeight.value = window.innerHeight - 124;
-//   };
-// });
 </script>
 
 <style lang="scss" scoped>

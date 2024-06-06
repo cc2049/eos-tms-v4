@@ -2,7 +2,7 @@
  * @Author: cc2049
  * @Date: 2024-05-27 17:02:11
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-06-06 11:44:06
+ * @LastEditTime: 2024-06-06 12:50:39
  * @Description: 简介
 -->
 <template>
@@ -15,7 +15,6 @@
           </el-icon>
           <span class="ml-26">返回</span>
         </div>
-
         <span class="color-999 ml-20">
           {{ route.meta.title }} / {{ btnConfig.VNAME }}
         </span>
@@ -36,7 +35,7 @@
         <slotCustemPage :config="btnConfig" :currentData="currentData" @close="closeCustemPage" />
       </template>
       <template v-else>
-        <FormPage :menuID="menuParams" :currentData @closeModal="closeModal" @refreshTable="refreshTable" :isGetDetail :activeBtn :topButton :isDetail />
+        <FormPage :menuID="menuParams" :currentData @closeModal="backEvent" @refreshTable="refreshTable" :isGetDetail :activeBtn="btnConfig" :topButton :isDetail />
       </template>
     </div>
   </div>
@@ -112,6 +111,7 @@ function backEvent() {
 
 <style lang="scss" scoped>
 .open-page {
+  min-height: calc(100vh - 78px);
   .page-title {
     padding: 10px;
     border-bottom: 1px solid var(--el-border-color-light);

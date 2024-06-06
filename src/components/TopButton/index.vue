@@ -2,7 +2,7 @@
  * @Author: cc2049
  * @Date: 2024-04-28 15:12:29
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-06-05 14:49:23
+ * @LastEditTime: 2024-06-06 12:10:19
  * @Description: 简介
 -->
 
@@ -25,6 +25,7 @@
           <div class="buttom-item" @click="handleEvent(itemBtn)" :title="itemBtn.BTNTITLE " v-if="setShowBtn(itemBtn) ">
             {{ itemBtn.VNAME }}
           </div>
+          
           <el-dropdown v-else-if="itemBtn.CHILDREN?.length" style="margin: 0 6px" @command="handelEvent" size="large">
             <div class="buttom-item ">
               {{ itemBtn.VNAME }}
@@ -43,11 +44,15 @@
               </el-dropdown-menu>
             </template>
           </el-dropdown>
+
         </template>
 
-        
 
+          <el-divider direction="vertical" />
 
+           <div class="buttom-item" @click="leftHandleEvent(3)">
+            退出
+          </div>
 
       </div>
 
@@ -145,7 +150,7 @@ const MenuID = inject("menuID");
 const formID = ref(null);
 const { proxy } = getCurrentInstance();
 // const emit = defineEmits(["handleTopBtn", "reloadTableData"]);
-const emit = defineEmits(["reloadTableData"]);
+const emit = defineEmits(["reloadTableData", "quitPage" , "handleBtnEvent"]);
 
 const modalConfig = reactive({
   modalW: 1000,
@@ -233,14 +238,15 @@ function leftHandleEvent(type) {
     case 2:
       emit("reloadTableData");
       break;
+    case 3:
+      emit("quitPage");
+      break;
   }
 }
 
 function refreshTable() {
   emit("reloadTableData");
 }
-
-// proxy.$emit("handelEvent", { data, row: null });
 
 // 表格的顶部按钮操作
 function handleEvent(data, row) {
@@ -441,7 +447,7 @@ defineExpose({ openDeatil });
 <style lang="scss" scoped>
 .fixed-top-button {
   display: flex;
-
+  align-items: center;
   .buttom-item {
     padding: 0 12px;
     font-size: 14px;

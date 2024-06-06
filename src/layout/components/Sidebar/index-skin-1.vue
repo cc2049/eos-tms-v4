@@ -2,7 +2,7 @@
  * @Author: cc2049
  * @Date: 2024-04-25 14:41:35
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-06-06 11:05:13
+ * @LastEditTime: 2024-06-06 12:40:32
  * @Description: 简介
 -->
 <template>
@@ -80,7 +80,7 @@
                       {{ menus.NAME }}
                     </span>
                     <template v-for="itemt in menus.CHILDREN" :key="itemt.BILLNO">
-                      <div class="eoslink">
+                      <div class="eoslink" v-if="setShowMenu( itemt.ISSHOW)">
                         <router-link :to="itemt.fullPath" class="eoslink-a">
                           {{ itemt.NAME }}
                         </router-link>
@@ -91,8 +91,8 @@
                     </template>
                   </div>
 
-                  <div class="eoslink" v-else>
-                    <router-link :to="menus.fullPath" class="eoslink-a">
+                  <div class="eoslink" v-if="setShowMenu( menus.ISSHOW)">
+                    <router-link :to="menus.fullPath" class="eoslink-a" >
                       {{ menus.NAME }}
                     </router-link>
                     <el-icon class="my-start" title="加入快捷入口2" :size="14" @click.stop="jionStart(menus, 1)">
@@ -102,11 +102,11 @@
                 </div>
               </template>
 
-              <div class="eoslink" v-else>
+              <div class="eoslink" v-if="setShowMenu( item.ISSHOW)">
                 <router-link :to="item.fullPath" class="eoslink-a" @click="closeMenu">
-                  {{ item.NAME }}
+                  {{ item.NAME }}{{ item.ISSHOW }}
                 </router-link>
-                <el-icon class="my-start" title="加入快捷入口3" :size="14" @click.stop="jionStart(item, 1)">
+                <el-icon class="my-start" title="加入快捷入口" :size="14" @click.stop="jionStart(item, 1)">
                   <Star />
                 </el-icon>
               </div>
