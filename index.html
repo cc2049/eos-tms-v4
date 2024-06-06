@@ -2,7 +2,7 @@
  * @Author: cc2049
  * @Date: 2024-04-19 09:01:33
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-04-19 14:20:58
+ * @LastEditTime: 2024-06-06 08:54:41
  * @Description: 简介
 -->
 <!DOCTYPE html>
@@ -17,13 +17,24 @@
   <title>EOS-TMS-V4</title>
   <!--[if lt IE 11]><script>window.location.href='/html/ie.html';</script><![endif]-->
   <style>
-   
+    .loader-wrapper {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50px, -50px);
+    }
+
+    .loding-img {
+     
+    }
   </style>
 </head>
 
 <body>
   <div id="app">
-   
+    <div class="loader-wrapper">
+      <img src="/public/cloud_loading.gif" alt="" srcset="" class="loding-img">
+    </div>
   </div>
   <script type="module" src="/src/main.js"></script>
 </body>

@@ -1,3 +1,10 @@
+<!--
+ * @Author: cc2049
+ * @Date: 2024-04-19 09:01:33
+ * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2024-06-06 10:39:43
+ * @Description: 简介
+-->
 <template>
   <div :class="{ 'has-logo': showLogo }" :style="{ backgroundColor: sideTheme === 'theme-dark' ? variables.menuBackground : variables.menuLightBackground }">
     <logo v-if="showLogo" :collapse="isCollapse" />
@@ -17,7 +24,8 @@
           :key="route.path + index"
           :item="route"
           :base-path="route.path"
-        />
+        >
+        </sidebar-item>
       </el-menu>
     </el-scrollbar>
   </div>
@@ -50,5 +58,8 @@ const activeMenu = computed(() => {
   }
   return path;
 })
+
+
+console.log(999, sidebarRouters.value );
 
 </script>

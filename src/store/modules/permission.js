@@ -88,6 +88,8 @@ function filterAsyncRouter(asyncRouterMap, lastRouter = false, type = false, par
     route.name = route.PATH;
     route.meta = {};
     route.meta.title = route.NAME;
+    route.meta.title = route.NAME;
+    route.isShow = route.ISSHOW==0;
     route.meta.icon = route.META.VICON;
     route.meta.imgIcon = route.META.VIMG;
     route.meta.noCache = route.META.ISCACHE == '0'
