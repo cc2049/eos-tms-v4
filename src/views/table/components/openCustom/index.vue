@@ -1,8 +1,8 @@
 <!--
  * @Author: cc2049
  * @Date: 2024-05-27 17:02:11
- * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-06-05 19:51:02
+ * @LastEditors: PiPin 33947354+p1Master@users.noreply.github.com
+ * @LastEditTime: 2024-06-06 10:46:28
  * @Description: 简介
 -->
 <template>
@@ -78,19 +78,15 @@ const pageCFG = ref({})
 /** 动态自定义组件 */
 const slotCustemPage = ref();
 const openCustemPage = (type) => {
-  // console.log(888, props.activeBtn);
-
+  console.log(888, props.activeBtn);
   try {
     btnConfig.value = props.activeBtn.data.btnConf;
-    pageCFG.value.PAGE = "form";
+    pageCFG.value.PAGE = props.activeBtn.data.btnConf.PK_PAGE || 'form';
     menuParams.value = {
       MODULEID: btnConfig.value.PK_MODULE || "-",
       PAGEID: btnConfig.value.PK_PAGE || "-",
     };
-
-    // visibleFormPage.value = true;
     const path = props.slotCustemPagePath;
-    // type == 1 ? (visibleFormPage.value = true) : (pageConfig.modalVisible = true);
     slotCustemPage.value = pageAutoComponent(path);
   } catch (err) {
     console.error("Err:打开自定义页面", err);
