@@ -2,7 +2,7 @@
  * @Author: cc2049
  * @Date: 2024-04-25 14:41:35
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-06-04 10:27:26
+ * @LastEditTime: 2024-06-06 10:58:51
  * @Description: 简介
 -->
 <template>
@@ -10,7 +10,7 @@
     <el-scrollbar :height="sidebarHeight" :class="['sidebar-left', isCollapse ? 'sidebar-left-ani' : '']" :style="{ width: isCollapse ? '58px' : '240px' }">
       <el-menu default-active="2" class="el-menu-vertical-demo menu-wzc" :collapse="isCollapse">
         <template v-for="(item, index) in topMenus" :key="item.path">
-          <el-menu-item :index="`${index}`" v-if="!item.CHILDREN.length" @click="handleMenu(itemS)">
+          <el-menu-item :index="`${index}`" v-if="!item.CHILDREN.length && setShowMenu( item.ISSHOW)" @click="handleMenu(itemS)">
             <el-icon color="#fff" :size="20">
               <Icon icon="ic:outline-menu-book"></Icon>
             </el-icon>
@@ -27,9 +27,9 @@
             </template>
 
             <template v-for="(itemS, indexS) in item.CHILDREN" :key="indexS">
-              <el-menu-item :index="`${index}-${indexS}`" @click="handleMenu(itemS)" class="my-sub">
+              <el-menu-item :index="`${index}-${indexS}`" @click="handleMenu(itemS)" class="my-sub 66" v-if="setShowMenu(itemS.ISSHOW)">
                 <span class="fa fa-circle"></span>
-                <span class="menu-name-sub">{{ itemS.NAME }}</span>
+                <span class="menu-name-sub">{{ itemS.NAME }} </span>
               </el-menu-item>
             </template>
           </el-sub-menu>
@@ -263,6 +263,11 @@ const changeMenu = (data) => {
 const closeMenu = () => {
   $emit("closeMenu");
 };
+
+function setShowMenu(t) {
+  if (t === "0") return false;
+  return true;
+}
 
 function handleSelect(key, menu) {
   currentIndex.value = key;

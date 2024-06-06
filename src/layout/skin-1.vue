@@ -2,7 +2,7 @@
  * @Author: cc2049
  * @Date: 2024-04-24 12:47:35
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-06-04 10:32:50
+ * @LastEditTime: 2024-06-06 09:06:50
  * @Description: 主题风格一 金蝶云
 -->
 <template>
@@ -95,7 +95,7 @@ function closeMenu() {
   showSidebar.value = false;
 }
 function openAllMenu() {
-  showSidebar.value = true;
+  showSidebar.value = !showSidebar.value;
 }
 </script>
 
