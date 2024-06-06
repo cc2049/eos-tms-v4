@@ -120,8 +120,8 @@ const delLine = () => {
 
     if (chooseOneLIneIndex.value || chooseOneLIneIndex.value == 0) {
         newFilterArr.value.splice(chooseOneLIneIndex.value, 1);
+        currentQueryList.value.splice(chooseOneLIneIndex.value, 1);
         chooseOneLIneIndex.value = null
-
     }
 }
 

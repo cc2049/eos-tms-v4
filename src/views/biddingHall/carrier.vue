@@ -132,66 +132,125 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="disflex flex-w mt10">
-                                            <div v-for="(item, index) in cargoInfoList" :key="index"
-                                                class="disflex mr-20 mb-5">
-                                                <div class="mr-5">{{ item.title }}</div>
-                                                <div v-if="item.flag">
-                                                    <div v-if="item.flag == 'select'" class="cargoInfo-top-content">
-                                                        {{ computedCargoInfoSelect(item.selectList,
-                detailNoDynamic[item.text]) }}
-                                                    </div>
-                                                    <div class="cargoInfo-top-content" v-else-if="item.flag == 'sub'">
-                                                        <span v-for="item in computedSub(detailNoDynamic.SUBLIST)"
-                                                            :key="item">{{
-                item
+                                        <el-row>
+                                            <el-col :span="6">
+                                                <span>发货日期：</span>
+                                                <span class="cargoInfo-top-content">{{ detailNoDynamic.YQSTDATE
+                                                    }}</span>
+                                            </el-col>
+                                            <el-col :span="6">
+                                                <span>要求送达日期：</span>
+                                                <span class="cargoInfo-top-content">{{ detailNoDynamic.YQEDDATE
+                                                    }}</span>
+                                            </el-col>
+                                            <el-col :span="6">
+                                                <span>车辆类型：</span>
+                                                <span class="cargoInfo-top-content">{{ detailNoDynamic.CARTYPE }}</span>
+                                            </el-col>
+                                            <el-col :span="6">
+                                                <span>提供装货：</span>
+                                                <span class="cargoInfo-top-content">{{ detailNoDynamic.IS_LOAD == 1 ?
+                '是' : '否'
+                                                    }}</span>
+                                            </el-col>
+                                            <el-col :span="6">
+                                                <span>提供卸货：</span>
+                                                <span class="cargoInfo-top-content">{{ detailNoDynamic.IS_UNLOAD == 1 ?
+                '是' : '否'
+                                                    }}</span>
+                                            </el-col>
+                                            <el-col :span="6">
+                                                <span>提供发票：</span>
+                                                <span class="cargoInfo-top-content">{{ detailNoDynamic.PRICECUT == 1 ?
+                '是' : '否'
+                                                    }}</span>
+                                            </el-col>
+                                        </el-row>
+                                        <el-row class=" mt10 pt-10" style="border-top: 1px dashed #ccc;">
+                                            <el-col :span="12">
+                                                <span>竞价时间：</span>
+                                                <span class="cargoInfo-top-content">{{ detailNoDynamic.BIDSTTIME }} - {{
+                detailNoDynamic.BIDEDTIME
             }}</span>
-                                                        <!-- {{ computedSub(detailNoDynamic.SUBLIST) }} -->
-                                                    </div>
-                                                    <div class="cargoInfo-top-content" v-else-if="item.flag == 'joint'">
-                                                        {{ detailNoDynamic.CARMINLENGTH }}*{{
-                detailNoDynamic.CARMINWIDTH
-            }}*{{
-                    detailNoDynamic.CARMINHEIGHT }}
-                                                    </div>
-                                                    <div v-else-if="item.flag == 'isRadio'">
-                                                        {{ detailNoDynamic[item.text] == 1 ? '是' : '否' }}
-                                                    </div>
-                                                </div>
-                                                <div v-else class="cargoInfo-top-content">{{ detailNoDynamic[item.text]
-                                                    }}
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="disflex flex-w mt10 pt-10" style="border-top: 1px dashed #ccc;">
-                                            <div v-for="(item, index) in cargoInfoList1" :key="index"
-                                                class="disflex mr-20 mb-5">
-                                                <div class="mr-5">{{ item.title }}</div>
-                                                <div v-if="item.flag && compShow(detailNoDynamic, item)">
-                                                    <div v-if="item.flag == 'select'" class="cargoInfo-top-content">
-                                                        {{ computedCargoInfoSelect(item.selectList,
-                detailNoDynamic[item.text]).label }}
-                                                    </div>
-                                                    <div class="cargoInfo-top-content" v-else-if="item.flag == 'sub'">
-                                                        <span v-for="item in computedSub(detailNoDynamic.SUBLIST)"
-                                                            :key="item">{{
-                item
+                                            </el-col>
+                                            <el-col :span="6">
+                                                <span>延期时长：</span>
+                                                <span class="cargoInfo-top-content">{{ detailNoDynamic.DELAYTIME
+                                                    }}分钟</span>
+                                            </el-col>
+                                            <el-col :span="6">
+                                                <span>报名确认：</span>
+                                                <span class="cargoInfo-top-content">{{
+                IS_SIGNQRList[detailNoDynamic.IS_SIGNQR]
             }}</span>
-                                                        <!-- {{ computedSub(detailNoDynamic.SUBLIST) }} -->
-                                                    </div>
-                                                    <div class="cargoInfo-top-content"
-                                                        v-else-if="item.flag == 'joinBiddingTime'">
-                                                        {{ detailNoDynamic.BIDSTTIME }}-{{ detailNoDynamic.BIDEDTIME }}
-                                                    </div>
-                                                    <div v-else-if="item.flag == 'isRadio'">
-                                                        {{ detailNoDynamic[item.text] == 1 ? '是' : '否' }}
-                                                    </div>
-                                                </div>
-                                                <div v-else class="cargoInfo-top-content">{{ detailNoDynamic[item.text]
-                                                    }}
-                                                </div>
-                                            </div>
-                                        </div>
+                                            </el-col>
+                                            <!-- <el-col :span="9">
+                        <span>车辆要求：</span>
+                        <span class="cargoInfo-top-content">dd</span>
+                      </el-col> -->
+                                            <el-col :span="12">
+                                                <span>报名时间：</span>
+                                                <span class="cargoInfo-top-content">{{
+                detailNoDynamic.SIGNSTTIME ? detailNoDynamic.SIGNSTTIME + ' - ' : ''
+            }}{{
+                    detailNoDynamic.SIGNEDTIME }}</span>
+                                            </el-col>
+                                            <el-col :span="6">
+                                                <span>保证金额：</span>
+                                                <span class="cargoInfo-top-content">{{ detailNoDynamic.BONDAMT
+                                                    }}元</span>
+                                            </el-col>
+                                            <el-col :span="6">
+                                                <span>运费上限：</span>
+                                                <span class="cargoInfo-top-content">{{ detailNoDynamic.FLOORPRICE
+                                                    }}元</span>
+                                            </el-col>
+                                            <el-col :span="6">
+                                                <span>确标方式：</span>
+                                                <span class="cargoInfo-top-content">{{ detailNoDynamic.IS_SURE == 1?'是':'否' }}</span>
+                                            </el-col>
+                                            <el-col :span="6">
+                                                <span>中标分配：</span>
+                                                <span class="cargoInfo-top-content">{{
+                DEVIDETYPEList[detailNoDynamic.DEVIDETYPE]
+            }}</span>
+                                            </el-col>
+                                            <el-col :span="6">
+                                                <span>中标名次：</span>
+                                                <span class="cargoInfo-top-content">{{
+                WINNUMList[detailNoDynamic.WINNUM] }}</span>
+                                            </el-col>
+                                            <el-col :span="6" v-if="detailNoDynamic.WINNUM > 0">
+                                                <span>第一名量：</span>
+                                                <span class="cargoInfo-top-content">{{ detailNoDynamic.ONEZBNUM*100
+                                                    }}%</span>
+                                            </el-col>
+                                            <el-col :span="6" v-if="detailNoDynamic.WINNUM > 1">
+                                                <span>第二名量：</span>
+                                                <span class="cargoInfo-top-content">{{ detailNoDynamic.TWOZBNUM*100
+                                                    }}%</span>
+                                            </el-col>
+                                            <el-col :span="6" v-if="detailNoDynamic.WINNUM > 2">
+                                                <span>第三名量：</span>
+                                                <span class="cargoInfo-top-content">{{ detailNoDynamic.THREEZBNUM*100
+                                                    }}%</span>
+                                            </el-col>
+                                            <el-col :span="6" v-if="detailNoDynamic.WINNUM > 3">
+                                                <span>第四名量：</span>
+                                                <span class="cargoInfo-top-content">{{ detailNoDynamic.FOURZBNUM*100
+                                                    }}%</span>
+                                            </el-col>
+                                            <el-col :span="6" v-if="detailNoDynamic.WINNUM > 4">
+                                                <span>第五名量：</span>
+                                                <span class="cargoInfo-top-content">{{ detailNoDynamic.FIVEZBNUM*100
+                                                    }}%</span>
+                                            </el-col>
+                                            <el-col :span="6">
+                                                <span>降价幅度：</span>
+                                                <span class="cargoInfo-top-content">{{ detailNoDynamic.PRICECUT
+                                                    }}元</span>
+                                            </el-col>
+                                        </el-row>
                                     </div>
                                 </div>
 
@@ -339,20 +398,6 @@ const userInfo = computed(() => userStore.userInfo);
 // BILLSTATUS  0未开始(待提交、审核中、未通过)、1待发公告、2报名中(无需报名的没有这个状态)、3待竞价(报名结束)、4竞价中、5竞价结束、6已完成/已结束(已中标、未中标、已作废)、7强制结束
 const statusList = ref(['未开始', '待发公告', '报名中', '待竞价', '竞价中', '竞价结束', '已完成', '强制结束'])
 
-const computedCargoInfoSelect = computed((list, val) => {
-    return (list, val) => {
-        if (!list || !val) return "暂无数据";
-        for (const key in list) {
-            if (val == key) {
-                return list[key];
-            }
-        }
-        return "暂无数据";
-
-        // let obj = list.filter(ele => ele.value == val)[0]
-        // return obj?.value || '暂无数据'
-    };
-});
 const noticInfoModal = ref(false)
 const copyVCODE = () => {
     let input = document.createElement("input"); // 创建input对象
@@ -364,177 +409,12 @@ const copyVCODE = () => {
     proxy.$modal.msgSuccess("复制成功");
 }
 
-const computedSub = computed((list) => {
-    return (list) => {
-        if (!list) return "暂无数据";
-        let arr = [];
-        list.forEach((item) => {
-            let str = item.MATERIALNAME.concat(
-                ` | ${item.ORDERNUM} | ${item.TRANSUNIT}`
-            );
-            arr.push(str);
-        });
-        return arr || [];
-    };
-});
-
 
 const activeName = ref(["1"]);
 
-
-const cargoInfoList = ref([
-    {
-        title: "发货日期",
-        text: "YQSTDATE",
-    },
-    {
-        title: "要求送达日期",
-        text: "YQEDDATE",
-    },
-    {
-        title: "车辆类型",
-        text: "CARTYPE",
-        flag: 'isRadio',
-    },
-    // {
-    //   title: "车辆要求",
-    //   text: "BIDSTARTTIME",
-    // },
-    {
-        title: "提供装货",
-        text: "IS_LOAD",
-    },
-    {
-        title: "提供卸货",
-        text: "IS_UNLOAD",
-    },
-    {
-        title: "提供发票",
-        text: "PRICECUT",
-    },
-]);
-const cargoInfoList1 = ref([
-    {
-        title: "竞价时间",
-        flag: 'joinBiddingTime'
-    },
-    {
-        title: "延期时长",
-        text: "DELAYTIME",
-    },
-    {
-        title: "报名确认",
-        text: "IS_SIGNQR",
-        flag: 'select',
-        selectList: [
-            {
-                label: '人工确认',
-                value: 0,
-            },
-            {
-                label: '自动确认',
-                value: 1,
-            },
-        ]
-    },
-    {
-        title: "保证金额",
-        text: "BONDAMT",
-    },
-    {
-        title: "报名时间",
-        text: "SIGNSTTIME",
-    },
-    {
-        title: "运费上限",
-        text: "FLOORPRICE",
-    },
-    {
-        title: "确标方式",
-        text: "IS_SURE",
-        flag: 'isRadio',
-    },
-    {
-        title: "中标分配",
-        text: "DEVIDETYPE",
-        flag: 'select',
-        selectList: [
-            {
-                label: '平均分配',
-                value: 0,
-            },
-            {
-                label: '货主分配',
-                value: 1,
-            },
-            {
-                label: '承运商出量',
-                value: 2,
-            },
-        ]
-    },
-    {
-        title: "中标名次",
-        text: "WINNUM",
-        flag: 'select',
-        selectList: [
-            {
-                label: ' 第一名中标',
-                value: 1,
-            },
-            {
-                label: '前两名中标',
-                value: 2,
-            },
-            {
-                label: '前三名中标',
-                value: 3,
-            },
-            {
-                label: '前四名中标',
-                value: 4,
-            },
-            {
-                label: '前五名中标',
-                value: 5,
-            },
-        ]
-    },
-    {
-        title: "第一名量",
-        text: "ONEZBNUM",
-        flag: 'isShow',
-        isShow: "DATA.WINNUM >= 1"
-    },
-    {
-        title: "第二名量",
-        text: "TWOZBNUM",
-        flag: 'isShow',
-        isShow: "DATA.WINNUM >= 2"
-    },
-    {
-        title: "第三名量",
-        text: "THREEZBNUM",
-        flag: 'isShow',
-        isShow: "DATA.WINNUM >= 3"
-    },
-    {
-        title: "第四名量",
-        text: "FOURZBNUM",
-        flag: 'isShow',
-        isShow: "DATA.WINNUM >= 4"
-    },
-    {
-        title: "第五名量",
-        text: "FIVEZBNUM",
-        flag: 'isShow',
-        isShow: "DATA.WINNUM >= 5"
-    },
-    {
-        title: "降价幅度",
-        text: "PRICECUT",
-    },
-])
+const IS_SIGNQRList = ref(['人工确认', '自动确认'])
+const DEVIDETYPEList = ref(['平均分配', '货主分配', '承运商出量'])
+const WINNUMList = ref(['', '第一名中标', '前两名中标', '前三名中标', '前四名中标', '前五名中标'])
 
 // 0-未开始 1-待发公告 2-待报名 3-报名中 4-待竞价 5-竞价中 6-竞价结束 7-竞价完
 const BILLSTATUSList = ref([
@@ -554,14 +434,6 @@ const count = ref(0);
 onMounted(() => {
     getPageList();
 });
-
-const compShow = (DATA, config) => {
-    if (!config.isShow) return
-    try {
-        eval(config.isShow)
-    } catch (error) { }
-}
-
 
 const menuVal = ref(null);
 const queryLeftForm = ref({
@@ -589,16 +461,6 @@ const getPageList = () => {
         if (leftMenuList.value.length) chooeseMune(leftMenuList.value[0]);
     });
 
-    // getTableData("oms/bidProject/getCargoPageList", {
-
-    //   // ...MenuID.value
-    // }).then((res) => {
-    //   // leftMenuTotal.value = res.RESULT.TOTAL
-    //   leftMenuList.value = res.RESULT.RECORDS;
-    //   menuVal.value = null
-    //   detailNoDynamic.value = {}
-    //   if (leftMenuList.value.length) chooeseMune(leftMenuList.value[0]);
-    // });
 };
 
 const chooseLeftData = ref({})
@@ -709,8 +571,8 @@ const offerPriceObj = ref({
     EXPECTVALUE: ''
 })
 const clickOfferPrice = () => {
-    if(!offerPriceObj.value.BIDPRICE) return proxy.$modal.msgError('请输入出价金额');
-    if(!offerPriceObj.value.EXPECTVALUE) return proxy.$modal.msgError('请输入出量');
+    if (!offerPriceObj.value.BIDPRICE) return proxy.$modal.msgError('请输入出价金额');
+    if (!offerPriceObj.value.EXPECTVALUE) return proxy.$modal.msgError('请输入出量');
     const protData = {
         BILLFROM: 0,
         PK_PROJECT: detailNoDynamic.value.BILLNO,
@@ -738,8 +600,6 @@ const querygetCarrierEndList = () => {
     });
 
 }
-
-
 
 const signBidding = () => {
     const protData = {
