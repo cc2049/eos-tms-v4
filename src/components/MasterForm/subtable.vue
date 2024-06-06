@@ -3,14 +3,14 @@
     <div class="title" v-if="showTitle">{{title}}</div>
     <template v-if="!detail">
       <div class="saveAndAdd" v-if="ShowType == 'form'">
-        <eos-form ref="editFormRef" class="subForm" v-model="form" v-model:mainFormData="mainFormData" :config="tableCFG.tableColumns" :rules="Rules" @openModal="openModal" />
+        <eos-form ref="editFormRef" class="subForm" v-model="form" v-model:mainFormData="mainFormData" :config="tableCFG.tableColumns" @openModal="openModal" />
         <el-button class="mb10" type="primary" plain size="default" @click="formSubmit">保存并新增</el-button>
       </div>
       <div class="btn" v-if="ShowType == 'modal'">
         <slot name="modalBtnBefore" />
-        <el-link class="btn-item icon-plus" v-if="ButtonMap.includes('ADD')" type="primary" @click="plusRow">添加</el-link>
-        <el-link class="btn-item icon-edit" v-if="ShowType != 'form' && ((ButtonMap.includes('EDIT') && !editTableButton[0].OTHER) || (ButtonMap.includes('EDIT') && evalEditBtn))" type="warning" :disabled="checkData.length == 0" @click="editRow()">编辑</el-link>
-        <el-link class="btn-item icon-delete" v-if="ButtonMap.includes('DELETE')" type="danger" :disabled="checkData.length == 0" @click="delRow()">删除</el-link>
+        <el-link class="btn-item icon-plus" v-if="Eval_ShowBtn(AddBtnConfig)" type="primary" @click="plusRow">添加</el-link>
+        <el-link class="btn-item icon-edit" v-if="ShowType != 'form' && Eval_ShowBtn(EditBtnConfig)" type="warning" :disabled="checkData.length == 0" @click="editRow">编辑</el-link>
+        <el-link class="btn-item icon-delete" v-if="newData.length > 0 && Eval_ShowBtn(DeleteBtnConfig)" type="danger" :disabled="checkData.length == 0" @click="delRow">删除{{Eval_ShowBtn(DeleteBtnConfig)}}</el-link>
         <slot name="modalBtnAfter" />
       </div>
     </template>
@@ -25,13 +25,13 @@
           </el-col>
         </template>
         <template v-else>
-          <el-col :span="8" v-if="ButtonMap.includes('ADD') && ShowType != 'form'">
+          <el-col :span="8" v-if="ShowType != 'form' && Eval_ShowBtn(AddBtnConfig)">
             <el-link :icon="Plus" @click="plusRow" />
           </el-col>
-          <el-col :span="8" v-if="ShowType !='row' ? ButtonMap.includes('DELETE') : rowIndex > 0 && ButtonMap.includes('DELETE')">
+          <el-col :span="8" v-if="ShowType !='row' ? Eval_ShowBtn(DeleteBtnConfig) : rowIndex > 0 && Eval_ShowBtn(DeleteBtnConfig)">
             <el-link :icon="Delete" @click="delRow(row)" />
           </el-col>
-          <el-col :span="8" v-if="(ButtonMap.includes('EDIT') && !editTableButton[0].OTHER) || (ButtonMap.includes('EDIT') && evalEditBtn )">
+          <el-col :span="8" v-if="Eval_ShowBtn(EditBtnConfig)">
             <el-link :icon="Notification" @click="editRow(row)" />
           </el-col>
         </template>
@@ -44,7 +44,7 @@
       <span> {{ pageConfig.modelTitle }} </span>
     </template>
     <template #default>
-      <eos-form ref="editFormRef" mod="subForm" v-model="form" v-model:mainFormData="mainFormData" :config="tableCFG.tableColumns" :rules="Rules" @openModal="openModal" />
+      <eos-form ref="editFormRef" mod="subForm" v-model="form" v-model:mainFormData="mainFormData" :config="tableCFG.tableColumns" @openModal="openModal" />
     </template>
     <template #footer>
       <el-button size="default" @click="formSubmit">保存</el-button>
@@ -61,7 +61,7 @@ export default {
 import { ref, reactive, computed, toRefs, getCurrentInstance, watch, onMounted } from "vue";
 import ETable from "@/components/Vxtable/edit";
 import VTable from "@/components/Vxtable";
-import { getFormValue, getFormRule, deepClone } from "@/utils/index";
+import { getFormValue, getFormRule, deepClone, evilFn } from "@/utils";
 import { Plus, Delete, Edit, Notification } from "@element-plus/icons-vue";
 
 const props = defineProps({
@@ -98,8 +98,7 @@ const form = ref({})
 /** 表格 */
 const checkData = ref([])
 const BaseRowData = ref({})
-const ButtonConfig = ref(config.value.BUTTON)
-const ButtonMap = ref([])
+const ButtonConfig = computed(() => config.value.BUTTON)
 const tableCFG = reactive({
   tableColumns: [],
   tableButtons: [],
@@ -110,14 +109,21 @@ const tableCFG = reactive({
   height: props.config.TABLEHEIGHT || 200,
   hasFill: false, // 表格补位
 })
-const editTableButton = ref([])
-const evalEditBtn = computed(() => {
-  try {
-    const SUBLIST = newData.value
-    return eval(editTableButton.value[0].OTHER)
-  } catch (error) {
-    console.error("evalEditBtn:错误！", error)
-    return false
+
+/** 按钮控制 */
+const AddBtnConfig = computed(() => ButtonConfig.value.find(el => el.ACTION == "ADD"))
+const EditBtnConfig = computed(() => ButtonConfig.value.find(el => el.ACTION == "EDIT"))
+const DeleteBtnConfig = computed(() => ButtonConfig.value.find(el => el.ACTION == "DELETE"))
+const Eval_ShowBtn = computed(() => {
+  return config => {
+    if (!config) return false
+    const { ISSHOW, OTHER } = config
+    if (ISSHOW == "2") {
+      let Data = newData.value[0] || {}
+      return evilFn(Data, OTHER)
+    } else {
+      return ISSHOW == '1'
+    }
   }
 })
 
@@ -260,6 +266,7 @@ const pageConfig = reactive({
 });
 const formSubmit = () => {
   editFormRef.value.validate().then((valid) => {
+    console.log("🚀 ~ editFormRef.value.validate ~ valid:", valid)
     if (!valid) return;
     if (ShowType.value == 'form' || ShowType.value == 'modal') {
       let newRowData = deepClone(form.value)
@@ -273,7 +280,6 @@ const formSubmit = () => {
       updateTable();
     }
     pageConfig.modalVisible = false;
-  }).finally(() => {
     editFormRef.value.resetFields();
   })
 };
@@ -322,9 +328,8 @@ const InitConfig = () => {
   // tableCFG.height = othTabCFG.value?.height ? othTabCFG.value?.height : (_rowConfig?.SLOTCFG && _rowConfig.SLOTCFG.includes("height")) ? JSON.parse(_rowConfig.SLOTCFG).height : 200;
   tableCFG.height = TABLEHEIGHT < 100 ? 200 : TABLEHEIGHT;
   tableCFG.tableColumns = COLUMNS.filter((el) => el.ISSHOW == "1");
-  ButtonMap.value = BUTTON.filter((el) => el.ACTION == "ADD" || el.ACTION == "EDIT" || el.ACTION == "DELETE" || el.ACTION == "-").map((el) => el.ACTION);
-  tableCFG.tableButtons = ButtonMap.value
-  editTableButton.value = BUTTON.filter((el) => el.ACTION == "EDIT");
+  tableCFG.tableButtons = ButtonConfig.value
+  // editTableButton.value = BUTTON.filter((el) => el.ACTION == "EDIT");
   let form = getFormValue(COLUMNS);
   delete form.EnumData
   BaseRowData.value = deepClone(form)
