@@ -2,7 +2,7 @@
  * @Author: cc2049
  * @Date: 2024-05-27 17:02:11
  * @LastEditors: PiPin 33947354+p1Master@users.noreply.github.com
- * @LastEditTime: 2024-06-06 10:46:28
+ * @LastEditTime: 2024-06-06 11:13:28
  * @Description: 简介
 -->
 <template>
@@ -33,7 +33,7 @@
     </div>
     <div class="form-page-content mt20">
       <template v-if="pageCFG.PAGE == 'slot'">
-        <slotCustemPage :config="{}" :currentData="currentData" @close="closeCustemPage" />
+        <slotCustemPage :config="btnConfig" :currentData="currentData" @close="closeCustemPage" />
       </template>
       <template v-else-if="pageCFG.PAGE == 'form'">
         <FormPage :menuID="menuParams" :currentData @closeModal="closeModal" @refreshTable="refreshTable" :isGetDetail :activeBtn :topButton :isDetail />
@@ -42,16 +42,17 @@
   </div>
 </template>
 <script setup>
+import { ref, reactive, computed } from "vue";
 import FormPage from "@/views/formPage/index.vue";
-
 import pageAutoComponent from "@/pageToComponents";
-const route = useRoute();
 
 const props = defineProps({
   activeBtn: Object,
   slotCustemPagePath: String,
 });
 const emit = defineEmits(["treeClick", "backEvents"]);
+const route = useRoute();
+
 const formModalTableCFG = ref({
   MODULE: "",
   PAGE: "",
@@ -69,23 +70,24 @@ const formConfig = reactive({
   showDetail: false, // 是否显示表单 ， 初始时不显示，详情数据查询后显示
 });
 
-const currentData = ref([]);
-
-const btnConfig = ref({});
-const menuParams = ref({});
-const pageCFG = ref({})
+const currentData = computed(() => props.activeBtn.row)
+const btnConfig = computed(() => props.activeBtn.data.btnConf)
+const menuParams = computed(() => {
+  return {
+    MODULEID: btnConfig.value.PK_MODULE || "-",
+    PAGEID: btnConfig.value.PK_PAGE || "-",
+  }
+})
+const pageCFG = computed(() => {
+  return {
+    PAGE: props.activeBtn.data.btnConf.PK_PAGE || 'form'
+  }
+})
 
 /** 动态自定义组件 */
 const slotCustemPage = ref();
-const openCustemPage = (type) => {
-  console.log(888, props.activeBtn);
+const openCustemPage = () => {
   try {
-    btnConfig.value = props.activeBtn.data.btnConf;
-    pageCFG.value.PAGE = props.activeBtn.data.btnConf.PK_PAGE || 'form';
-    menuParams.value = {
-      MODULEID: btnConfig.value.PK_MODULE || "-",
-      PAGEID: btnConfig.value.PK_PAGE || "-",
-    };
     const path = props.slotCustemPagePath;
     slotCustemPage.value = pageAutoComponent(path);
   } catch (err) {
