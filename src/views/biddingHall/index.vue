@@ -48,6 +48,21 @@
         <el-card class="box-card" v-if="detailNoDynamic.BILLNO">
           <template #header>
             <div class="tr">
+              <!-- <el-button size="small" :type="btn.COLOR" 
+              v-for="(btn,btnIndex) in allPageCon.BUTTON" 
+              @click="clickCommonBtn(btn)"
+              :key="btn.BILLNO">{{ btn.VNAME }}</el-button> -->
+
+              <!-- <TopButton :topButton="allPageCon.BUTTON" sourceType="2" @handleBtnEvent="clickCommonBtn"  /> -->
+
+              <TopButton sourceType="2" :isCurrentBtn="true" ref="topBtnRef">
+                <template #currentBtn>
+                  <el-button size="small" :type="btn.COLOR" v-for="(btn, btnIndex) in allPageCon.BUTTON"
+                    @click="clickCommonBtn(btn)" :key="btn.BILLNO">{{ btn.VNAME }}</el-button>
+                </template>
+              </TopButton>
+
+
               <el-button size="small" v-if="queryLeftForm.BILLSTATUS == 0">编辑</el-button>
               <el-button size="small" v-if="queryLeftForm.BILLSTATUS == 0">发布公告</el-button>
               <el-button size="small" v-if="queryLeftForm.BILLSTATUS == 0" type="primary"
@@ -215,7 +230,9 @@
                       </el-col> -->
                       <el-col :span="12">
                         <span>报名时间：</span>
-                        <span class="cargoInfo-top-content">{{ detailNoDynamic.SIGNSTTIME ? detailNoDynamic.SIGNSTTIME + ' - ': '' }}{{ detailNoDynamic.SIGNEDTIME }}</span>
+                        <span class="cargoInfo-top-content">
+                          {{ detailNoDynamic.SIGNSTTIME ? detailNoDynamic.SIGNSTTIME + ' - ' : '' }}{{
+        detailNoDynamic.SIGNEDTIME }}</span>
                       </el-col>
                       <el-col :span="6">
                         <span>保证金额：</span>
@@ -420,14 +437,14 @@ const MenuID = inject("menuID");
 const emptyImg = proxy.getAssetsFile("icon_task_NoData.png");
 
 const route = useRoute();
-console.log("🚀 ~ route:", route)
 const router = useRouter();
 
+import TopButton from "@/components/TopButton";
 
-import { onMounted, onUnmounted, ref, } from "vue";
+import { computed, onMounted, onUnmounted, ref, } from "vue";
 
 import { Search } from "@element-plus/icons-vue";
-import { getTableData } from "@/api/system/page";
+import { getPageConfig, getTableData } from "@/api/system/page";
 import countDown from "@/components/countDown/index";
 
 import axios from "axios";
@@ -455,6 +472,10 @@ const userStore = useUserStore();
 const userInfo = computed(() => userStore.userInfo);
 // BILLSTATUS  0未开始(待提交、审核中、未通过)、1待发公告、2报名中(无需报名的没有这个状态)、3待竞价(报名结束)、4竞价中、5竞价结束、6已完成/已结束(已中标、未中标、已作废)、7强制结束
 const statusList = ref(['未开始', '待发公告', '报名中', '待竞价', '竞价中', '竞价结束', '已完成', '强制结束'])
+
+const pageInfo = computed(() => route.meta)
+
+
 
 const applyDetailModal = ref(false)
 const copyVCODE = () => {
@@ -491,6 +512,9 @@ const count = ref(0);
 
 onMounted(() => {
   getPageList();
+  getPageConfigs()
+
+
 });
 
 const menuVal = ref(null);
@@ -735,6 +759,32 @@ const Verification = () => {
     }
   }, 1000);
 };
+
+const topBtnRef=ref(null)
+const clickCommonBtn = (btn) => {
+
+  
+
+
+
+}
+
+
+
+
+const allPageCon = ref({})
+
+const getPageConfigs = () => {
+  console.log(pageInfo.value)
+  getPageConfig({
+    MODULEID: pageInfo.value.BILLNO,
+    PAGEID: pageInfo.value.ACTION,
+  }).then(res => {
+    allPageCon.value = res.RESULT
+  }).catch(err => {
+
+  })
+}
 
 onUnmounted(() => {
   // console.log("竞价离开视线");
