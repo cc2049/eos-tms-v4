@@ -201,7 +201,9 @@ export const TableConfig_Table = [
   { FIELD: "FIELD", LABEL: "主键", WIDTH: "120", ALIGN: "left",ISFIXED: "left", CONTROLS: "ExTextBox", ISREQUIRE: 0, EDITTABLE: 1, FIXED: "left", ISSHOW: 1, COL: 8 },
   { FIELD: "SORTCODE", LABEL: "排序", WIDTH: "100", ALIGN: "center", CONTROLS: "ExNumber", EDITTABLE: 1, DEFAULTVAL: "", ISSHOW: 1, COL: 8, ISSORT: 1, ISREQUIRE: 1, LINKAGE: "{\"POINT\":\"0\"}" },
   { FIELD: "WIDTH", LABEL: "宽度", WIDTH: "80", ALIGN: "left", CONTROLS: "ExNumber", EDITTABLE: 1, MAXLENGHT: "9999", DEFAULTVAL: "100", ISREQUIRE: 1, ISSHOW: 1, COL: 8 },
-  { FIELD: "VTYPE", LABEL: "类型", WIDTH: "80", ALIGN: "left", VTYPE: "exNum", CONTROLS: "ExSelect", VTYPE: "exNum", OTHER: JSON.stringify(VTYPE), EDITTABLE: 1, DEFAULTVAL: "0", ISREQUIRE: 1, ISSHOW: 1, COL: 8 },
+  // { FIELD: "VTYPE", LABEL: "类型", WIDTH: "80", ALIGN: "left", VTYPE: "exNum", CONTROLS: "ExSelect", VTYPE: "exNum", OTHER: JSON.stringify(VTYPE), EDITTABLE: 1, DEFAULTVAL: "0", ISREQUIRE: 1, ISSHOW: 1, COL: 8 },
+  { FIELD: "VTYPE", LABEL: "类型", WIDTH: "80", ALIGN: "left", VTYPE: "exNum", CONTROLS: "ExSelect", VTYPE: "exNum", OTHER: "${COLTYPE}", EDITTABLE: 1, DEFAULTVAL: "0", ISREQUIRE: 1, ISSHOW: 1, COL: 8 },
+
   { FIELD: "ISSHOW", LABEL: "显示", WIDTH: "80", ALIGN: "", CONTROLS: "ExSelect", OTHER: JSON.stringify(ISSHOW), EDITTABLE: 1, DEFAULTVAL: "1", ISSHOW: 1, COL: 8, ISSORT: 1, SLOT: "tags" },
   { FIELD: "ISEDIT", LABEL: "编辑", WIDTH: "80", ALIGN: "", CONTROLS: "ExSwitch", EDITTABLE: 1, DEFAULTVAL: "0", ISSHOW: 1, COL: 8 },
   { FIELD: "CONTROLS", LABEL: "控件", WIDTH: "100", ALIGN: "left", CONTROLS: "ExSelect", OTHER: JSON.stringify(TableCONTROLS), EDITTABLE: 1, ISREQUIRE: 1, DEFAULTVAL: "ExReadCard", ISSHOW: 1, COL: 8 },

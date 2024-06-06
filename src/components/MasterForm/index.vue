@@ -81,7 +81,6 @@ const formData = computed({
   set: (val) => emit("update:modelValue", val),
 });
 const { formConfig, tableConfig, tableRules, labelWidth } = toRefs(props);
-
 const { GET_TableConfig, UPDATA_TableData } = useTableHook();
 const { modalRef, modalConfig, openModal, closeModal } = useModalHook();
 

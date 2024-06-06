@@ -428,7 +428,7 @@ export function getAssetsFile(url) {
  * @param { Object } QueryData  查询参数的数据
  * @returns
  */
-export function getFormValue(data, hasTS = false, QueryData ={} ) {
+export function getFormValue(data, hasTS = false, QueryData = {}) {
   if (!Array.isArray(data)) return {};
   /**
    * EnumData 枚举字典
@@ -544,7 +544,7 @@ export function getFormValue(data, hasTS = false, QueryData ={} ) {
         break;
     }
     // 是否存在赋值默认值是通过查询条件进行赋值
-    if(item.DEFAULTVAL && item.DEFAULTVAL.includes('QDATA')){
+    if (item.DEFAULTVAL && item.DEFAULTVAL.includes('QDATA')) {
       a[FIELD] = QueryData[item.DEFAULTVAL.replace('QDATA.', '')]
     }
 
@@ -883,6 +883,7 @@ export function bytesToSize(bytes) {
 // eval 函数取代
 export const evilFn = (row, fn) => {
   const Data = JSON.parse(JSON.stringify(row)) || Object.create(null);
+  fn = fn.replace(/DATA/g, "Data")
   let Fn = new Function("Data", `return ${fn}`);
   const proxy = new Proxy(Data, {
     has(target, key) {
@@ -951,11 +952,11 @@ export function evalFun(DATA, OTHER) {
   return eval(OTHER)
 }
 
-export function percentageToNumber(percentage='50%') {
+export function percentageToNumber(percentage = '50%') {
   const percentageWithoutSign = percentage.replace('%', '');
-  let  number = percentageWithoutSign*1 ;
+  let number = percentageWithoutSign * 1;
   number = number > 99 ? 100 : number;
-  let newNum =  (100 - number) + "%";
+  let newNum = (100 - number) + "%";
   return newNum;
 }
 
