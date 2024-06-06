@@ -1,8 +1,8 @@
 <!--
  * @Author: cc2049
  * @Date: 2024-05-27 17:02:11
- * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-06-06 11:44:06
+ * @LastEditors: PiPin 33947354+p1Master@users.noreply.github.com
+ * @LastEditTime: 2024-06-06 11:56:11
  * @Description: 简介
 -->
 <template>
@@ -15,7 +15,6 @@
           </el-icon>
           <span class="ml-26">返回</span>
         </div>
-
         <span class="color-999 ml-20">
           {{ route.meta.title }} / {{ btnConfig.VNAME }}
         </span>

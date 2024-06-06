@@ -2,7 +2,7 @@
  * @Author: cc2049
  * @Date: 2024-04-23 11:35:41
  * @LastEditors: PiPin 33947354+p1Master@users.noreply.github.com
- * @LastEditTime: 2024-06-06 11:44:46
+ * @LastEditTime: 2024-06-06 11:56:32
  * @Description: 大表单组件
 -->
 
@@ -144,12 +144,6 @@ function submitEvent(URL, sdata) {
   });
 }
 
-// onMounted(() => {
-//   formHeight.value = window.innerHeight - 124;
-//   window.onresize = function temp() {
-//     formHeight.value = window.innerHeight - 124;
-//   };
-// });
 </script>
 
 <style lang="scss" scoped>
