@@ -204,15 +204,14 @@ function setLayout() {
     align-items: center;
     .logo-wrap {
       img {
-        width: 32px;
-        height: 32px;
+        height: 26px;
       }
       margin-right: 10px;
     }
     .version {
       background-color: #fff;
       color: var(--el-color-primary);
-      font-size: 0.7rem;
+      font-size: 0.6rem;
       font-weight: 600;
       transform: skewX(-15deg);
       padding: 2px 4px;

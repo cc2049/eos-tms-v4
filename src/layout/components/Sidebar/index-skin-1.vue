@@ -2,7 +2,7 @@
  * @Author: cc2049
  * @Date: 2024-04-25 14:41:35
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-06-06 10:58:51
+ * @LastEditTime: 2024-06-06 11:05:13
  * @Description: 简介
 -->
 <template>
@@ -410,8 +410,8 @@ function handleSubMenu(data) {
     justify-content: center;
 
     img {
-      width: 40px;
-      height: 40px;
+      
+      height: 24px;
     }
   }
 
