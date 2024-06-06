@@ -2,7 +2,7 @@
  * @Author: cc2049
  * @Date: 2024-05-27 17:02:11
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-06-06 11:44:06
+ * @LastEditTime: 2024-06-06 12:43:09
  * @Description: 简介
 -->
 <template>
@@ -36,7 +36,7 @@
         <slotCustemPage :config="btnConfig" :currentData="currentData" @close="closeCustemPage" />
       </template>
       <template v-else>
-        <FormPage :menuID="menuParams" :currentData @closeModal="closeModal" @refreshTable="refreshTable" :isGetDetail :activeBtn :topButton :isDetail />
+        <FormPage :menuID="menuParams" :currentData @closeModal="backEvent" @refreshTable="refreshTable" :isGetDetail :activeBtn="btnConfig" :topButton :isDetail />
       </template>
     </div>
   </div>

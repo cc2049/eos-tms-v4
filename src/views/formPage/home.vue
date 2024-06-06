@@ -2,7 +2,7 @@
  * @Author: cc2049
  * @Date: 2024-06-03 20:55:06
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-06-05 14:41:36
+ * @LastEditTime: 2024-06-06 12:14:35
  * @Description: 简介
 -->
 <template>
@@ -31,6 +31,10 @@ if (route.params) {
   if (type !=0) isGetDetail.value = true;
   if (type == 2) isDetail.value = true;
   if(id!='-') currentData.value = [ {BILLNO:id}]
+}
+
+function closeModal(){
+  
 }
 
 </script>
