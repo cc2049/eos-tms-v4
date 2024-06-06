@@ -9,7 +9,7 @@
 <template>
   <div class="button-wrap">
 
-    <div class="top-button">
+    <div class="top-button" v-if="!isCurrentBtn">
       <div class="fixed-top-button">
         <div class="flex flex-items-center" v-if="sourceType==1">
           <div class="buttom-item" @click="leftHandleEvent(1)">
@@ -44,6 +44,11 @@
             </template>
           </el-dropdown>
         </template>
+
+        
+
+
+
       </div>
 
       <div class="top-button-right">
@@ -80,6 +85,9 @@
       </div>
 
     </div>
+
+    <slot name="currentBtn" />
+
 
     <!-- 公共弹窗表单模块 -->
     <vxe-modal destroy-on-close v-model="modalConfig.modalVisible" :width="modalConfig.modalW" :height="modalConfig.modalH" id="formModal" resize storage transfer show-zoom @close="closeModal">
@@ -118,6 +126,10 @@ const props = defineProps({
     type: [String, Number],
     default: 1,
   },
+  isCurrentBtn:{
+    type: Boolean,
+    default: false,
+  }
 });
 const isDetail = ref(false);
 const isGetDetail = ref(false);
