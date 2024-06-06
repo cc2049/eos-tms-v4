@@ -16,7 +16,7 @@ const { proxy } = getCurrentInstance();
 const scrollHeight = ref(window.innerHeight - 160 + 'px')
 
 const props = defineProps({
-  currentData: Object,
+  currentData: Array,
   config: Object
 })
 const emits = defineEmits(['close'])
@@ -28,7 +28,7 @@ const resData = ref({})
 const formType = ref("add")
 
 const handleDetail = () => {
-  const id = props.currentData.BILLNO;
+  const id = props.currentData[0].BILLNO;
   WFDetail(id).then((res) => {
     form.value = JSON.parse(res.RESULT.JSON);
     formType.value = "detail";
