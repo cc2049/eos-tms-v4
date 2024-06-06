@@ -649,6 +649,7 @@ const checkCertification = (val) => {
 }
 
 const PK_CARRIER = ref('')
+const IS_BID=ref('')
 const bidRunList = ref([])
 const getGetBidRunList = (PK_PROJECT) => {
   const protData = {
@@ -677,7 +678,7 @@ const changePK_CARRIER = (e) => {
 
 const changeIS_BID=()=>{
 
-  
+
 }
 
 const subCheck = () => {
