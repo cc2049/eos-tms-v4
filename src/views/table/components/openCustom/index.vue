@@ -2,7 +2,7 @@
  * @Author: cc2049
  * @Date: 2024-05-27 17:02:11
  * @LastEditors: PiPin 33947354+p1Master@users.noreply.github.com
- * @LastEditTime: 2024-06-06 11:13:28
+ * @LastEditTime: 2024-06-06 11:15:41
  * @Description: 简介
 -->
 <template>
@@ -80,7 +80,7 @@ const menuParams = computed(() => {
 })
 const pageCFG = computed(() => {
   return {
-    PAGE: props.activeBtn.data.btnConf.PK_PAGE || 'form'
+    PAGE: btnConfig.value.PK_PAGE || 'form'
   }
 })
 
@@ -96,7 +96,7 @@ const openCustemPage = () => {
 };
 
 onMounted(() => {
-  openCustemPage();
+  pageCFG.value.PAGE == 'slot' && openCustemPage();
 });
 
 function backEvent() {
