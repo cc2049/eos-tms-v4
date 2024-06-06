@@ -1,13 +1,13 @@
 <!--
  * @Author: cc2049
  * @Date: 2024-05-27 17:02:11
- * @LastEditors: PiPin 33947354+p1Master@users.noreply.github.com
- * @LastEditTime: 2024-06-06 11:15:41
+ * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2024-06-06 11:44:06
  * @Description: 简介
 -->
 <template>
   <div class="open-page bg-white">
-    <div class="page-title flex">
+    <div class="page-title flex" v-if="pageCFG.PAGE == 'slot'">
       <div class="form-title-left flex ">
         <div class="text-muted" @click="backEvent">
           <el-icon :size="24">
@@ -17,7 +17,7 @@
         </div>
 
         <span class="color-999 ml-20">
-          {{ route.meta.title }} / --
+          {{ route.meta.title }} / {{ btnConfig.VNAME }}
         </span>
       </div>
       <div class="form-title-btn">
@@ -31,11 +31,11 @@
         </template>
       </div>
     </div>
-    <div class="form-page-content mt20">
+    <div class="form-page-content">
       <template v-if="pageCFG.PAGE == 'slot'">
         <slotCustemPage :config="btnConfig" :currentData="currentData" @close="closeCustemPage" />
       </template>
-      <template v-else-if="pageCFG.PAGE == 'form'">
+      <template v-else>
         <FormPage :menuID="menuParams" :currentData @closeModal="closeModal" @refreshTable="refreshTable" :isGetDetail :activeBtn :topButton :isDetail />
       </template>
     </div>
@@ -70,19 +70,20 @@ const formConfig = reactive({
   showDetail: false, // 是否显示表单 ， 初始时不显示，详情数据查询后显示
 });
 
-const currentData = computed(() => props.activeBtn.row)
-const btnConfig = computed(() => props.activeBtn.data.btnConf)
+const currentData = computed(() => props.activeBtn.row);
+const btnConfig = computed(() => props.activeBtn.data.btnConf);
+console.log(btnConfig.value);
 const menuParams = computed(() => {
   return {
     MODULEID: btnConfig.value.PK_MODULE || "-",
     PAGEID: btnConfig.value.PK_PAGE || "-",
-  }
-})
+  };
+});
 const pageCFG = computed(() => {
   return {
-    PAGE: btnConfig.value.PK_PAGE || 'form'
-  }
-})
+    PAGE: btnConfig.value.PK_PAGE || "form",
+  };
+});
 
 /** 动态自定义组件 */
 const slotCustemPage = ref();
@@ -96,7 +97,7 @@ const openCustemPage = () => {
 };
 
 onMounted(() => {
-  pageCFG.value.PAGE == 'slot' && openCustemPage();
+  pageCFG.value.PAGE == "slot" && openCustemPage();
 });
 
 function backEvent() {
@@ -115,6 +116,8 @@ function backEvent() {
     padding: 10px;
     border-bottom: 1px solid var(--el-border-color-light);
     align-items: center;
+    justify-content: space-between;
+
     .form-title-left {
       .text-muted {
         position: relative;
