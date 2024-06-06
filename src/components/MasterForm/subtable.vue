@@ -10,7 +10,7 @@
         <slot name="modalBtnBefore" />
         <el-link class="btn-item icon-plus" v-if="Eval_ShowBtn(AddBtnConfig)" type="primary" @click="plusRow()">添加</el-link>
         <el-link class="btn-item icon-edit" v-if="ShowType != 'form' && Eval_ShowBtn(EditBtnConfig)" type="warning" :disabled="checkData.length == 0" @click="editRow()">编辑</el-link>
-        <el-link class="btn-item icon-delete" v-if="newData.length > 0 && Eval_ShowBtn(DeleteBtnConfig)" type="danger" :disabled="checkData.length == 0" @click="delRow()">删除{{Eval_ShowBtn(DeleteBtnConfig)}}</el-link>
+        <el-link class="btn-item icon-delete" v-if="newData.length > 0 && Eval_ShowBtn(DeleteBtnConfig)" type="danger" :disabled="checkData.length == 0" @click="delRow()">删除</el-link>
         <slot name="modalBtnAfter" />
       </div>
     </template>
