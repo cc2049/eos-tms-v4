@@ -39,6 +39,8 @@ const LoginConfig = ref({
   style: null,
 });
 
+console.log(LoginConfig.value)
+
 const getGlobalConfig = () => {
   let data = { MODULETYPE: "PCCONFIG", VTYPE: "SYSCONFIG" };
   axiosGet("sys/config/getList?ISRSA=1", data).then((res) => {

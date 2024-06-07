@@ -117,8 +117,7 @@ const addLine = () => {
 
 }
 const delLine = () => {
-
-    if (chooseOneLIneIndex.value || chooseOneLIneIndex.value == 0) {
+    if ((chooseOneLIneIndex.value || chooseOneLIneIndex.value == 0) && typeof(chooseOneLIneIndex.value) == 'number') {
         newFilterArr.value.splice(chooseOneLIneIndex.value, 1);
         currentQueryList.value.splice(chooseOneLIneIndex.value, 1);
         chooseOneLIneIndex.value = null
