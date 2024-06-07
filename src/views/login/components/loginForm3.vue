@@ -76,13 +76,21 @@
         @click="handleLogin">登录</el-button>
     </div>
 
-    <div>
+    <div class="footer">
       <div>
-        <text class="optionClass" @click="showClause(1)">用户协议</text>
+        <text class="optionClass cp" @click="showClause(1)">用户协议</text>
         <el-divider direction="vertical" />
-        <text class="optionClass" @click="showClause(2)">隐私协议</text>
+        <text class="optionClass cp" @click="showClause(2)">隐私协议</text>
       </div>
-
+      <div>
+        <text class="optionClass cp" >建议浏览器：</text>
+        <text class="optionClass cp" >Chrome</text>
+        <el-divider direction="vertical" />
+        <text class="optionClass cp" >建议分辨率：</text>
+        <text class="optionClass cp" >1280x1024以上像素</text>
+        <el-divider direction="vertical" />
+        <text class="optionClass cp clean" >清除本地缓存</text>
+      </div>
 
 
 
@@ -424,6 +432,18 @@ const showClause = (e) => {
     color: #56688e;
     font-size: 14px;
     height: 46px;
+    &.clean{
+      color: var(--el-color-primary) !important;
+    }
+  }
+
+  .footer{
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    text-align: center;
   }
 
   .positionRT {
