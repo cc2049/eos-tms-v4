@@ -71,7 +71,7 @@ export const queryConfig = [
 
 export const TabDict = [
   {
-    ID: 0,
+    BILLNO: 0,
     VNAME: "待办",
     Config: [
       { FIELD: "BUSINESSKEY", LABEL: "单据编码", WIDTH: 170, ALIGN: "left", ISSHOW: 1, SELECTEDFLAG: 1 },
@@ -83,7 +83,7 @@ export const TabDict = [
     ]
   },
   {
-    ID: 1,
+    BILLNO: 1,
     VNAME: "已办",
     Config: [
       { FIELD: "BUSINESSKEY", LABEL: "单据编码", WIDTH: 170, ALIGN: "left", ISSHOW: 1, SELECTEDFLAG: 1 },
@@ -95,7 +95,7 @@ export const TabDict = [
     ]
   },
   {
-    ID: 2,
+    BILLNO: 2,
     VNAME: "已发起",
     Config: [
       { FIELD: "BUSINESSKEY", LABEL: "单据编码", WIDTH: 170, ALIGN: "left", ISSHOW: 1, SELECTEDFLAG: 1 },
