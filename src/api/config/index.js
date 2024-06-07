@@ -132,13 +132,11 @@ export const BUSSTYPE = [
 
 // 加密
 export const ENCRY = [
-  // { LABEL: "MD5加密", VALUE: "4" },
   { LABEL: "无", VALUE: "-" },
   { LABEL: "加密", VALUE: "1" },
   { LABEL: "解密", VALUE: "2" },
   { LABEL: "解密且脱敏", VALUE: "3" },
   { LABEL: "脱敏", VALUE: "4" },
-
 ]
 
 // 验证规则
@@ -150,6 +148,7 @@ export const RULES = [
   { LABEL: "身份证", VALUE: "IdCard" },
   { LABEL: "密码", VALUE: "PWD" },
   { LABEL: "中文", VALUE: "Chines" },
+  { LABEL: "姓名", VALUE: "Name" },
   { LABEL: "整数", VALUE: "Integer" },
   { LABEL: "数字", VALUE: "NumberFloat" },
   { LABEL: "邮箱", VALUE: "Email" },

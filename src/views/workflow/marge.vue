@@ -2,16 +2,10 @@
 <template>
   <div class="app-wrap">
     <div class="query-wrap">
-      <!-- <Form class="query-form" ref="formRefTop" v-model:formData="queryJson" :formConfig="set24col(queryConfig, 4)" inline @select="formSelect" @enter="enterEvent" /> -->
-      <div class="flex-row-end">
-        <el-button @click="queryEvent" type="primary" size="Default">查找</el-button>
-        <el-button @click="queryDrawer=true" size="Default">高级</el-button>
-      </div>
+      <AdvanceQuery :queryConfig="queryConfig" @updateHeight="queryHeight" :customPlan ref="advanceQueryRef" @handleCustomPlan="handleCustomPlan" />
     </div>
     <div class="table-wrap">
-      <el-tabs tab-position="top" class="demo-tabs" v-model="TabsAction">
-        <el-tab-pane :label="item.VNAME" v-for="(item, index) in TabDict" :key="index" :name="index" />
-      </el-tabs>
+      <EosTabs :tabsList="TabDict" @change="changeTab" />
       <VTable ref="tableRef" :tableCFG="tableConfig" :tableData="dataList" @dbClick="handleDetail" @change="tableChange" :actionBar="TabsAction == '0'" :actionBarWidth="80">
         <template #actionBar="{ row }">
           <el-button type="primary" @click="handleAudit(row)">审批</el-button>
@@ -55,7 +49,9 @@
 </template>
 
 <script setup>
-// import Form from "@/components/Form"
+import { ref, reactive, onMounted, provide, getCurrentInstance } from "vue";
+import AdvanceQuery from "@/components/AdvancedQuery/index";
+import EosTabs from "@/components/EosTabs";
 import VTable from "@/components/Vxtable";
 import MasterForm from "@/components/MasterForm";
 import WorkflowTimeLine from "@/components/Workflow/timeLine.vue";
@@ -68,6 +64,12 @@ import request from "@/utils/request";
 
 const { proxy } = getCurrentInstance();
 const route = useRoute();
+const routerParams = route.meta;
+const menuParams = ref({
+  MODULEID: routerParams.BILLNO || "-",
+  PAGEID: routerParams.ACTION || "-",
+});
+provide("menuID", menuParams);
 
 const WorkflowRef = ref(null);
 const queryRef = ref(null)
@@ -266,11 +268,10 @@ const Init = () => {
   queryEvent()
 }
 Init()
-watch(TabsAction, val => {
+const changeTab = (res) => {
+  TabsAction.value = res.index
   Init()
-}, {
-  immediate: true
-})
+}
 
 function set24col(data, n) {
   let newdata = deepClone(data);

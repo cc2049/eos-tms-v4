@@ -2,7 +2,7 @@
  * @Author: cc2049
  * @Date: 2024-04-23 11:35:41
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-06-07 17:24:46
+ * @LastEditTime: 2024-06-07 17:29:46
  * @Description: 大表单组件
 -->
 
@@ -121,18 +121,16 @@ function getDetail(URL) {
 }
 
 const quitPage = () => {
-  emit("closeModal");
-};
+  emit('closeModal')
+}
 
 function handleBtnEvent(btn) {
   let URL = btn.ACTIONADDRESS;
-
-  let params = getUrlParams(URL);
-
+  let params = getUrlParams(URL)
   let MenuID = { MODULEID: btn.PK_MODULE, PAGEID: btn.PK_PAGE };
-  let sdata = { ...formData.value, ...MenuID, ...params };
   eosFormRef.value.validate().then((valid) => {
     if (valid) {
+      let sdata = { ...formData.value, ...MenuID, ...params };
       submitEvent(URL, sdata);
     }
   });
