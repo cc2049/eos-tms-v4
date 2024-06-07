@@ -189,7 +189,7 @@ const cancle = () => {
 @import "@/assets/styles/variables.module.scss";
 
 .btnStyle {
-    color: $--color-primary;
+    color: var(--el-color-primary) !important;
     cursor: pointer;
     font-size: 14px;
 }

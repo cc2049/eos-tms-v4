@@ -332,7 +332,7 @@ onMounted(() => {
 </script>
 
 <style scoped lang="scss">
-@import "@/assets/styles/variables.module.scss";
+// @import "@/assets/styles/variables.module.scss";
 
 .advancedQuery {
   padding-top: 20px;
@@ -348,8 +348,8 @@ onMounted(() => {
     cursor: pointer;
 
     &.active {
-      color: $--color-primary;
-      border-color: $--color-primary;
+      color: var(--el-color-primary) !important;
+      border-color: var(--el-color-primary) !important;
     }
   }
 
@@ -385,7 +385,7 @@ onMounted(() => {
   }
 
   .btnStyle {
-    color: $--color-primary;
+    color:var(--el-color-primary) !important;
     cursor: pointer;
     font-size: 14px;
   }
@@ -406,6 +406,7 @@ onMounted(() => {
 
   .foldOUnfoldIcon {
     margin: 6px 0 0 10px;
+    color: var(--el-color-primary) !important;
   }
 }
 
