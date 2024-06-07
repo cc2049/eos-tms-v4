@@ -2,7 +2,7 @@
  * @Author: cc2049
  * @Date: 2024-04-23 11:35:41
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-06-07 16:32:45
+ * @LastEditTime: 2024-06-07 17:24:46
  * @Description: 大表单组件
 -->
 
@@ -10,7 +10,7 @@
 
   <div class="form-container bg-white" ref="formBoxRef">
     <div class="form-affix" ref="affixRef">
-      <TopButton :topButton="topButton" sourceType="2" @handleBtnEvent="handleBtnEvent"  @quitPage="quitPage"/>
+      <TopButton :topButton="topButton" sourceType="2" @handleBtnEvent="handleBtnEvent" @quitPage="quitPage" />
       <div id="eos-form-tabs"></div>
     </div>
     <el-scrollbar :height="formHeight" class="eos-scrollbar">
@@ -23,7 +23,7 @@
 import TopButton from "@/components/TopButton";
 import MasterForm from "@/components/MasterForm/index.vue";
 import { getPageConfig } from "#/system/page.js";
-import { getFormValue, getQueryUrl,getUrlParams } from "@/utils";
+import { getFormValue, getQueryUrl, getUrlParams } from "@/utils";
 import { axiosGet } from "#/common";
 import { onMounted } from "vue";
 
@@ -47,8 +47,8 @@ const props = defineProps({
 const emit = defineEmits(["closeModal", "refreshTable"]);
 
 const { proxy } = getCurrentInstance();
-const formBoxRef = ref(null)
-const affixRef = ref(null)
+const formBoxRef = ref(null);
+const affixRef = ref(null);
 const eosFormRef = ref(null);
 const topButton = ref([]);
 const formConfig = ref([]);
@@ -57,8 +57,9 @@ const detail = ref(false);
 const labelWidth = ref("100px");
 const tableConfig = ref([]);
 const formHeight = computed(() => {
-  formBoxRef.value && formBoxRef.value.clientHeight - affixRef.value.clientHeight - 10 + 'px'
-})
+  formBoxRef.value &&
+    formBoxRef.value.clientHeight - affixRef.value.clientHeight - 10 + "px";
+});
 const formLoading = ref(false);
 
 watch(
@@ -75,7 +76,7 @@ watch(
         formLoading.value = true;
         if (props.isGetDetail) {
           let detailURL = SLOTCFG || getQueryUrl(props.topButton);
-          getDetail(detailURL);
+          detailURL ? getDetail(detailURL) : null;
         } else {
           formLoading.value = false;
         }
@@ -98,7 +99,7 @@ function resetButton(arr) {
   try {
     let customCF = JSON.parse(copyBtn.PAGEPATH);
     copyBtn.VNAME = customCF.sName;
-  } catch (error) { }
+  } catch (error) {}
 
   let newBtn = [copyBtn];
   return newBtn;
@@ -119,17 +120,17 @@ function getDetail(URL) {
   // console.log("formData.value", formData.value);
 }
 
-const quitPage =()=>{
-  emit('closeModal')
-}
+const quitPage = () => {
+  emit("closeModal");
+};
 
 function handleBtnEvent(btn) {
   let URL = btn.ACTIONADDRESS;
 
-  let params = getUrlParams(URL)
+  let params = getUrlParams(URL);
 
   let MenuID = { MODULEID: btn.PK_MODULE, PAGEID: btn.PK_PAGE };
-  let sdata = { ...formData.value, ...MenuID,...params };
+  let sdata = { ...formData.value, ...MenuID, ...params };
   eosFormRef.value.validate().then((valid) => {
     if (valid) {
       submitEvent(URL, sdata);
@@ -151,7 +152,6 @@ function submitEvent(URL, sdata) {
     }
   });
 }
-
 </script>
 
 <style lang="scss" scoped>

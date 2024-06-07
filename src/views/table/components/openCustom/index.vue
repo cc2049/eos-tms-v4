@@ -2,7 +2,7 @@
  * @Author: cc2049
  * @Date: 2024-05-27 17:02:11
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-06-06 12:50:39
+ * @LastEditTime: 2024-06-07 17:23:27
  * @Description: 简介
 -->
 <template>
@@ -52,6 +52,8 @@ const props = defineProps({
 const emit = defineEmits(["treeClick", "backEvents"]);
 const route = useRoute();
 
+const isGetDetail = ref(false);
+
 const formModalTableCFG = ref({
   MODULE: "",
   PAGE: "",
@@ -71,7 +73,7 @@ const formConfig = reactive({
 
 const currentData = computed(() => props.activeBtn.row);
 const btnConfig = computed(() => props.activeBtn.data.btnConf);
-console.log(btnConfig.value);
+console.log("btnConfig", btnConfig.value);
 const menuParams = computed(() => {
   return {
     MODULEID: btnConfig.value.PK_MODULE || "-",
@@ -96,6 +98,9 @@ const openCustemPage = () => {
 };
 
 onMounted(() => {
+  if (btnConfig.value.ACTION == "EDIT") {
+    isGetDetail.value = true;
+  }
   pageCFG.value.PAGE == "slot" && openCustemPage();
 });
 
