@@ -1,3 +1,10 @@
+/*
+ * @Author: cc2049
+ * @Date: 2024-04-19 09:01:33
+ * @LastEditors: 
+ * @LastEditTime: 2024-06-07 09:37:39
+ * @Description: 简介
+ */
 import request from '@/utils/request'
 
 // 查询菜单列表
@@ -9,11 +16,12 @@ export function listMenu(query) {
   })
 }
 
-// 查询菜单详细
-export function getMenu(menuId) {
+// 关键字查询菜单
+export function getMenukeyword(query) {
   return request({
-    url: '/system/menu/' + menuId,
-    method: 'get'
+    url: 'sys/module/getSimpleMenuByRoleList' ,
+    method: 'post',
+    data: query
   })
 }
 
