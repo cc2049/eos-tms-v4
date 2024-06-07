@@ -293,7 +293,7 @@
               </el-collapse-item>
             </el-collapse>
             <!-- 报名信息 报名中 -->
-            <div v-if="detailNoDynamic.BILLSTATUS == 3">
+            <div v-if="detailNoDynamic.BILLSTATUS == 2 || detailNoDynamic.BILLSTATUS == 3">
               <div class="commonSmallTitle mt-10 disflex justify-sb">
                 <div class="disflex card-header">
                   <div class="mr-20">报名信息</div>
@@ -374,7 +374,7 @@
                   <el-table-column type="selection" width="55" fixed />
                   <el-table-column prop="RANK" label="排名" />
                   <el-table-column prop="CARRIERNAME" width="140" label="出价单位" />
-                  <el-table-column prop="CONTACTTEL" width="110" label="联系方式" />
+                  <el-table-column prop="CONTACTTEL" width="110" label="联系方式" v-if="queryLeftForm.BILLSTATUS == 4" />
                   <el-table-column prop="BIDPRICE" label="出价金额" />
                   <el-table-column prop="EXPECTVALUE" label="出量" />
                   <el-table-column prop="UIPADDRESS" width="120" label="IP地址" />
@@ -389,11 +389,12 @@
                   <el-table-column prop="TRUSTNUM" label="分配量" width="140">
                     <template #default="scope">
                       <span v-if="queryLeftForm.BILLSTATUS == 6">{{ scope.row.TRUSTNUM }}</span>
-                      <el-input v-else type="number" size="small" v-model="scope.row.TRUSTNUM" placeholder="输入分配量" clearable />
+                      <el-input v-else type="number" size="small" v-model="scope.row.TRUSTNUM" placeholder="输入分配量"
+                        clearable />
                     </template>
                   </el-table-column>
                   <el-table-column prop="SURETIME" label="中标时间" />
-                  <el-table-column prop="SURENAME" label="中标确认人" />
+                  <el-table-column prop="SURENAME" width="130" label="中标确认人" />
                 </el-table>
               </div>
             </div>
@@ -643,6 +644,10 @@ const getDetailNoDynamic = () => {
     const { BILLSTATUS } = res.RESULT
 
     switch (BILLSTATUS) {
+      case "2":
+        queryApplyInfo(menuVal.value)
+        getGetBidSignCount(menuVal.value)
+        break;
       case "3":
         queryApplyInfo(menuVal.value)
         getGetBidSignCount(menuVal.value)
@@ -696,11 +701,6 @@ const getGetBidSignCount = (PK_PROJECT) => {
   getBidSignCount(protData).then((res) => {
     applyInfoData.value = res.RESULT
   });
-}
-
-const checkCertification = (val) => {
-  console.log("🚀 ~ checkCertification ~ val:", val)
-
 }
 
 const PK_CARRIER = ref('')
@@ -803,7 +803,6 @@ const confirmApply = () => {
 
 const winBiddingArr = ref([])
 const handleSelectionChange = (val) => {
-  console.log("🚀 ~ handleSelectionChange ~ val:", val)
   winBiddingArr.value = val
 }
 const winBidding = () => {
@@ -888,6 +887,13 @@ const clickCommonBtn = (btn) => {
   topBtnRef.value.handleEvent(btn, [detailNoDynamic.value])
 }
 
+const checkCertification = (val) => {
+  let btn = allPageCon.value.BUTTON.filter(ele=>ele.BTNTITLE=='checkCertification')[0]
+  btn.ACTIONADDRESS = btn.ACTIONADDRESS.concat(`?PK_CARRIER=${val.BILLNO}`)
+  topBtnRef.value.handleEvent(btn, [detailNoDynamic.value])
+}
+
+
 const setShowBtn = (btn) => {
   if (btn.ISSHOW == 0) return false;
   if (btn.ISSHOW == 2 && btn.OTHER) {
@@ -921,7 +927,6 @@ function evilFn(row, fn) {
 const allPageCon = ref({})
 
 const getPageConfigs = () => {
-  console.log(pageInfo.value)
   getPageConfig({
     MODULEID: pageInfo.value.BILLNO,
     PAGEID: pageInfo.value.ACTION,

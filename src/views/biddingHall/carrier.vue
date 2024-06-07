@@ -311,7 +311,7 @@
                                             </template>
                                         </el-table-column>
                                         <el-table-column prop="SURETIME" label="中标时间" />
-                                        <el-table-column prop="SURENAME" label="中标确认人" />
+                                        <el-table-column prop="SURENAME" width="130" label="中标确认人" />
                                     </template>
                                 </el-table>
                             </div>
