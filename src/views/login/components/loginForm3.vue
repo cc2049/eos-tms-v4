@@ -15,6 +15,21 @@
 
       <el-tabs v-model="activeName" class="demo-tabs" @tab-click="handleClick">
         <el-tab-pane label="易思·云账号" name="1">
+          <div class="disflex optionClass justify-between">
+            <div class="disflex">
+              <div class="mr-5">集团</div>
+              <el-icon>
+                <CaretBottom />
+              </el-icon>
+            </div>
+            <div class="disflex">
+              <div class="mr-5">命名用户身份</div>
+              <el-icon>
+                <CaretBottom />
+              </el-icon>
+            </div>
+          </div>
+          
           <el-form-item prop="username">
             <el-input v-model="loginForm.username" style="width: 338px;" type="text" auto-complete="off"
               placeholder="用户名" class="inputDeep" clearable>
