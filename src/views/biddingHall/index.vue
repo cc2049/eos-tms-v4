@@ -348,14 +348,16 @@
                   <div class="disflex">
                     <div class="disflex">
                       <div class="selectLeftText">出价单位</div>
-                      <el-select v-model="PK_CARRIER" size="small" style="width: 120px" @change="changePK_CARRIER">
+                      <el-select v-model="PK_CARRIER" size="small" clearable style="width: 120px"
+                        @change="changePK_CARRIER">
                         <el-option :label="item.CARRIERNAME" :value="item.PK_CARRIER" v-for="item in carrierList"
                           :key="item.PK_CARRIER" />
                       </el-select>
                     </div>
-                    <div v-if="detailNoDynamic.BILLSTATUS == 6 || detailNoDynamic.BILLSTATUS == 7">
+                    <div class="disflex ml-20"
+                      v-if="detailNoDynamic.BILLSTATUS == 6 || detailNoDynamic.BILLSTATUS == 7">
                       <div class="selectLeftText">是否中标</div>
-                      <el-select v-model="IS_BID" size="small" style="width: 120px" @change="changeIS_BID">
+                      <el-select v-model="IS_BID" size="small" clearable style="width: 120px" @change="changeIS_BID">
                         <el-option label="是" value="1" />
                         <el-option label="否" value="0" />
                       </el-select>
@@ -365,23 +367,25 @@
                 </div>
               </div>
               <div class="mt10">
-                <el-table :data="bidRunList" style="width: 100%">
-                  <el-table-column type="index" width="50" label="排名" />
-                  <el-table-column prop="CONTACTTEL" label="联系方式" />
+                <el-table :data="bidRunList" border style="width: 100%" :span-method="arraySpanMethod">
+                  <el-table-column type="index" width="70" label="排名" />
+                  <el-table-column prop="CARRIERNAME" width="140" label="出价单位" />
+                  <el-table-column prop="CONTACTTEL" width="110" label="联系方式" />
                   <el-table-column prop="BIDPRICE" label="出价金额" />
                   <el-table-column prop="EXPECTVALUE" label="出量" />
-                  <el-table-column prop="UIPADDRESS" label="IP地址" />
-                  <el-table-column prop="BIDADDRESS" label="定位信息" />
-                  <el-table-column prop="BIDTIME" label="出价时间" />
+                  <el-table-column prop="UIPADDRESS" width="120" label="IP地址" />
+                  <el-table-column prop="BIDADDRESS" width="120" label="定位信息" />
+                  <el-table-column prop="BIDTIME" width="140" label="出价时间" />
                   <el-table-column prop="IS_BID" label="中标">
                     <template #default="scope">
                       <span>{{ scope.row.IS_BID == 0 ? '否' : scope.row.IS_BID == 1 ? '是' : '' }}</span>
                     </template>
                   </el-table-column>
-                  <el-table-column prop="BIDDATE" label="物料" />
-                  <el-table-column prop="BILLSTATUS" label="分配量">
+                  <el-table-column prop="MATERIALNAME" label="物料" />
+                  <el-table-column prop="TRUSTNUM" label="分配量" width="140">
                     <template #default="scope">
-
+                      <span v-if="queryLeftForm.BILLSTATUS == 6">{{ scope.row.TRUSTNUM }}</span>
+                      <el-input size="small" v-model="scope.row.TRUSTNUM" placeholder="输入分配量" clearable />
                     </template>
                   </el-table-column>
                   <el-table-column prop="SURETIME" label="中标时间" />
@@ -439,7 +443,7 @@
 <script setup>
 
 const leftHight = window.innerHeight - 240;
-const Hight = window.innerHeight - 154;
+const Hight = window.innerHeight - 160;
 const { proxy } = getCurrentInstance();
 // const MenuID = inject("menuID");
 // console.log("🚀 ~ MenuID:", MenuID)
@@ -464,12 +468,11 @@ import { computed, onMounted, onUnmounted, ref, } from "vue";
 import { Search } from "@element-plus/icons-vue";
 import { getPageConfig, getTableData } from "@/api/system/page";
 import countDown from "@/components/countDown/index";
-
 import axios from "axios";
 
 import {
   getSignList, getBidSignCount, getCarrierDetail
-  , getBidRunList, submitApprove, forceEnd, cancelSign, confirmSign
+  , getBidRunList, submitApprove, forceEnd, cancelSign, confirmSign, getCargoEndList
   , getBidRecordCarrierList, cancellation
 } from "#/system/biddingHall";
 
@@ -493,7 +496,54 @@ const statusList = ref(['未开始', '待发公告', '报名中', '待竞价', '
 
 const pageInfo = computed(() => route.meta)
 
+const cellList = ref([])
+const listCount = ref(null)
+const computeCell = (tableBody) => {
+  // 循环遍历表体数据
+  for (let i = 0; i < tableBody.length; i++) {
+    if (i == 0) {
+      // 先设置第一项
+      cellList.value.push(1); // 初为1，若下一项和此项相同，就往cellList数组中追加0
+      listCount.value = 0; // 初始计数为0
+      // console.log("索引", 0, listCount.value);
+    } else {
+      // 判断当前项与上项的设备类别是否相同，因为是合并这一列的单元格
+      if (tableBody[i].PK_RECORD == tableBody[i - 1].PK_RECORD) {
+        // 如果相等
+        cellList.value[listCount.value] += 1; // 增加计数
+        cellList.value.push(0); // 相等就往cellList数组中追加0
+        // console.log("索引", i, listCount.value);
+      } else {
+        cellList.value.push(1); // 不等就往cellList数组中追加1
+        listCount.value = i; // 将索引赋值为计数
+        // console.log("索引", i, listCount.value);
+      }
+    }
+  }
+}
+const arraySpanMethod = (obj) => {
+  const { row, column, rowIndex, columnIndex } = obj
+  if (columnIndex === 0 || columnIndex === 1 || columnIndex === 2 || columnIndex === 3 || columnIndex === 4 || columnIndex === 5 || columnIndex === 6 || columnIndex === 7 || columnIndex === 8 || columnIndex === 11 || columnIndex === 12) {
+    const rowCell = cellList.value[rowIndex];
+    if (rowCell > 0) {
+      const colCell = 1;
+      // console.log(`动态竖向合并单元格, 第${colCell}列，竖向合并${rowCell}个单元格 `);
+      return {
+        rowspan: rowCell,
+        colspan: colCell,
+      };
+    } else {
+      // 清除原有的单元格，必须要加，否则就会出现单元格会被横着挤到后面了！！！
+      return {
+        rowspan: 0,
+        colspan: 0,
+      };
+    }
+  }
 
+}
+
+const bidRunList = ref([])
 
 const applyDetailModal = ref(false)
 const copyVCODE = () => {
@@ -649,17 +699,39 @@ const checkCertification = (val) => {
 }
 
 const PK_CARRIER = ref('')
-const IS_BID=ref('')
-const bidRunList = ref([])
+const IS_BID = ref('')
 const getGetBidRunList = (PK_PROJECT) => {
   const protData = {
     // PK_PROJECT,
     PK_PROJECT,
-    PK_CARRIER: PK_CARRIER.value,
+    PK_CARRIER: PK_CARRIER.value || '',
+    IS_BID: IS_BID.value || ''
   }
-  getBidRunList(protData).then((res) => {
-    bidRunList.value = res.RESULT
-  });
+  bidRunList.value = []
+
+  if (queryLeftForm.value.BILLSTATUS == 6) {  // 已结束
+    getCargoEndList(protData).then((res) => {
+      bidRunList.value = res.RESULT
+      listCount.value = null
+      cellList.value = []
+      computeCell(bidRunList.value)
+    }).catch(() => {
+      listCount.value = null
+      cellList.value = []
+      bidRunList.value = []
+    });
+  } else {
+    getBidRunList(protData).then((res) => {
+      bidRunList.value = res.RESULT
+      listCount.value = null
+      cellList.value = []
+      computeCell(bidRunList.value)
+    }).catch(() => {
+      listCount.value = null
+      cellList.value = []
+      bidRunList.value = []
+    });
+  }
 
 }
 const carrierList = ref([])
@@ -676,8 +748,8 @@ const changePK_CARRIER = (e) => {
   getGetBidRunList(menuVal.value);
 }
 
-const changeIS_BID=()=>{
-
+const changeIS_BID = () => {
+  getGetBidRunList(menuVal.value);
 
 }
 
