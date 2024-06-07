@@ -117,6 +117,7 @@ const clickRadio = (item) => {
   let query = {
     ...MenuID.value,
     PKBILLNO: item?.BILLNO,
+    VTYPE:0
   };
   // 查询方案里面的值
   axiosGet("/sys/queryprogUserDtl/getSubList", query).then((res) => {
@@ -235,7 +236,7 @@ const clickSavePlan = () => {
 // 调用保存方案
 const callAddition = () => {
   let QUERYS = []
-  QUERYS = querySaveList.value.map(ele => {
+  QUERYS = querySaveList.value.map((ele,index) => {
     return {
       FIELD: ele.FIELD,
       QUERYTYPE: ele.QUERYTYPE,
@@ -246,11 +247,13 @@ const callAddition = () => {
       QRYCONT: ele.QRYCONT,
       QRYPRE: ele.QRYPRE,
       QRYSUF: ele.QRYSUF,
+      SORTCODE:index
     }
   })
 
   const protData = {
     BILLNO: chooseRadioVal.value, // 方案主键
+    VTYPE:0,
     QUERYS,
     ...MenuID.value,
   };

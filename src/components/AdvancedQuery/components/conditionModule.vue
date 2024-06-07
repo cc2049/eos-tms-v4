@@ -150,7 +150,7 @@ const changeFilter = (val, item, index) => {
 
 const confirm = () => {
     let QUERYS = []
-    QUERYS = currentQueryList.value.map(ele => {
+    QUERYS = currentQueryList.value.map((ele,index) => {
         return {
             FIELD: ele.FIELD,
             QUERYTYPE: ele.QUERYTYPE,
@@ -161,11 +161,12 @@ const confirm = () => {
             QRYCONT: ele.QRYCONT,
             QRYPRE: ele.QRYPRE,
             QRYSUF: ele.QRYSUF,
+            SORTCODE:index
         }
     })
-
     const protData = {
         BILLNO: props.choosePlanObj.BILLNO, // 方案主键
+        VTYPE:1,
         QUERYS,
         ...MenuID.value,
     };
