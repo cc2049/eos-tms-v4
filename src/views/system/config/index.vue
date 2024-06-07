@@ -438,7 +438,7 @@ const plusConfig = (rowIndex) => {
   const actionTab = activeTabRow.value;
   BaseRowData.value.PK_PAGE = actionTab.BILLNO;
   BaseRowData.value.GROUPNO = actionTab.GROUPNO;
-  if (tableData.value.length == rowIndex) rowIndex = -1;
+  if (tableData.value.length <= rowIndex) rowIndex = -1;
   ETableRef.value.xEditTable.insertAt({ ...BaseRowData.value }, rowIndex);
 };
 const editRow = ref();
