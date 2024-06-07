@@ -389,7 +389,7 @@
                   <el-table-column prop="TRUSTNUM" label="分配量" width="140">
                     <template #default="scope">
                       <span v-if="queryLeftForm.BILLSTATUS == 6">{{ scope.row.TRUSTNUM }}</span>
-                      <el-input type="number" size="small" v-model="scope.row.TRUSTNUM" placeholder="输入分配量" clearable />
+                      <el-input v-else type="number" size="small" v-model="scope.row.TRUSTNUM" placeholder="输入分配量" clearable />
                     </template>
                   </el-table-column>
                   <el-table-column prop="SURETIME" label="中标时间" />
