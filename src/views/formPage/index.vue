@@ -1,8 +1,8 @@
 <!--
  * @Author: cc2049
  * @Date: 2024-04-23 11:35:41
- * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-06-07 16:32:45
+ * @LastEditors: PiPin 33947354+p1Master@users.noreply.github.com
+ * @LastEditTime: 2024-06-07 17:21:59
  * @Description: 大表单组件
 -->
 
@@ -10,7 +10,7 @@
 
   <div class="form-container bg-white" ref="formBoxRef">
     <div class="form-affix" ref="affixRef">
-      <TopButton :topButton="topButton" sourceType="2" @handleBtnEvent="handleBtnEvent"  @quitPage="quitPage"/>
+      <TopButton :topButton="topButton" sourceType="2" @handleBtnEvent="handleBtnEvent" @quitPage="quitPage" />
       <div id="eos-form-tabs"></div>
     </div>
     <el-scrollbar :height="formHeight" class="eos-scrollbar">
@@ -23,7 +23,7 @@
 import TopButton from "@/components/TopButton";
 import MasterForm from "@/components/MasterForm/index.vue";
 import { getPageConfig } from "#/system/page.js";
-import { getFormValue, getQueryUrl,getUrlParams } from "@/utils";
+import { getFormValue, getQueryUrl, getUrlParams } from "@/utils";
 import { axiosGet } from "#/common";
 import { onMounted } from "vue";
 
@@ -119,19 +119,17 @@ function getDetail(URL) {
   // console.log("formData.value", formData.value);
 }
 
-const quitPage =()=>{
+const quitPage = () => {
   emit('closeModal')
 }
 
 function handleBtnEvent(btn) {
   let URL = btn.ACTIONADDRESS;
-
   let params = getUrlParams(URL)
-
   let MenuID = { MODULEID: btn.PK_MODULE, PAGEID: btn.PK_PAGE };
-  let sdata = { ...formData.value, ...MenuID,...params };
   eosFormRef.value.validate().then((valid) => {
     if (valid) {
+      let sdata = { ...formData.value, ...MenuID, ...params };
       submitEvent(URL, sdata);
     }
   });
