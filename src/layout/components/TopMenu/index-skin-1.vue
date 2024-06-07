@@ -26,10 +26,10 @@
     <div class="right-menu">
       <template v-if="appStore.device !== 'mobile'">
         <el-space size="large">
-          <!-- <header-search id="header-search" class="right-menu-item" /> -->
-          <el-icon color="#fff" :size="20">
+          <header-search id="header-search" class="right-menu-item" />
+          <!-- <el-icon color="#fff" :size="20">
             <Icon icon="iconamoon:search"></Icon>
-          </el-icon>
+          </el-icon> -->
           <el-icon :size="20">
             <Icon icon="bi:bell"></Icon>
           </el-icon>
@@ -202,6 +202,7 @@ function setLayout() {
     width: 100%;
     padding-left: 10px;
     align-items: center;
+    font-size: 14px;
     .logo-wrap {
       img {
         height: 26px;
@@ -211,7 +212,7 @@ function setLayout() {
     .version {
       background-color: #fff;
       color: var(--el-color-primary);
-      font-size: 0.6rem;
+      font-size: 0.55rem;
       font-weight: 600;
       transform: skewX(-15deg);
       padding: 2px 4px;

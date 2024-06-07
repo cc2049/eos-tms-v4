@@ -1,8 +1,8 @@
 <!--
  * @Author: cc2049
  * @Date: 2024-04-28 13:10:44
- * @LastEditors: PiPin 33947354+p1Master@users.noreply.github.com
- * @LastEditTime: 2024-06-05 19:19:27
+ * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2024-06-06 18:38:48
  * @Description: 简介
 -->
 <template v-if="pageConfig">
@@ -48,7 +48,7 @@
         </div>
       </div>
 
-      <div class="pager-wrap flex flex-items-center" :class=" compType=='VTableSub'?'justify-between':'justify-end' ">
+      <div class="pager-wrap flex flex-items-center" :class=" compType=='VTableSub' && SubTableConfig.length ?'justify-between':'justify-end' ">
         <EosTabs :tabsList="SubTableConfig" @change="changeTab" v-if="compType=='VTableSub' && SubTableConfig.length" />
         <vxe-pager size="mini" class-name="vxe-page-wrap " :page-size="pageInfo.pageSize" :page-sizes="ListPageSize" :current-page="pageInfo.currentPage" :total="pageInfo.totalResult" :layouts="pagerLayouts" @page-change="handlePageChange">
           <template #left>

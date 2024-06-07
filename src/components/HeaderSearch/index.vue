@@ -1,29 +1,56 @@
 <template>
   <div :class="{ 'show': show }" class="header-search">
-    <svg-icon class-name="search-icon" icon-class="search" @click.stop="click" />
-    <el-select
-      ref="headerSearchSelectRef"
-      v-model="search"
-      :remote-method="querySearch"
-      filterable
-      default-first-option
-      remote
-      placeholder="Search"
-      class="header-search-select"
-      @change="change"
-    >
-      <el-option v-for="option in options" :key="option.item.path" :value="option.item" :label="option.item.title.join(' > ')" />
-    </el-select>
+    <!-- <svg-icon class-name="search-icon" icon-class="search" @click.stop="click" /> -->
+
+    <el-icon v-show="!show" color="#fff" :size="20" @click.stop="click" class="header-search-icon">
+      <Icon icon="iconamoon:search"></Icon>
+    </el-icon>
+
+    <el-select-v2 ref="headerSearchSelectRef" v-model="search" :props="selectProps" :options="options" filterable clearable placeholder="请输入内容进行搜索" class="header-search-select" @change="change">
+
+      <template #empty>
+        暂无数据
+      </template>
+
+      <template #prefix>
+        <el-select class="select-type-wrap" size="small" v-model="searchType" placeholder="请选择" style="width: 100px">
+          <el-option label="应用菜单" value="1"></el-option>
+          <el-option label="内容查询" value="2"></el-option>
+        </el-select>
+      </template>
+
+      <template #header>
+        <div class="select-title">
+          <el-icon color="#333" :size="20">
+            <Icon icon="iconamoon:search"></Icon>
+          </el-icon>
+          <span class="select-title-text">搜索"{{ search }}"</span>
+        </div>
+      </template>
+
+      <template #default="{ item }">
+        <span style="margin-right: 8px">{{ item.NAME }}</span>
+        <span style="color: var(--el-text-color-secondary); font-size: 13px">
+          {{ item.BILLNO }}
+        </span>
+      </template>
+
+    </el-select-v2>
   </div>
 </template>
 
 <script setup>
-import Fuse from 'fuse.js'
-import { getNormalPath } from '@/utils/ruoyi'
-import { isHttp } from '@/utils/validate'
-import usePermissionStore from '@/store/modules/permission'
+import Fuse from "fuse.js";
+import { getNormalPath } from "@/utils/ruoyi";
+import { isHttp } from "@/utils/validate";
+import usePermissionStore from "@/store/modules/permission";
+import { getMenukeyword } from "#/system/menu";
+import { onMounted } from "vue";
+const permissionStore = usePermissionStore();
 
-const search = ref('');
+const sidebarRouters = computed(() => permissionStore.topbarRouters);
+
+const search = ref("");
 const options = ref([]);
 const searchPool = ref([]);
 const show = ref(false);
@@ -32,19 +59,28 @@ const headerSearchSelectRef = ref(null);
 const router = useRouter();
 const routes = computed(() => usePermissionStore().routes);
 
+const searchType = ref("1");
+
+const selectProps = ref({
+  label: "NAME",
+  value: "BILLNO",
+});
+
 function click() {
-  show.value = !show.value
+  show.value = !show.value;
   if (show.value) {
-    headerSearchSelectRef.value && headerSearchSelectRef.value.focus()
+    headerSearchSelectRef.value && headerSearchSelectRef.value.focus();
   }
-};
+}
 function close() {
-  headerSearchSelectRef.value && headerSearchSelectRef.value.blur()
-  options.value = []
-  show.value = false
+  headerSearchSelectRef.value && headerSearchSelectRef.value.blur();
+  options.value = [];
+  show.value = false;
 }
 function change(val) {
-  const path = val.path;
+
+  let item = options.value.find((item) => item.BILLNO === val);
+  const path = item.fullPath ;
   const query = val.query;
   if (isHttp(path)) {
     // http(s):// 路径新窗口打开
@@ -54,106 +90,79 @@ function change(val) {
     if (query) {
       router.push({ path: path, query: JSON.parse(query) });
     } else {
-      router.push(path)
+      router.push(path);
     }
   }
-
-  search.value = ''
-  options.value = []
   nextTick(() => {
-    show.value = false
-  })
+    show.value = false;
+  });
 }
-function initFuse(list) {
-  fuse.value = new Fuse(list, {
-    shouldSort: true,
-    threshold: 0.4,
-    location: 0,
-    distance: 100,
-    minMatchCharLength: 1,
-    keys: [{
-      name: 'title',
-      weight: 0.7
-    }, {
-      name: 'path',
-      weight: 0.3
-    }]
-  })
-}
-// Filter out the routes that can be displayed in the sidebar
-// And generate the internationalized title
-function generateRoutes(routes, basePath = '', prefixTitle = []) {
-  let res = []
 
-  for (const r of routes) {
-    // skip hidden router
-    if (r.hidden) { continue }
-    const p = r.path.length > 0 && r.path[0] === '/' ? r.path : '/' + r.path;
-    const data = {
-      path: !isHttp(r.path) ? getNormalPath(basePath + p) : r.path,
-      title: [...prefixTitle]
-    }
-
-    if (r.meta && r.meta.title) {
-      data.title = [...data.title, r.meta.title]
-
-      if (r.redirect !== 'noRedirect') {
-        // only push the routes with title
-        // special case: need to exclude parent router without redirect
-        res.push(data)
-      }
-    }
-    if (r.query) {
-      data.query = r.query
-    }
-
-    // recursive child routes
-    if (r.children) {
-      const tempRoutes = generateRoutes(r.children, data.path, data.title)
-      if (tempRoutes.length >= 1) {
-        res = [...res, ...tempRoutes]
-      }
-    }
-  }
-  return res
-}
 function querySearch(query) {
-  if (query !== '') {
-    options.value = fuse.value.search(query)
+  if (query !== "") {
+   
   } else {
-    options.value = []
+    options.value = [];
   }
 }
 
-onMounted(() => {
-  searchPool.value = generateRoutes(routes.value);
-})
-
-watchEffect(() => {
-  searchPool.value = generateRoutes(routes.value)
-})
+/*
+ * 获取树形结构数组的每一项的最后一项
+ */
+function getLastItems(arr) {
+  const results = [];
+  function traverse(node) {
+    // 基础情况：如果当前节点为空，则直接返回
+    if (!node) return;
+    // 如果当前节点是叶节点（没有children属性或children为空数组），则添加到结果中
+    if (!node.children || node.children.length === 0) {
+      results.push(node);
+    } else {
+      // 递归遍历所有子节点
+      for (const child of node.children) {
+        traverse(child);
+      }
+    }
+  }
+  // 对于树的每个顶层元素开始遍历
+  for (const item of arr) {
+    traverse(item);
+  }
+  return results;
+}
 
 watch(show, (value) => {
   if (value) {
-    document.body.addEventListener('click', close)
+    document.body.addEventListener("click", close);
   } else {
-    document.body.removeEventListener('click', close)
+    document.body.removeEventListener("click", close);
   }
-})
+});
 
-watch(searchPool, (list) => {
-  initFuse(list)
-})
+onMounted(() => {
+  options.value = getLastItems(sidebarRouters.value);
+});
 </script>
 
 <style lang='scss' scoped>
 .header-search {
-  font-size: 0 !important;
-
+  display: flex !important;
+  &-icon {
+    position: relative;
+    top: 5px;
+    cursor: pointer;
+  }
   .search-icon {
     cursor: pointer;
     font-size: 18px;
     vertical-align: middle;
+  }
+
+  .select-type-wrap {
+    // width: 100px !important;
+    :deep(.el-select__wrapper) {
+      box-shadow: none !important;
+    }
   }
 
   .header-search-select {
@@ -165,21 +174,32 @@ watch(searchPool, (list) => {
     border-radius: 0;
     display: inline-block;
     vertical-align: middle;
+    position: relative;
+    top: 0px;
+
+    :deep(.el-select__wrapper) {
+      border-radius: 50px !important;
+      height: 28px;
+      min-height: 28px;
+    }
+
+    :deep(.el-select__wrapper.is-focused) {
+      box-shadow: none;
+    }
 
     :deep(.el-input__inner) {
-      border-radius: 0;
+      border-radius: 10px !important;
       border: 0;
       padding-left: 0;
       padding-right: 0;
       box-shadow: none !important;
-      border-bottom: 1px solid #d9d9d9;
       vertical-align: middle;
     }
   }
 
   &.show {
     .header-search-select {
-      width: 210px;
+      width: 290px;
       margin-left: 10px;
     }
   }
