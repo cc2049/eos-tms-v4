@@ -1,8 +1,8 @@
 /*
  * @Author: cc2049
  * @Date: 2024-04-19 09:01:33
- * @LastEditors: 
- * @LastEditTime: 2024-06-07 09:37:39
+ * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2024-06-07 17:31:17
  * @Description: 简介
  */
 import request from '@/utils/request'
@@ -15,6 +15,17 @@ export function listMenu(query) {
     params: query
   })
 }
+
+// 
+
+export function getMenu(query) {
+  return request({
+    url: '/system/menu/list',
+    method: 'get',
+    params: query
+  })
+}
+
 
 // 关键字查询菜单
 export function getMenukeyword(query) {
