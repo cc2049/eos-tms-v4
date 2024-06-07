@@ -117,8 +117,7 @@ const addLine = () => {
 
 }
 const delLine = () => {
-
-    if (chooseOneLIneIndex.value || chooseOneLIneIndex.value == 0) {
+    if ((chooseOneLIneIndex.value || chooseOneLIneIndex.value == 0) && typeof(chooseOneLIneIndex.value) == 'number') {
         newFilterArr.value.splice(chooseOneLIneIndex.value, 1);
         currentQueryList.value.splice(chooseOneLIneIndex.value, 1);
         chooseOneLIneIndex.value = null
@@ -150,7 +149,7 @@ const changeFilter = (val, item, index) => {
 
 const confirm = () => {
     let QUERYS = []
-    QUERYS = currentQueryList.value.map(ele => {
+    QUERYS = currentQueryList.value.map((ele,index) => {
         return {
             FIELD: ele.FIELD,
             QUERYTYPE: ele.QUERYTYPE,
@@ -161,11 +160,12 @@ const confirm = () => {
             QRYCONT: ele.QRYCONT,
             QRYPRE: ele.QRYPRE,
             QRYSUF: ele.QRYSUF,
+            SORTCODE:index
         }
     })
-
     const protData = {
         BILLNO: props.choosePlanObj.BILLNO, // 方案主键
+        VTYPE:1,
         QUERYS,
         ...MenuID.value,
     };
@@ -188,7 +188,7 @@ const cancle = () => {
 @import "@/assets/styles/variables.module.scss";
 
 .btnStyle {
-    color: $--color-primary;
+    color: var(--el-color-primary) !important;
     cursor: pointer;
     font-size: 14px;
 }

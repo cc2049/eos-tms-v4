@@ -46,6 +46,15 @@ export function getBidRunList(data) {
     })
 }
 
+export function getCargoEndList(data) {
+    return request({
+        url: 'oms/bidRecord/getCargoEndList',
+        method: 'post',
+        data: data
+    })
+}
+
+
 // 提交审核
 export function submitApprove(data) {
     return request({
@@ -94,12 +103,20 @@ export function getBidRecordCarrierList(data) {
 // 作废
 export function cancellation(data) {
     return request({
-        url: 'oms/bidRecord/bidWin/cancel',
+        url: 'oms/bidWin/cancel',
         method: 'post',
         data: data
     })
 }
 
+// 中标
+export function bidWin(data) {
+    return request({
+        url: 'oms//bidWin/win',
+        method: 'post',
+        data: data
+    })
+}
 
 // 获取公告信息
 

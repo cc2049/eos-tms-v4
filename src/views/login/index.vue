@@ -6,9 +6,10 @@
  * @Description: 简介
 -->
 <template>
-  <loginStyle01 :LoginConfig  />
-  <!-- <loginStyle01 v-if="LoginConfig.style==1" :LoginConfig /> -->
-  <!-- <loginStyle02 v-if="LoginConfig.style==1" :LoginConfig /> -->
+  <!-- <loginStyle01 :LoginConfig  /> -->
+  <loginStyle01 v-if="LoginConfig.style==1" :LoginConfig />
+  <loginStyle02 v-else-if="LoginConfig.style==2" :LoginConfig />
+  <loginStyle03 v-else-if="LoginConfig.style==3" :LoginConfig />
 
   <!-- <div v-else>
     <h1>登录入口-可以切换登录模板</h1>
@@ -28,6 +29,7 @@
 // import loginPublic from "@/views/login/login-public.vue"
 import loginStyle01 from "@/views/login/style-1.vue";
 import loginStyle02 from "@/views/login/style-2.vue";
+import loginStyle03 from "@/views/login/style-3.vue";
 import useSettingsStore from "@/store/modules/settings";
 const settingsStore = useSettingsStore();
 // const systemConfig = computed(() => settingsStore.systemConfig);
@@ -38,6 +40,8 @@ import { axiosGet } from "#/common";
 const LoginConfig = ref({
   style: null,
 });
+
+console.log(LoginConfig.value)
 
 const getGlobalConfig = () => {
   let data = { MODULETYPE: "PCCONFIG", VTYPE: "SYSCONFIG" };

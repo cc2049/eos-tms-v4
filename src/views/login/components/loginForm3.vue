@@ -1,120 +1,96 @@
 <template>
   <!-- 登录表单组件 -->
   <div class="loginForm">
-    <div class="loginForm-header">
-      <div class="loginForm-header-title">账号登录</div>
-      <el-button type="primary" link class="loginForm-forgetPassword" @click="forgetPassword">忘记密码</el-button>
+
+    <div class=" optionClass positionRT">
+      <div class="disflex">
+        <div class="">中文（简体）</div>
+      </div>
     </div>
-    <el-form ref="loginRef" style="max-width: 600px" :model="loginForm" :rules="loginRules" label-width="auto"
-      size="large" class="demo-loginForm" status-icon>
 
-      <template v-if="loginType == 'captcha'">
-        <el-form-item prop="username">
-          <el-input v-model="loginForm.username" type="text" auto-complete="off" placeholder="账号" class="inputDeep"
-            clearable>
-            <template #prefix>
-              <svg-icon icon-class="user" class="el-input__icon input-icon" />
-            </template>
-          </el-input>
-        </el-form-item>
-        <el-form-item prop="password">
-          <el-input v-model="loginForm.password" type="password" auto-complete="off" placeholder="密码" show-password
-            class="inputDeep" @keyup.enter="handleLogin">
-            <template #prefix>
-              <svg-icon icon-class="password" class="el-input__icon input-icon" />
-            </template>
-          </el-input>
-          <!-- <el-input v-model="loginForm.password" placeholder="请输入密码" /> -->
-        </el-form-item>
-      </template>
-      <template v-else>
-        <el-form-item prop="mobile">
-          <el-input v-model.number="loginForm.mobile" type="number" size="large" auto-complete="off" placeholder="手机号"
-            clearable class="inputDeep" :prefix-icon="Iphone">
-          </el-input>
-        </el-form-item>
 
-        <el-form-item prop="code">
-          <el-input v-model="loginForm.code" type="text" size="large" auto-complete="off" placeholder="验证码" clearable
-            :maxlength="11" :prefix-icon="Lock" class="input-with-select inputDeep">
-            <template #append>
-              <el-button @click="getTelCode" type="primary" :disabled="telCode != '获取验证码' ? true : false" link>
-                {{ telCode }}
-              </el-button>
-            </template>
-          </el-input>
-        </el-form-item>
-      </template>
+
+    <el-form ref="loginRef" :model="loginForm" width="400" :rules="loginRules" label-width="auto" size="large"
+      class="demo-loginForm" status-icon>
+
+      <el-tabs v-model="activeName" class="demo-tabs" @tab-click="handleClick">
+        <el-tab-pane label="易思·云账号" name="1">
+          <el-form-item prop="username">
+            <el-input v-model="loginForm.username" style="width: 338px;" type="text" auto-complete="off"
+              placeholder="用户名" class="inputDeep" clearable>
+              <template #prefix>
+                <svg-icon icon-class="user" class="el-input__icon input-icon" />
+              </template>
+            </el-input>
+          </el-form-item>
+          <el-form-item prop="password">
+            <el-input v-model="loginForm.password" type="password" auto-complete="off" placeholder="密码" show-password
+              class="inputDeep" @keyup.enter="handleLogin">
+              <template #prefix>
+                <svg-icon icon-class="password" class="el-input__icon input-icon" />
+              </template>
+            </el-input>
+            <!-- <el-input v-model="loginForm.password" placeholder="请输入密码" /> -->
+          </el-form-item>
+
+        </el-tab-pane>
+        <el-tab-pane label="易思云星空账号" name="2">
+          <div class="disflex optionClass justify-between">
+            <div class="disflex">
+              <div class="mr-5">集团</div>
+              <el-icon>
+                <CaretBottom />
+              </el-icon>
+            </div>
+            <div class="disflex">
+              <div class="mr-5">命名用户身份</div>
+              <el-icon>
+                <CaretBottom />
+              </el-icon>
+            </div>
+          </div>
+
+
+          <el-form-item prop="username">
+            <el-input v-model="loginForm.username" style="width: 338px;" type="text" auto-complete="off"
+              placeholder="用户名" class="inputDeep" clearable>
+              <template #prefix>
+                <svg-icon icon-class="user" class="el-input__icon input-icon" />
+              </template>
+            </el-input>
+          </el-form-item>
+          <el-form-item prop="password">
+            <el-input v-model="loginForm.password" type="password" auto-complete="off" placeholder="密码" show-password
+              class="inputDeep" @keyup.enter="handleLogin">
+              <template #prefix>
+                <svg-icon icon-class="password" class="el-input__icon input-icon" />
+              </template>
+            </el-input>
+            <!-- <el-input v-model="loginForm.password" placeholder="请输入密码" /> -->
+          </el-form-item>
+        </el-tab-pane>
+      </el-tabs>
     </el-form>
     <div class="loginForm-btn">
       <el-button type="primary" :loaging="loginBtnLogin" size="large" style="width: 100%;"
         @click="handleLogin">登录</el-button>
     </div>
-    <div class="disflex justify-sb codeimgDad">
-      <el-row :gutter="20">
-        <el-col :span="8" v-if="LoginConfig.isIosIcon == 1">
-          <el-popover placement="top-start" :width="280" trigger="hover">
-            <template #reference>
-              <div class="">
-                <div class="app-img">
-                  <img class="codeimg" src="@/assets/images/login/2.png" alt="">
-                </div>
-              </div>
-            </template>
-            <template #default>
-              <img class="QRCode" :src="imgBaseUrl + LoginConfig.iosQRCode" alt="">
-            </template>
-          </el-popover>
-        </el-col>
-        <el-col :span="8" v-if="LoginConfig.isAndroidIcon == 1">
-          <el-popover placement="top-start" :width="280" trigger="hover">
-            <template #reference>
-              <div class="">
-                <div class="app-img">
-                  <img class="codeimg" src="@/assets/images/login/2.png" alt="">
-                </div>
-              </div>
-            </template>
-            <template #default>
-              <img class="QRCode" :src="imgBaseUrl + LoginConfig.AndroidQRCode" alt="">
-            </template>
-          </el-popover>
-        </el-col>
-        <el-col :span="8" v-if="LoginConfig.isWxIcon == 1">
-          <el-popover placement="top-start" :width="280" trigger="hover">
-            <template #reference>
-              <div class="">
-                <div class="app-img">
-                  <img class="codeimg" src="@/assets/images/login/2.png" alt="">
-                </div>
-              </div>
-            </template>
-            <template #default>
-              <img class="QRCode" :src="imgBaseUrl + LoginConfig.WxQRCode" alt="">
-            </template>
-          </el-popover>
-        </el-col>
-      </el-row>
-      <el-button v-if="LoginConfig.isSMS == 1" type="primary" link class="loginForm-forgetPassword" @click="clickCut">{{
-        loginType == 'captcha' ?
-          '验证码登录'
-          :
-          '密码登录' }}</el-button>
+
+    <div>
+      <div>
+        <text class="optionClass" @click="showClause(1)">用户协议</text>
+        <el-divider direction="vertical" />
+        <text class="optionClass" @click="showClause(2)">隐私协议</text>
+      </div>
+
+
+
+
+
     </div>
-    <div class="disflex loginForm-clause">
-      <el-icon  class="text-blue">
-        <SuccessFilled />
-      </el-icon>
-      同意
-      <text class="text-blue" @click="showClause(1)">《服务条款》</text>
-      与
-      <text class="text-blue" @click="showClause(2)">《隐私条款》</text>
-    </div>
+
+
   </div>
-
-
-
-
 </template>
 
 <script setup>
@@ -160,6 +136,8 @@ const props = defineProps({
 console.log(props.LoginConfigs)
 const { proxy } = getCurrentInstance();
 const emit = defineEmits('clickForgetPassword', "clickShowClause")
+
+const activeName = ref('2')
 
 const imgBaseUrl = computed(() => settingsStore.globalConfig.imgBaseUrl + '/');
 
@@ -364,12 +342,11 @@ const showClause = (e) => {
 
 
 <style scoped lang="scss">
-
 .loginForm {
 
   background: #FEFEFE;
-  box-shadow: 0px 0px 43px 0px rgba(74, 74, 74, 0.25);
-  border-radius: 11px;
+  // box-shadow: 0px 0px 43px 0px rgba(74, 74, 74, 0.25);
+  // border-radius: 11px;
   padding: 60px 40px;
 
   &-header {
@@ -422,11 +399,11 @@ const showClause = (e) => {
     height: 48px;
   }
 
-  :deep(.el-input__wrapper) {
-    box-shadow: none;
-    border-bottom: 1px solid #E1E2E6;
-    border-radius: 0;
-  }
+  // :deep(.el-input__wrapper) {
+  //   box-shadow: none;
+  //   border-bottom: 1px solid #E1E2E6;
+  //   border-radius: 0;
+  // }
 
   // :deep(.el-input__prefix) {
   //   height: 14px !important;
@@ -443,6 +420,18 @@ const showClause = (e) => {
     cursor: pointer;
   }
 
+  .optionClass {
+    color: #56688e;
+    font-size: 14px;
+    height: 46px;
+  }
+
+  .positionRT {
+    position: fixed;
+    right: 5px;
+    top: 10px;
+  }
+
 
 }
 
@@ -450,73 +439,17 @@ const showClause = (e) => {
   width: 250px !important;
 }
 
-:deep(.el-input-group__append, .el-input-group__prepend) {
-  background-color: transparent !important;
-  box-shadow: none !important;
-}
-
-// /* 在小屏幕上减小字体大小 */
-// @media (max-width: 1024px) {
-//   .loginForm {
-//     border-radius: 11px;
-//     padding: 30px 20px;
-//     &-header {
-//       display: flex;
-//       align-items: center;
-//       justify-content: space-between;
-//       margin-bottom: 20px;
-//       &-title {
-//         font-weight: 500;
-//         font-size: 22px;
-//         color: #131313;
-//         margin-right: 68px;
-//       }
-//     }
-//     &-forgetPassword {
-//       font-weight: 500;
-//       font-size: 14px;
-//       // color: #3370FF;
-//       color: $--color-primary;
-//     }
-//     &-btn {
-//       margin-top: 20px;
-//     }
-//     .linkText {
-//       color: $--color-primary;
-//     }
-//     &-clause {
-//       text-align: center;
-//       font-size: 14px;
-//       justify-content: center;
-//       margin-top: 20px;
-//       .el-radio {
-//         margin: 0;
-//       }
-//     }
-//     .codeimgDad {
-//       margin-top: 10px;
-//     }
-//     .codeimg {
-//       width: 30px;
-//       height: 30px;
-//     }
-//     .input-icon {
-//       height: 29px;
-//       width: 14px;
-//       margin-left: 0px;
-//     }
-//     .text-blue {
-//       color: #0c64eb;
-//       cursor: pointer;
-//     }
-//   }
+// :deep(.el-input-group__append, .el-input-group__prepend) {
+//   background-color: transparent !important;
+//   box-shadow: none !important;
 // }
+
 
 /* 在大屏幕上增加字体大小 */
 @media (max-width: 1200px) {
 
   .loginForm {
-    border-radius: 11px;
+    // border-radius: 11px;
     padding: 30px 20px;
 
     &-header {

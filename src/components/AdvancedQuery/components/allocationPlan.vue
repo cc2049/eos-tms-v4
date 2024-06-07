@@ -284,10 +284,9 @@ defineExpose({
 </script>
 
 <style scoped lang="scss">
-@import "@/assets/styles/variables.module.scss";
 
 .btnStyle {
-    color: $--color-primary;
+    color: var(--el-color-primary) !important;
     cursor: pointer;
     font-size: 14px;
 }
@@ -316,7 +315,7 @@ defineExpose({
             margin-right: 1px;
 
             &.active {
-                background-color: $--color-primary;
+                background-color: var(--el-color-primary) !important;
                 color: #fff;
             }
         }
@@ -351,7 +350,7 @@ defineExpose({
     padding: 4px 10px;
 
     &.active {
-        background-color: $--color-primary;
+        background-color:var(--el-color-primary) !important;
         color: #fff;
     }
 

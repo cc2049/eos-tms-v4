@@ -42,7 +42,7 @@
                   <el-tooltip effect="light" :content="item.BILLNO" placement="bottom">
                     <div class="tab-name">
                       {{ item.VNAME }}
-                      <template v-if="activeTabRow.BILLNO == item.BILLNO">
+                      <template v-if="activeTabRow.BILLNO == item.BILLNO && activeTabRow.VNAME == item.VNAME">
                         <template v-if="item.GROUPNO !='QRY' && item.GROUPNO!='BTN'">
                           <Notification @click="EditTabs" style="width: 1em; height: 1em; margin-left: 8px" />
                           <Close v-if="item.ISDELETE == '1'" @click="DelTabs" style="width: 1em; height: 1em; margin-left: 8px" />
@@ -438,7 +438,7 @@ const plusConfig = (rowIndex) => {
   const actionTab = activeTabRow.value;
   BaseRowData.value.PK_PAGE = actionTab.BILLNO;
   BaseRowData.value.GROUPNO = actionTab.GROUPNO;
-  if (tableData.value.length == rowIndex) rowIndex = -1;
+  if (tableData.value.length <= rowIndex) rowIndex = -1;
   ETableRef.value.xEditTable.insertAt({ ...BaseRowData.value }, rowIndex);
 };
 const editRow = ref();
