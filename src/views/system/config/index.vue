@@ -42,7 +42,7 @@
                   <el-tooltip effect="light" :content="item.BILLNO" placement="bottom">
                     <div class="tab-name">
                       {{ item.VNAME }}
-                      <template v-if="activeTabRow.BILLNO == item.BILLNO">
+                      <template v-if="activeTabRow.BILLNO == item.BILLNO && activeTabRow.VNAME == item.VNAME">
                         <template v-if="item.GROUPNO !='QRY' && item.GROUPNO!='BTN'">
                           <Notification @click="EditTabs" style="width: 1em; height: 1em; margin-left: 8px" />
                           <Close v-if="item.ISDELETE == '1'" @click="DelTabs" style="width: 1em; height: 1em; margin-left: 8px" />
