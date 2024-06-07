@@ -2,7 +2,7 @@
  * @Author: cc2049
  * @Date: 2024-04-23 11:33:59
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-06-05 19:40:30
+ * @LastEditTime: 2024-06-07 15:46:17
  * @Description: 简介
 -->
 <template>
@@ -27,8 +27,8 @@ const { key17Status } = useKey17Status();
 /*
  * 解析路由获取菜单id
  */
-const router = useRouter();
-const routerParams = router.currentRoute.value.meta;
+const route = useRoute();
+const routerParams = route.meta;
 const menuParams = ref({
   MODULEID: routerParams.BILLNO || "-",
   PAGEID: routerParams.ACTION || "-",
@@ -62,6 +62,7 @@ onMounted(() => {});
 .page-container {
   padding: 0 20px;
   position: relative;
+  background-color: #e8ecf6;
 }
 </style>
 

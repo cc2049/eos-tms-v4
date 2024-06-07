@@ -124,7 +124,7 @@ function filterAsyncRouter(asyncRouterMap, lastRouter = false, type = false, par
       } else if (route.COMPONENT === "SonTable") {
         // route.component = () => import('@/views/sontable/sontable');
         route.component = () => import('@/views/table/index');
-      } else if (route.COMPONENT === "VForm") {
+      } else if (route.COMPONENT === "VForm"|| route.COMPONENT === "FM" ) {
         route.component = () => import('@/views/formPage/home');
       } else if (route.COMPONENT === "Link") {
         route.component = () => import('@/views/table/index');
