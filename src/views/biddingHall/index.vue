@@ -79,8 +79,11 @@
                   <el-button size="small"
                     v-if="detailNoDynamic.BILLSTATUS == 5 || detailNoDynamic.BILLSTATUS == 6 || detailNoDynamic.BILLSTATUS == 7"
                     @click="clickApplyDetail">报名明细</el-button>
-                  <el-button size="small" v-if="detailNoDynamic.BILLSTATUS == 6"
-                    @click="clickCancellation">作废</el-button>
+                  <el-button size="small" type="primary" :disabled="winBiddingArr.length ? false : true"
+                    v-if="detailNoDynamic.BILLSTATUS == 5" @click="winBidding">中标</el-button>
+                  <el-button size="small"
+                    v-if="detailNoDynamic.BILLSTATUS == 5 || detailNoDynamic.BILLSTATUS == 6 || detailNoDynamic.BILLSTATUS == 7"
+                    :disabled="winBiddingArr.length ? false : true" @click="clickCancellation">作废</el-button>
                 </template>
               </TopButton>
 
@@ -93,7 +96,6 @@
 
 
 
-              <!-- <el-button size="small" type="primary" v-if="detailNoDynamic.BILLSTATUS == 5">中标</el-button> -->
 
 
             </div>
@@ -367,8 +369,10 @@
                 </div>
               </div>
               <div class="mt10">
-                <el-table :data="bidRunList" border style="width: 100%" :span-method="arraySpanMethod">
-                  <el-table-column type="index" width="70" label="排名" />
+                <el-table :data="bidRunList" border style="width: 100%" :span-method="arraySpanMethod"
+                  @selection-change="handleSelectionChange">
+                  <el-table-column type="selection" width="55" fixed />
+                  <el-table-column prop="RANK" label="排名" />
                   <el-table-column prop="CARRIERNAME" width="140" label="出价单位" />
                   <el-table-column prop="CONTACTTEL" width="110" label="联系方式" />
                   <el-table-column prop="BIDPRICE" label="出价金额" />
@@ -385,7 +389,7 @@
                   <el-table-column prop="TRUSTNUM" label="分配量" width="140">
                     <template #default="scope">
                       <span v-if="queryLeftForm.BILLSTATUS == 6">{{ scope.row.TRUSTNUM }}</span>
-                      <el-input size="small" v-model="scope.row.TRUSTNUM" placeholder="输入分配量" clearable />
+                      <el-input type="number" size="small" v-model="scope.row.TRUSTNUM" placeholder="输入分配量" clearable />
                     </template>
                   </el-table-column>
                   <el-table-column prop="SURETIME" label="中标时间" />
@@ -473,7 +477,7 @@ import axios from "axios";
 import {
   getSignList, getBidSignCount, getCarrierDetail
   , getBidRunList, submitApprove, forceEnd, cancelSign, confirmSign, getCargoEndList
-  , getBidRecordCarrierList, cancellation
+  , getBidRecordCarrierList, cancellation, bidWin
 } from "#/system/biddingHall";
 
 
@@ -523,7 +527,7 @@ const computeCell = (tableBody) => {
 }
 const arraySpanMethod = (obj) => {
   const { row, column, rowIndex, columnIndex } = obj
-  if (columnIndex === 0 || columnIndex === 1 || columnIndex === 2 || columnIndex === 3 || columnIndex === 4 || columnIndex === 5 || columnIndex === 6 || columnIndex === 7 || columnIndex === 8 || columnIndex === 11 || columnIndex === 12) {
+  if (columnIndex === 1 || columnIndex === 2 || columnIndex === 3 || columnIndex === 4 || columnIndex === 5 || columnIndex === 6 || columnIndex === 7 || columnIndex === 8 || columnIndex === 9 || columnIndex === 12 || columnIndex === 13) {
     const rowCell = cellList.value[rowIndex];
     if (rowCell > 0) {
       const colCell = 1;
@@ -650,13 +654,14 @@ const getDetailNoDynamic = () => {
       case "5":
         getGetBidRunList(menuVal.value);
         querygetBidRecordCarrierList(menuVal.value)
-
         break;
       case "6":
-
+        getGetBidRunList(menuVal.value);
+        querygetBidRecordCarrierList(menuVal.value)
         break;
       case "7":
-
+        getGetBidRunList(menuVal.value);
+        querygetBidRecordCarrierList(menuVal.value)
         break;
       default:
         break;
@@ -796,9 +801,31 @@ const confirmApply = () => {
   });
 }
 
+const winBiddingArr = ref([])
+const handleSelectionChange = (val) => {
+  console.log("🚀 ~ handleSelectionChange ~ val:", val)
+  winBiddingArr.value = val
+}
+const winBidding = () => {
+  const protData = {
+    data: winBiddingArr.value,
+  }
+  bidWin(protData).then((res) => {
+    proxy.$modal.msgSuccess(res.MESSAGE || "提交成功");
+    getPageList()
+  });
+
+}
+
 const clickCancellation = () => {
 
-
+  const protData = {
+    data: winBiddingArr.value,
+  }
+  cancellation(protData).then((res) => {
+    proxy.$modal.msgSuccess(res.MESSAGE || "提交成功");
+    getPageList()
+  });
 
 
 }

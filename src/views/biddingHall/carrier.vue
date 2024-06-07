@@ -207,7 +207,9 @@
                                             </el-col>
                                             <el-col :span="6">
                                                 <span>确标方式：</span>
-                                                <span class="cargoInfo-top-content">{{ detailNoDynamic.IS_SURE == 1?'是':'否' }}</span>
+                                                <span class="cargoInfo-top-content">{{ detailNoDynamic.IS_SURE ==
+                1 ? '是' : '否'
+                                                    }}</span>
                                             </el-col>
                                             <el-col :span="6">
                                                 <span>中标分配：</span>
@@ -222,27 +224,27 @@
                                             </el-col>
                                             <el-col :span="6" v-if="detailNoDynamic.WINNUM > 0">
                                                 <span>第一名量：</span>
-                                                <span class="cargoInfo-top-content">{{ detailNoDynamic.ONEZBNUM*100
+                                                <span class="cargoInfo-top-content">{{ detailNoDynamic.ONEZBNUM * 100
                                                     }}%</span>
                                             </el-col>
                                             <el-col :span="6" v-if="detailNoDynamic.WINNUM > 1">
                                                 <span>第二名量：</span>
-                                                <span class="cargoInfo-top-content">{{ detailNoDynamic.TWOZBNUM*100
+                                                <span class="cargoInfo-top-content">{{ detailNoDynamic.TWOZBNUM * 100
                                                     }}%</span>
                                             </el-col>
                                             <el-col :span="6" v-if="detailNoDynamic.WINNUM > 2">
                                                 <span>第三名量：</span>
-                                                <span class="cargoInfo-top-content">{{ detailNoDynamic.THREEZBNUM*100
+                                                <span class="cargoInfo-top-content">{{ detailNoDynamic.THREEZBNUM * 100
                                                     }}%</span>
                                             </el-col>
                                             <el-col :span="6" v-if="detailNoDynamic.WINNUM > 3">
                                                 <span>第四名量：</span>
-                                                <span class="cargoInfo-top-content">{{ detailNoDynamic.FOURZBNUM*100
+                                                <span class="cargoInfo-top-content">{{ detailNoDynamic.FOURZBNUM * 100
                                                     }}%</span>
                                             </el-col>
                                             <el-col :span="6" v-if="detailNoDynamic.WINNUM > 4">
                                                 <span>第五名量：</span>
-                                                <span class="cargoInfo-top-content">{{ detailNoDynamic.FIVEZBNUM*100
+                                                <span class="cargoInfo-top-content">{{ detailNoDynamic.FIVEZBNUM * 100
                                                     }}%</span>
                                             </el-col>
                                             <el-col :span="6">
@@ -288,26 +290,29 @@
                                 <el-button type="primary" @click="clickOfferPrice">出价</el-button>
                             </div>
                             <div class="mt10">
-                                <el-table :data="bidRunList" style="width: 100%">
-                                    <!-- <el-table-column prop="CONTACTTEL" label="出价次数" /> -->
-                                    <el-table-column type="index" width="50" label="出价次数" />
+                                <el-table :data="bidRunList" border style="width: 100%" :span-method="arraySpanMethod"
+                                    @selection-change="handleSelectionChange">
+                                    <el-table-column prop="RANK" label="出价次数" />
                                     <el-table-column prop="BIDPRICE" label="出价金额" />
                                     <el-table-column prop="EXPECTVALUE" label="出量" />
                                     <el-table-column prop="BIDTIME" label="出价时间" />
-                                    <el-table-column prop="IS_BID" label="中标">
-                                        <template #default="scope">
-                                            <span>{{ scope.row.IS_BID == 0 ? '否' : scope.row.IS_BID == 1 ? '是' : ''
-                                                }}</span>
-                                        </template>
-                                    </el-table-column>
-                                    <el-table-column prop="BIDDATE" label="物料" />
-                                    <el-table-column prop="BILLSTATUS" label="分配量">
-                                        <template #default="scope">
-
-                                        </template>
-                                    </el-table-column>
-                                    <el-table-column prop="SURETIME" label="中标时间" />
-                                    <el-table-column prop="SURENAME" label="中标确认人" />
+                                    <template v-if="queryLeftForm.BILLSTATUS == 6">
+                                        <el-table-column prop="IS_BID" label="中标">
+                                            <template #default="scope">
+                                                <span>{{ scope.row.IS_BID == 0 ? '否' : scope.row.IS_BID == 1 ? '是' : ''
+                                                    }}</span>
+                                            </template>
+                                        </el-table-column>
+                                        <el-table-column prop="MATERIALNAME" label="物料" />
+                                        <el-table-column prop="TRUSTNUM" label="分配量" width="140">
+                                            <template #default="scope">
+                                                <span>{{ scope.row.TRUSTNUM
+                                                    }}</span>
+                                            </template>
+                                        </el-table-column>
+                                        <el-table-column prop="SURETIME" label="中标时间" />
+                                        <el-table-column prop="SURENAME" label="中标确认人" />
+                                    </template>
                                 </el-table>
                             </div>
                         </div>
@@ -527,6 +532,52 @@ const getNoticInfo = () => {
     });
 }
 const bidRunList = ref([])
+const cellList = ref([])
+const listCount = ref(null)
+const computeCell = (tableBody) => {
+    // 循环遍历表体数据
+    for (let i = 0; i < tableBody.length; i++) {
+        if (i == 0) {
+            // 先设置第一项
+            cellList.value.push(1); // 初为1，若下一项和此项相同，就往cellList数组中追加0
+            listCount.value = 0; // 初始计数为0
+            // console.log("索引", 0, listCount.value);
+        } else {
+            // 判断当前项与上项的设备类别是否相同，因为是合并这一列的单元格
+            if (tableBody[i].PK_RECORD == tableBody[i - 1].PK_RECORD) {
+                // 如果相等
+                cellList.value[listCount.value] += 1; // 增加计数
+                cellList.value.push(0); // 相等就往cellList数组中追加0
+                // console.log("索引", i, listCount.value);
+            } else {
+                cellList.value.push(1); // 不等就往cellList数组中追加1
+                listCount.value = i; // 将索引赋值为计数
+                // console.log("索引", i, listCount.value);
+            }
+        }
+    }
+}
+const arraySpanMethod = (obj) => {
+    const { row, column, rowIndex, columnIndex } = obj
+    if (columnIndex === 0 || columnIndex === 1 || columnIndex === 2 || columnIndex === 3 || columnIndex === 4 || columnIndex === 5 || columnIndex === 8 || columnIndex === 9) {
+        const rowCell = cellList.value[rowIndex];
+        if (rowCell > 0) {
+            const colCell = 1;
+            // console.log(`动态竖向合并单元格, 第${colCell}列，竖向合并${rowCell}个单元格 `);
+            return {
+                rowspan: rowCell,
+                colspan: colCell,
+            };
+        } else {
+            // 清除原有的单元格，必须要加，否则就会出现单元格会被横着挤到后面了！！！
+            return {
+                rowspan: 0,
+                colspan: 0,
+            };
+        }
+    }
+
+}
 
 const querygetBidRecordList = () => {
     const protData = {
@@ -535,6 +586,10 @@ const querygetBidRecordList = () => {
     }
     getBidRecordList(protData).then((res) => {
         bidRunList.value = res.RESULT
+        // listCount.value = null
+        // cellList.value = []
+        // computeCell(bidRunList.value)
+
     });
 }
 
@@ -595,8 +650,11 @@ const querygetCarrierEndList = () => {
         // PK_PROJECT,
         PK_PROJECT: menuVal.value,
     }
+    listCount.value = null
+    cellList.value = []
     getCarrierEndList(protData).then((res) => {
         bidRunList.value = res.RESULT
+        computeCell(bidRunList.value)
     });
 
 }
