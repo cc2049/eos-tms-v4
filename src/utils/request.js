@@ -54,7 +54,7 @@ service.interceptors.request.use(config => {
     PROGRAMID: axiosData ? (config.data.PROGRAMID) || '' : '',
     VERSION: ""
   }
-  if (config.url.includes('ISRSA=1')) {
+  if (config.url?.includes('ISRSA=1')) {
     const {aesKey , aesData  } = aesEncrypt( config.data.DATA)
     const newRsaData = { KEY: aesKey, SECRETDATA: aesData}
     // config.data.KEY = aesKey

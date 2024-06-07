@@ -2,11 +2,11 @@
  * @Author: cc2049
  * @Date: 2024-04-23 11:33:59
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-06-07 15:46:17
+ * @LastEditTime: 2024-06-07 16:31:16
  * @Description: 简介
 -->
 <template>
-  <div class="page-container">
+  <div class="page-container" :class="{ formBg: visibleFormPage }">
     <SingleTable v-if="!visibleFormPage" ref="listTableRef" :menuID="menuParams" :compType="routerParams.COMP" @openCustemPage="openCustemPage" />
 
     <template v-else>
@@ -35,6 +35,7 @@ const menuParams = ref({
 });
 const visibleFormPage = ref(false);
 
+
 const activeBtn = ref({})
 const backEvent = () => {
   // 目前不行，这样的话 财旺写的组件会报错
@@ -62,7 +63,12 @@ onMounted(() => {});
 .page-container {
   padding: 0 20px;
   position: relative;
-  background-color: #e8ecf6;
+  background-color: #fafcff;
+
+}
+
+.formBg{
+  background-color: #e8ecf6!important;
 }
 </style>
 

@@ -2,7 +2,7 @@
  * @Author: cc2049
  * @Date: 2024-06-03 20:55:06
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-06-07 15:55:03
+ * @LastEditTime: 2024-06-07 17:00:20
  * @Description: 简介
 -->
 <template>
@@ -26,7 +26,7 @@ const currentData = ref([]);
 const isGetDetail = ref(false);
 const isDetail = ref(false);
 
-if (route.params) {
+if (route.params && Object.keys(route.params).length) {
   let { id, type } = route.params;
   if (type !=0) isGetDetail.value = true;
   if (type == 2) isDetail.value = true;
@@ -43,6 +43,6 @@ function closeModal(){
 <style scoped>
 .home{
   padding: 0 20px;
-  background-color: #fff;
+  background-color: #e8ecf6!important;
 }
 </style>

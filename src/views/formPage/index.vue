@@ -2,13 +2,13 @@
  * @Author: cc2049
  * @Date: 2024-04-23 11:35:41
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-06-06 12:48:34
+ * @LastEditTime: 2024-06-07 16:32:45
  * @Description: 大表单组件
 -->
 
 <template>
 
-  <div class="form-container" ref="formBoxRef">
+  <div class="form-container bg-white" ref="formBoxRef">
     <div class="form-affix" ref="affixRef">
       <TopButton :topButton="topButton" sourceType="2" @handleBtnEvent="handleBtnEvent"  @quitPage="quitPage"/>
       <div id="eos-form-tabs"></div>
@@ -44,7 +44,6 @@ const props = defineProps({
   activeBtn: {},
   topButton: {},
 });
-console.log(props.currentData)
 const emit = defineEmits(["closeModal", "refreshTable"]);
 
 const { proxy } = getCurrentInstance();
@@ -117,7 +116,7 @@ function getDetail(URL) {
       formLoading.value = false;
     });
   }
-  console.log("formData.value", formData.value);
+  // console.log("formData.value", formData.value);
 }
 
 const quitPage =()=>{
