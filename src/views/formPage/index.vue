@@ -1,8 +1,8 @@
 <!--
  * @Author: cc2049
  * @Date: 2024-04-23 11:35:41
- * @LastEditors: PiPin 33947354+p1Master@users.noreply.github.com
- * @LastEditTime: 2024-06-07 17:21:59
+ * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2024-06-07 17:29:46
  * @Description: 大表单组件
 -->
 
@@ -47,8 +47,8 @@ const props = defineProps({
 const emit = defineEmits(["closeModal", "refreshTable"]);
 
 const { proxy } = getCurrentInstance();
-const formBoxRef = ref(null)
-const affixRef = ref(null)
+const formBoxRef = ref(null);
+const affixRef = ref(null);
 const eosFormRef = ref(null);
 const topButton = ref([]);
 const formConfig = ref([]);
@@ -57,8 +57,9 @@ const detail = ref(false);
 const labelWidth = ref("100px");
 const tableConfig = ref([]);
 const formHeight = computed(() => {
-  formBoxRef.value && formBoxRef.value.clientHeight - affixRef.value.clientHeight - 10 + 'px'
-})
+  formBoxRef.value &&
+    formBoxRef.value.clientHeight - affixRef.value.clientHeight - 10 + "px";
+});
 const formLoading = ref(false);
 
 watch(
@@ -75,7 +76,7 @@ watch(
         formLoading.value = true;
         if (props.isGetDetail) {
           let detailURL = SLOTCFG || getQueryUrl(props.topButton);
-          getDetail(detailURL);
+          detailURL ? getDetail(detailURL) : null;
         } else {
           formLoading.value = false;
         }
@@ -98,7 +99,7 @@ function resetButton(arr) {
   try {
     let customCF = JSON.parse(copyBtn.PAGEPATH);
     copyBtn.VNAME = customCF.sName;
-  } catch (error) { }
+  } catch (error) {}
 
   let newBtn = [copyBtn];
   return newBtn;
@@ -149,7 +150,6 @@ function submitEvent(URL, sdata) {
     }
   });
 }
-
 </script>
 
 <style lang="scss" scoped>
