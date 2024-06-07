@@ -46,6 +46,15 @@ export function getBidRunList(data) {
     })
 }
 
+export function getCargoEndList(data) {
+    return request({
+        url: 'oms/bidRecord/getCargoEndList',
+        method: 'post',
+        data: data
+    })
+}
+
+
 // 提交审核
 export function submitApprove(data) {
     return request({
