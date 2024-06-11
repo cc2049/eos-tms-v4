@@ -34,8 +34,8 @@
     <!-- <div style="width: 260px"> -->
     <div style="width: 170px">
       <template v-if="showDateType == '0' || showDateType == '1'">
-        <el-input v-model="formData.DEFAULTVAL" style="width: 100%" placeholder="请输入" :disabled="showDateType == '0'?true:false"
-          type="number" />
+        <el-input v-model="formData.DEFAULTVAL" style="width: 100%" placeholder="请输入"
+          :disabled="showDateType == '0' ? true : false" type="number" />
       </template>
       <!-- ExDate 日期选择 -->
       <template v-else-if="currentConfig.CONTROLS == 'ExDate'">
@@ -160,6 +160,9 @@
 import { watch } from "vue";
 import { getPageConfig, getTableData } from "@/api/system/page";
 import { trace } from "mathjs";
+import { useDict } from '@/utils/dict'
+
+
 // import { getDicts } from '@/api/system/dict'
 const { proxy } = getCurrentInstance();
 const { dateQueryType } = proxy.useDict("dateQueryType");
@@ -218,7 +221,19 @@ watch(
   (value) => {
     selectvalue.value = value.BILLNO;
     if (value.CONTROLS == "ExSelect") {
-      EnumArr.value = JSON.parse(value.OTHER);
+      if (value.OTHER &&
+        value.OTHER.indexOf("${") === 0 &&
+        value.OTHER.charAt(value.OTHER.length - 1) == "}"
+      ) {
+        let dictname = value.OTHER.substring(2, value.OTHER.length - 1);
+        EnumArr.value = useDict(dictname);
+
+      } else {
+        EnumArr.value = JSON.parse(value.OTHER);
+
+      }
+
+
       // console.log("🚀 ~ watch ~ EnumArr.value :", EnumArr.value)
     }
   },
