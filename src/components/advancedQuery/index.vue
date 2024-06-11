@@ -25,9 +25,9 @@
               <Icon icon="iconamoon:search"></Icon>
             </el-icon>
           </el-button>
-          <el-popover placement="bottom" :width="510" trigger="click" :visible="visible">
+          <el-popover placement="bottom" :width="510" trigger="click" ref="popoverRef" >
             <template #reference>
-              <el-button @click="visible = true">
+              <el-button>
                 <el-icon :size="20">
                   <Icon icon="uil:setting"></Icon>
                 </el-icon>
@@ -38,8 +38,8 @@
               @changeCurrentQueryList="settingChangeCurrentQueryList" />
             <el-divider />
             <div class="tr">
-              <el-button @click="visible = false" size="mini">取消</el-button>
-              <el-button type="primary" @click="visible = false" size="mini">确定</el-button>
+              <el-button @click="clostPopver" size="mini">取消</el-button>
+              <el-button type="primary" @click="clostPopver" size="mini">确定</el-button>
             </div>
           </el-popover>
           <div class="ml10 mr10 btnStyle" @click="clickSavePlan">保存</div>
@@ -213,6 +213,10 @@ watch(
   },
   { immediate: true }
 );
+const popoverRef=ref(null)
+const clostPopver=()=>{
+  popoverRef.value.hide()
+}
 
 const querySaveList = ref([]);
 const changeCurrentQueryList = (val) => {
@@ -307,7 +311,6 @@ const changeFilter = (val, item, index) => {
   filterArr.value[index] = JSON.parse(JSON.stringify(val));
 };
 
-const visible = ref(false);
 const changeCondition = (e) => {
 
   filterArr.value.push(e);
