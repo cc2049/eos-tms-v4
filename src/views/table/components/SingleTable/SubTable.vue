@@ -2,7 +2,7 @@
  * @Author: cc2049
  * @Date: 2024-05-22 08:30:20
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-05-30 20:24:49
+ * @LastEditTime: 2024-06-11 09:05:02
  * @Description: 简介
 -->
 
@@ -86,7 +86,6 @@ watch(
   (value) => {
     const { TABLEHEIGHT } = props.SubTableConfig[0];
     tableCFG.height = props.subLayout == 1 ? props.height : TABLEHEIGHT;
-    console.log(666, props.subLayout ,  tableCFG.height );
   }
 );
 

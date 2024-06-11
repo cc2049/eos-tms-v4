@@ -216,7 +216,7 @@ const props = defineProps({
     type: Number,
     default: 150,
   },
-  // 分页总数据数
+  // 合计总数据数
   totalData: {
     type: Object,
   },

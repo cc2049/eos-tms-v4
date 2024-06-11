@@ -2,7 +2,7 @@
  * @Author: cc2049
  * @Date: 2024-04-28 13:10:44
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-06-06 18:38:48
+ * @LastEditTime: 2024-06-11 09:41:32
  * @Description: 简介
 -->
 <template v-if="pageConfig">
@@ -40,7 +40,7 @@
 
       <div class="main-sub-table flex">
         <div class="left-table " :style="{width: SubLayoutConfig.subLayout==1? SubLayoutConfig.subLayoutLeft : '100%'}">
-          <Vxtable ref="VxtableRef" class="bg-white" :tableCFG="tableCFG" :tableData="tableData" :sourceTableData="sourceTableData" @change="tableChange" @dragRow="dragTableRow" @queryEvent="queryEvent" @resetConfig="resetConfig" @filterNameEvent="filterNameEvent" @dbClick="dbClickTable">
+          <Vxtable ref="VxtableRef" class="bg-white" :tableCFG="tableCFG" :totalData="totalData" :tableData="tableData" :sourceTableData="sourceTableData" @change="tableChange" @dragRow="dragTableRow" @queryEvent="queryEvent" @resetConfig="resetConfig" @filterNameEvent="filterNameEvent" @dbClick="dbClickTable">
           </Vxtable>
         </div>
         <div class="right-table ml-6" :style="{width: SubLayoutConfig.subLayoutLeft }" v-if="SubLayoutConfig.subLayout==1 && SubTableConfig.length">
@@ -101,6 +101,8 @@ const topButtonRef = ref(null);
 const pageConfig = ref(null);
 const tableCFG = ref(null);
 const tableData = ref([]);
+const totalData = ref(null);
+
 const sourceTableData = ref([]);
 const treeData = ref([]);
 const showZtree = ref(true);
@@ -295,8 +297,9 @@ const getTableData = () => {
         tableData.value = res.RESULT;
         pageInfo.totalResult = res.RESULT.length;
       } else {
-        const { RECORDS, TOTAL } = res.RESULT;
+        const { RECORDS, TOTAL ,TOTALDATA } = res.RESULT;
         tableData.value = RECORDS;
+        totalData.value = TOTALDATA ? JSON.parse(TOTALDATA) : {}
         pageInfo.totalResult = TOTAL;
       }
       sourceTableData.value = JSON.parse(JSON.stringify(tableData.value));

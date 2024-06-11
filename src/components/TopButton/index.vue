@@ -2,7 +2,7 @@
  * @Author: cc2049
  * @Date: 2024-04-28 15:12:29
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-06-06 12:10:19
+ * @LastEditTime: 2024-06-11 09:12:49
  * @Description: 简介
 -->
 
@@ -25,7 +25,7 @@
           <div class="buttom-item" @click="handleEvent(itemBtn)" :title="itemBtn.BTNTITLE " v-if="setShowBtn(itemBtn) ">
             {{ itemBtn.VNAME }}
           </div>
-          
+
           <el-dropdown v-else-if="itemBtn.CHILDREN?.length" style="margin: 0 6px" @command="handelEvent" size="large">
             <div class="buttom-item ">
               {{ itemBtn.VNAME }}
@@ -47,12 +47,11 @@
 
         </template>
 
+        <el-divider direction="vertical" />
 
-          <el-divider direction="vertical" />
-
-           <div class="buttom-item" @click="leftHandleEvent(3)">
-            退出
-          </div>
+        <div class="buttom-item" @click="leftHandleEvent(3)">
+          退出
+        </div>
 
       </div>
 
@@ -93,7 +92,6 @@
 
     <slot name="currentBtn" />
 
-
     <!-- 公共弹窗表单模块 -->
     <vxe-modal destroy-on-close v-model="modalConfig.modalVisible" :width="modalConfig.modalW" :height="modalConfig.modalH" id="formModal" resize storage transfer show-zoom @close="closeModal">
       <template #title>
@@ -131,10 +129,10 @@ const props = defineProps({
     type: [String, Number],
     default: 1,
   },
-  isCurrentBtn:{
+  isCurrentBtn: {
     type: Boolean,
     default: false,
-  }
+  },
 });
 const isDetail = ref(false);
 const isGetDetail = ref(false);
@@ -150,7 +148,7 @@ const MenuID = inject("menuID");
 const formID = ref(null);
 const { proxy } = getCurrentInstance();
 // const emit = defineEmits(["handleTopBtn", "reloadTableData"]);
-const emit = defineEmits(["reloadTableData", "quitPage" , "handleBtnEvent"]);
+const emit = defineEmits(["reloadTableData", "quitPage", "handleBtnEvent"]);
 
 const modalConfig = reactive({
   modalW: 1000,
@@ -250,9 +248,9 @@ function refreshTable() {
 
 // 表格的顶部按钮操作
 function handleEvent(data, row) {
-  console.log("handelEvent22", data, row);
   let selectRecords = row?.length ? row : props.currentData;
   activeBtn.value = data;
+  console.log("handelEvent22", data, row, selectRecords);
 
   // 表单中的按钮事件直接调
   if (props.sourceType == 2) {
@@ -266,6 +264,11 @@ function handleEvent(data, row) {
   } else {
   }
 
+  // 验证是否需要选择数据
+  if (data.ISCHOOSE && data.ISCHOOSE * 1 > 0 && !selectRecords.length) {
+    return proxy.$modal.msgError("请先选择数据再操作");
+  }
+
   if (data.VTYPE == 1) {
     emit("handleTopBtn", { type: "openCustemPage", btnConf: data });
   } else if (
@@ -276,32 +279,27 @@ function handleEvent(data, row) {
   ) {
     if (data.ACTION == "EDIT" || data.ACTION == "DTL") {
       if (!selectRecords.length) {
-        return proxy.$message.warning("请先选择数据再操作");
+        return proxy.$modal.msgError("请先选择数据再操作");
       }
       isGetDetail.value = true;
     } else {
       isGetDetail.value = false;
     }
     isDetail.value = data.ACTION == "DTL";
-  console.log("🚀 ~ handleEvent ~ selectRecords:", selectRecords)
 
     currentData2.value = selectRecords;
-    console.log("🚀 ~ handleEvent ~ currentData2.value:", currentData2.value)
-    
     modalConfig.modalVisible = true;
     modalConfig.pageTitle = data.VNAME;
     formID.value = {
       MODULEID: data.PK_MODULE,
       PAGEID: data.PK_PAGE,
     };
-    console.log('执行到了这里',data)
-
   } else if (data.VTYPE == 3) {
     //  选中数据并提交
     let dataChoose = props.currentData;
 
     if (!dataChoose || !dataChoose.length) {
-      return proxy.$message.warning("请先选择数据再操作");
+      return proxy.$modal.msgError("请先选择数据再操作");
     }
 
     if (data.ISTWOSURE == 1) {
@@ -448,7 +446,7 @@ function evilFn(row, fn) {
   return Fn(proxy);
 }
 
-defineExpose({ openDeatil,handleEvent});
+defineExpose({ openDeatil, handleEvent });
 </script>
 
 <style lang="scss" scoped>
