@@ -326,8 +326,8 @@
                       <span>{{ scope.row.BILLSTATUS == 0 ? '未确认' : '已确认' }}</span>
                     </template>
                   </el-table-column>
-                  <el-table-column prop="CARRIERNAME" label="报名单位" />
-                  <el-table-column prop="CREATIONTIME" label="报名时间" />
+                  <el-table-column prop="CARRIERNAME" show-overflow-tooltip  label="报名单位" />
+                  <el-table-column prop="CREATIONTIME" show-overflow-tooltip  label="报名时间" />
                   <el-table-column prop="CREATORNAME" label="报名用户" />
                   <el-table-column prop="APPROVER" label="确认人" />
                   <el-table-column prop="APPROVERTIME" label="确认时间" />
@@ -373,19 +373,19 @@
                   @selection-change="handleSelectionChange">
                   <el-table-column type="selection" width="50" fixed />
                   <el-table-column prop="RANK" label="排名" width="55" />
-                  <el-table-column prop="CARRIERNAME" width="140" label="出价单位" />
+                  <el-table-column prop="CARRIERNAME" width="140" show-overflow-tooltip label="出价单位" />
                   <el-table-column prop="CONTACTTEL" width="110" label="联系方式" v-if="queryLeftForm.BILLSTATUS == 4" />
                   <el-table-column prop="BIDPRICE" label="出价金额" />
                   <el-table-column prop="EXPECTVALUE" label="出量" />
                   <el-table-column prop="UIPADDRESS" width="120" label="IP地址" />
-                  <el-table-column prop="BIDADDRESS" width="120" label="定位信息" />
-                  <el-table-column prop="BIDTIME" width="140" label="出价时间" />
+                  <el-table-column prop="BIDADDRESS" width="120"  show-overflow-tooltip  label="定位信息" />
+                  <el-table-column prop="BIDTIME" width="140"  show-overflow-tooltip  label="出价时间" />
                   <el-table-column prop="IS_BID" label="中标" v-if="queryLeftForm.BILLSTATUS == 6">
                     <template #default="scope">
                       <span>{{ scope.row.IS_BID == 0 ? '否' : scope.row.IS_BID == 1 ? '是' : '' }}</span>
                     </template>
                   </el-table-column>
-                  <el-table-column prop="MATERIALNAME" label="物料" />
+                  <el-table-column prop="MATERIALNAME" label="物料" width="100" />
                   <el-table-column prop="TRUSTNUM" label="分配量" width="140">
                     <template #default="scope">
                       <span v-if="queryLeftForm.BILLSTATUS == 6">{{ scope.row.TRUSTNUM }}</span>
@@ -393,7 +393,7 @@
                         clearable />
                     </template>
                   </el-table-column>
-                  <el-table-column prop="SURETIME" label="中标时间" />
+                  <el-table-column prop="SURETIME" label="中标时间" width="140"  show-overflow-tooltip  />
                   <el-table-column prop="SURENAME" width="130" label="中标确认人" />
                 </el-table>
               </div>
@@ -428,8 +428,8 @@
               <span>{{ scope.row.BILLSTATUS == 0 ? '未确认' : '已确认' }}</span>
             </template>
           </el-table-column>
-          <el-table-column prop="CARRIERNAME" label="报名单位" />
-          <el-table-column prop="CREATIONTIME" label="报名时间" />
+          <el-table-column prop="CARRIERNAME" show-overflow-tooltip label="报名单位" />
+          <el-table-column prop="CREATIONTIME" show-overflow-tooltip label="报名时间" />
           <el-table-column prop="CREATORNAME" label="报名用户" />
           <el-table-column prop="APPROVER" label="确认人" />
           <el-table-column prop="APPROVERTIME" label="确认时间" />
@@ -889,8 +889,11 @@ const clickCommonBtn = (btn) => {
 
 const checkCertification = (val) => {
   let btn = allPageCon.value.BUTTON.filter(ele=>ele.BTNTITLE=='checkCertification')[0]
-  btn.ACTIONADDRESS = btn.ACTIONADDRESS.concat(`?PK_CARRIER=${val.BILLNO}`)
-  topBtnRef.value.handleEvent(btn, [detailNoDynamic.value])
+  // btn.ACTIONADDRESS = btn.ACTIONADDRESS.concat(`?PK_CARRIER=${val.BILLNO}`)
+  let data = {
+    BILLNO:val.BILLNO
+  }
+  topBtnRef.value.handleEvent(btn, [data])
 }
 
 
