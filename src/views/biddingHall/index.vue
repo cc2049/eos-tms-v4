@@ -371,8 +371,8 @@
               <div class="mt10">
                 <el-table :data="bidRunList" border style="width: 100%" :span-method="arraySpanMethod"
                   @selection-change="handleSelectionChange">
-                  <el-table-column type="selection" width="55" fixed />
-                  <el-table-column prop="RANK" label="排名" />
+                  <el-table-column type="selection" width="50" fixed />
+                  <el-table-column prop="RANK" label="排名" width="55" />
                   <el-table-column prop="CARRIERNAME" width="140" label="出价单位" />
                   <el-table-column prop="CONTACTTEL" width="110" label="联系方式" v-if="queryLeftForm.BILLSTATUS == 4" />
                   <el-table-column prop="BIDPRICE" label="出价金额" />
@@ -380,7 +380,7 @@
                   <el-table-column prop="UIPADDRESS" width="120" label="IP地址" />
                   <el-table-column prop="BIDADDRESS" width="120" label="定位信息" />
                   <el-table-column prop="BIDTIME" width="140" label="出价时间" />
-                  <el-table-column prop="IS_BID" label="中标">
+                  <el-table-column prop="IS_BID" label="中标" v-if="queryLeftForm.BILLSTATUS == 6">
                     <template #default="scope">
                       <span>{{ scope.row.IS_BID == 0 ? '否' : scope.row.IS_BID == 1 ? '是' : '' }}</span>
                     </template>

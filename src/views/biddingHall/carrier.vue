@@ -523,7 +523,7 @@ const getDetailNoDynamic = () => {
 const noticInfo = ref({})
 const getNoticInfo = () => {
     const protData = {
-        PK_PROJECT: menuVal.value,
+        BILLNO: menuVal.value,
     }
     getNoticDetail(protData).then((res) => {
         noticInfo.value = res.RESULT || {}
