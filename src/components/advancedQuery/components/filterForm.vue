@@ -33,8 +33,12 @@
 
     <!-- <div style="width: 260px"> -->
     <div style="width: 170px">
+      <template v-if="showDateType == '0' || showDateType == '1'">
+        <el-input v-model="formData.DEFAULTVAL" style="width: 100%" placeholder="请输入" :disabled="showDateType == '0'?true:false"
+          type="number" />
+      </template>
       <!-- ExDate 日期选择 -->
-      <template v-if="currentConfig.CONTROLS == 'ExDate'">
+      <template v-else-if="currentConfig.CONTROLS == 'ExDate'">
         <el-date-picker v-model="formData.DEFAULTVAL" clearable style="width: 100%" placeholder="请选择"
           value-format="YYYY-MM-DD" />
       </template>
@@ -156,6 +160,9 @@
 import { watch } from "vue";
 import { getPageConfig, getTableData } from "@/api/system/page";
 import { trace } from "mathjs";
+// import { getDicts } from '@/api/system/dict'
+const { proxy } = getCurrentInstance();
+const { dateQueryType } = proxy.useDict("dateQueryType");
 
 const emit = defineEmits(["update:formData", "changeFilter"]);
 
@@ -222,6 +229,19 @@ watch(
 //   console.log(value)
 //   setDataArrs()
 // }, { immediate: true })
+
+const showDateType = ref(null)
+watch(() => props.formData.QUERYTYPE, value => {
+  let newData = dateQueryType.value.filter(ele => ele.VALUE == value)
+  if (newData.length) {
+    if (newData[0].LABEL.includes('-0')) {
+      showDateType.value = '0'
+    } else if (newData[0].LABEL.includes('-1')) {
+      showDateType.value = '1'
+    }
+  }
+})
+
 
 // // 枚举数据
 // const EnumData = ref({});
