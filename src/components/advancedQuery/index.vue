@@ -253,13 +253,14 @@ const callAddition = () => {
       QRYCONT: ele.QRYCONT,
       QRYPRE: ele.QRYPRE,
       QRYSUF: ele.QRYSUF,
-      SORTCODE:index
+      SORTCODE:index,
+      VTYPE:0,
     }
   })
 
   const protData = {
     BILLNO: chooseRadioVal.value, // 方案主键
-    VTYPE:0,
+    // VTYPE:0,
     QUERYS,
     ...MenuID.value,
   };

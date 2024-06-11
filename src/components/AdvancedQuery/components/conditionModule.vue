@@ -160,12 +160,13 @@ const confirm = () => {
             QRYCONT: ele.QRYCONT,
             QRYPRE: ele.QRYPRE,
             QRYSUF: ele.QRYSUF,
-            SORTCODE:index
+            SORTCODE:index,
+            VTYPE:1,
         }
     })
     const protData = {
         BILLNO: props.choosePlanObj.BILLNO, // 方案主键
-        VTYPE:1,
+        // VTYPE:1,
         QUERYS,
         ...MenuID.value,
     };
