@@ -16,6 +16,8 @@
       :sort-config="{ showIcon: false }" 
       :footer-method="footerMethod" 
       :row-class-name="rowClassName" 
+      footer-row-class-name="footerRowClassName"
+      footer-cell-class-name="footerCellClassName"
       @toggle-row-expand="toggleExpandChangeEvent" 
       @sort-change="sortChange" 
       @radio-change="radioChangeEvent"
@@ -1136,6 +1138,14 @@ defineExpose({
 :deep(.mytable-scrollbar .vxe-body--row .cell-active) {
   box-shadow: inset 0 0 0 2px var(--vxe-primary-color);
 }
+.mytable-scrollbar:deep() .footerRowClassName{
+  background-color: #f5f5f5!important;
+}
+.mytable-scrollbar:deep() .footerCellClassName{
+  // background-color: #f5f5f5!important;
+  background-image: none !important;
+}
+
 /* // 移除vxtable  可编辑表格的 编辑图标 */
 .vxe-header--column .vxe-cell--edit-icon {
   display: none;
