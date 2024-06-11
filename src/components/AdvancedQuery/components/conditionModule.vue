@@ -70,7 +70,7 @@ const currentQueryList = ref([])
 const newFilterArr = ref([])
 
 watch(() => props.filterArr, value => {
-    console.log('执行了监听 filterarr')
+    // console.log('执行了监听 filterarr')
     newFilterArr.value = value
     currentQueryList.value = value.map(ele => {
         if (ele.BILLNO) {

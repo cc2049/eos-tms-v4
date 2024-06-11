@@ -230,11 +230,7 @@ watch(
 
       } else {
         EnumArr.value = JSON.parse(value.OTHER);
-
       }
-
-
-      // console.log("🚀 ~ watch ~ EnumArr.value :", EnumArr.value)
     }
   },
   { immediate: true }
