@@ -295,7 +295,7 @@
                                     <el-table-column prop="RANK" label="出价次数" />
                                     <el-table-column prop="BIDPRICE" label="出价金额" />
                                     <el-table-column prop="EXPECTVALUE" label="出量" />
-                                    <el-table-column prop="BIDTIME" label="出价时间" />
+                                    <el-table-column prop="BIDTIME" show-overflow-tooltip  label="出价时间" />
                                     <template v-if="queryLeftForm.BILLSTATUS == 6">
                                         <el-table-column prop="IS_BID" label="中标">
                                             <template #default="scope">
@@ -310,7 +310,7 @@
                                                     }}</span>
                                             </template>
                                         </el-table-column>
-                                        <el-table-column prop="SURETIME" label="中标时间" />
+                                        <el-table-column show-overflow-tooltip prop="SURETIME" label="中标时间" />
                                         <el-table-column prop="SURENAME" width="130" label="中标确认人" />
                                     </template>
                                 </el-table>

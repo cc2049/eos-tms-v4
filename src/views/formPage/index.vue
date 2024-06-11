@@ -130,8 +130,18 @@ function handleBtnEvent(btn) {
   let MenuID = { MODULEID: btn.PK_MODULE, PAGEID: btn.PK_PAGE };
   eosFormRef.value.validate().then((valid) => {
     if (valid) {
-      let sdata = { ...formData.value, ...MenuID, ...params };
-      submitEvent(URL, sdata);
+
+      if(btn.BTNTITLE == 'getCurrentData'){  // 竞价大厅货主端的发布公告中提交按钮要的参数
+        let sdata = { ...formData.value, ...MenuID, ...params,PK_PROJECT:props.currentData[0].BILLNO,PROJECTNAME: props.currentData[0].VNAME };
+        submitEvent(URL, sdata);
+        
+      }else{
+        let sdata = { ...formData.value, ...MenuID, ...params };
+        submitEvent(URL, sdata);
+
+      }
+
+
     }
   });
 }
