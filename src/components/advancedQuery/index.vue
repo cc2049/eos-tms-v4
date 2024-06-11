@@ -92,9 +92,11 @@ const props = defineProps({
 const showModal = ref(false);
 const binSize = computed(() => {
   const windowWidth = document.documentElement.clientWidth;
+  // let val = (windowWidth - 20 - 20 - 50 - 165) / 520;
   let val = (windowWidth - 20 - 20 - 50 - 165) / 520;
   let newVal = Math.floor(val);
-  return 520 * newVal;
+  // return 520 * newVal;
+  return 430 * newVal;
 });
 
 const openShowModal = () => {
