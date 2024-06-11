@@ -119,7 +119,7 @@ const clickRadio = (item) => {
   let query = {
     ...MenuID.value,
     PKBILLNO: item?.BILLNO,
-    VTYPE:0
+    VTYPE:'0'
   };
   // 查询方案里面的值
   axiosGet("/sys/queryprogUserDtl/getSubList", query).then((res) => {
@@ -254,7 +254,7 @@ const callAddition = () => {
       QRYPRE: ele.QRYPRE,
       QRYSUF: ele.QRYSUF,
       SORTCODE:index,
-      VTYPE:0,
+      VTYPE:'0',
     }
   })
 

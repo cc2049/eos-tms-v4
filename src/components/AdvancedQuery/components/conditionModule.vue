@@ -161,7 +161,7 @@ const confirm = () => {
             QRYPRE: ele.QRYPRE,
             QRYSUF: ele.QRYSUF,
             SORTCODE:index,
-            VTYPE:1,
+            VTYPE:'1',
         }
     })
     const protData = {

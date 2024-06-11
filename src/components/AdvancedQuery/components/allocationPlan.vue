@@ -164,6 +164,7 @@ const clickLeftPlan = (item) => {
     const protData = {
         PKBILLNO: item.BILLNO,
         ...MenuID.value,
+        VTYPE:'1'
     }
     getSubList(protData).then((res) => {
        conditionModuleList.value = res.RESULT
