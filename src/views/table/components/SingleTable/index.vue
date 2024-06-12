@@ -2,7 +2,7 @@
  * @Author: cc2049
  * @Date: 2024-04-28 13:10:44
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-06-11 09:41:32
+ * @LastEditTime: 2024-06-12 18:11:19
  * @Description: 简介
 -->
 <template v-if="pageConfig">
@@ -15,7 +15,7 @@
     <!-- 左侧树模块 -->
     <template v-if="pageConfig?.hasTree">
       <div class="tree-wrap" v-show="showZtree">
-        <Ztree :treeData :height="tableCFG.height - 50 " :defaultExpandedKeys="defaultExpandedKeys" @treeClick="treeClick" />
+        <Ztree :treeData :height="tableCFG.height - 50 " :defaultExpandedKeys="defaultExpandedKeys" @treeClick="treeClick" @treeBtnEvent="treeBtnEvent" />
       </div>
       <div class="splitbar-wrap">
         <div class="btn-icon left" @click="handleSplitbar('left')" v-if="showZtree">
@@ -40,7 +40,8 @@
 
       <div class="main-sub-table flex">
         <div class="left-table " :style="{width: SubLayoutConfig.subLayout==1? SubLayoutConfig.subLayoutLeft : '100%'}">
-          <Vxtable ref="VxtableRef" class="bg-white" :tableCFG="tableCFG" :totalData="totalData" :tableData="tableData" :sourceTableData="sourceTableData" @change="tableChange" @dragRow="dragTableRow" @queryEvent="queryEvent" @resetConfig="resetConfig" @filterNameEvent="filterNameEvent" @dbClick="dbClickTable">
+          <Vxtable ref="VxtableRef" class="bg-white" :tableCFG="tableCFG" :totalData="totalData" :tableData="tableData" :sourceTableData="sourceTableData" @change="tableChange" @dragRow="dragTableRow" @queryEvent="queryEvent" @resetConfig="resetConfig" @filterNameEvent="filterNameEvent"
+            @dbClick="dbClickTable">
           </Vxtable>
         </div>
         <div class="right-table ml-6" :style="{width: SubLayoutConfig.subLayoutLeft }" v-if="SubLayoutConfig.subLayout==1 && SubTableConfig.length">
@@ -80,7 +81,7 @@ import { getUrlParams } from "@/utils";
 import EosTabs from "@/components/EosTabs/index.vue";
 import SubTable from "./SubTable.vue";
 const emit = defineEmits(["openCustemPage", "dbClick"]);
-const proxy = getCurrentInstance();
+const { proxy } = getCurrentInstance();
 
 const showTablePage = ref(true);
 
@@ -156,13 +157,12 @@ const changeTab = (e) => {
   tableCFG.value = e.data.tableCFG;
   setPageConfig();
   getTableData();
-  // console.log(123, e);
 };
 
 // 表格内部的多选事件，顶部筛选排序事件, 超链接事件
 
 function tableChange(data) {
-  // console.log("tableChange", data.data);
+  // console.log("tableChange", data);
   if (data.clicktype == "sort") {
     pageInfo.sortName = data.data.sortBy;
     pageInfo.sortOrder = data.data.sort;
@@ -191,32 +191,17 @@ function tableChange(data) {
     }
     // let expandRow = getRowExpandRecords()
   }
-  // if (data.clicktype == "openLink") {
-  //   // 超链接点击事件
-  //   formModalTableCFG.value.tableBillNo = data.data.BILLNO;
 
-  //   currentData.value = data.data;
-
-  //   if (data.linkCFG.includes("?") && data.linkCFG.includes(":")) {
-  //     // 如果配置了三元运算
-  //     let currentLinkCFG = getEvalValue(data.data, data.linkCFG);
-  //     let getLinkBtn = pageConfig.initButton.filter((i) => {
-  //       return i.BILLNO == currentLinkCFG;
-  //     });
-  //     // currentData.value = data.data;
-  //     getLinkBtn.length
-  //       ? handelEvent({ data: getLinkBtn[0], row: data.data })
-  //       : null;
-  //   } else {
-  //     let getLinkBtn = pageConfig.initButton.filter((i) => {
-  //       return i.BILLNO == data.linkCFG;
-  //     });
-  //     // currentData.value = data.data;
-  //     getLinkBtn.length
-  //       ? handelEvent({ data: getLinkBtn[0], row: data.data })
-  //       : null;
-  //   }
-  // }
+  // 超链接点击事件
+  if (data.clicktype == "openLink") {
+    currentData.value = [data.data];
+    let getLinkBtn = topButton.value.filter((i) => {
+      return i.BILLNO == data.linkCFG;
+    });
+    getLinkBtn.length
+      ? topButtonRef.value.handleEvent( getLinkBtn[0],  currentData.value)
+      : null;
+  }
   // if (data.clicktype == "openDrawer") {
   //   colDrawer.value = true;
   // } else {
@@ -232,16 +217,25 @@ function tableChange(data) {
 function reloadTableData() {
   pageInfo.currentPage = 1;
   queryJSON.value.PAGENUM = 1;
-  getTableData();
+  queryJSON.value.PK_CLASS = "";
+  if (pageConfig.value.hasTree) {
+    getTreeData();
+  } else {
+    getTableData();
+  }
 }
 const advanceQueryRef = ref(null);
 function handleTopBtn(data) {
   if (data.type == "openCustomPlan") {
-    advanceQueryRef.value.clostPopver();  // 关闭设置的弹窗
+    advanceQueryRef.value.clostPopver(); // 关闭设置的弹窗
     advanceQueryRef.value.openShowModal();
   } else if (data.type == "openCustemPage") {
-    console.log('handleTopBtn', data);
-    emit("openCustemPage", { data: data, path: data.btnConf.PAGEPATH, row: currentData.value });
+    console.log("handleTopBtn", data , currentData.value);
+    emit("openCustemPage", {
+      data: data,
+      path: data.btnConf.PAGEPATH,
+      row: currentData.value,
+    });
   } else {
     handelEvent({ data: data, row: currentData.value });
   }
@@ -279,7 +273,15 @@ const dragTableRow = ({ row, $rowIndex }) => {
   console.log(row, $rowIndex);
 };
 
+const ztreeQUERYS = ref({
+  FIELD: "PK_CLASS",
+  QUERYTYPE: "EqualTo",
+  DEFAULTVAL: "",
+  SORTCODE: "",
+});
+
 const getTableData = () => {
+  // console.log(999, tableCFG.value);
   tableCFG.value.loading = true;
   queryJSON.value.PAGENUM = pageInfo.currentPage;
   queryJSON.value.SORTNAME = pageInfo.sortName;
@@ -290,6 +292,16 @@ const getTableData = () => {
     queryJSON.value.PAGEID = activeTabs.value.pageID.PAGEID;
   }
 
+  if (pageConfig.value.hasTree) {
+    ztreeQUERYS.value.DEFAULTVAL = queryJSON.value.PK_CLASS || "";
+    let hasPK_CLASS = queryJSON.value.QUERYS?.findIndex(
+      (item) => item.FIELD == "PK_CLASS"
+    );
+    hasPK_CLASS < 0
+      ? queryJSON.value.QUERYS?.push(ztreeQUERYS.value)
+      : (queryJSON.value.QUERYS[hasPK_CLASS] = ztreeQUERYS.value);
+  }
+
   axiosGet(queryURL.value, queryJSON.value)
     .then((res) => {
       currentData.value = [];
@@ -298,9 +310,9 @@ const getTableData = () => {
         tableData.value = res.RESULT;
         pageInfo.totalResult = res.RESULT.length;
       } else {
-        const { RECORDS, TOTAL ,TOTALDATA } = res.RESULT;
+        const { RECORDS, TOTAL, TOTALDATA } = res.RESULT;
         tableData.value = RECORDS;
-        totalData.value = TOTALDATA ? JSON.parse(TOTALDATA) : {}
+        totalData.value = TOTALDATA ? JSON.parse(TOTALDATA) : {};
         pageInfo.totalResult = TOTAL;
       }
       sourceTableData.value = JSON.parse(JSON.stringify(tableData.value));
@@ -336,12 +348,16 @@ function getTreeData() {
 const queryURL = ref(null);
 const queryJSON = ref({});
 const topButton = ref([]);
+const treeButton = ref([]);
 const multiMainTable = ref([]);
 
 const { getConfig } = useTableConifg(props.menuID);
 
+// 重置页面相关配置
+
 const setPageConfig = () => {
   topButton.value = pageConfig.value.topButton;
+  treeButton.value = pageConfig.value.treeButton;
   queryURL.value = pageConfig.value.queryUrl;
   queryJSON.value = pageConfig.value.queryJson;
   customPlan.value = pageConfig.value.customPlan;
@@ -350,6 +366,13 @@ const setPageConfig = () => {
   let getConfigPager = tableCFG.value.pagerConfig;
   pageInfo.pageSize = getConfigPager.pageSize || 10;
   queryJSON.value.PAGESIZE = pageInfo.pageSize;
+  queryJSON.value.QUERYS = [];
+  let customPlanDefa = pageConfig.value.customPlan.filter(
+    (i) => i.ISDEFAULT == "1"
+  );
+  queryJSON.value.PROGRAMID = customPlanDefa.length
+    ? customPlanDefa[0].BILLNO
+    : "";
   nextTick(() => {
     resetHeight();
   });
@@ -371,7 +394,6 @@ watch(
           tableCFG.value = pageConfig.value.tableCFG;
         }
         setPageConfig();
-
         if (pageConfig.value.hasTree) {
           getTreeData();
         } else {
@@ -411,7 +433,7 @@ function queryHeight() {
 function handleCustomPlan(data) {
   queryJSON.value.PROGRAMID = data.PROGRAMID;
   queryJSON.value.QUERYS = data.QUERYS || [];
-  pageConfig.value.hasTree ? getTreeData() : getTableData();
+  pageConfig.value?.hasTree ? getTreeData() : getTableData();
 }
 
 function resetConfig(data) {
@@ -424,6 +446,34 @@ function resetConfig(data) {
 
   // VxtableRef.value.refreshColumn();
   console.log("resetConfig", tableCFG.value.tableColumns);
+}
+
+/*
+ * 左侧树按钮点击事件
+ */
+function treeBtnEvent(data) {
+  let addBtn = treeButton.value.filter((i) => i.ACTION == "ADD");
+  let editBtn = treeButton.value.filter((i) => i.ACTION == "EDIT");
+  let deleteBtn = treeButton.value.filter((i) => i.ACTION == "DELETE");
+  let btnCfg = null;
+
+  if (data.type > 1 && !queryJSON.value.PK_CLASS) {
+    return proxy.$modal.msgError("请先选择分组");
+  }
+  if (data.type == 1) {
+    if (!addBtn.length) return proxy.$modal.msgError("您没有权限");
+    btnCfg = addBtn[0];
+  } else if (data.type == 2) {
+    if (!editBtn.length) return proxy.$modal.msgError("您没有权限");
+    btnCfg = editBtn[0];
+  } else if (data.type == 3) {
+    if (!deleteBtn.length) return proxy.$modal.msgError("您没有权限");
+    btnCfg = deleteBtn[0];
+    btnCfg.VTYPE = 3;
+  }
+  topButtonRef.value.handleEvent(btnCfg, [
+    { BILLNO: queryJSON.value.PK_CLASS },
+  ]);
 }
 
 function dbClickTable(data) {

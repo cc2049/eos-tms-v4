@@ -2,7 +2,7 @@
  * @Author: cc2049
  * @Date: 2024-05-08 14:49:22
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-05-14 09:27:21
+ * @LastEditTime: 2024-06-12 16:58:29
  * @Description: 简介
 -->
     
@@ -16,13 +16,13 @@
       </el-input>
     </div>
     <div class="tree-btn">
-      <div class="tree-btn-item">
+      <div class="tree-btn-item" @click="handleBtn(1)">
         新增分组
       </div>
-      <div class="tree-btn-item">
+      <div class="tree-btn-item" @click="handleBtn(2)">
         编辑分组
       </div>
-      <div class="tree-btn-item">
+      <div class="tree-btn-item" @click="handleBtn(3)">
         删除分组
       </div>
     </div>
@@ -32,9 +32,7 @@
                 label: 'LABEL',
                 children: 'CHILDREN',
                 disabled: 'disabled',
-              }" node-key="BILLNO" 
-              :default-expanded-keys="defaultExpandedKeys"
-              :filter-node-method="filterNode" ref="treeRef" highlight-current @node-click="handleNodeClick">
+              }" node-key="BILLNO" :default-expanded-keys="defaultExpandedKeys" :filter-node-method="filterNode" ref="treeRef" highlight-current @node-click="handleNodeClick">
       <template #default="{ data }">
         <TextOverflow :content="` ${data.LABEL}`" />
       </template>
@@ -59,17 +57,22 @@ const props = defineProps({
   },
 });
 
-
-
 const treeKeyword = ref("");
 
-const emit = defineEmits(["treeClick"]);
+const emit = defineEmits(["treeClick","treeBtnEvent"]);
 
 const { proxy } = getCurrentInstance();
 
+const selectTree = ref(null)
+
 /** 节点点击事件  */
 const handleNodeClick = (data) => {
+  data.BILLNO = data.VALUE;
   emit("treeClick", data);
+};
+
+const handleBtn = (type) => {
+  emit("treeBtnEvent", {type});
 };
 
 const treeRef = ref(null);

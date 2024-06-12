@@ -2,7 +2,7 @@
  * @Author: cc2049
  * @Date: 2024-06-03 15:39:57
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-06-03 16:33:34
+ * @LastEditTime: 2024-06-12 17:43:47
  * @Description: 简介
 -->
 
@@ -63,7 +63,7 @@
 <script setup>
 import { setSuffix } from "@/utils";
 import { selectDictLabel } from "@/utils/ruoyi";
-
+const { proxy } = getCurrentInstance();
 const props = defineProps({
   config: {
     type: Object,
@@ -94,6 +94,12 @@ function setArrToDictLabel(Arr, value) {
   } catch (error) {
     return "";
   }
+}
+
+
+// 点击超链接事件
+function openLink(cf, row) {
+  proxy.$emit("openLink", { cf, row });
 }
 </script>
 

@@ -53,7 +53,7 @@
               <Header :column="column" :config="config" :tableData="sourceTableData" :sortCFG :tableCFG="tableCFG" @filterEvent="filterEvent" @handleSortEvent="headerCellClickEvent" @rightClick="rightClickEvent" @setColShowEvent="setColShowEvent" />
             </template>
             <template #default="{ row }">
-              <Content :config :row />
+              <Content :config :row @openLink="openLink" />
             </template>
           </vxe-column>
         </template>
@@ -640,7 +640,8 @@ function rowClick({ row, column, triggerCheckbox, rowIndex }) {
   }
 }
 // 点击超链接事件
-function openLink(cf, row) {
+function openLink(data) {
+  const { cf, row} = data
   if (cf.OTHER) {
     let giveParentData = {
       clicktype: "openLink",

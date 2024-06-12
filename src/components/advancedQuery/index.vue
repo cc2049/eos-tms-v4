@@ -291,7 +291,7 @@ const getPlanList = () => {
           ? newArr[0].BILLNO
           : myPlanList.value[0].BILLNO
 
-        clickRadio(newArr.length ? newArr[0] : myPlanList.value[0])
+        // clickRadio(newArr.length ? newArr[0] : myPlanList.value[0])
       }
 
 

@@ -2,7 +2,7 @@
  * @Author: cc2049
  * @Date: 2024-04-28 15:12:29
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-06-11 09:12:49
+ * @LastEditTime: 2024-06-12 17:56:00
  * @Description: 简介
 -->
 
@@ -250,7 +250,7 @@ function refreshTable() {
 function handleEvent(data, row) {
   let selectRecords = row?.length ? row : props.currentData;
   activeBtn.value = data;
-  console.log("handelEvent22", data, row, selectRecords);
+  console.log("handelEvent22", data, selectRecords);
 
   // 表单中的按钮事件直接调
   if (props.sourceType == 2) {
@@ -261,8 +261,7 @@ function handleEvent(data, row) {
   if (data.RATIO) {
     let WWHH =
       data.RATIO != 1 ? data.RATIO.split("*") : data.PAGEPATH.split("*");
-  } else {
-  }
+  } 
 
   // 验证是否需要选择数据
   if (data.ISCHOOSE && data.ISCHOOSE * 1 > 0 && !selectRecords.length) {
@@ -296,7 +295,7 @@ function handleEvent(data, row) {
     };
   } else if (data.VTYPE == 3) {
     //  选中数据并提交
-    let dataChoose = props.currentData;
+    let dataChoose = selectRecords;
 
     if (!dataChoose || !dataChoose.length) {
       return proxy.$modal.msgError("请先选择数据再操作");
@@ -392,13 +391,9 @@ function submitByBtn(btn, data) {
     sdata = null;
   if (btn.ACTION == "DELETE" || btn.ISCHOOSE == 2) {
     let arr = [];
-    if (btn.VTYPE == 20) {
-      arr.push(treeNode.value.VALUE);
-    } else {
-      arr = props.currentData.map((i) => {
-        return i.BILLNO;
-      });
-    }
+    arr = data.map((i) => {
+      return i.BILLNO;
+    });
     sdata = { data: arr };
   } else {
     // sdata = { ...data, ...params };
