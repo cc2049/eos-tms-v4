@@ -442,11 +442,6 @@ import { getPageConfig, getTableData } from "@/api/system/page";
 import countDown from "@/components/countDown/index";
 import axios from "axios";
 
-import {
-    getSignList, getBidSignCount, getCarrierDetail
-    , getBidRunList, submitApprove, forceEnd, cancelSign, confirmSign, getCargoEndList
-    , getBidRecordCarrierList, cancellation, bidWin
-} from "#/system/biddingHall";
 
 const robOrderForm = ref({
     PK_ROBE: '',
@@ -691,65 +686,7 @@ const queryApplyInfo = () => {
         })
 }
 
-const changeApplyStatus = (e) => {
-    queryApplyInfo(menuVal.value)
-}
-const applyInfoData = ref({})
-const getGetBidSignCount = (PK_PROJECT) => {
-    const protData = {
-        PK_PROJECT: PK_PROJECT,
-        BILLSTATUS: applyStatus.value,
-    }
-    getBidSignCount(protData).then((res) => {
-        applyInfoData.value = res.RESULT
-    });
-}
 
-const PK_CARRIER = ref('')
-const IS_BID = ref('')
-const getGetBidRunList = (PK_PROJECT) => {
-    const protData = {
-        // PK_PROJECT,
-        PK_PROJECT,
-        PK_CARRIER: PK_CARRIER.value || '',
-        IS_BID: IS_BID.value || ''
-    }
-    bidRunList.value = []
-
-    if (queryLeftForm.value.BILLSTATUS == 6) {  // 已结束
-        getCargoEndList(protData).then((res) => {
-            bidRunList.value = res.RESULT
-            listCount.value = null
-            cellList.value = []
-            computeCell(bidRunList.value)
-        }).catch(() => {
-            listCount.value = null
-            cellList.value = []
-            bidRunList.value = []
-        });
-    } else {
-        getBidRunList(protData).then((res) => {
-            bidRunList.value = res.RESULT
-            listCount.value = null
-            cellList.value = []
-            computeCell(bidRunList.value)
-        }).catch(() => {
-            listCount.value = null
-            cellList.value = []
-            bidRunList.value = []
-        });
-    }
-
-}
-const carrierList = ref([])
-const querygetBidRecordCarrierList = () => {
-    const protData = {
-        PK_PROJECT: detailNoDynamic.value.BILLNO
-    }
-    getBidRecordCarrierList(protData).then((res) => {
-        carrierList.value = res.RESULT
-    });
-}
 
 const changePK_CARRIER = (e) => {
     queryApplyInfo()
@@ -758,84 +695,6 @@ const changePK_CARRIER = (e) => {
 
 const changeIS_BID = () => {
     queryApplyInfo()
-
-
-}
-
-const subCheck = () => {
-    const protData = {
-        BILLNO: menuVal.value,
-    }
-    submitApprove(protData).then((res) => {
-        proxy.$modal.msgSuccess(res.MESSAGE || "提交成功");
-        getPageList()
-    });
-
-}
-
-const constraintEnd = () => {
-    const protData = {
-        BILLNO: menuVal.value,
-    }
-    forceEnd(protData).then((res) => {
-        proxy.$modal.msgSuccess(res.MESSAGE || "提交成功");
-        getPageList()
-    });
-}
-
-const cancalSure = () => {
-    let BILLNO = applyInfoRefChooseList.value.map(ele => ele.BILLNO)
-    const protData = {
-        BILLNO,
-    }
-    cancelSign(protData).then((res) => {
-        proxy.$modal.msgSuccess(res.MESSAGE || "提交成功");
-        getPageList()
-    });
-}
-
-const confirmApply = () => {
-    let BILLNO = applyInfoRefChooseList.value.map(ele => ele.BILLNO)
-    const protData = {
-        BILLNO,
-    }
-    confirmSign(protData).then((res) => {
-        proxy.$modal.msgSuccess(res.MESSAGE || "提交成功");
-        getPageList()
-    });
-}
-
-const winBiddingArr = ref([])
-const handleSelectionChange = (val) => {
-    winBiddingArr.value = val
-}
-const winBidding = () => {
-    const protData = {
-        data: winBiddingArr.value,
-    }
-    bidWin(protData).then((res) => {
-        proxy.$modal.msgSuccess(res.MESSAGE || "提交成功");
-        getPageList()
-    });
-
-}
-
-const clickCancellation = () => {
-
-    const protData = {
-        data: winBiddingArr.value,
-    }
-    cancellation(protData).then((res) => {
-        proxy.$modal.msgSuccess(res.MESSAGE || "提交成功");
-        getPageList()
-    });
-
-
-}
-
-const clickApplyDetail = () => {
-    applyDetailModal.value = true
-    queryApplyInfo(menuVal.value)
 
 }
 
@@ -867,9 +726,6 @@ const getPermissDetail = () => {
         });
 };
 
-
-
-const positionData = ref({});
 
 const Verification = () => {
     if (timer.value) return
