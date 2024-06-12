@@ -1,16 +1,22 @@
-<!-- 竞价大厅 承运商 -->
+<!-- 抢单大厅 -->
 <template>
     <div class="manual-app">
         <el-row>
             <el-col :span="5">
                 <el-card class="box-card">
                     <div>
-                        <el-tabs v-model="queryLeftForm.BILLSTATUS" class="demo-tabs" @tab-change="handleClick">
+                        <el-tabs v-model="queryLeftForm.TAGSTATUS" class="demo-tabs" @tab-change="handleClick">
                             <template>
-                                <el-tab-pane label="全部" name="10"></el-tab-pane>
-                                <el-tab-pane label="已报名" name="3"></el-tab-pane>
-                                <el-tab-pane label="竞价中" name="4"></el-tab-pane>
-                                <el-tab-pane label="已结束" name="6"></el-tab-pane>
+                                <template v-if="userInfo.USERTYPE == 0">
+                                    <el-tab-pane label="未开始" name="1"></el-tab-pane>
+                                    <el-tab-pane label="抢单中" name="2"></el-tab-pane>
+                                    <el-tab-pane label="已结束" name="4"></el-tab-pane>
+                                </template>
+                                <template v-else>
+                                    <el-tab-pane label="全部" name="0"></el-tab-pane>
+                                    <el-tab-pane label="已抢单" name="3"></el-tab-pane>
+                                    <el-tab-pane label="已结束" name="4"></el-tab-pane>
+                                </template>
                             </template>
                         </el-tabs>
                     </div>
@@ -35,8 +41,8 @@
 
                             </div>
                             <!-- <div class="leftMenu-content">报名截止时间：{{ item.SIGNENDTIME }}</div> -->
-                            <div class="leftMenu-content">竞价开始时间：{{ item.BIDSTTIME }}</div>
-                            <div class="leftMenu-content">竞价截止时间：{{ item.BIDEDTIME }}</div>
+                            <div class="leftMenu-content">抢单开始时间：{{ item.ROBSTTIME }}</div>
+                            <div class="leftMenu-content">抢单截止时间：{{ item.ROBEDTIME }}</div>
                         </div>
                     </el-scrollbar>
                 </el-card>
@@ -46,12 +52,60 @@
                 <el-card class="box-card" v-if="detailNoDynamic.BILLNO">
                     <template #header>
                         <div class="tr">
-                            <el-button size="small" v-if="detailNoDynamic.BILLSTATUS == 3"
-                                @click="signBidding">标识竞价</el-button>
-                            <el-button size="small" v-if="detailNoDynamic.BILLSTATUS == 2" type="primary"
-                                @click="clickSign">报名</el-button>
-                            <el-button v-if="detailNoDynamic.BILLSTATUS > 3" size="small" type="primary"
-                                @click="noticInfoModal = true">查看公告</el-button>
+                            <!-- <el-button size="small" :type="btn.COLOR" 
+                v-for="(btn,btnIndex) in allPageCon.BUTTON" 
+                @click="clickCommonBtn(btn)"
+                :key="btn.BILLNO">{{ btn.VNAME }}</el-button> -->
+
+                            <!-- <TopButton :topButton="allPageCon.BUTTON" sourceType="2" @handleBtnEvent="clickCommonBtn"  /> -->
+                            <TopButton :isCurrentBtn="true" ref="topBtnRef" :currentData="[detailNoDynamic]"
+                                @reloadTableData="reloadTableData">
+                                <template #currentBtn>
+                                    <!-- 走了财旺的按钮方法 -->
+                                    <template v-for="(btn, btnIndex) in allPageCon.BUTTON" :key="btn.BILLNO">
+                                        <el-button v-if="setShowBtn(btn)" size="small" :type="btn.COLOR"
+                                            @click="clickCommonBtn(btn)">{{
+                btn.VNAME }}</el-button>
+                                    </template>
+
+                                    <!-- 走的自己写的 -->
+                                    <!-- <el-button size="small" v-if="detailNoDynamic.BILLSTATUS == 0" type="primary"
+                                        @click="subCheck">提交审核</el-button>
+                                    <el-popconfirm title="确定要结束?" @confirm="constraintEnd">
+                                        <template #reference>
+                                            <el-button size="small" type="danger"
+                                                v-if="detailNoDynamic.BILLSTATUS == 2 || queryLeftForm.BILLSTATUS == 5">强制结束</el-button>
+                                        </template>
+                                    </el-popconfirm>
+                                    <el-button size="small" :disabled="applyInfoRefChooseList.length > 0 ? false : true"
+                                        v-if="detailNoDynamic.BILLSTATUS == 2" @click="cancalSure">取消确认</el-button>
+                                    <el-button size="small" :disabled="applyInfoRefChooseList.length > 0 ? false : true"
+                                        type="primary" v-if="detailNoDynamic.BILLSTATUS == 2"
+                                        @click="confirmApply">确认报名</el-button>
+                                    <el-button size="small"
+                                        v-if="detailNoDynamic.BILLSTATUS == 5 || detailNoDynamic.BILLSTATUS == 6 || detailNoDynamic.BILLSTATUS == 7"
+                                        @click="clickApplyDetail">报名明细</el-button>
+                                    <el-button size="small" type="primary"
+                                        :disabled="winBiddingArr.length ? false : true"
+                                        v-if="detailNoDynamic.BILLSTATUS == 5" @click="winBidding">中标</el-button>
+                                    <el-button size="small"
+                                        v-if="detailNoDynamic.BILLSTATUS == 5 || detailNoDynamic.BILLSTATUS == 6 || detailNoDynamic.BILLSTATUS == 7"
+                                        :disabled="winBiddingArr.length ? false : true"
+                                        @click="clickCancellation">作废</el-button> -->
+                                </template>
+                            </TopButton>
+
+
+                            <!-- <el-button size="small" v-if="queryLeftForm.BILLSTATUS == 0">编辑</el-button> -->
+
+
+                            <!-- <el-button size="small"
+                  v-if="detailNoDynamic.BILLSTATUS == 2 || detailNoDynamic.BILLSTATUS == 5 || detailNoDynamic.BILLSTATUS == 6 || detailNoDynamic.BILLSTATUS == 7">查看公告</el-button> -->
+
+
+
+
+
                         </div>
                     </template>
                     <el-scrollbar :height="Hight">
@@ -66,22 +120,19 @@
                                     <div class="card-header-tag">
                                         <div class="card-header-tag-text">
                                             <!-- {{ BILLSTATUSList[detailNoDynamic.BILLSTATUS] || '暂无状态' }} -->
+                                            <!-- {{ queryLeftForm.BILLSTATUS == 6 ? detailNoDynamic.STATUSNAME : detailNoDynamic.STATUSNAME }} -->
                                             {{ chooseLeftData.STATUSNAME }}
                                         </div>
                                     </div>
-                                    <countDown ref="countDownRef" v-if="queryLeftForm.BILLSTATUS == 4"
-                                        :time="detailNoDynamic.BIDEDTIME" />
-                                    <!-- <countDown ref="countDownRef"
-                      v-if="bidInfo.BILLSTATUS == 5 || bidInfo.BILLSTATUS == 4 || bidInfo.BILLSTATUS == 3"
-                      :time="bidInfo.BILLSTATUS == 5 ? bidInfo.BIDENDTIME : bidInfo.BILLSTATUS == 4 ? bidInfo.BIDSTARTTIME : bidInfo.BILLSTATUS == 3 ? bidInfo.SIGNENDTIME : ''" /> -->
+                                    <countDown ref="countDownRef" :time="detailNoDynamic.ROBEDTIME" />
                                 </div>
                             </div>
                         </div>
                         <el-collapse v-model="activeName" class="">
                             <el-collapse-item name="1">
-                                <template #title>
+                                <!-- <template #title>
                                     <div class="commonSmallTitle">竞价信息</div>
-                                </template>
+                                </template> -->
                                 <div>
                                     <div class="cargoInfo">
                                         <div class="disflex mb-10">
@@ -127,7 +178,7 @@
                                                 <div v-for="item in detailNoDynamic.SUBLIST" :key="item.BILLNO"
                                                     class="disflex">
                                                     <div>{{ item.MATERIALNAME }}/</div>
-                                                    <div>{{ item.TWEIGHT }}</div>
+                                                    <div>{{ item.SPNUM }}</div>
                                                     <div>{{ item.VUNIT }}</div>
                                                 </div>
                                             </div>
@@ -140,7 +191,7 @@
                                             </el-col>
                                             <el-col :span="6">
                                                 <span>要求送达日期：</span>
-                                                <span class="cargoInfo-top-content">{{ detailNoDynamic.YQEDDATE
+                                                <span class="cargoInfo-top-content">{{ detailNoDynamic.YQSDDATE
                                                     }}</span>
                                             </el-col>
                                             <el-col :span="6">
@@ -161,193 +212,201 @@
                                             </el-col>
                                             <el-col :span="6">
                                                 <span>提供发票：</span>
-                                                <span class="cargoInfo-top-content">{{ detailNoDynamic.PRICECUT == 1 ?
+                                                <span class="cargoInfo-top-content">{{ detailNoDynamic.IS_INVOICE == 1 ?
                 '是' : '否'
                                                     }}</span>
                                             </el-col>
                                         </el-row>
+
+
                                         <el-row class=" mt10 pt-10" style="border-top: 1px dashed #ccc;">
                                             <el-col :span="12">
-                                                <span>竞价时间：</span>
-                                                <span class="cargoInfo-top-content">{{ detailNoDynamic.BIDSTTIME }} - {{
-                detailNoDynamic.BIDEDTIME
+                                                <span>抢单时间：</span>
+                                                <span class="cargoInfo-top-content">{{ detailNoDynamic.ROBSTTIME }} - {{
+                detailNoDynamic.ROBEDTIME
             }}</span>
                                             </el-col>
                                             <el-col :span="6">
-                                                <span>延期时长：</span>
-                                                <span class="cargoInfo-top-content">{{ detailNoDynamic.DELAYTIME
-                                                    }}分钟</span>
-                                            </el-col>
-                                            <el-col :span="6">
-                                                <span>报名确认：</span>
+                                                <span>抢单类型：</span>
                                                 <span class="cargoInfo-top-content">{{
-                IS_SIGNQRList[detailNoDynamic.IS_SIGNQR]
+                detailNoDynamic.VTYPE == 0 ? '司机抢单' : '承运商抢单'
             }}</span>
                                             </el-col>
-                                            <!-- <el-col :span="9">
-                        <span>车辆要求：</span>
-                        <span class="cargoInfo-top-content">dd</span>
-                      </el-col> -->
-                                            <el-col :span="12">
-                                                <span>报名时间：</span>
+                                            <el-col :span="6">
+                                                <span>运费价格：</span>
                                                 <span class="cargoInfo-top-content">{{
-                detailNoDynamic.SIGNSTTIME ? detailNoDynamic.SIGNSTTIME + ' - ' : ''
-            }}{{
-                    detailNoDynamic.SIGNEDTIME }}</span>
+                detailNoDynamic.TRANSPRICE
+            }}元</span>
                                             </el-col>
-                                            <el-col :span="6">
-                                                <span>保证金额：</span>
-                                                <span class="cargoInfo-top-content">{{ detailNoDynamic.BONDAMT
-                                                    }}元</span>
-                                            </el-col>
-                                            <el-col :span="6">
-                                                <span>运费上限：</span>
-                                                <span class="cargoInfo-top-content">{{ detailNoDynamic.FLOORPRICE
-                                                    }}元</span>
-                                            </el-col>
+
+
                                             <el-col :span="6">
                                                 <span>确标方式：</span>
-                                                <span class="cargoInfo-top-content">{{ detailNoDynamic.IS_SURE ==
-                1 ? '是' : '否'
+                                                <span class="cargoInfo-top-content">{{ detailNoDynamic.IS_SURE == 1 ?
+                '人工' : '自动'
                                                     }}</span>
                                             </el-col>
                                             <el-col :span="6">
-                                                <span>中标分配：</span>
-                                                <span class="cargoInfo-top-content">{{
-                DEVIDETYPEList[detailNoDynamic.DEVIDETYPE]
-            }}</span>
+                                                <span>结算周期：</span>
+                                                <span class="cargoInfo-top-content">{{ detailNoDynamic.SETTLECYCLE ==
+                0 ? '现结' : detailNoDynamic.SETTLECYCLE ==
+                    1 ? '7天' : detailNoDynamic.SETTLECYCLE ==
+                        2 ? '14天' : ''
+                                                    }}</span>
                                             </el-col>
-                                            <el-col :span="6">
-                                                <span>中标名次：</span>
-                                                <span class="cargoInfo-top-content">{{
-                WINNUMList[detailNoDynamic.WINNUM] }}</span>
-                                            </el-col>
-                                            <el-col :span="6" v-if="detailNoDynamic.WINNUM > 0">
-                                                <span>第一名量：</span>
-                                                <span class="cargoInfo-top-content">{{ detailNoDynamic.ONEZBNUM * 100
-                                                    }}%</span>
-                                            </el-col>
-                                            <el-col :span="6" v-if="detailNoDynamic.WINNUM > 1">
-                                                <span>第二名量：</span>
-                                                <span class="cargoInfo-top-content">{{ detailNoDynamic.TWOZBNUM * 100
-                                                    }}%</span>
-                                            </el-col>
-                                            <el-col :span="6" v-if="detailNoDynamic.WINNUM > 2">
-                                                <span>第三名量：</span>
-                                                <span class="cargoInfo-top-content">{{ detailNoDynamic.THREEZBNUM * 100
-                                                    }}%</span>
-                                            </el-col>
-                                            <el-col :span="6" v-if="detailNoDynamic.WINNUM > 3">
-                                                <span>第四名量：</span>
-                                                <span class="cargoInfo-top-content">{{ detailNoDynamic.FOURZBNUM * 100
-                                                    }}%</span>
-                                            </el-col>
-                                            <el-col :span="6" v-if="detailNoDynamic.WINNUM > 4">
-                                                <span>第五名量：</span>
-                                                <span class="cargoInfo-top-content">{{ detailNoDynamic.FIVEZBNUM * 100
-                                                    }}%</span>
-                                            </el-col>
-                                            <el-col :span="6">
-                                                <span>降价幅度：</span>
-                                                <span class="cargoInfo-top-content">{{ detailNoDynamic.PRICECUT
-                                                    }}元</span>
-                                            </el-col>
+
                                         </el-row>
+
+
                                     </div>
                                 </div>
 
                             </el-collapse-item>
                         </el-collapse>
-
-                        <!-- 竞价信息 -->
-                        <div
-                            v-if="detailNoDynamic.BILLSTATUS == 4 || detailNoDynamic.BILLSTATUS == 5 || detailNoDynamic.BILLSTATUS == 6 || detailNoDynamic.BILLSTATUS == 7">
-                            <div class="commonSmallTitle mt-10 disflex justify-sb">
-                                <div class="disflex card-header">
-                                    <div class="mr-20">竞价信息</div>
-                                    <div class="disflex" v-if="detailNoDynamic.BILLSTATUS == 4">
-                                        <div class="lastPlaceClass">最后一名可中标价格为{{ lastPlaceObj.LAST_PLACE_PRICE || 0 }}元
+                        <!-- 货主 -->
+                        <!-- 抢单项目状态 BILLSTATUS 0-未开始(未审核、审核中、未通过) 1-未发布 2-已发布 3-抢单中 4-已结束 -->
+                        <template v-if="userInfo.USERTYPE == 0">
+                            <div v-if="detailNoDynamic.BILLSTATUS == 3 || detailNoDynamic.BILLSTATUS == 4">
+                                <div class="commonSmallTitle mt-10 disflex justify-sb">
+                                    <div class="disflex card-header">
+                                        <div class="mr-20">抢单信息</div>
+                                        <div class="disflex">
+                                            <div class="disflex">
+                                                <div class="selectLeftText">抢单单位</div>
+                                                <el-select v-model="robOrderForm.PK_ROBE" size="small" clearable
+                                                    style="width: 120px" @change="changePK_CARRIER">
+                                                    <el-option :label="item.ROBERNAME" :value="item.PK_ROBE"
+                                                        v-for="item in PK_ROBEList" :key="item.PK_ROBE" />
+                                                </el-select>
+                                            </div>
+                                            <div class="disflex ml-20" v-if="detailNoDynamic.BILLSTATUS == 4">
+                                                <div class="selectLeftText">是否中标</div>
+                                                <el-select v-model="robOrderForm.BILLSTATUS" size="small" clearable
+                                                    style="width: 120px" @change="changeIS_BID">
+                                                    <el-option label="待确认" value="0" />
+                                                    <el-option label="成功" value="1" />
+                                                    <el-option label="失败" value="2" />
+                                                </el-select>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="disflex justify-between offerPriceClass" v-if="detailNoDynamic.BILLSTATUS == 4">
-                                <div class="disflex">
-                                    <div class="disflex mr-20">
-                                        <div>出价金额：</div>
-                                        <div>
-                                            <el-input type="number" v-model="offerPriceObj.BIDPRICE">
-                                                <template #append>元</template></el-input>
-                                        </div>
-                                    </div>
-                                    <div class="disflex">
-                                        <div>出量：</div>
-                                        <div>
-                                            <el-input type="number" v-model="offerPriceObj.EXPECTVALUE"></el-input>
-                                        </div>
-                                    </div>
-                                </div>
-                                <el-button type="primary" @click="clickOfferPrice">出价</el-button>
-                            </div>
-                            <div class="mt10">
-                                <el-table :data="bidRunList" border style="width: 100%" :span-method="arraySpanMethod"
-                                    @selection-change="handleSelectionChange">
-                                    <el-table-column prop="RANK" label="出价次数" />
-                                    <el-table-column prop="BIDPRICE" label="出价金额" />
-                                    <el-table-column prop="EXPECTVALUE" label="出量" />
-                                    <el-table-column prop="BIDTIME" show-overflow-tooltip  label="出价时间" />
-                                    <template v-if="queryLeftForm.BILLSTATUS == 6">
-                                        <el-table-column prop="IS_BID" label="中标">
+                                <div class="mt10">
+                                    <el-table ref="applyInfoRef" :data="applyInfoList" style="width: 100%" border
+                                        :span-method="arraySpanMethod" @selection-change="applyInfoRefSelectionChange">
+                                        <el-table-column type="selection" width="55" />
+                                        <el-table-column prop="ROBERNAME" width="120" show-overflow-tooltip
+                                            label="抢单单位" />
+                                        <el-table-column prop="PHONE" width="120" show-overflow-tooltip label="联系方式" />
+                                        <el-table-column prop="CREATIONTIME" width="120" show-overflow-tooltip
+                                            label="抢单时间" />
+                                        <el-table-column prop="BILLSTATUS" show-overflow-tooltip label="中标">
                                             <template #default="scope">
-                                                <span>{{ scope.row.IS_BID == 0 ? '否' : scope.row.IS_BID == 1 ? '是' : ''
-                                                    }}</span>
+                                                <span> {{ scope.row.BILLSTATUS == 0 ? '待确认' : scope.row.BILLSTATUS ==
+                1 ? '成功' : scope.row.BILLSTATUS == 2 ? '失败' : '' }} </span>
                                             </template>
                                         </el-table-column>
-                                        <el-table-column prop="MATERIALNAME" label="物料" />
-                                        <el-table-column prop="TRUSTNUM" label="分配量" width="140">
-                                            <template #default="scope">
-                                                <span>{{ scope.row.TRUSTNUM
+                                        <el-table-column prop="ROBWEIGHT" label="出量" />
+                                        <el-table-column prop="MATERIALNAME" show-overflow-tooltipshow-overflow-tooltip
+                                            width="120" label="物料名称" />
+                                        <el-table-column prop="ENTRUSTNUM" label="分配量" width="140">
+                                            <!-- <template #default="scope">
+                                                <span v-if="detailNoDynamic.BILLSTATUS != 3">{{ scope.row.ENTRUSTNUM
                                                     }}</span>
+                                                <el-input v-else type="number" size="small" v-model="scope.row.ENTRUSTNUM"
+                                                    placeholder="输入分配量" clearable />
+                                            </template> -->
+                                        </el-table-column>
+                                        <el-table-column prop="SURENAME" label="中标确认人" width="120" />
+                                        <el-table-column prop="SURETIME" show-overflow-tooltip width="120"
+                                            label="中标时间" />
+                                        <el-table-column label="资质审查">
+                                            <template #default="scope">
+                                                <el-button type="primary" text
+                                                    @click="checkCertification(scope.row)">查看资质</el-button>
                                             </template>
                                         </el-table-column>
-                                        <el-table-column show-overflow-tooltip prop="SURETIME" label="中标时间" />
-                                        <el-table-column prop="SURENAME" width="130" label="中标确认人" />
-                                    </template>
-                                </el-table>
-                            </div>
-                        </div>
-                        <!-- 公告信息 -->
-                        <div v-else>
-                            <div class="commonSmallTitle mt-10 disflex justify-sb">
-                                <div class="disflex card-header">
-                                    <div class="mr-20">公告信息</div>
+                                    </el-table>
                                 </div>
                             </div>
-                            <div class="mt10 p-5" v-if="noticInfo.BILLNO">
-                                <div class="noticInfoTitle mt-10 mb-10">{{ noticInfo.VNAME }}</div>
-                                <div v-html="noticInfo.CONTENT"></div>
+                            <!-- 公告信息 -->
+                            <div v-if="detailNoDynamic.BILLSTATUS == 1 || detailNoDynamic.BILLSTATUS == 2">
+                                <div class="commonSmallTitle mt-10 disflex justify-sb">
+                                    <div class="disflex card-header">
+                                        <div class="mr-20">公告信息</div>
+                                    </div>
+                                </div>
+                                <div class="mt10 p-5" v-if="noticInfo.BILLNO">
+                                    <div class="noticInfoTitle mt-10 mb-10">{{ noticInfo.VNAME }}</div>
+                                    <div v-html="noticInfo.CONTENT"></div>
+                                </div>
+                                <div v-else>
+                                    <el-empty :image="emptyImg" description="很抱歉，暂时没有相关数据~" :image-size="150" />
+                                </div>
                             </div>
-                            <div v-else>
-                                <el-empty :image="emptyImg" description="很抱歉，暂时没有相关数据~" :image-size="150" />
+                        </template>
+                        <!-- 承运商 -->
+                        <template v-else>
+                            <div v-if="detailNoDynamic.BILLSTATUS == 3 || detailNoDynamic.BILLSTATUS == 4">
+                                <div class="commonSmallTitle mt-10 disflex justify-sb">
+                                    <div class="disflex card-header">
+                                        <div class="mr-20">抢单信息</div>
+                                    </div>
+                                </div>
+                                <div class="mt10">
+                                    <el-table ref="applyInfoRef" :data="applyInfoList" style="width: 100%"
+                                        @selection-change="applyInfoRefSelectionChange">
+                                        <el-table-column prop="ROBERNAME" show-overflow-tooltip label="抢单单位" />
+                                        <el-table-column prop="CREATIONTIME" show-overflow-tooltip label="抢单时间" />
+                                        <el-table-column prop="BILLSTATUS" show-overflow-tooltip label="中标">
+                                            <template #default="scope">
+                                                <span> {{ scope.row.BILLSTATUS == 0 ? '待确认' : scope.row.BILLSTATUS ==
+                                                    1?'成功':scope.row.BILLSTATUS == 2?'失败':''}} </span>
+                                            </template>
+                                        </el-table-column>
+                                        <el-table-column prop="MATERIALNAME" label="物料名称" />
+                                        <el-table-column prop="ENTRUSTNUM" label="分配量" />
+                                        <el-table-column prop="SURENAME" label="中标确认人" />
+                                        <el-table-column prop="SURETIME" label="中标时间" />
+                                    </el-table>
+                                </div>
                             </div>
-                        </div>
+                        </template>
                     </el-scrollbar>
                 </el-card>
                 <el-card v-else>
                     <el-empty style="height: 680px;" :image="emptyImg" description="很抱歉，暂时没有相关数据~" :image-size="350" />
                 </el-card>
                 <!-- </el-scrollbar> -->
+
             </el-col>
         </el-row>
-        <vxe-modal destroy-on-close v-model="noticInfoModal" id="formModal" width="800" height="400" resize storage
+
+        <vxe-modal destroy-on-close v-model="applyDetailModal" id="formModal" width="800" height="400" resize storage
             transfer show-zoom>
             <template #title>
-                <span class="modal-title"> 公告信息
+                <span class="modal-title"> 报名明细
                 </span>
             </template>
             <template #default>
-                <div class="noticInfoTitle">{{ noticInfo.VNAME }}</div>
-                <div v-html="noticInfo.CONTENT"></div>
+                <el-table ref="applyInfoRef" :data="applyInfoList" style="width: 100%">
+                    <el-table-column prop="BILLSTATUS" label="报名状态">
+                        <template #default="scope">
+                            <span>{{ scope.row.BILLSTATUS == 0 ? '未确认' : '已确认' }}</span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column prop="CARRIERNAME" show-overflow-tooltip label="报名单位" />
+                    <el-table-column prop="CREATIONTIME" show-overflow-tooltip label="报名时间" />
+                    <el-table-column prop="CREATORNAME" label="报名用户" />
+                    <el-table-column prop="APPROVER" label="确认人" />
+                    <el-table-column prop="APPROVERTIME" label="确认时间" />
+                    <el-table-column prop="BILLSTATUS" label="资质审查">
+                        <template #default="scope">
+                            <!-- 调用 13 -->
+                            <el-button type="primary" text @click="checkCertification(scope.row)">查看资质</el-button>
+                        </template>
+                    </el-table-column>
+                </el-table>
             </template>
         </vxe-modal>
     </div>
@@ -355,37 +414,44 @@
 
 <script setup>
 
-const leftHight = window.innerHeight - 240;
-const Hight = window.innerHeight - 154;
+const leftHight = window.innerHeight - 218;
+const Hight = window.innerHeight - 168;
 const { proxy } = getCurrentInstance();
-const MenuID = inject("menuID");
+// const MenuID = inject("menuID");
+
+const route = useRoute();
+
+const router = useRouter();
+const routerParams = router.currentRoute.value.meta;
+const menuParams = ref({
+    MODULEID: routerParams.BILLNO || "-",
+    PAGEID: routerParams.ACTION || "-",
+});
+provide("menuID", menuParams);
+console.log("🚀 ~ menuParams:", menuParams)
+
 const emptyImg = proxy.getAssetsFile("icon_task_NoData.png");
-import { onMounted, onUnmounted, ref, } from "vue";
+
+
+import TopButton from "@/components/TopButton";
+
+import { computed, onMounted, onUnmounted, ref, } from "vue";
 
 import { Search } from "@element-plus/icons-vue";
-import { getTableData } from "@/api/system/page";
+import { getPageConfig, getTableData } from "@/api/system/page";
 import countDown from "@/components/countDown/index";
-
 import axios from "axios";
 
 import {
-    getCarrierPageList,
-    getCarrierDetailss,
-    collectBid,
-    carrierSign,
-    getNoticDetail,
-    getBidRecordList,
-    getLastPlacePrice,
-    offerPrice,
-    getCarrierEndList,
-
-
     getSignList, getBidSignCount, getCarrierDetail
-    , getBidRunList, submitApprove, forceEnd, cancelSign, confirmSign
-    , getBidRecordCarrierList, cancellation
+    , getBidRunList, submitApprove, forceEnd, cancelSign, confirmSign, getCargoEndList
+    , getBidRecordCarrierList, cancellation, bidWin
 } from "#/system/biddingHall";
 
-
+const robOrderForm = ref({
+    PK_ROBE: '',
+    BILLSTATUS: '',
+})
 
 const ruleForm = ref({
     BIDPRICE: null,
@@ -400,138 +466,12 @@ import useUserStore from "@/store/modules/user";
 const userStore = useUserStore();
 
 const userInfo = computed(() => userStore.userInfo);
+// 0货主 2 承运商
 // BILLSTATUS  0未开始(待提交、审核中、未通过)、1待发公告、2报名中(无需报名的没有这个状态)、3待竞价(报名结束)、4竞价中、5竞价结束、6已完成/已结束(已中标、未中标、已作废)、7强制结束
 const statusList = ref(['未开始', '待发公告', '报名中', '待竞价', '竞价中', '竞价结束', '已完成', '强制结束'])
 
-const noticInfoModal = ref(false)
-const copyVCODE = () => {
-    let input = document.createElement("input"); // 创建input对象
-    input.value = detailNoDynamic.value.VCODE; // 设置复制内容
-    document.body.appendChild(input); // 添加临时实例
-    input.select(); // 选择实例内容
-    document.execCommand("Copy"); // 执行复制
-    document.body.removeChild(input); // 删除临时实例
-    proxy.$modal.msgSuccess("复制成功");
-}
+const pageInfo = computed(() => route.meta)
 
-
-const activeName = ref(["1"]);
-
-const IS_SIGNQRList = ref(['人工确认', '自动确认'])
-const DEVIDETYPEList = ref(['平均分配', '货主分配', '承运商出量'])
-const WINNUMList = ref(['', '第一名中标', '前两名中标', '前三名中标', '前四名中标', '前五名中标'])
-
-// 0-未开始 1-待发公告 2-待报名 3-报名中 4-待竞价 5-竞价中 6-竞价结束 7-竞价完
-const BILLSTATUSList = ref([
-    "未开始",
-    "待发公告",
-    "待报名",
-    "报名中",
-    "待竞价",
-    "竞价中",
-    "竞价结束",
-    "竞价完",
-]);
-const leftMenuList = ref([]);
-const timer = ref(null);
-const count = ref(0);
-
-onMounted(() => {
-    getPageList();
-});
-
-const menuVal = ref(null);
-const queryLeftForm = ref({
-    // BILLSTATUS: userInfo.value.USERTYPE == 2 ? '3,4' : userInfo.value.USERTYPE != 0 ? '3' : '5',
-    BILLSTATUS: '10',
-    KEYWORD: ''
-})
-const handleClick = (e) => {
-    queryLeftForm.value.KEYWORD = ''
-    getPageList()
-}
-const clickLeftBtn = () => {
-    getPageList()
-}
-const getPageList = () => {
-    const protData = {
-        PAGENUM: 1,
-        PAGESIZE: 99,
-        ...queryLeftForm.value,
-    }
-    getCarrierPageList(protData).then((res) => {
-        leftMenuList.value = res.RESULT.RECORDS;
-        menuVal.value = null
-        detailNoDynamic.value = {}
-        if (leftMenuList.value.length) chooeseMune(leftMenuList.value[0]);
-    });
-
-};
-
-const chooseLeftData = ref({})
-const chooeseMune = (item) => {
-    menuVal.value = item.BILLNO;
-    chooseLeftData.value = item;
-    ruleForm.value = {
-        BIDPRICE: null,
-        EXPECTVALUE: null,
-        BIDADDRESS: null,
-    };
-
-    getDetailNoDynamic();
-};
-const detailNoDynamic = ref({});
-const countDownRef = ref(null);
-const ROUNDNUM = ref('')
-const getDetailNoDynamic = () => {
-
-    getCarrierDetailss({ BILLNO: menuVal.value }).then((res) => {
-        detailNoDynamic.value = res.RESULT;
-
-        const { BILLSTATUS } = res.RESULT
-
-        getNoticInfo()
-        switch (BILLSTATUS) {
-            case "3":
-                break;
-            case "4":
-                querygetBidRecordList()
-                querygetLastPlacePrice()
-                break;
-            case "5":
-                querygetCarrierEndList()
-                break;
-            case "6":
-                querygetCarrierEndList()
-                break;
-            case "7":
-                querygetCarrierEndList()
-                break;
-            default:
-                break;
-        }
-
-
-
-    });
-
-
-
-};
-
-
-const noticInfo = ref({})
-const getNoticInfo = () => {
-    const protData = {
-        BILLNO: menuVal.value,
-    }
-    getNoticDetail(protData).then((res) => {
-        noticInfo.value = res.RESULT || {}
-    }).catch((err) => {
-        noticInfo.value = {}
-    });
-}
-const bidRunList = ref([])
 const cellList = ref([])
 const listCount = ref(null)
 const computeCell = (tableBody) => {
@@ -544,7 +484,7 @@ const computeCell = (tableBody) => {
             // console.log("索引", 0, listCount.value);
         } else {
             // 判断当前项与上项的设备类别是否相同，因为是合并这一列的单元格
-            if (tableBody[i].PK_RECORD == tableBody[i - 1].PK_RECORD) {
+            if (tableBody[i].BILLNO == tableBody[i - 1].BILLNO) {
                 // 如果相等
                 cellList.value[listCount.value] += 1; // 增加计数
                 cellList.value.push(0); // 相等就往cellList数组中追加0
@@ -559,7 +499,7 @@ const computeCell = (tableBody) => {
 }
 const arraySpanMethod = (obj) => {
     const { row, column, rowIndex, columnIndex } = obj
-    if (columnIndex === 0 || columnIndex === 1 || columnIndex === 2 || columnIndex === 3 || columnIndex === 4 || columnIndex === 5 || columnIndex === 8 || columnIndex === 9) {
+    if (columnIndex === 1 || columnIndex === 2 || columnIndex === 3 || columnIndex === 4 || columnIndex === 5 || columnIndex === 8 || columnIndex === 9 || columnIndex === 10) {
         const rowCell = cellList.value[rowIndex];
         if (rowCell > 0) {
             const colCell = 1;
@@ -579,112 +519,332 @@ const arraySpanMethod = (obj) => {
 
 }
 
-const querygetBidRecordList = () => {
-    const protData = {
-        // PK_PROJECT,
-        PK_PROJECT: menuVal.value,
-    }
-    getBidRecordList(protData).then((res) => {
-        bidRunList.value = res.RESULT
-        // listCount.value = null
-        // cellList.value = []
-        // computeCell(bidRunList.value)
+const bidRunList = ref([])
 
-    });
+const applyDetailModal = ref(false)
+const copyVCODE = () => {
+    let input = document.createElement("input"); // 创建input对象
+    input.value = detailNoDynamic.value.VCODE; // 设置复制内容
+    document.body.appendChild(input); // 添加临时实例
+    input.select(); // 选择实例内容
+    document.execCommand("Copy"); // 执行复制
+    document.body.removeChild(input); // 删除临时实例
+    proxy.$modal.msgSuccess("复制成功");
 }
 
-const lastPlaceObj = ref({})
-const querygetLastPlacePrice = () => {
-    const protData = {
-        // PK_PROJECT,
-        PK_PROJECT: menuVal.value,
+const activeName = ref(["1"]);
+
+// const IS_SIGNQRList = ref(['人工确认', '自动确认'])
+// const DEVIDETYPEList = ref(['平均分配', '货主分配', '承运商出量'])
+// const WINNUMList = ref(['', '第一名中标', '前两名中标', '前三名中标', '前四名中标', '前五名中标'])
+
+
+// 0-未开始 1-待发公告 2-待报名 3-报名中 4-待竞价 5-竞价中 6-竞价结束 7-竞价完
+const BILLSTATUSList = ref([
+    "未开始",
+    "待发公告",
+    "待报名",
+    "报名中",
+    "待竞价",
+    "竞价中",
+    "竞价结束",
+    "竞价完",
+]);
+const leftMenuList = ref([]);
+const timer = ref(null);
+const count = ref(0);
+
+onMounted(() => {
+    getPageList();
+    getPageConfigs()
+
+
+});
+
+
+
+const menuVal = ref(null);
+const queryLeftForm = ref({
+    TAGSTATUS: userInfo.value.USERTYPE == 2 ? '0' : '1',
+    // TAGSTATUS: '1',
+    KEYWORD: ''
+})
+const handleClick = (e) => {
+    queryLeftForm.value.KEYWORD = ''
+    robOrderForm.value = {
+        PK_ROBE: '',
+        BILLSTATUS: '',
     }
-    getLastPlacePrice(protData).then((res) => {
-        lastPlaceObj.value = res.RESULT
-    });
-
+    getPageList()
 }
-
-const positionData = ref({});
-const queryPosition = () => {
-    console.log("🚀 ~ .then ~ response:",)
-
-    axios
-        .get("http://ip-api.com/json/?lang=zh-CN")
-        .then((response) => {
-            console.log("🚀 ~ .then ~ response:", response)
-            positionData.value = response.data;
-        })
-        .catch((error) => {
-            console.log(error);
-        });
+const clickLeftBtn = () => {
+    getPageList()
+}
+const getPageList = () => {
+    getTableData("oms/robProject/getRobList", {
+        // PAGENUM: 1,
+        // PAGESIZE: 99,
+        ...queryLeftForm.value,
+        // ...MenuID.value
+        ...menuParams.value
+    }).then((res) => {
+        // leftMenuTotal.value = res.RESULT.TOTAL
+        leftMenuList.value = res.RESULT.RECORDS;
+        menuVal.value = null
+        detailNoDynamic.value = {}
+        if (leftMenuList.value.length) chooeseMune(leftMenuList.value[0]);
+    });
 };
 
+const chooseLeftData = ref({})
+const chooeseMune = (item) => {
+    menuVal.value = item.BILLNO;
+    chooseLeftData.value = item;
+    ruleForm.value = {
+        BIDPRICE: null,
+        EXPECTVALUE: null,
+        BIDADDRESS: null,
+    };
 
-const offerPriceObj = ref({
-    BIDPRICE: '',
-    EXPECTVALUE: ''
-})
-const clickOfferPrice = () => {
-    if (!offerPriceObj.value.BIDPRICE) return proxy.$modal.msgError('请输入出价金额');
-    if (!offerPriceObj.value.EXPECTVALUE) return proxy.$modal.msgError('请输入出量');
-    const protData = {
-        BILLFROM: 0,
-        PK_PROJECT: detailNoDynamic.value.BILLNO,
-        PROJECTNAME: detailNoDynamic.value.VNAME,
-        ULON: positionData.value.lon,
-        ULAT: positionData.value.lat,
-        UIPADDRESS: positionData.value.query,
-        BIDADDRESS: positionData.value.country + positionData.value.city,
-        ...offerPriceObj.value
-    }
-    offerPrice(protData).then((res) => {
-        proxy.$modal.msgSuccess(res.MESSAGE || "提交成功");
-        querygetBidRecordList()
+    getDetailNoDynamic();
+};
+const detailNoDynamic = ref({});
+const countDownRef = ref(null);
+const ROUNDNUM = ref('')
+const getDetailNoDynamic = () => {
+    getTableData("oms/robProject/getRobInfo", {
+        BILLNO: menuVal.value,
+        ...menuParams.value
+    }).then((res) => {
+        // countDownRef.value ? countDownRef.value.countDownClearInterval() : ''
+        detailNoDynamic.value = res.RESULT;
+
+        const { BILLSTATUS } = res.RESULT
+
+        switch (BILLSTATUS) {
+            case "1":
+                getNoticInfo()
+                break;
+            case "2":
+                getNoticInfo()
+                break;
+            case "3":
+                queryApplyInfo()
+                break;
+            case "4":
+                queryApplyInfo()
+                break;
+            default:
+                break;
+        }
     });
+};
 
+const noticInfo = ref({})
+const getNoticInfo = () => {
+    const protData = {
+        BILLNO: menuVal.value,
+        ...menuParams.value
+
+    }
+
+    getTableData("/oms/robNotice/getDetailByRobId", protData)
+        .then((res) => {
+            noticInfo.value = res.RESULT || {}
+
+        })
+        .catch(() => {
+            noticInfo.value = {}
+        });
 }
 
-const querygetCarrierEndList = () => {
+
+const applyStatus = ref('')
+const applyInfoList = ref([])
+const PK_ROBEList = ref([])
+const queryApplyInfo = () => {
+    const protData = {
+        BILLNO: menuVal.value,
+        ...menuParams.value,
+        ...robOrderForm.value
+    }
+    console.log("🚀 ~ queryApplyInfo ~ protData.robOrderForm.value:", robOrderForm.value)
+    getTableData("/oms/robRecords/getRobRecordList", protData)
+        .then((res) => {
+            applyInfoList.value = res.RESULT
+            listCount.value = null
+            cellList.value = []
+            computeCell(applyInfoList.value)
+
+            let newobj = {};
+            PK_ROBEList.value = applyInfoList.value.reduce((preVal, curVal) => {
+                newobj[curVal.PK_ROBE] ? '' : newobj[curVal.PK_ROBE] = preVal.push(curVal);
+                return preVal
+            }, [])
+
+        }).catch(() => {
+            console.log('gfdgdf')
+            applyInfoList.value = []
+            listCount.value = null
+            cellList.value = []
+            PK_ROBEList.value = []
+        })
+}
+
+const changeApplyStatus = (e) => {
+    queryApplyInfo(menuVal.value)
+}
+const applyInfoData = ref({})
+const getGetBidSignCount = (PK_PROJECT) => {
+    const protData = {
+        PK_PROJECT: PK_PROJECT,
+        BILLSTATUS: applyStatus.value,
+    }
+    getBidSignCount(protData).then((res) => {
+        applyInfoData.value = res.RESULT
+    });
+}
+
+const PK_CARRIER = ref('')
+const IS_BID = ref('')
+const getGetBidRunList = (PK_PROJECT) => {
     const protData = {
         // PK_PROJECT,
-        PK_PROJECT: menuVal.value,
+        PK_PROJECT,
+        PK_CARRIER: PK_CARRIER.value || '',
+        IS_BID: IS_BID.value || ''
     }
-    listCount.value = null
-    cellList.value = []
-    getCarrierEndList(protData).then((res) => {
-        bidRunList.value = res.RESULT
-        computeCell(bidRunList.value)
+    bidRunList.value = []
+
+    if (queryLeftForm.value.BILLSTATUS == 6) {  // 已结束
+        getCargoEndList(protData).then((res) => {
+            bidRunList.value = res.RESULT
+            listCount.value = null
+            cellList.value = []
+            computeCell(bidRunList.value)
+        }).catch(() => {
+            listCount.value = null
+            cellList.value = []
+            bidRunList.value = []
+        });
+    } else {
+        getBidRunList(protData).then((res) => {
+            bidRunList.value = res.RESULT
+            listCount.value = null
+            cellList.value = []
+            computeCell(bidRunList.value)
+        }).catch(() => {
+            listCount.value = null
+            cellList.value = []
+            bidRunList.value = []
+        });
+    }
+
+}
+const carrierList = ref([])
+const querygetBidRecordCarrierList = () => {
+    const protData = {
+        PK_PROJECT: detailNoDynamic.value.BILLNO
+    }
+    getBidRecordCarrierList(protData).then((res) => {
+        carrierList.value = res.RESULT
+    });
+}
+
+const changePK_CARRIER = (e) => {
+    queryApplyInfo()
+
+}
+
+const changeIS_BID = () => {
+    queryApplyInfo()
+
+
+}
+
+const subCheck = () => {
+    const protData = {
+        BILLNO: menuVal.value,
+    }
+    submitApprove(protData).then((res) => {
+        proxy.$modal.msgSuccess(res.MESSAGE || "提交成功");
+        getPageList()
     });
 
 }
 
-const signBidding = () => {
+const constraintEnd = () => {
     const protData = {
-        PK_PROJECT: detailNoDynamic.value.BILLNO,
-        PROJECTNAME: detailNoDynamic.value.VNAME,
-        BILLFROM: 0
+        BILLNO: menuVal.value,
     }
-    collectBid(protData).then((res) => {
+    forceEnd(protData).then((res) => {
         proxy.$modal.msgSuccess(res.MESSAGE || "提交成功");
         getPageList()
     });
 }
 
-// 
-const clickSign = () => {
+const cancalSure = () => {
+    let BILLNO = applyInfoRefChooseList.value.map(ele => ele.BILLNO)
     const protData = {
-        PK_PROJECT: detailNoDynamic.value.BILLNO,
-        PROJECTNAME: detailNoDynamic.value.VNAME,
-        BILLFROM: 0
+        BILLNO,
     }
-    carrierSign(protData).then((res) => {
+    cancelSign(protData).then((res) => {
         proxy.$modal.msgSuccess(res.MESSAGE || "提交成功");
         getPageList()
     });
 }
 
+const confirmApply = () => {
+    let BILLNO = applyInfoRefChooseList.value.map(ele => ele.BILLNO)
+    const protData = {
+        BILLNO,
+    }
+    confirmSign(protData).then((res) => {
+        proxy.$modal.msgSuccess(res.MESSAGE || "提交成功");
+        getPageList()
+    });
+}
 
+const winBiddingArr = ref([])
+const handleSelectionChange = (val) => {
+    winBiddingArr.value = val
+}
+const winBidding = () => {
+    const protData = {
+        data: winBiddingArr.value,
+    }
+    bidWin(protData).then((res) => {
+        proxy.$modal.msgSuccess(res.MESSAGE || "提交成功");
+        getPageList()
+    });
+
+}
+
+const clickCancellation = () => {
+
+    const protData = {
+        data: winBiddingArr.value,
+    }
+    cancellation(protData).then((res) => {
+        proxy.$modal.msgSuccess(res.MESSAGE || "提交成功");
+        getPageList()
+    });
+
+
+}
+
+const clickApplyDetail = () => {
+    applyDetailModal.value = true
+    queryApplyInfo(menuVal.value)
+
+}
+
+
+const applyInfoRef = ref(null)
+const applyInfoRefChooseList = ref([])
+const applyInfoRefSelectionChange = (e) => {
+    applyInfoRefChooseList.value = e
+}
 
 const bidInfo = ref({});
 const getPermissDetail = () => {
@@ -709,6 +869,8 @@ const getPermissDetail = () => {
 
 
 
+const positionData = ref({});
+
 const Verification = () => {
     if (timer.value) return
 
@@ -723,9 +885,72 @@ const Verification = () => {
     }, 1000);
 };
 
-onMounted(() => {
-    queryPosition();
+const topBtnRef = ref(null)
+const clickCommonBtn = (btn) => {
+    // btn.ACTIONADDRESS = btn.ACTIONADDRESS.concat(`?PK_PROJECT=${detailNoDynamic.value.BILLNO}`)
+    topBtnRef.value.handleEvent(btn, [detailNoDynamic.value])
+}
 
+const checkCertification = (val) => {
+    let btn = allPageCon.value.BUTTON.filter(ele => ele.BTNTITLE == 'checkCertification')[0]
+    // btn.ACTIONADDRESS = btn.ACTIONADDRESS.concat(`?PK_CARRIER=${val.BILLNO}`)
+    let data = {
+        BILLNO: val.BILLNO
+    }
+    topBtnRef.value.handleEvent(btn, [data])
+}
+
+const reloadTableData = () => {
+    getPageList()
+}
+
+const setShowBtn = (btn) => {
+    if (btn.ISSHOW == 0) return false;
+    if (btn.ISSHOW == 2 && btn.OTHER) {
+        try {
+            let DATA = detailNoDynamic.value;
+            // console.error(evilFn( DATA, btn.OTHER));
+            if (!evilFn(DATA, btn.OTHER)) {
+                return false;
+            }
+        } catch (error) {
+            console.error(error);
+        }
+        return true;
+    } else if (!btn.CHILDREN || !btn.CHILDREN.length) {
+        return true;
+    }
+};
+
+function evilFn(row, fn) {
+    const DATA = JSON.parse(JSON.stringify(row)) || Object.create(null);
+    let Fn = new Function("DATA", `return ${fn}`);
+    const proxy = new Proxy(DATA, {
+        has(target, key) {
+            return true;
+        },
+    });
+    return Fn(proxy);
+}
+
+
+const allPageCon = ref({})
+
+const getPageConfigs = () => {
+    getPageConfig({
+        MODULEID: pageInfo.value.BILLNO,
+        PAGEID: pageInfo.value.ACTION,
+    }).then(res => {
+        allPageCon.value = res.RESULT
+    }).catch(err => {
+
+    })
+}
+
+onUnmounted(() => {
+    // console.log("竞价离开视线");
+    // clearInterval(timer.value);
+    // timer.value = null;
 });
 </script>
 
@@ -843,7 +1068,6 @@ onMounted(() => {
                     font-weight: 400;
                     font-size: 14px;
                     flex-shrink: 0;
-
                 }
 
                 &-status0 {
@@ -1173,23 +1397,6 @@ onMounted(() => {
 
 :deep(.el-tabs__item) {
     padding: 0 6px;
-}
-
-.lastPlaceClass {
-    background-color: #eaf0fc;
-    color: #1964F8;
-    padding: 4px 10px;
-    font-size: 14px;
-    border-radius: 4px;
-}
-
-.offerPriceClass {
-    background-color: #f5f5f5;
-    padding: 20px;
-    border-radius: 4px;
-    margin: 10px 0;
-    font-size: 14px;
-
 }
 
 .noticInfoTitle {

@@ -408,7 +408,7 @@
 
         </el-card>
         <el-card v-else>
-          <el-empty :image="emptyImg" description="很抱歉，暂时没有相关数据~" :image-size="350" />
+          <el-empty  style="height: 680px;" :image="emptyImg" description="很抱歉，暂时没有相关数据~" :image-size="350" />
         </el-card>
         <!-- </el-scrollbar> -->
 
