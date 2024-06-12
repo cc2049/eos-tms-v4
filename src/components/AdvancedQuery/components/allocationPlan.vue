@@ -7,7 +7,7 @@
 <template>
     <div class="container">
 
-        <vxe-modal destroy-on-close v-model="showModals" id="formModal" :width="970" resize storage transfer show-zoom
+        <vxe-modal destroy-on-close v-model="showModals" id="formModal" :width="1070" resize storage transfer show-zoom
             @close="closeModal">
             <template #title>
                 <span class="modal-title"> 列表过滤
