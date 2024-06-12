@@ -237,6 +237,7 @@ function reloadTableData() {
 const advanceQueryRef = ref(null);
 function handleTopBtn(data) {
   if (data.type == "openCustomPlan") {
+    advanceQueryRef.value.clostPopver();  // 关闭设置的弹窗
     advanceQueryRef.value.openShowModal();
   } else if (data.type == "openCustemPage") {
     console.log('handleTopBtn', data);

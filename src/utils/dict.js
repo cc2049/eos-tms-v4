@@ -17,7 +17,7 @@ export function useDict(...args) {
     args.forEach((dictType, index) => {
       res.value[dictType] = [];
       const dicts = useDictStore().getDict(dictType);
-      if (dicts) {
+      if (dicts && Object.keys(dicts).length != 0 ) {  // 加了个判断对象不能是空的
         res.value[dictType] = dicts;
       } else {
         getDicts(dictType).then(resp => {

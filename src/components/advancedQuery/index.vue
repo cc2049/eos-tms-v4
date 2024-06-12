@@ -25,9 +25,9 @@
               <Icon icon="iconamoon:search"></Icon>
             </el-icon>
           </el-button>
-          <el-popover placement="bottom" :width="510" trigger="click" ref="popoverRef" >
+          <el-popover placement="bottom" :width="510" trigger="click" ref="popoverRef" :visible="visible" >
             <template #reference>
-              <el-button>
+              <el-button @click="visible = true">
                 <el-icon :size="20">
                   <Icon icon="uil:setting"></Icon>
                 </el-icon>
@@ -214,8 +214,10 @@ watch(
   { immediate: true }
 );
 const popoverRef=ref(null)
+const visible=ref(false)
 const clostPopver=()=>{
-  popoverRef.value.hide()
+  // popoverRef.value.hide()
+  visible.value = false
 }
 
 const querySaveList = ref([]);
@@ -330,6 +332,7 @@ const delFilterArr = (index) => {
 
 defineExpose({
   openShowModal,
+  clostPopver
 });
 
 onMounted(() => {
