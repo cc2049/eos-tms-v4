@@ -241,18 +241,52 @@ watch(
 //   setDataArrs()
 // }, { immediate: true })
 
-const showDateType = ref(null)
+
+const showDateType = computed(() => {
+  let newData = dateQueryType.value.filter(ele => ele.VALUE == props.formData.QUERYTYPE)
+  if (newData.length) {
+    if (newData[0].LABEL.includes('-0')) {
+      props.formData.DEFAULTVAL = ''
+      // showDateType.value = '0'
+      return '0'
+    } else if (newData[0].LABEL.includes('-1')) {
+      // showDateType.value = '1'
+      return '1'
+    }
+  }else{
+    return null
+  }
+
+
+
+
+
+});
+
+// const showDateType = ref(null)
 watch(() => props.formData.QUERYTYPE, value => {
   let newData = dateQueryType.value.filter(ele => ele.VALUE == value)
   if (newData.length) {
     if (newData[0].LABEL.includes('-0')) {
       showDateType.value = '0'
+      props.formData.DEFAULTVAL = ''
     } else if (newData[0].LABEL.includes('-1')) {
       showDateType.value = '1'
     }
   }
 })
 
+const inData = () => {
+  let newData = dateQueryType.value.filter(ele => ele.VALUE == props.formData.QUERYTYPE)
+  if (newData.length) {
+    if (newData[0].LABEL.includes('-0')) {
+      showDateType.value = '0'
+      props.formData.DEFAULTVAL = ''
+    } else if (newData[0].LABEL.includes('-1')) {
+      showDateType.value = '1'
+    }
+  }
+}
 
 // // 枚举数据
 // const EnumData = ref({});
@@ -446,6 +480,7 @@ function GetUrlParams(url, backType) {
 
 onMounted(() => {
   setDataArrs()
+  // inData()
 });
 </script>
 
