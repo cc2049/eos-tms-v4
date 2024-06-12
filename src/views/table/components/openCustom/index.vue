@@ -1,8 +1,8 @@
 <!--
  * @Author: cc2049
  * @Date: 2024-05-27 17:02:11
- * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-06-07 17:23:27
+ * @LastEditors: PiPin 33947354+p1Master@users.noreply.github.com
+ * @LastEditTime: 2024-06-12 09:27:43
  * @Description: 简介
 -->
 <template>
@@ -96,6 +96,9 @@ const openCustemPage = () => {
     console.error("Err:打开自定义页面", err);
   }
 };
+const closeCustemPage = () => {
+  emit("backEvents");
+}
 
 onMounted(() => {
   if (btnConfig.value.ACTION == "EDIT") {
