@@ -16,6 +16,7 @@
       :sort-config="{ showIcon: false }" 
       :footer-method="footerMethod" 
       :row-class-name="rowClassName" 
+      :tree-config="tableCFG.treeID"
       footer-row-class-name="footerRowClassName"
       footer-cell-class-name="footerCellClassName"
       @toggle-row-expand="toggleExpandChangeEvent" 
