@@ -158,7 +158,7 @@ const cellClassName = ({ row, column }) => {
   const hasCellClass = proxy.tableCFG.tableColumns.filter(el => el.FIELD == column.field && el.SLOT && el.SLOT == 'cellBg')
   if (hasCellClass.length == 0) return ""
   let DATA = row
-  if (eval(hasCellClass[0].SLOTCFG)) return "cell-red"
+  if (DATA && eval(hasCellClass[0].SLOTCFG)) return "cell-red"
   return null;
 };
 
