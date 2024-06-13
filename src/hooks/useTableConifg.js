@@ -2,7 +2,7 @@
  * @Author: cc2049
  * @Date: 2024-04-25 17:34:36
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-06-04 16:14:41
+ * @LastEditTime: 2024-06-13 10:00:44
  * @Description: 获取动态配置
  */
 
@@ -10,7 +10,7 @@ import { getPageConfig } from '#/system/page.js'
 
 import { getQueryUrl, resetColConfig } from './utils'
 
-import { getFormValue, getShowCFG , percentageToNumber} from '@/utils'
+import { getFormValue, getShowCFG, percentageToNumber } from '@/utils'
 
 const useTableConifg = (menu) => {
     const pageConfig = reactive({
@@ -51,6 +51,7 @@ const useTableConifg = (menu) => {
         hasFill: false, // 表格补位
         hasEmpty: false,
         height: 500,
+        treeID: null,
         rowClassEval: "", // 行加背景色的条件
         mergeCFG: [], // 表尾合计的配置  字段
         mergeRowField: [], // 需要合并的字段
@@ -66,7 +67,7 @@ const useTableConifg = (menu) => {
             MAINTABLE,
         } = res.RESULT
 
-        let newPageConfig = null , newtableCFG = null ;
+        let newPageConfig = null, newtableCFG = null;
         if (MAINTABLE.length) {
             let newMainTable = MAINTABLE.map(item => {
                 return resetConfig(item)
@@ -121,15 +122,15 @@ const useTableConifg = (menu) => {
         copyPageConfig.queryJson = Object.assign(initQueryJson, menu)
         copyPageConfig.pageTitle = VNAME
         copyPageConfig.pageID = {
-            MODULEID:PK_MODULE ,
+            MODULEID: PK_MODULE,
             PAGEID: BILLNO,
         }
         copyPageConfig.tableCFG = resetTableConfig(data)
         // 左右布局表格
         let subConfig = {
             subLayout: ISSUB || 0,
-            subLayoutLeft: TABLEHEIGHT || '50%' ,
-            subLayoutRight:  ISSUB ==1? percentageToNumber(TABLEHEIGHT ):''
+            subLayoutLeft: TABLEHEIGHT || '50%',
+            subLayoutRight: ISSUB == 1 ? percentageToNumber(TABLEHEIGHT) : ''
         }
         copyPageConfig.subConfig = subConfig
         return copyPageConfig
@@ -144,6 +145,7 @@ const useTableConifg = (menu) => {
             ISADAPTION,
             MODALTYPE,
             ISTBSELECT,
+            ISTREE,
             VMEMO,
         } = data
         // 设置表格配置
@@ -155,6 +157,17 @@ const useTableConifg = (menu) => {
         copyTableCFG.tableColumns = getShowCFG(COLUMNS);
         copyTableCFG.allColumns = COLUMNS
         copyTableCFG.pagerConfig.pageSize = PAGESIZE || 20
+
+        //  是否存在树形表格
+        if (ISTREE) {
+            try {
+                let treeConfig = JSON.parse(ISTREE);
+                copyTableCFG.treeID = treeConfig;
+            } catch (error) {
+                console.error("ISTREE配置异常无法解析", error);
+            }
+        }
+
         if (VMEMO && VMEMO.includes("PAGESIZE")) {
             try {
                 copyTableCFG.pagerConfig.pageSizes = JSON.parse(VMEMO).PAGESIZE || 20

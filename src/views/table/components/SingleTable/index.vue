@@ -2,7 +2,7 @@
  * @Author: cc2049
  * @Date: 2024-04-28 13:10:44
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-06-12 18:11:19
+ * @LastEditTime: 2024-06-12 18:28:01
  * @Description: 简介
 -->
 <template v-if="pageConfig">
@@ -44,7 +44,7 @@
             @dbClick="dbClickTable">
           </Vxtable>
         </div>
-        <div class="right-table ml-6" :style="{width: SubLayoutConfig.subLayoutLeft }" v-if="SubLayoutConfig.subLayout==1 && SubTableConfig.length">
+        <div class="right-table ml-6" :style="{width: SubLayoutConfig.subLayoutRight }" v-if="SubLayoutConfig.subLayout==1 && SubTableConfig.length">
           <SubTable ref="SubTableRef" :SubTableConfig :subLayout="SubLayoutConfig.subLayout" :height="tableCFG.height " />
         </div>
       </div>

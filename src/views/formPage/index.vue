@@ -1,13 +1,12 @@
 <!--
  * @Author: cc2049
  * @Date: 2024-04-23 11:35:41
- * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-06-07 17:29:46
+ * @LastEditors: PiPin 33947354+p1Master@users.noreply.github.com
+ * @LastEditTime: 2024-06-13 15:45:07
  * @Description: 大表单组件
 -->
 
 <template>
-
   <div class="form-container bg-white" ref="formBoxRef">
     <div class="form-affix" ref="affixRef">
       <TopButton :topButton="topButton" sourceType="2" @handleBtnEvent="handleBtnEvent" @quitPage="quitPage" />
@@ -25,7 +24,7 @@ import MasterForm from "@/components/MasterForm/index.vue";
 import { getPageConfig } from "#/system/page.js";
 import { getFormValue, getQueryUrl, getUrlParams } from "@/utils";
 import { axiosGet } from "#/common";
-import { onMounted } from "vue";
+import { nextTick, onMounted } from "vue";
 
 const props = defineProps({
   menuID: {
@@ -57,8 +56,11 @@ const detail = ref(false);
 const labelWidth = ref("100px");
 const tableConfig = ref([]);
 const formHeight = computed(() => {
-  formBoxRef.value &&
-    formBoxRef.value.clientHeight - affixRef.value.clientHeight - 10 + "px";
+  if (formBoxRef.value) {
+    const formScrollHeight = formBoxRef.value.clientHeight - affixRef.value.clientHeight - 10
+    const windowScrollHeight = window.innerHeight - 115 - affixRef.value.clientHeight
+    return `${formScrollHeight < 0 ? windowScrollHeight : formScrollHeight}px`
+  }
 });
 const formLoading = ref(false);
 
@@ -99,7 +101,7 @@ function resetButton(arr) {
   try {
     let customCF = JSON.parse(copyBtn.PAGEPATH);
     copyBtn.VNAME = customCF.sName;
-  } catch (error) {}
+  } catch (error) { }
 
   let newBtn = [copyBtn];
   return newBtn;
@@ -117,7 +119,6 @@ function getDetail(URL) {
       formLoading.value = false;
     });
   }
-  // console.log("formData.value", formData.value);
 }
 
 const quitPage = () => {
@@ -130,18 +131,13 @@ function handleBtnEvent(btn) {
   let MenuID = { MODULEID: btn.PK_MODULE, PAGEID: btn.PK_PAGE };
   eosFormRef.value.validate().then((valid) => {
     if (valid) {
-
-      if(btn.BTNTITLE == 'getCurrentData'){  // 竞价大厅货主端的发布公告中提交按钮要的参数
-        let sdata = { ...formData.value, ...MenuID, ...params,PK_PROJECT:props.currentData[0].BILLNO,PROJECTNAME: props.currentData[0].VNAME };
+      if (btn.BTNTITLE == 'getCurrentData') {  // 竞价大厅货主端的发布公告中提交按钮要的参数
+        let sdata = { ...formData.value, ...MenuID, ...params, PK_PROJECT: props.currentData[0].BILLNO, PROJECTNAME: props.currentData[0].VNAME };
         submitEvent(URL, sdata);
-        
-      }else{
+      } else {
         let sdata = { ...formData.value, ...MenuID, ...params };
         submitEvent(URL, sdata);
-
       }
-
-
     }
   });
 }
