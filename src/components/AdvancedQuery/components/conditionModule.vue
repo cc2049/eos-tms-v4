@@ -196,7 +196,7 @@ const cancle = () => {
 
 
 .content {
-    height: 240px;
+    height: 330px;
     overflow-y: auto;
     width: 780px;
 

@@ -55,3 +55,23 @@ export function getSubList(data) {
     data: data
   })
 }
+
+
+
+// 方案排序及隐藏字段信息查询
+export function getFieldList(data) {
+  return request({
+    url: 'sys/queryprogUserDtl/getFieldList',
+    method: 'post',
+    data: data
+  })
+}
+
+// 方案排序及隐藏字段信息更新
+export function updateFields(data) {
+  return request({
+    url: 'sys/queryprogUserDtl/updateFields',
+    method: 'post',
+    data: data
+  })
+}
