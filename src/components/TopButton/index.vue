@@ -207,7 +207,7 @@ function treeToArray(tree) {
 const setShowBtn = (btn) => {
   if (btn.ISSHOW == 0) return false;
   if (btn.ISSHOW == 2 && btn.OTHER) {
-    if (!props.currentData.length) {
+    if (!props.currentData || !props.currentData.length) {
       return false;
     }
     try {

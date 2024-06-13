@@ -64,48 +64,12 @@
                                     <!-- 走了财旺的按钮方法 -->
                                     <template v-for="(btn, btnIndex) in allPageCon.BUTTON" :key="btn.BILLNO">
                                         <el-button v-if="setShowBtn(btn)" size="small" :type="btn.COLOR"
+                                            :disabled="(btn.BTNTITLE == 'cancellation' || btn.BTNTITLE == 'winBidding') && !applyInfoRefChooseList.length ? true : false"
                                             @click="clickCommonBtn(btn)">{{
                 btn.VNAME }}</el-button>
                                     </template>
-
-                                    <!-- 走的自己写的 -->
-                                    <!-- <el-button size="small" v-if="detailNoDynamic.BILLSTATUS == 0" type="primary"
-                                        @click="subCheck">提交审核</el-button>
-                                    <el-popconfirm title="确定要结束?" @confirm="constraintEnd">
-                                        <template #reference>
-                                            <el-button size="small" type="danger"
-                                                v-if="detailNoDynamic.BILLSTATUS == 2 || queryLeftForm.BILLSTATUS == 5">强制结束</el-button>
-                                        </template>
-                                    </el-popconfirm>
-                                    <el-button size="small" :disabled="applyInfoRefChooseList.length > 0 ? false : true"
-                                        v-if="detailNoDynamic.BILLSTATUS == 2" @click="cancalSure">取消确认</el-button>
-                                    <el-button size="small" :disabled="applyInfoRefChooseList.length > 0 ? false : true"
-                                        type="primary" v-if="detailNoDynamic.BILLSTATUS == 2"
-                                        @click="confirmApply">确认报名</el-button>
-                                    <el-button size="small"
-                                        v-if="detailNoDynamic.BILLSTATUS == 5 || detailNoDynamic.BILLSTATUS == 6 || detailNoDynamic.BILLSTATUS == 7"
-                                        @click="clickApplyDetail">报名明细</el-button>
-                                    <el-button size="small" type="primary"
-                                        :disabled="winBiddingArr.length ? false : true"
-                                        v-if="detailNoDynamic.BILLSTATUS == 5" @click="winBidding">中标</el-button>
-                                    <el-button size="small"
-                                        v-if="detailNoDynamic.BILLSTATUS == 5 || detailNoDynamic.BILLSTATUS == 6 || detailNoDynamic.BILLSTATUS == 7"
-                                        :disabled="winBiddingArr.length ? false : true"
-                                        @click="clickCancellation">作废</el-button> -->
                                 </template>
                             </TopButton>
-
-
-                            <!-- <el-button size="small" v-if="queryLeftForm.BILLSTATUS == 0">编辑</el-button> -->
-
-
-                            <!-- <el-button size="small"
-                  v-if="detailNoDynamic.BILLSTATUS == 2 || detailNoDynamic.BILLSTATUS == 5 || detailNoDynamic.BILLSTATUS == 6 || detailNoDynamic.BILLSTATUS == 7">查看公告</el-button> -->
-
-
-
-
-
                         </div>
                     </template>
                     <el-scrollbar :height="Hight">
@@ -246,7 +210,7 @@
                 '人工' : '自动'
                                                     }}</span>
                                             </el-col>
-                                            <el-col :span="6">
+                                            <el-col :span="6" v-if="detailNoDynamic.VTYPE == 0">
                                                 <span>结算周期：</span>
                                                 <span class="cargoInfo-top-content">{{ detailNoDynamic.SETTLECYCLE ==
                 0 ? '现结' : detailNoDynamic.SETTLECYCLE ==
@@ -428,7 +392,6 @@ const menuParams = ref({
     PAGEID: routerParams.ACTION || "-",
 });
 provide("menuID", menuParams);
-console.log("🚀 ~ menuParams:", menuParams)
 
 const emptyImg = proxy.getAssetsFile("icon_task_NoData.png");
 
@@ -494,7 +457,7 @@ const computeCell = (tableBody) => {
 }
 const arraySpanMethod = (obj) => {
     const { row, column, rowIndex, columnIndex } = obj
-    if (columnIndex === 1 || columnIndex === 2 || columnIndex === 3 || columnIndex === 4 || columnIndex === 5 || columnIndex === 8 || columnIndex === 9 || columnIndex === 10) {
+    if (columnIndex === 0 || columnIndex === 1 || columnIndex === 2 || columnIndex === 3 || columnIndex === 4 || columnIndex === 5 || columnIndex === 8 || columnIndex === 9 || columnIndex === 10) {
         const rowCell = cellList.value[rowIndex];
         if (rowCell > 0) {
             const colCell = 1;
@@ -663,7 +626,6 @@ const queryApplyInfo = () => {
         ...menuParams.value,
         ...robOrderForm.value
     }
-    console.log("🚀 ~ queryApplyInfo ~ protData.robOrderForm.value:", robOrderForm.value)
     getTableData("/oms/robRecords/getRobRecordList", protData)
         .then((res) => {
             applyInfoList.value = res.RESULT
@@ -678,7 +640,6 @@ const queryApplyInfo = () => {
             }, [])
 
         }).catch(() => {
-            console.log('gfdgdf')
             applyInfoList.value = []
             listCount.value = null
             cellList.value = []
@@ -743,13 +704,28 @@ const Verification = () => {
 
 const topBtnRef = ref(null)
 const clickCommonBtn = (btn) => {
-    // btn.ACTIONADDRESS = btn.ACTIONADDRESS.concat(`?PK_PROJECT=${detailNoDynamic.value.BILLNO}`)
-    topBtnRef.value.handleEvent(btn, [detailNoDynamic.value])
+    if (btn.BTNTITLE == "cancellation" || btn.BTNTITLE == "winBidding") { // 作废  中标
+        const Collection = applyInfoRefChooseList.value.map(ele => ele.BILLNO)
+        const protData = {
+            data: Collection,
+            ...menuParams.value,
+        }
+        getTableData(btn.ACTIONADDRESS, protData)
+            .then((res) => {
+                proxy.$modal.msgSuccess("操作成功");
+                applyInfoRefChooseList.value = []
+                getPageList()
+
+            })
+
+
+    } else {
+        topBtnRef.value.handleEvent(btn, [detailNoDynamic.value])
+    }
 }
 
 const checkCertification = (val) => {
     let btn = allPageCon.value.BUTTON.filter(ele => ele.BTNTITLE == 'checkCertification')[0]
-    // btn.ACTIONADDRESS = btn.ACTIONADDRESS.concat(`?PK_CARRIER=${val.BILLNO}`)
     let data = {
         BILLNO: val.BILLNO
     }
