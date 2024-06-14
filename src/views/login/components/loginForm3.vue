@@ -49,7 +49,7 @@
           </el-form-item>
 
         </el-tab-pane>
-        <el-tab-pane label="易思云星空账号" name="2">
+        <!-- <el-tab-pane label="易思云星空账号" name="2">
           <div class="disflex optionClass justify-between">
             <div class="disflex">
               <div class="mr-5">集团</div>
@@ -81,10 +81,9 @@
                 <svg-icon icon-class="password" class="el-input__icon input-icon" />
               </template>
             </el-input>
-            <!-- <el-input v-model="loginForm.password" placeholder="请输入密码" /> -->
           </el-form-item>
         </el-tab-pane>
-      </el-tabs>
+      </el-tabs> -->
     </el-form>
     <div class="loginForm-btn">
       <el-button type="primary" :loaging="loginBtnLogin" size="large" style="width: 100%;"

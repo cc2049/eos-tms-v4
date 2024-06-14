@@ -44,10 +44,14 @@
                             <EosTabs :tabsList="rightMenu" @change="chooseTab" />
                         </div>
                         <div v-if="chooseTabVal == '条件' && choosePlanObj.BILLNO">
-                            <ConditionModule :filterConfig :filterArr="conditionModuleList" :choosePlanObj @closeModal="closeModal" />
+                            <ConditionModule :filterConfig :filterArr="conditionModuleList" :choosePlanObj
+                                @closeModal="closeModal" />
                         </div>
                         <div v-else-if="chooseTabVal == '排序' && choosePlanObj.BILLNO">
                             <SortModule :MenuID :choosePlanObj></SortModule>
+                        </div>
+                        <div v-else-if="chooseTabVal == '显示隐藏列' && choosePlanObj.BILLNO">
+                            <ShowHiddenModule :MenuID :choosePlanObj></ShowHiddenModule>
                         </div>
                     </div>
                 </div>
@@ -114,26 +118,27 @@ const MenuID = inject("menuID");
 
 import ConditionModule from "./conditionModule.vue"
 import SortModule from "./sortModule.vue"
+import ShowHiddenModule from "./showHiddenModule.vue"
 import EosTabs from "@/components/EosTabs/index.vue";
 
 const { proxy } = getCurrentInstance();
 
 const rightMenu = ref([
     {
-        BILLNO:0,
-        VNAME:'条件',
+        BILLNO: 0,
+        VNAME: '条件',
     },
     {
-        BILLNO:0,
-        VNAME:'高级',
+        BILLNO: 0,
+        VNAME: '高级',
     },
     {
-        BILLNO:0,
-        VNAME:'排序',
+        BILLNO: 0,
+        VNAME: '排序',
     },
     {
-        BILLNO:0,
-        VNAME:'显示隐藏列',
+        BILLNO: 0,
+        VNAME: '显示隐藏列',
     },
 
     // '条件', '高级', '排序', '显示隐藏列'
@@ -178,17 +183,17 @@ const changeBox = (val) => {
 
 
 const choosePlanObj = ref({})
-const conditionModuleList=ref([])
+const conditionModuleList = ref([])
 const clickLeftPlan = (item) => {
 
     choosePlanObj.value = item
     const protData = {
         PKBILLNO: item.BILLNO,
         ...MenuID.value,
-        VTYPE:'1'
+        VTYPE: '1'
     }
     getSubList(protData).then((res) => {
-       conditionModuleList.value = res.RESULT
+        conditionModuleList.value = res.RESULT
     });
 
 }
@@ -274,21 +279,21 @@ const savePlanLeft = () => {
 
 
 const clickUpdate = () => {
-    if(choosePlanObj.value.VTYPE == '0') return proxy.$modal.msgError(`默认方案不支持修改!`);
+    if (choosePlanObj.value.VTYPE == '0') return proxy.$modal.msgError(`默认方案不支持修改!`);
     saveAsForm.value = JSON.parse(JSON.stringify(choosePlanObj.value))
     saveAsModal.value = true
 
 }
 
 const clickDelete = () => {
-    if(choosePlanObj.value.VTYPE == '0') return proxy.$modal.msgError(`默认方案不支持删除!`);
+    if (choosePlanObj.value.VTYPE == '0') return proxy.$modal.msgError(`默认方案不支持删除!`);
     // const protData = {
     //     // CHOOSEDATA: [choosePlanObj.value],
     //     // ...MenuID.value
     //     [choosePlanObj.value]
     // }
-    const protData={
-        data:[choosePlanObj.value.BILLNO],
+    const protData = {
+        data: [choosePlanObj.value.BILLNO],
         ...MenuID.value
     }
 
@@ -308,7 +313,6 @@ defineExpose({
 </script>
 
 <style scoped lang="scss">
-
 .btnStyle {
     color: var(--el-color-primary) !important;
     cursor: pointer;
@@ -333,6 +337,7 @@ defineExpose({
     &-right {
         border-left: 10px solid #f3f3f3;
         width: 100%;
+
         .currentTabs {
             background-color: #eef1f8;
             padding: 4px 8px;
@@ -374,7 +379,7 @@ defineExpose({
     padding: 4px 10px;
 
     &.active {
-        background-color:var(--el-color-primary) !important;
+        background-color: var(--el-color-primary) !important;
         color: #fff;
     }
 
