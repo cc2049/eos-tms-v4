@@ -214,6 +214,7 @@ export const SLOT = [
   { LABEL: "主表", VALUE: "mainTable" },
   { LABEL: "子表", VALUE: "subTable" },
   { LABEL: "行色", VALUE: "rowBg" },
+  { LABEL: "单元格色", VALUE: "cellBg" },
   { LABEL: "展开表格", VALUE: "expandTB" },
   { LABEL: "展开表单", VALUE: "expandFM" },
   { LABEL: "状态节点", VALUE: "statusNode" },

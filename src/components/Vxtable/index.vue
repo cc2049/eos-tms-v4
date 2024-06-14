@@ -1,36 +1,15 @@
 <template>
   <div class="val_table bg-white">
 
-    <vxe-table class="mytable-scrollbar mytable-footer" resizable round show-overflow ref="xTable" size="mini" highlight-hover-row  width="100%" :show-footer="tableCFG.mergeCFG && tableCFG.mergeCFG.length" border :loading="tableCFG.loading"
-      :cell-class-name="cellClassName" 
-      :height="tableCFG.height"
-      :scroll-y="{enabled: true, gt: 0}"
-      :column-config="{ isCurrent: false, isHover: true }" :row-config="{
+    <vxe-table class="mytable-scrollbar mytable-footer" resizable round show-overflow ref="xTable" size="mini" highlight-hover-row width="100%" :show-footer="tableCFG.mergeCFG && tableCFG.mergeCFG.length" border :loading="tableCFG.loading" :cell-class-name="cellClassName" :height="tableCFG.height" :scroll-y="{enabled: true, gt: 0}" :column-config="{ isCurrent: false, isHover: true }" :row-config="{
         isCurrent: true,
         isHover: true,
         height:  34 ,
-      }" 
-      :data="tableData" 
-      :span-method="mergeRowMethod" 
-      :checkbox-config="{highlight: true}" 
-      :sort-config="{ showIcon: false }" 
-      :footer-method="footerMethod" 
-      :row-class-name="rowClassName" 
-      :tree-config="tableCFG.treeID"
-      footer-row-class-name="footerRowClassName"
-      footer-cell-class-name="footerCellClassName"
-      @toggle-row-expand="toggleExpandChangeEvent" 
-      @sort-change="sortChange" 
-      @radio-change="radioChangeEvent"
-      @checkbox-change="checkboxChange" 
-      @checkbox-all="checkboxChange" 
-      @custom="toolbarCustomEvent" 
-      @cell-click="rowClick" 
-      @cell-dblclick="
+      }" :data="tableData" :span-method="mergeRowMethod" :checkbox-config="{highlight: true}" :sort-config="{ showIcon: false }" :footer-method="footerMethod" :row-class-name="rowClassName" :tree-config="tableCFG.treeID" footer-row-class-name="footerRowClassName" footer-cell-class-name="footerCellClassName" @toggle-row-expand="toggleExpandChangeEvent" @sort-change="sortChange" @radio-change="radioChangeEvent" @checkbox-change="checkboxChange" @checkbox-all="checkboxChange" @custom="toolbarCustomEvent" @cell-click="rowClick" @cell-dblclick="
         (e) => {
           openDetail(e.row);
         }
-      " >
+      ">
 
       <template v-for="(config, indexC) in tableCFG.tableColumns" :key="indexC">
 
@@ -48,8 +27,7 @@
         </template>
 
         <template v-else>
-          <vxe-column :field="config.FIELD" :align="config.ALIGN" :width="setColWidth(config)" :title=" setColTitle(config)  " :fixed="config.ISFIXED=='left'?'left':null" :height="30" :resizable="true" :key="i" :tree-node=" tableCFG.treeID?.treenodeId == config.FIELD "
-            :visible="setTableColShow(config)" :sortable="config.ISSORT == 1">
+          <vxe-column :field="config.FIELD" :align="config.ALIGN" :width="setColWidth(config)" :title=" setColTitle(config)  " :fixed="config.ISFIXED=='left'?'left':null" :height="30" :resizable="true" :key="i" :tree-node=" tableCFG.treeID?.treenodeId == config.FIELD " :visible="setTableColShow(config)" :sortable="config.ISSORT == 1">
             <template #header="{ column }">
               <Header :column="column" :config="config" :tableData="sourceTableData" :sortCFG :tableCFG="tableCFG" @filterEvent="filterEvent" @handleSortEvent="headerCellClickEvent" @rightClick="rightClickEvent" @setColShowEvent="setColShowEvent" />
             </template>
@@ -66,7 +44,6 @@
           <slot name="actionBar" :rowIndex="rowIndex" :row="row"></slot>
         </template>
       </vxe-column>
-      
 
       <template #empty>
         <el-empty :image="emptyImg" description="很抱歉，暂时没有相关数据~" :image-size="150" />
@@ -178,6 +155,10 @@ const cellClassName = ({ row, column }) => {
   if (row === selectRow.value && column === selectColumn.value) {
     return "cell-active";
   }
+  const hasCellClass = proxy.tableCFG.tableColumns.filter(el => el.FIELD == column.field && el.SLOT && el.SLOT == 'cellBg')
+  if (hasCellClass.length == 0) return ""
+  let DATA = row
+  if (DATA && eval(hasCellClass[0].SLOTCFG)) return "cell-red"
   return null;
 };
 
@@ -290,12 +271,12 @@ const setStatusNodes = computed((config, val) => {
           newArr[0].COLOR == "info"
             ? "#909399"
             : newArr[0].COLOR == "primary"
-            ? "#409EFF"
-            : newArr[0].COLOR == "success"
-            ? "#67C23A"
-            : newArr[0].COLOR == "danger"
-            ? "#F56C6C"
-            : "#E6A23C";
+              ? "#409EFF"
+              : newArr[0].COLOR == "success"
+                ? "#67C23A"
+                : newArr[0].COLOR == "danger"
+                  ? "#F56C6C"
+                  : "#E6A23C";
         let LABEL = newArr[0].LABEL;
         let VALUE = newArr[0].VALUE;
         return { color, LABEL, VALUE };
@@ -642,7 +623,7 @@ function rowClick({ row, column, triggerCheckbox, rowIndex }) {
 }
 // 点击超链接事件
 function openLink(data) {
-  const { cf, row} = data
+  const { cf, row } = data
   if (cf.OTHER) {
     let giveParentData = {
       clicktype: "openLink",
@@ -1140,10 +1121,10 @@ defineExpose({
 :deep(.mytable-scrollbar .vxe-body--row .cell-active) {
   box-shadow: inset 0 0 0 2px var(--vxe-primary-color);
 }
-.mytable-scrollbar:deep() .footerRowClassName{
-  background-color: #f5f5f5!important;
+.mytable-scrollbar:deep() .footerRowClassName {
+  background-color: #f5f5f5 !important;
 }
-.mytable-scrollbar:deep() .footerCellClassName{
+.mytable-scrollbar:deep() .footerCellClassName {
   // background-color: #f5f5f5!important;
   background-image: none !important;
 }
@@ -1168,6 +1149,10 @@ defineExpose({
 .row-red {
   background-color: #187;
   color: #fff;
+}
+:deep(.vxe-body--column.cell-red) {
+  background: red !important;
+  color: #fff !important;
 }
 .img-box {
   display: flex;
