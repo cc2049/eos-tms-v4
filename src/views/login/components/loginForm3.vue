@@ -159,7 +159,7 @@ console.log(props.LoginConfigs)
 const { proxy } = getCurrentInstance();
 const emit = defineEmits('clickForgetPassword', "clickShowClause")
 
-const activeName = ref('2')
+const activeName = ref('1')
 
 const imgBaseUrl = computed(() => settingsStore.globalConfig.imgBaseUrl + '/');
 
