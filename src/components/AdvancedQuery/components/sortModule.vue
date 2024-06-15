@@ -16,19 +16,21 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr v-for="item in filedList" :key="item.BILLNO">
-                                <td>{{ item.LABEL}}</td>
+                            <tr v-for="item in filedList" :key="item.BILLNO"
+                                :class="item.BILLNO == chooseLeftVal.BILLNO ? 'active' : ''"
+                                @click="clickLeftTable(item)">
+                                <td>{{ item.LABEL }}</td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
             </el-col>
             <el-col :span="4">
-                <div><el-button type="primary" class="mb-10" size="small">加入</el-button></div>
-                <div><el-button type="primary" class="mb-10" size="small">删除</el-button></div>
-                <div><el-button type="primary" class="mb-30" size="small">全删</el-button></div>
-                <div><el-button type="primary" class="mb-10" size="small">上移</el-button></div>
-                <div><el-button type="primary" size="small">下移</el-button></div>
+                <div><el-button type="primary" class="mb-10" size="small" @click="clickBtn(1)">加入</el-button></div>
+                <div><el-button type="primary" class="mb-10" size="small" @click="clickBtn(2)">删除</el-button></div>
+                <div><el-button type="primary" class="mb-30" size="small" @click="clickBtn(3)">全删</el-button></div>
+                <div><el-button type="primary" class="mb-10" size="small" @click="clickBtn(4)">上移</el-button></div>
+                <div><el-button type="primary" size="small" @click="clickBtn(5)">下移</el-button></div>
             </el-col>
             <el-col :span="12">
                 <table style="width: 280px;">
@@ -40,22 +42,21 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>这大</td>
-                        </tr>
-                        <tr>
-                            <td>这大</td>
-                        </tr>
-                        <tr>
-                            <td>这大</td>
-                        </tr>
-                        <tr>
-                            <td>这大</td>
+                        <tr v-for="(item, index) in rightList" :key="item.BILLNO"
+                            :class="item.BILLNO == chooseRightVal.BILLNO ? 'active' : ''"
+                            @click="clickRightTable(item)">
+                            <td>{{ index + 1 }}</td>
+                            <td>{{ item.LABEL }}</td>
+                            <td>{{ item.SORTCODE }}</td>
                         </tr>
                     </tbody>
                 </table>
             </el-col>
         </el-row>
+        <div class="tr ">
+            <el-button @click="confirm">确定</el-button>
+            <el-button @click="cancle">取消</el-button>
+        </div>
     </div>
 </template>
 
@@ -77,6 +78,54 @@ const props = defineProps({
     },
 });
 
+
+
+const chooseLeftVal = ref({})
+const chooseRightVal = ref({})
+const rightList = ref([])
+const clickLeftTable = (item) => {
+    chooseLeftVal.value = item
+}
+const clickRightTable = (item) => {
+    chooseRightVal.value = item
+}
+
+const clickBtn = (flag) => {
+    switch (flag) {
+        case 1:
+            if (chooseLeftVal.value.BILLNO && !rightList.value.find(ele => ele.BILLNO == chooseLeftVal.value.BILLNO)) {
+                rightList.value.push(chooseLeftVal.value)
+            }
+            break
+        case 2:
+            let index = rightList.value.findIndex(item => item.BILLNO === chooseRightVal.value.BILLNO) || null
+            if (index == -1) return
+            rightList.value.splice(index, 1)
+            chooseRightVal.value = {}
+            break
+        case 3:
+            rightList.value = []
+            chooseRightVal.value = {}
+            break
+        case 4:
+            let index1 = rightList.value.findIndex(item => item.BILLNO === chooseRightVal.value.BILLNO) || null
+            if (index1 == -1 || index1 == 0 || !index1) return
+            let currentData = JSON.parse(JSON.stringify(rightList.value[index1]))
+            let exchangeData = JSON.parse(JSON.stringify(rightList.value[index1 - 1]))
+            rightList.value.splice(index1, 1, exchangeData)
+            rightList.value.splice(index1 - 1, 1, currentData)
+            break
+        case 5:
+            let index2 = rightList.value.findIndex(item => item.BILLNO === chooseRightVal.value.BILLNO)
+            if (index2 == rightList.value.length - 1) return
+            let currentData2 = JSON.parse(JSON.stringify(rightList.value[index2]))
+            let exchangeData2 = JSON.parse(JSON.stringify(rightList.value[index2 + 1]))
+            rightList.value.splice(index2, 1, exchangeData2)
+            rightList.value.splice(index2 + 1, 1, currentData2)
+            break
+
+    }
+}
 const filedList = ref([])
 const getgetFieldList = () => {
     const protData = {
