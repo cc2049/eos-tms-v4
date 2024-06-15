@@ -72,6 +72,7 @@ const MenuID = inject("menuID");
 
 const { proxy } = getCurrentInstance();
 
+const emit = defineEmits(["closeModal"]);
 
 const props = defineProps({
     MenuID: {

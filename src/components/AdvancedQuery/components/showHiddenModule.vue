@@ -15,7 +15,10 @@
                             <tr>
                                 <td>序号</td>
                                 <td>字段</td>
-                                <td>显示</td>
+                                <td class="disflex"><el-checkbox v-model="allIS_SHOW" true-value="1" false-value="0"
+                                        @change="changeallIS_SHOW" />
+                                    <span class="ml-5">显示</span>
+                                </td>
                                 <td>宽度</td>
                             </tr>
                         </thead>
@@ -56,6 +59,7 @@ import { inject, reactive } from "vue";
 // const MenuID = inject("menuID");
 const { proxy } = getCurrentInstance();
 
+const emit = defineEmits(["closeModal"]);
 
 
 const props = defineProps({
@@ -69,18 +73,23 @@ const props = defineProps({
     },
 });
 
-
+const allIS_SHOW = ref(false)
+const changeallIS_SHOW = (e) => {
+    filedList.value.forEach((item, index) => {
+        filedList.value[index].IS_SHOW = e
+    })
+}
 const confirm = () => {
 
     let FIELDS = filedList.value
     FIELDS.forEach((item, index) => {
-        FIELDS[index].SORTCODE = index + 1
+        FIELDS[index].SORTCODE = String(index + 1)
     })
 
     const protData = {
         PKBILLNO: props.choosePlanObj.BILLNO, // 方案主键
         VTYPE: props.choosePlanObj.VTYPE,
-        DEALTYPE: 1, // 1-隐藏保存，2-排序保存
+        DEALTYPE: '1', // 1-隐藏保存，2-排序保存
         FIELDS,
         ...props.MenuID,
     };
@@ -104,7 +113,6 @@ const clickLeftTable = (item) => {
 const numberLIne = ref(null)
 
 const clickBtn = (flag) => {
-    console.log(numberLIne.value)
     if (!chooseLeftVal.value.BILLNO) return
     switch (flag) {
         case 1:
@@ -117,7 +125,6 @@ const clickBtn = (flag) => {
             break
         case 2:
             let newArr = initFiledList.value.filter(ele => ele.BILLNO == chooseLeftVal.value.BILLNO)
-            console.log("🚀 ~ clickBtn ~ newArr:", newArr)
             let newIndex = filedList.value.findIndex(item => item.BILLNO == chooseLeftVal.value.BILLNO)
             filedList.value[newIndex] = JSON.parse(JSON.stringify(newArr[0]))
 
