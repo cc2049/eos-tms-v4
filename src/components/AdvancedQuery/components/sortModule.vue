@@ -186,6 +186,7 @@ const getgetSortFieldList = () => {
         rightList.value.forEach((item, index) => {
             let obj = filedList.value.find(ele => ele.FIELD == item.FIELD)
             rightList.value[index].LABEL = obj.LABEL
+            rightList.value[index].BILLNO = obj.BILLNO
         })
 
 
