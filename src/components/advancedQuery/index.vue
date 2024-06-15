@@ -25,7 +25,7 @@
               <Icon icon="iconamoon:search"></Icon>
             </el-icon>
           </el-button>
-          <el-popover placement="bottom" :width="510" trigger="click" ref="popoverRef" :visible="visible" >
+          <el-popover placement="bottom" :width="510" trigger="click" ref="popoverRef" :visible="visible">
             <template #reference>
               <el-button @click="visible = true">
                 <el-icon :size="20">
@@ -33,9 +33,9 @@
                 </el-icon>
               </el-button>
             </template>
-            <SettingFilter :filterConfig="filterConfig" :filterArr="filterArr" @changeCondition="changeCondition"
-              @resetCondition="resetCondition" @delFilterArr="delFilterArr" @changeFilter="changeFilter"
-              @changeCurrentQueryList="settingChangeCurrentQueryList" />
+            <SettingFilter ref="settingFilterRef" :filterConfig="filterConfig" :filterArr="filterArr"
+              @changeCondition="changeCondition" @resetCondition="resetCondition" @delFilterArr="delFilterArr"
+              @changeFilter="changeFilter" @changeCurrentQueryList="settingChangeCurrentQueryList" />
             <el-divider />
             <div class="tr">
               <el-button @click="clostPopver" size="mini">取消</el-button>
@@ -112,14 +112,16 @@ const filterArr = ref([]);
 const defaultFilterArr = ref([]);
 // 我的方案
 const chooseRadioVal = ref(null);
+const chooseRadioObj = ref({})
 const myPlanList = ref([]);
+const settingFilterRef=ref(null)
 const clickRadio = (item) => {
   chooseRadioVal.value = item?.BILLNO;
-
+  chooseRadioObj.value = item
   let query = {
     ...MenuID.value,
     PKBILLNO: item?.BILLNO,
-    VTYPE:'0'
+    VTYPE: '0'
   };
   // 查询方案里面的值
   axiosGet("/sys/queryprogUserDtl/getSubList", query).then((res) => {
@@ -127,6 +129,9 @@ const clickRadio = (item) => {
 
     querySaveList.value = JSON.parse(JSON.stringify(res.RESULT));
     settingQueryList.value = JSON.parse(JSON.stringify(res.RESULT));
+
+
+    settingFilterRef.value && settingFilterRef.value.updateCurrentQueryList(res.RESULT)
 
   });
 
@@ -213,9 +218,9 @@ watch(
   },
   { immediate: true }
 );
-const popoverRef=ref(null)
-const visible=ref(false)
-const clostPopver=()=>{
+const popoverRef = ref(null)
+const visible = ref(false)
+const clostPopver = () => {
   // popoverRef.value.hide()
   visible.value = false
 }
@@ -226,18 +231,18 @@ const changeCurrentQueryList = (val) => {
   querySaveList.value = JSON.parse(JSON.stringify(val));
 };
 const settingQueryList = ref([]);
-const filtrationComRef=ref(null)
+const filtrationComRef = ref(null)
 const settingChangeCurrentQueryList = (val) => {
   clickStatus.value = 2;
   settingQueryList.value = JSON.parse(JSON.stringify(val));
   // querySaveList.value = JSON.parse(JSON.stringify(val));
   filtrationComRef.value && filtrationComRef.value.updateCurrentQueryList(val)
- 
+
 };
 
 const allocationPlanRef = ref(null);
 const clickSavePlan = () => {
-  if (myPlanList.value) {
+  if (myPlanList.value && chooseRadioObj.value.VTYPE == 1) {
     callAddition();
   } else {
     allocationPlanRef.value.showSaveAs(querySaveList.value);
@@ -247,7 +252,7 @@ const clickSavePlan = () => {
 // 调用保存方案
 const callAddition = () => {
   let QUERYS = []
-  QUERYS = querySaveList.value.map((ele,index) => {
+  QUERYS = querySaveList.value.map((ele, index) => {
     return {
       FIELD: ele.FIELD,
       QUERYTYPE: ele.QUERYTYPE,
@@ -258,8 +263,8 @@ const callAddition = () => {
       QRYCONT: ele.QRYCONT,
       QRYPRE: ele.QRYPRE,
       QRYSUF: ele.QRYSUF,
-      SORTCODE:index,
-      VTYPE:'0',
+      SORTCODE: index,
+      VTYPE: '0',
     }
   })
 
@@ -294,7 +299,7 @@ const getPlanList = () => {
           ? newArr[0].BILLNO
           : myPlanList.value[0].BILLNO
 
-        // clickRadio(newArr.length ? newArr[0] : myPlanList.value[0])
+        clickRadio(newArr.length ? newArr[0] : myPlanList.value[0])
       }
 
 
@@ -397,7 +402,7 @@ onMounted(() => {
   }
 
   .btnStyle {
-    color:var(--el-color-primary) !important;
+    color: var(--el-color-primary) !important;
     cursor: pointer;
     font-size: 14px;
   }

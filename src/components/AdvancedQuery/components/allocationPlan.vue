@@ -48,10 +48,10 @@
                                 @closeModal="closeModal" />
                         </div>
                         <div v-else-if="chooseTabVal == '排序' && choosePlanObj.BILLNO">
-                            <SortModule :MenuID :choosePlanObj @closeModal="closeModal" ></SortModule>
+                            <SortModule :MenuID :choosePlanObj @closeModal="closeModal"></SortModule>
                         </div>
                         <div v-else-if="chooseTabVal == '显示隐藏列' && choosePlanObj.BILLNO">
-                            <ShowHiddenModule :MenuID :choosePlanObj @closeModal="closeModal" ></ShowHiddenModule>
+                            <ShowHiddenModule :MenuID :choosePlanObj @closeModal="closeModal"></ShowHiddenModule>
                         </div>
                     </div>
                 </div>
@@ -237,6 +237,23 @@ const saveAsRules = ref({
 })
 const savePlanLeft = () => {
 
+    let QUERYS = []
+    QUERYS = addConditionList.value.map((ele, index) => {
+        return {
+            FIELD: ele.FIELD,
+            QUERYTYPE: ele.QUERYTYPE,
+            DEFAULTVAL: ele.DEFAULTVAL,
+            DEFAULTVAL2: ele.DEFAULTVAL2,
+            SORTCODE: ele.SORTCODE,
+            DEFAULTVALArr: ele.DEFAULTVALArr,
+            QRYCONT: ele.QRYCONT,
+            QRYPRE: ele.QRYPRE,
+            QRYSUF: ele.QRYSUF,
+            SORTCODE: index,
+            VTYPE: '0',
+        }
+    })
+
     const protData = {
         // VNAME: saveAsForm.value.VNAME,
         // VTYPE: 1,
@@ -246,7 +263,8 @@ const savePlanLeft = () => {
         // ISDEFAULT: 1,
         ...saveAsForm.value,
         ...MenuID.value,
-        QUERYS: addConditionList.value,  // 如果外面没有方案，那么保存时候会走新增方案，把外层方案传过来
+        // QUERYS: addConditionList.value,  // 如果外面没有方案，那么保存时候会走新增方案，把外层方案传过来
+        QUERYS
     }
 
     if (saveAsForm.value.BILLNO) {

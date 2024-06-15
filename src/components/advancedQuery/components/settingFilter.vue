@@ -84,6 +84,10 @@ const delFilterArr = (item, index) => {
     emit("delFilterArr", index)
 }
 
+const updateCurrentQueryList = (val) => {
+    currentQueryList.value = val
+}
+
 const changeFilter = (val, item, index) => {
     emit("changeFilter", val, item, index)
 }
@@ -136,7 +140,9 @@ watch(() => currentQueryList.value, value => {
 
 
 
-
+defineExpose({
+    updateCurrentQueryList,
+});
 
 </script>
 
