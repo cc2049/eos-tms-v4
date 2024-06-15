@@ -48,7 +48,7 @@
                                 @closeModal="closeModal" />
                         </div>
                         <div v-else-if="chooseTabVal == '排序' && choosePlanObj.BILLNO">
-                            <SortModule :MenuID :choosePlanObj></SortModule>
+                            <SortModule :MenuID :choosePlanObj @closeModal="closeModal" ></SortModule>
                         </div>
                         <div v-else-if="chooseTabVal == '显示隐藏列' && choosePlanObj.BILLNO">
                             <ShowHiddenModule :MenuID :choosePlanObj></ShowHiddenModule>

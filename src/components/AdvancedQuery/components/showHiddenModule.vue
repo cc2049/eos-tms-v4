@@ -51,9 +51,10 @@
 </template>
 
 <script setup>
-import { getFieldList } from "#/system/advancedQuery";
+import { getFieldList, updateFields } from "#/system/advancedQuery";
 import { inject, reactive } from "vue";
-const MenuID = inject("menuID");
+// const MenuID = inject("menuID");
+const { proxy } = getCurrentInstance();
 
 
 
@@ -68,6 +69,30 @@ const props = defineProps({
     },
 });
 
+
+const confirm = () => {
+
+    let FIELDS = filedList.value
+    FIELDS.forEach((item, index) => {
+        FIELDS[index].SORTCODE = index + 1
+    })
+
+    const protData = {
+        PKBILLNO: props.choosePlanObj.BILLNO, // 方案主键
+        VTYPE: props.choosePlanObj.VTYPE,
+        DEALTYPE: 1, // 1-隐藏保存，2-排序保存
+        FIELDS,
+        ...props.MenuID,
+    };
+    updateFields(protData).then((res) => {
+        proxy.$modal.msgSuccess("保存成功");
+        emit("closeModal")
+    });
+}
+
+const cancle = () => {
+    emit("closeModal")
+}
 
 
 const chooseLeftVal = ref({})
@@ -128,13 +153,23 @@ const getgetFieldList = () => {
 
     }
     getFieldList(protData).then((res) => {
+        // let data = res.RESULT
+        // data.forEach((item, index) => {
+        //     data[index].SORTCODE = index + 1
+        // })
+        // filedList.value = JSON.parse(JSON.stringify(data))
+        // initFiledList.value = JSON.parse(JSON.stringify(data))
         filedList.value = JSON.parse(JSON.stringify(res.RESULT))
         initFiledList.value = JSON.parse(JSON.stringify(res.RESULT))
     });
 }
 
-onMounted(() => {
+watch(() => props.choosePlanObj.BILLNO, value => {
     getgetFieldList();
+}, { immediate: true })
+
+onMounted(() => {
+    // getgetFieldList();
 
 });
 

@@ -33,12 +33,12 @@
                 <div><el-button type="primary" size="small" @click="clickBtn(5)">下移</el-button></div>
             </el-col>
             <el-col :span="12">
-                <table style="width: 280px;">
+                <table style="width: 100%;">
                     <thead>
                         <tr>
-                            <td>序号</td>
+                            <td style="width: 50px;">序号</td>
                             <td>字段</td>
-                            <td>排序方式</td>
+                            <td style="width: 100px;">排序方式</td>
                         </tr>
                     </thead>
                     <tbody>
@@ -47,7 +47,12 @@
                             @click="clickRightTable(item)">
                             <td>{{ index + 1 }}</td>
                             <td>{{ item.LABEL }}</td>
-                            <td>{{ item.SORTCODE }}</td>
+                            <td>
+                                <el-select v-model="item.SORTFLAG" size="small" style="width: 100%">
+                                    <el-option label="升序" value="AES" />
+                                    <el-option label="降序" value="DESC" />
+                                </el-select>
+                            </td>
                         </tr>
                     </tbody>
                 </table>
@@ -61,10 +66,11 @@
 </template>
 
 <script setup>
-import { getFieldList } from "#/system/advancedQuery";
+import { getFieldList, updateSortFields, getSortFieldList } from "#/system/advancedQuery";
 import { inject, reactive } from "vue";
 const MenuID = inject("menuID");
 
+const { proxy } = getCurrentInstance();
 
 
 const props = defineProps({
@@ -80,6 +86,7 @@ const props = defineProps({
 
 
 
+
 const chooseLeftVal = ref({})
 const chooseRightVal = ref({})
 const rightList = ref([])
@@ -89,6 +96,30 @@ const clickLeftTable = (item) => {
 const clickRightTable = (item) => {
     chooseRightVal.value = item
 }
+
+const confirm = () => {
+    let FIELDS = rightList.value.map(ele => {
+        return {
+            FIELD: ele.FIELD,
+            SORTFLAG: ele.SORTFLAG
+        }
+    })
+    const protData = {
+        BILLNO: props.choosePlanObj.BILLNO, // 方案主键
+        VTYPE: props.choosePlanObj.VTYPE,
+        FIELDS,
+        ...props.MenuID,
+    };
+    updateSortFields(protData).then((res) => {
+        proxy.$modal.msgSuccess("保存成功");
+        emit("closeModal")
+    });
+}
+
+const cancle = () => {
+    emit("closeModal")
+}
+
 
 const clickBtn = (flag) => {
     switch (flag) {
@@ -135,11 +166,36 @@ const getgetFieldList = () => {
     }
     getFieldList(protData).then((res) => {
         filedList.value = res.RESULT
+        getgetSortFieldList()
     });
 }
 
-onMounted(() => {
+const getgetSortFieldList = () => {
+    const protData = {
+        ...props.MenuID,
+        PKBILLNO: props.choosePlanObj.BILLNO,
+        BILLNO: props.choosePlanObj.BILLNO,
+
+    }
+    getSortFieldList(protData).then((res) => {
+        rightList.value = res.RESULT
+
+        // const newArr = res.RESULT
+
+        rightList.value.forEach((item, index) => {
+            let obj = filedList.value.find(ele => ele.FIELD == item.FIELD)
+            rightList.value[index].LABEL = obj.LABEL
+        })
+
+
+    });
+}
+watch(() => props.choosePlanObj.BILLNO, value => {
     getgetFieldList();
+}, { immediate: true })
+
+onMounted(() => {
+    // getgetFieldList();
 
 });
 

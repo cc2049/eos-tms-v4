@@ -75,3 +75,23 @@ export function updateFields(data) {
     data: data
   })
 }
+
+// 方案排序字段信息更新
+export function updateSortFields(data) {
+  return request({
+    url: '/sys/queryprogUser/updateSortFields',
+    method: 'post',
+    data: data
+  })
+}
+
+
+// 方案排序字段信息查询
+export function getSortFieldList(data) {
+  return request({
+    url: '/sys/queryprogUser/getSortFieldList',
+    method: 'post',
+    data: data
+  })
+}
+
