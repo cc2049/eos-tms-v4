@@ -48,8 +48,9 @@ onMounted(() => {
 })
 
 
-
-
+const updateCurrentQueryList = (val) => {
+    currentQueryList.value = val
+}
 
 const changeFilter = (val, item, index) => {
     emit("changeFilter", val, item, index)
@@ -75,7 +76,7 @@ watch(() => props.filterArr, value => {
 
     })
 
-}, { immediate: true, deep: true  })
+}, { immediate: true, deep: true })
 
 watch(() => currentQueryList.value, value => {
     emit('changeCurrentQueryList', value)
@@ -87,7 +88,9 @@ watch(() => props.settingArr, value => {
 
 }, { immediate: true, deep: true })
 
-
+defineExpose({
+    updateCurrentQueryList,
+});
 </script>
 
 <style scoped lang="scss">

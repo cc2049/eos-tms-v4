@@ -16,7 +16,7 @@
       <div class="advancedQuery-title">快捷过滤</div>
       <!-- <div style="width: calc(100% - 100px)"> -->
       <div class="oneLine">
-        <FiltrationCom :filterConfig="filterConfig" :filterArr="filterArr" class="oneLine-left"
+        <FiltrationCom ref="filtrationComRef" :filterConfig="filterConfig" :filterArr="filterArr" class="oneLine-left"
           :style="{ height: FiltrationComHeight, maxWidth: binSize + 'px' }" @changeFilter="changeFilter"
           @changeCurrentQueryList="changeCurrentQueryList" :settingArr="settingQueryList" />
         <div class="advancedQuery-rightBtn">
@@ -226,10 +226,13 @@ const changeCurrentQueryList = (val) => {
   querySaveList.value = JSON.parse(JSON.stringify(val));
 };
 const settingQueryList = ref([]);
+const filtrationComRef=ref(null)
 const settingChangeCurrentQueryList = (val) => {
   clickStatus.value = 2;
   settingQueryList.value = JSON.parse(JSON.stringify(val));
   // querySaveList.value = JSON.parse(JSON.stringify(val));
+  filtrationComRef.value && filtrationComRef.value.updateCurrentQueryList(val)
+ 
 };
 
 const allocationPlanRef = ref(null);
