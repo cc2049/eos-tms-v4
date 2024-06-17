@@ -110,3 +110,7 @@
 .success-color, .bg-success{
   color: $--color-success;
 }
+
+.el-form-item--default{
+  --font-size: 12px;
+}
