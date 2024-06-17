@@ -88,34 +88,34 @@ export const constantRoutes = [
 
 // 动态路由，基于用户权限动态去加载
 export const dynamicRoutes = [
-  {
-    path: '/system/user-auth',
-    component: Layout,
-    hidden: true,
-    permissions: ['system:user:edit'],
-    children: [
-      {
-        path: 'role/:userId(\\d+)',
-        component: () => import('@/views/system/user/authRole'),
-        name: 'AuthRole',
-        meta: { title: '分配角色', activeMenu: '/system/user' }
-      }
-    ]
-  },
-  {
-    path: '/system/role-auth',
-    component: Layout,
-    hidden: true,
-    permissions: ['system:role:edit'],
-    children: [
-      {
-        path: 'user/:roleId(\\d+)',
-        component: () => import('@/views/system/role/authUser'),
-        name: 'AuthUser',
-        meta: { title: '分配用户', activeMenu: '/system/role' }
-      }
-    ]
-  },
+  // {
+  //   path: '/system/user-auth',
+  //   component: Layout,
+  //   hidden: true,
+  //   permissions: ['system:user:edit'],
+  //   children: [
+  //     {
+  //       path: 'role/:userId(\\d+)',
+  //       component: () => import('@/views/system/user/authRole'),
+  //       name: 'AuthRole',
+  //       meta: { title: '分配角色', activeMenu: '/system/user' }
+  //     }
+  //   ]
+  // },
+  // {
+  //   path: '/system/role-auth',
+  //   component: Layout,
+  //   hidden: true,
+  //   permissions: ['system:role:edit'],
+  //   children: [
+  //     {
+  //       path: 'user/:roleId(\\d+)',
+  //       component: () => import('@/views/system/role/authUser'),
+  //       name: 'AuthUser',
+  //       meta: { title: '分配用户', activeMenu: '/system/role' }
+  //     }
+  //   ]
+  // },
   {
     path: '/system/dict-data',
     component: Layout,

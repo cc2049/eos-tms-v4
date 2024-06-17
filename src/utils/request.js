@@ -120,13 +120,15 @@ service.interceptors.response.use(res => {
     return Promise.reject(res.data)
   } else {
     if (res.data && res.data.KEY) {
-      // let SECRETRESULT = res.data.SECRETRESULT, sraKey = RSADencrypt(res.data.KEY), KMData = aesJmDEncrypt(sraKey, SECRETRESULT);
-      // KMData = KMData ? JSON.parse(KMData) : null
-      // let SECRETRESULT = res.data.SECRETRESULT, sraKey = aesDEncrypt(res.data.KEY), KMData = aesJmDEncrypt(sraKey, SECRETRESULT);
       let KMData = {};
       KMData = KMData ? JSON.parse(aesDEncrypt(res.data)) : null
       res.data.RESULT = KMData
     }
+
+    // if(!res.data.RESULT){
+    //   return Promise.reject(res.data)
+    // }
+
     return Promise.resolve(res.data)
   }
 },
