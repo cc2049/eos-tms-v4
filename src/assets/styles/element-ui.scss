@@ -83,30 +83,43 @@
   box-sizing: content-box;
 }
 
-.el-menu--collapse
-  > div
-  > .el-submenu
-  > .el-submenu__title
-  .el-submenu__icon-arrow {
+.el-menu--collapse>div>.el-submenu>.el-submenu__title .el-submenu__icon-arrow {
   display: none;
 }
 
-.el-dropdown .el-dropdown-link{
+.el-dropdown .el-dropdown-link {
   color: var(--el-color-primary) !important;
 }
 
-.brand-color, .bg-brand{
+.brand-color,
+.bg-brand {
   color: $--color-primary;
 }
 
-.danger-color, .bg-danger{
+.danger-color,
+.bg-danger {
   color: $--color-danger;
 }
 
-.waring-color, .bg-waring{
+.waring-color,
+.bg-waring {
   color: $--color-warning;
 }
 
-.success-color, .bg-success{
+.success-color,
+.bg-success {
   color: $--color-success;
+}
+
+.el-form-item--default {
+  --font-size: 12px;
+
+  .el-form-item__label {
+    -webkit-font-smoothing: antialiased;
+    /* Chrome, Safari, Opera */
+    -moz-osx-font-smoothing: grayscale;
+    /* Firefox */
+    text-rendering: optimizeLegibility;
+    /* 推荐用于其他浏览器 */
+  }
 }
