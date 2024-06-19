@@ -108,7 +108,7 @@ watch(() => props.visible, (val) => {
     // getDepartmentList();
     searchVal.value = "";
     checkedEmployessList.value = props.data.filter(item => item.type === 1).map(({ name, targetId }) => ({
-      VNAME: name,
+      REALNAME: name,
       BILLNO: targetId
     }));
     checkedUserIDs.value = checkedEmployessList.value.map(el => el.BILLNO)
@@ -132,7 +132,7 @@ let saveDialog = () => {
   ].map(item => ({
     type: 1,
     targetId: item.BILLNO,
-    name: item.VNAME
+    name: item.REALNAME
   }))
   emits('change', checkedList)
 }
@@ -177,7 +177,7 @@ const queryParams = ref({
 const UserOptions = ref([])
 const getUserList = () => {
   getUserListData(queryParams.value).then((res) => {
-    UserOptions.value = res.RESULT.RECORDS;
+    UserOptions.value = res.RESULT;
   })
 }
 const change = row => {

@@ -1,7 +1,7 @@
 <!--
  * @Date: 2022-08-26 17:18:14
  * @LastEditors: PiPin 33947354+p1Master@users.noreply.github.com
- * @LastEditTime: 2024-06-05 17:44:52
+ * @LastEditTime: 2024-06-19 16:28:16
  * @FilePath: /Workflow-Vue3/src/components/selectBox.vue
 -->
 <template>
@@ -25,7 +25,7 @@
       <template v-if="elem.type === 'employee'">
         <li v-for="item in elem.data" :key="item.id" class="check_box">
           <a :class="elem.isActive(item) && 'active'" @click="elem.change(item)" :title="item.departmentNames">
-            <img src="@/assets/images/workflow/icon_people.png">{{item.VNAME}}
+            <img src="@/assets/images/workflow/icon_people.png">{{item.REALNAME}}
           </a>
         </li>
       </template>

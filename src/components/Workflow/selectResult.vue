@@ -1,7 +1,7 @@
 <!--
  * @Date: 2022-08-26 16:29:24
- * @LastEditors: piplns piplns@163.com
- * @LastEditTime: 2024-04-18 16:27:03
+ * @LastEditors: PiPin 33947354+p1Master@users.noreply.github.com
+ * @LastEditTime: 2024-06-19 16:28:59
  * @FilePath: /Workflow-Vue3/src/components/selectResult.vue
 -->
 <template>
@@ -27,7 +27,7 @@
         </template>
         <li v-for="item in data" :key="item.id">
           <img src="@/assets/images/workflow/icon_people.png">
-          <span>{{item.VNAME}}</span>
+          <span>{{item.REALNAME}}</span>
           <img src="@/assets/images/workflow/cancel.png" @click="cancel(item)">
         </li>
       </template>
