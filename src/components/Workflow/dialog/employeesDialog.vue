@@ -39,7 +39,7 @@
 import { ref, computed, watch } from 'vue';
 import selectBox from '../selectBox.vue';
 import selectResult from '../selectResult.vue';
-import { UserList, deptTreeSelect } from "#/system/user";
+import { getUserListData, getOrgDeptTreeData } from "#/workflow";
 import { departments, getDebounceData, getDepartmentList, searchVal } from './common'
 import $func from '../plugins/preload.js'
 let props = defineProps({
@@ -150,7 +150,7 @@ watch(keyword, (val) => {
 })
 const DeptName = ref("");
 const getDeptTree = () => {
-  deptTreeSelect().then((res) => {
+  getOrgDeptTreeData().then((res) => {
     menuOptions.value = res.RESULT;
   });
 };
@@ -178,7 +178,7 @@ const queryParams = ref({
 })
 const UserOptions = ref([])
 const getUserList = () => {
-  UserList(queryParams.value).then((res) => {
+  getUserListData(queryParams.value).then((res) => {
     UserOptions.value = res.RESULT.RECORDS;
   })
 }
