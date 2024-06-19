@@ -85,3 +85,19 @@ export const TableConfig = [
   { FIELD: "SUSPENDSTATE", LABEL: "状态", WIDTH: 100, ALIGN: "center", VTYPE: "exNum", OTHER: '[{"LABEL":"启用","VALUE":"1"},{"LABEL":"停用","VALUE":"2"}]', ISSHOW: 1, SELECTEDFLAG: 1 },
   { FIELD: "DEPLOYMENTTIME", LABEL: "部署时间", WIDTH: 160, ALIGN: "center", ISSHOW: 1, SELECTEDFLAG: 1 },
 ]
+
+export function getUserListData(data) {
+  return request({
+    url: "/sys/user/getList",
+    method: "post",
+    data
+  })
+}
+
+export function getOrgDeptTreeData(data) {
+  return request({
+    url: "/sys/organize/getDepTreeList",
+    method: "post",
+    data
+  })
+}
