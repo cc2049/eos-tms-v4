@@ -173,8 +173,6 @@ const handleNodeClick = (val) => {
 const queryParams = ref({
   PK_ORG: "",
   PK_DEPT: "",
-  PAGENUM: 1,
-  PAGESIZE: 10000
 })
 const UserOptions = ref([])
 const getUserList = () => {

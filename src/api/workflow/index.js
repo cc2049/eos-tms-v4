@@ -94,10 +94,10 @@ export function getUserListData(data) {
   })
 }
 
-export function getOrgDeptTreeData(data) {
+export function getOrgDeptTreeData() {
   return request({
     url: "/sys/organize/getDepTreeList",
     method: "post",
-    data
+    data: {}
   })
 }
