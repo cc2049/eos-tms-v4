@@ -596,9 +596,8 @@ function rowClick({ row, column, triggerCheckbox, rowIndex }) {
   if (selectRecords.length == 0) {
     rowClickIndex.value = null;
   }
-
   if (!triggerCheckbox) {
-    !key17Status.value ? proxy.$refs.xTable?.clearCheckboxRow() : null;
+    !key17Status || !key17Status.value ? proxy.$refs.xTable?.clearCheckboxRow() : null;
     if (rowClickIndex.value != rowIndex) {
       rowClickIndex.value = rowIndex;
       checked = true;
