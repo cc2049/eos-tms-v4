@@ -116,11 +116,10 @@
                       {{ chooseLeftData.STATUSNAME }}
                     </div>
                   </div>
-                  <countDown ref="countDownRef" v-if="queryLeftForm.BILLSTATUS == 4"
-                    :time="detailNoDynamic.BIDEDTIME" />
-                  <!-- <countDown ref="countDownRef"
-                    v-if="bidInfo.BILLSTATUS == 5 || bidInfo.BILLSTATUS == 4 || bidInfo.BILLSTATUS == 3"
-                    :time="bidInfo.BILLSTATUS == 5 ? bidInfo.BIDENDTIME : bidInfo.BILLSTATUS == 4 ? bidInfo.BIDSTARTTIME : bidInfo.BILLSTATUS == 3 ? bidInfo.SIGNENDTIME : ''" /> -->
+                  <!-- <countDown ref="countDownRef" v-if="queryLeftForm.BILLSTATUS == 4"
+                    :time="detailNoDynamic.BIDEDTIME" /> -->
+                  <countDown ref="countDownRef" v-if="detailNoDynamic.BILLSTATUS == 4"
+                    :time="detailNoDynamic.BIDRESIDUETIME" />
                 </div>
               </div>
             </div>
@@ -326,8 +325,8 @@
                       <span>{{ scope.row.BILLSTATUS == 0 ? '未确认' : '已确认' }}</span>
                     </template>
                   </el-table-column>
-                  <el-table-column prop="CARRIERNAME" show-overflow-tooltip  label="报名单位" />
-                  <el-table-column prop="CREATIONTIME" show-overflow-tooltip  label="报名时间" />
+                  <el-table-column prop="CARRIERNAME" show-overflow-tooltip label="报名单位" />
+                  <el-table-column prop="CREATIONTIME" show-overflow-tooltip label="报名时间" />
                   <el-table-column prop="CREATORNAME" label="报名用户" />
                   <el-table-column prop="APPROVER" label="确认人" />
                   <el-table-column prop="APPROVERTIME" label="确认时间" />
@@ -378,8 +377,8 @@
                   <el-table-column prop="BIDPRICE" label="出价金额" />
                   <el-table-column prop="EXPECTVALUE" label="出量" />
                   <el-table-column prop="UIPADDRESS" width="120" label="IP地址" />
-                  <el-table-column prop="BIDADDRESS" width="120"  show-overflow-tooltip  label="定位信息" />
-                  <el-table-column prop="BIDTIME" width="140"  show-overflow-tooltip  label="出价时间" />
+                  <el-table-column prop="BIDADDRESS" width="120" show-overflow-tooltip label="定位信息" />
+                  <el-table-column prop="BIDTIME" width="140" show-overflow-tooltip label="出价时间" />
                   <el-table-column prop="IS_BID" label="中标" v-if="queryLeftForm.BILLSTATUS == 6">
                     <template #default="scope">
                       <span>{{ scope.row.IS_BID == 0 ? '否' : scope.row.IS_BID == 1 ? '是' : '' }}</span>
@@ -393,7 +392,7 @@
                         clearable />
                     </template>
                   </el-table-column>
-                  <el-table-column prop="SURETIME" label="中标时间" width="140"  show-overflow-tooltip  />
+                  <el-table-column prop="SURETIME" label="中标时间" width="140" show-overflow-tooltip />
                   <el-table-column prop="SURENAME" width="130" label="中标确认人" />
                 </el-table>
               </div>
@@ -408,7 +407,7 @@
 
         </el-card>
         <el-card v-else>
-          <el-empty  style="height: 680px;" :image="emptyImg" description="很抱歉，暂时没有相关数据~" :image-size="350" />
+          <el-empty style="height: 680px;" :image="emptyImg" description="很抱歉，暂时没有相关数据~" :image-size="350" />
         </el-card>
         <!-- </el-scrollbar> -->
 
@@ -617,7 +616,7 @@ const getPageList = () => {
     if (leftMenuList.value.length) chooeseMune(leftMenuList.value[0]);
   });
 };
-
+const countDownRef = ref(null);
 const chooseLeftData = ref({})
 const chooeseMune = (item) => {
   menuVal.value = item.BILLNO;
@@ -627,11 +626,11 @@ const chooeseMune = (item) => {
     EXPECTVALUE: null,
     BIDADDRESS: null,
   };
+  countDownRef.value ? countDownRef.value.countDownClearInterval() : ''
 
   getDetailNoDynamic();
 };
 const detailNoDynamic = ref({});
-const countDownRef = ref(null);
 const ROUNDNUM = ref('')
 const getDetailNoDynamic = () => {
   getTableData("oms/bidProject/getCargoDetail", {
@@ -888,10 +887,10 @@ const clickCommonBtn = (btn) => {
 }
 
 const checkCertification = (val) => {
-  let btn = allPageCon.value.BUTTON.filter(ele=>ele.BTNTITLE=='checkCertification')[0]
+  let btn = allPageCon.value.BUTTON.filter(ele => ele.BTNTITLE == 'checkCertification')[0]
   // btn.ACTIONADDRESS = btn.ACTIONADDRESS.concat(`?PK_CARRIER=${val.BILLNO}`)
   let data = {
-    BILLNO:val.BILLNO
+    BILLNO: val.BILLNO
   }
   topBtnRef.value.handleEvent(btn, [data])
 }

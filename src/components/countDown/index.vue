@@ -15,17 +15,20 @@ const timeArr = ref([])
 
 const timeCha = ref(0)  // arr
 const subTime = ref(null) // 倒计时
-const endTime = computed(() => Date.parse(props.time))
+// const endTime = computed(() => Date.parse(props.time))
+const newTime = computed(() => props.time)
 
 watch(() => props.time, () => {
 
   clearInterval(subTime.value);
-  timeCha.value = 0;
+  timeCha.value = newTime.value;
 
-  let newTime = Date.now();
-  show.value = newTime < endTime.value
-  if (!show.value) return
-  timeCha.value = endTime.value - newTime
+  // let newTime = Date.now();
+  // show.value = newTime < endTime.value
+  show.value = newTime.value > 0
+  // if (!show.value) return
+  // timeCha.value = endTime.value - newTime
+  // console.log("🚀 ~ watch ~ timeCha.value :", timeCha.value )
   timeArr.value = formatDuring(timeCha.value)
   subTime.value = setInterval(() => {
     timeCha.value -= 1000;
@@ -47,7 +50,7 @@ function formatDuring(millisecond) {
 
   var days = parseInt(millisecond / (1000 * 60 * 60 * 24));
   var hours = parseInt(millisecond / (1000 * 60 * 60) % 24);
-  var minutes = parseInt((millisecond / (1000 * 60 )) % 60);
+  var minutes = parseInt((millisecond / (1000 * 60)) % 60);
   var seconds = parseInt((millisecond / 1000) % 60);
 
   let arr = []
@@ -87,7 +90,7 @@ defineExpose({ countDownClearInterval })
     font-size: 20px;
     font-weight: 500;
     color: #DD593B;
-    white-space:nowrap;
+    white-space: nowrap;
   }
 
   &-item {

@@ -69,11 +69,11 @@
                                             {{ chooseLeftData.STATUSNAME }}
                                         </div>
                                     </div>
-                                    <countDown ref="countDownRef" v-if="queryLeftForm.BILLSTATUS == 4"
-                                        :time="detailNoDynamic.BIDEDTIME" />
-                                    <!-- <countDown ref="countDownRef"
-                      v-if="bidInfo.BILLSTATUS == 5 || bidInfo.BILLSTATUS == 4 || bidInfo.BILLSTATUS == 3"
-                      :time="bidInfo.BILLSTATUS == 5 ? bidInfo.BIDENDTIME : bidInfo.BILLSTATUS == 4 ? bidInfo.BIDSTARTTIME : bidInfo.BILLSTATUS == 3 ? bidInfo.SIGNENDTIME : ''" /> -->
+                                    <!-- <countDown ref="countDownRef" v-if="queryLeftForm.BILLSTATUS == 4"
+                                        :time="detailNoDynamic.BIDEDTIME" /> -->
+                                    <countDown ref="countDownRef" v-if="detailNoDynamic.BILLSTATUS == 4"
+                                        :time="detailNoDynamic.BIDRESIDUETIME" />
+
                                 </div>
                             </div>
                         </div>
@@ -295,7 +295,7 @@
                                     <el-table-column prop="RANK" label="出价次数" />
                                     <el-table-column prop="BIDPRICE" label="出价金额" />
                                     <el-table-column prop="EXPECTVALUE" label="出量" />
-                                    <el-table-column prop="BIDTIME" show-overflow-tooltip  label="出价时间" />
+                                    <el-table-column prop="BIDTIME" show-overflow-tooltip label="出价时间" />
                                     <template v-if="queryLeftForm.BILLSTATUS == 6">
                                         <el-table-column prop="IS_BID" label="中标">
                                             <template #default="scope">
@@ -467,7 +467,7 @@ const getPageList = () => {
     });
 
 };
-
+const countDownRef = ref(null);
 const chooseLeftData = ref({})
 const chooeseMune = (item) => {
     menuVal.value = item.BILLNO;
@@ -477,11 +477,10 @@ const chooeseMune = (item) => {
         EXPECTVALUE: null,
         BIDADDRESS: null,
     };
-
+    countDownRef.value ? countDownRef.value.countDownClearInterval() : "";
     getDetailNoDynamic();
 };
 const detailNoDynamic = ref({});
-const countDownRef = ref(null);
 const ROUNDNUM = ref('')
 const getDetailNoDynamic = () => {
 
