@@ -1,7 +1,7 @@
 <template>
   <el-skeleton :rows="15" :loading="loading" :throttle="20" animated>
     <div class="master-form">
-      <eos-form ref="FormRef" v-model="formData" :config="formConfig" :detail="detail" @openModal="openModal">
+      <eos-form ref="FormRef" v-model="formData" :config="formConfig" :detail="detail" @openModal="openModal" @labelClick="LabelClick">
         <template #SubTable="{ config }" v-if="tableConfig.length > 0">
           <div class="formTable" :style="`margin-left:-${labelWidth};width:calc(100% + ${labelWidth})`">
             <SubTableCom :ref="config.FIELD+'Ref'" :key="config.FIELD" :detail="detail || config.ISDISABLED == '1'" :title="config.LABEL" :config="GET_TableConfig(config)" v-model="formData[config.FIELD]" v-model:mainFormData="formData" :othConfig="othConfig" @EtbaleLinkChange="EtbaleLinkChange" @updateTableData="UPDATA_TableData" @openModal="openModal">
@@ -72,6 +72,7 @@ const emit = defineEmits([
   "update:modelValue",
   "updateTableData",
   "EtbaleLinkChange",
+  "labelClick"
 ]);
 const { proxy } = getCurrentInstance();
 const FormRef = ref(null);
@@ -83,6 +84,10 @@ const formData = computed({
 const { formConfig, tableConfig, tableRules, labelWidth } = toRefs(props);
 const { GET_TableConfig, UPDATA_TableData } = useTableHook();
 const { modalRef, modalConfig, openModal, closeModal } = useModalHook();
+
+const LabelClick = val => {
+  emit("LabelClick", val)
+}
 
 /** 表格页面 双击 */
 const TablePagedbClick = (row) => {
@@ -147,6 +152,7 @@ const resetForm = () => {
   activeTab.value = 0;
   FormRef.value.resetFields();
 };
+
 
 // 主动暴露方法
 defineExpose({ validate, resetForm });

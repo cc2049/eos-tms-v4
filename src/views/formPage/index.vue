@@ -2,7 +2,7 @@
  * @Author: cc2049
  * @Date: 2024-04-23 11:35:41
  * @LastEditors: PiPin 33947354+p1Master@users.noreply.github.com
- * @LastEditTime: 2024-06-13 15:45:07
+ * @LastEditTime: 2024-06-21 16:20:53
  * @Description: 大表单组件
 -->
 
@@ -13,7 +13,7 @@
       <div id="eos-form-tabs"></div>
     </div>
     <el-scrollbar :height="formHeight" class="eos-scrollbar">
-      <MasterForm ref="eosFormRef" v-model="formData" :formConfig="formConfig" :detail="isDetail" :tableConfig="tableConfig" :loading="formLoading" />
+      <MasterForm ref="eosFormRef" v-model="formData" :formConfig="formConfig" :detail="isDetail" :tableConfig="tableConfig" :loading="formLoading" @labelClick="LabelClick" />
     </el-scrollbar>
   </div>
 </template>
@@ -142,6 +142,10 @@ function handleBtnEvent(btn) {
   });
 }
 
+function LabelClick(val) {
+  console.log("labelClick", val);
+}
+
 // 数据提交
 function submitEvent(URL, sdata) {
   let newData = JSON.parse(JSON.stringify(sdata));
@@ -156,6 +160,8 @@ function submitEvent(URL, sdata) {
     }
   });
 }
+
+
 </script>
 
 <style lang="scss" scoped>
