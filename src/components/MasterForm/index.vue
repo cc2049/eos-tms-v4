@@ -85,8 +85,9 @@ const { formConfig, tableConfig, tableRules, labelWidth } = toRefs(props);
 const { GET_TableConfig, UPDATA_TableData } = useTableHook();
 const { modalRef, modalConfig, openModal, closeModal } = useModalHook();
 
+/** label link 事件 */
 const LabelClick = val => {
-  emit("LabelClick", val)
+  emit("labelClick", val)
 }
 
 /** 表格页面 双击 */
