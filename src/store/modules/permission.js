@@ -183,14 +183,18 @@ function filterChildren(childrenMap, lastRouter = false, parentPath) {
   let children = [], margetBtnMenu = [];
   childrenMap.forEach((el, index) => {
     el.COVERMENULIST = el.META.COVERMENULIST
-    if (el.COVERMENULIST.length > 0) margetBtnMenu = getCOVERMENULIST(el, parentPath)
+    if (el.COVERMENULIST.length > 0) {
+      margetBtnMenu = margetBtnMenu.concat(getCOVERMENULIST(el, parentPath))
+    }
     if (el.CHILDREN && el.CHILDREN.length) {
       if ((el.COMPONENT === "BlankView" || el.COMPONENT === "ParentView") && !lastRouter) {
         el.CHILDREN.forEach((c) => {
           c.path = el.PATH + "/" + c.PATH;
           c.fullPath = parentPath + '/' + el.PATH + "/" + c.PATH
           c.COVERMENULIST = c.META.COVERMENULIST
-          if (c.COVERMENULIST && c.COVERMENULIST.length) margetBtnMenu = margetBtnMenu.concat(getCOVERMENULIST(c, parentPath))
+          if (c.COVERMENULIST && c.COVERMENULIST.length) {
+            margetBtnMenu = margetBtnMenu.concat(getCOVERMENULIST(c, parentPath))
+          }
           if (c.CHILDREN && c.CHILDREN.length) {
             children = children.concat(filterChildren(c.CHILDREN, c, c.fullPath));
             return;
