@@ -2,7 +2,7 @@
  * @Author: cc2049
  * @Date: 2024-04-28 15:12:29
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-06-12 17:56:00
+ * @LastEditTime: 2024-06-21 14:08:34
  * @Description: 简介
 -->
 
@@ -37,7 +37,7 @@
             <template #dropdown>
               <el-dropdown-menu>
                 <template v-for="itemBtnS in itemBtn.CHILDREN" :key="itemBtnS.BILLNO">
-                  <el-dropdown-item :command="itemBtnS" v-if=" setShowBtn(itemBtnS)">
+                  <el-dropdown-item :command="itemBtnS" v-if="setShowBtn(itemBtnS)" @click="handleEvent(itemBtnS)">
                     {{ itemBtnS.VNAME }}
                   </el-dropdown-item>
                 </template>

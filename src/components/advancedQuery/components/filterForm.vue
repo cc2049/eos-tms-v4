@@ -236,10 +236,10 @@ watch(
   { immediate: true }
 );
 
-watch(() => props.formData, value => {
-  console.log(value)
-  // setDataArrs()
-}, { immediate: true })
+// watch(() => props.formData, value => {
+//   console.log(value)
+//   // setDataArrs()
+// }, { immediate: true })
 
 
 const showDateType = computed(() => {
