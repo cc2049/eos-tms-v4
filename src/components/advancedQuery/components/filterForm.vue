@@ -16,13 +16,10 @@
     </div>
 
     <div class="firstSelect mr10">
-      <el-select v-model="formData.FIELD" placeholder="请选择" style="width: 120px" :size="commonSize"
-        @change="changeFilter">
+      <el-select v-model="formData.FIELD" placeholder="请选择" style="width: 120px" :size="commonSize" @change="changeFilter">
         <el-option v-for="item in filterSeceletArrs" :key="item.FIELD" :label="item.LABEL" :value="item.FIELD" />
       </el-select>
     </div>
-
-
 
     <div class="mr10">
       <el-select v-model="formData.QUERYTYPE" placeholder="请选择" style="width: 100px" :size="commonSize">
@@ -34,27 +31,20 @@
     <!-- <div style="width: 260px"> -->
     <div style="width: 170px">
       <template v-if="showDateType == '0' || showDateType == '1'">
-        <el-input v-model="formData.DEFAULTVAL" style="width: 100%" placeholder="请输入"
-          :disabled="showDateType == '0' ? true : false" type="number" />
+        <el-input v-model="formData.DEFAULTVAL" style="width: 100%" placeholder="请输入" :disabled="showDateType == '0' ? true : false" type="number" />
       </template>
       <!-- ExDate 日期选择 -->
       <template v-else-if="currentConfig.CONTROLS == 'ExDate'">
-        <el-date-picker v-model="formData.DEFAULTVAL" clearable style="width: 100%" placeholder="请选择"
-          value-format="YYYY-MM-DD" />
+        <el-date-picker v-model="formData.DEFAULTVAL" clearable style="width: 100%" placeholder="请选择" value-format="YYYY-MM-DD" />
       </template>
       <template v-else-if="currentConfig.CONTROLS == 'ExDateRange'">
-        <el-date-picker v-model="formData.DEFAULTVALArr" unlink-panels type="daterange" clearable
-          value-format="YYYY-MM-DD" range-separator="至" style="width: 100%" placeholder="请选择"
-          @change="(v) => DateChange(v)" @clear="DateChange(null)" />
+        <el-date-picker v-model="formData.DEFAULTVALArr" unlink-panels type="daterange" clearable value-format="YYYY-MM-DD" range-separator="至" style="width: 100%" placeholder="请选择" @change="(v) => DateChange(v)" @clear="DateChange(null)" />
       </template>
       <template v-else-if="currentConfig.CONTROLS == 'ExDateTime'">
-        <el-date-picker v-model="formData.DEFAULTVAL" clearable type="datetime" value-format="YYYY-MM-DD HH:mm:ss"
-          style="width: 100%" />
+        <el-date-picker v-model="formData.DEFAULTVAL" clearable type="datetime" value-format="YYYY-MM-DD HH:mm:ss" style="width: 100%" />
       </template>
       <template v-else-if="currentConfig.CONTROLS == 'ExDateTimeRange'">
-        <el-date-picker v-model="formData.DEFAULTVALArr" clearable unlink-panels type="datetimerange"
-          range-separator="至" value-format="YYYY-MM-DD HH:mm:ss" style="width: 100%" @change="(v) => DateChange(v)"
-          @clear="DateChange(null)" />
+        <el-date-picker v-model="formData.DEFAULTVALArr" clearable unlink-panels type="datetimerange" range-separator="至" value-format="YYYY-MM-DD HH:mm:ss" style="width: 100%" @change="(v) => DateChange(v)" @clear="DateChange(null)" />
       </template>
       <template v-else-if="currentConfig.CONTROLS == 'ExSelect'">
         <el-select placeholder="请选择" v-model="formData.DEFAULTVAL" clearable style="width: 100%">
@@ -66,8 +56,7 @@
       padding: 0
     }">
           <template #reference>
-            <el-input v-model="formData.DEFAULTVAL" style="width: 100%" placeholder="请输入"
-              @input="val => ExSelectModalInput(val, currentConfig)" />
+            <el-input v-model="formData.DEFAULTVAL" style="width: 100%" placeholder="请输入" @input="val => ExSelectModalInput(val, currentConfig)" />
           </template>
 
           <div class="disflex ExSelectModal-header">
@@ -253,7 +242,7 @@ const showDateType = computed(() => {
       // showDateType.value = '1'
       return '1'
     }
-  }else{
+  } else {
     return null
   }
 
@@ -429,9 +418,7 @@ function ParseOtherConfig(config) {
             ...ConvertData(setImportantParam),
           };
         }
-        paramsArr[3]
-          ? (SelectValueTo.value = GetUrlParams("a?" + paramsArr[3], "arr"))
-          : [];
+        SelectValueTo.value = paramsArr[3] ? GetUrlParams("a?" + paramsArr[3], "arr") : [];
       }
       return { url, data: queryJson, importantData };
     } else {
@@ -512,7 +499,8 @@ onMounted(() => {
   }
 }
 
-.ExSelectModalPopver {}
+.ExSelectModalPopver {
+}
 
 :deep(.el-select) {
   height: 26px !important;

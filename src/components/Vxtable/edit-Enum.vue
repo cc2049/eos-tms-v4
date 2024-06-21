@@ -453,7 +453,7 @@ function ParseOtherConfig(config, rowIndex) {
         queryJson[ii] = props.tableData[rowIndex][setQueryParam[ii]] || "";
       }
     }
-    SelectValueTo.value = GetUrlParams("a?" + paramsArr[3], "arr");
+    SelectValueTo.value =  paramsArr[3] ? GetUrlParams("a?" + paramsArr[3], "arr") :[];
   }
   return { url, data: queryJson };
 }

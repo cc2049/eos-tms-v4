@@ -883,7 +883,7 @@ function ParseOtherConfig(config, rowIndex) {
         }
       }
     }
-    SelectValueTo.value = GetUrlParams("/a?" + paramsArr[3], "arr");
+    SelectValueTo.value = paramsArr[3] ? GetUrlParams("/a?" + paramsArr[3], "arr") : [];
   }
   return { url, data: queryJson };
 }
