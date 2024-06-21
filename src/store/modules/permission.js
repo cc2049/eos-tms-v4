@@ -8,6 +8,8 @@ import ParentView from "@/components/ParentView";
 const modules = import.meta.glob("./../../views/**/*.vue");
 import VTable from "@/views/table/index"
 
+let BaseMargeBtnMenuRoute = []
+
 const usePermissionStore = defineStore("permission", {
   state: () => ({
     routes: [],
@@ -17,6 +19,7 @@ const usePermissionStore = defineStore("permission", {
     topbarRouters: [],
     sidebarRouters: [],
     menuIndex: 0,
+    btnMenuRouters: []
   }),
   persist: {
     enabled: true, // 开启存储
@@ -72,6 +75,7 @@ const usePermissionStore = defineStore("permission", {
             router.addRoute(route);
           });
           this.setRoutes(rewriteRoutes);
+          this.btnMenuRouters = BaseMargeBtnMenuRoute
           this.setSidebarRouters(constantRoutes.concat(sidebarRoutes));
           this.setDefaultRoutes(sidebarRoutes);
           this.setTopbarRoutes(defaultRoutes);
@@ -88,8 +92,7 @@ function filterAsyncRouter(asyncRouterMap, lastRouter = false, type = false, par
     route.name = route.PATH;
     route.meta = {};
     route.meta.title = route.NAME;
-    route.meta.title = route.NAME;
-    route.isShow = route.ISSHOW==0;
+    route.isShow = route.ISSHOW == 0;
     route.meta.icon = route.META.VICON;
     route.meta.imgIcon = route.META.VIMG;
     route.meta.noCache = route.META.ISCACHE == '0'
@@ -98,7 +101,6 @@ function filterAsyncRouter(asyncRouterMap, lastRouter = false, type = false, par
     route.meta.PBILLNO = route.PBILLNO
     route.meta.COMP = route.COMPONENT
     route.meta.ISTEMPLATE = route.META.ISTEMPLATE
-
     route.meta.VURL = route.VURL
     if (!route.path) route.path = route.PATH;
     route.children = route.CHILDREN
@@ -124,7 +126,7 @@ function filterAsyncRouter(asyncRouterMap, lastRouter = false, type = false, par
       } else if (route.COMPONENT === "SonTable") {
         // route.component = () => import('@/views/sontable/sontable');
         route.component = () => import('@/views/table/index');
-      } else if (route.COMPONENT === "VForm"|| route.COMPONENT === "FM" ) {
+      } else if (route.COMPONENT === "VForm" || route.COMPONENT === "FM") {
         route.component = () => import('@/views/formPage/home');
       } else if (route.COMPONENT === "Link") {
         route.component = () => import('@/views/table/index');
@@ -175,17 +177,24 @@ function createCustomComponent(name, component) {
   }
 }
 
+
 function filterChildren(childrenMap, lastRouter = false, parentPath) {
-  var children = [];
+  if (childrenMap.length == 0) return
+  let children = [], margetBtnMenu = [];
   childrenMap.forEach((el, index) => {
+    el.COVERMENULIST = el.META.COVERMENULIST
+    if (el.COVERMENULIST.length > 0) {
+      margetBtnMenu = margetBtnMenu.concat(getCOVERMENULIST(el, parentPath))
+    }
     if (el.CHILDREN && el.CHILDREN.length) {
-      if (
-        (el.COMPONENT === "BlankView" || el.COMPONENT === "ParentView") &&
-        !lastRouter
-      ) {
+      if ((el.COMPONENT === "BlankView" || el.COMPONENT === "ParentView") && !lastRouter) {
         el.CHILDREN.forEach((c) => {
           c.path = el.PATH + "/" + c.PATH;
           c.fullPath = parentPath + '/' + el.PATH + "/" + c.PATH
+          c.COVERMENULIST = c.META.COVERMENULIST
+          if (c.COVERMENULIST && c.COVERMENULIST.length) {
+            margetBtnMenu = margetBtnMenu.concat(getCOVERMENULIST(c, parentPath))
+          }
           if (c.CHILDREN && c.CHILDREN.length) {
             children = children.concat(filterChildren(c.CHILDREN, c, c.fullPath));
             return;
@@ -201,7 +210,30 @@ function filterChildren(childrenMap, lastRouter = false, parentPath) {
     }
     children = children.concat(el);
   });
+  children = children.concat(margetBtnMenu);
   return children;
+}
+
+function getCOVERMENULIST(routerItem, parentPath) {
+  let margeBtnRoute = []
+  routerItem.COVERMENULIST.forEach(al => {
+    const margetBtnMenuItem = {
+      ...al,
+      META: {
+        VICON: "",
+        VIMG: "",
+        ISCACHE: routerItem.META.ISCACHE
+      },
+      PATH: al.ACTION,
+      path: al.ACTION,
+      NAME: `${routerItem.NAME}-${al.PAGENAME}`,
+      name: `${routerItem.NAME}-${al.PAGENAME}`,
+      fullPath: `${parentPath}/${al.ACTION}`
+    }
+    margeBtnRoute.push(margetBtnMenuItem)
+    BaseMargeBtnMenuRoute.push(margetBtnMenuItem)
+  })
+  return margeBtnRoute
 }
 
 // 格式化路由
@@ -231,7 +263,6 @@ export function filterDynamicRoutes(routes) {
 }
 
 export const loadView = (view) => {
-  // console.log('99999', view );
   let res;
   for (const path in modules) {
     const dir = path.split("views/")[1].split(".vue")[0];
@@ -242,7 +273,7 @@ export const loadView = (view) => {
   return res;
 };
 
-const AsyncImport =(view) => {
+const AsyncImport = (view) => {
   let res;
   for (const path in modules) {
     const dir = path.split("views/")[1].split(".vue")[0];

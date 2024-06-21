@@ -8,17 +8,14 @@
   <div class="advancedQuery">
     <div class="disflex advancedQuery-alone mb20">
       <div class="advancedQuery-title">我的方案</div>
-      <div class="currentRadio" :class="chooseRadioVal == item.BILLNO ? 'active' : ''"
-        v-for="(item, index) in myPlanList" :key="index" @click="clickRadio(item)"> {{ item.VNAME }}
+      <div class="currentRadio" :class="chooseRadioVal == item.BILLNO ? 'active' : ''" v-for="(item, index) in myPlanList" :key="index" @click="clickRadio(item ,1)"> {{ item.VNAME }}
       </div>
     </div>
     <div class=" advancedQuery-alone ">
       <div class="advancedQuery-title">快捷过滤</div>
       <!-- <div style="width: calc(100% - 100px)"> -->
       <div class="oneLine">
-        <FiltrationCom ref="filtrationComRef" :filterConfig="filterConfig" :filterArr="filterArr" class="oneLine-left"
-          :style="{ height: FiltrationComHeight, maxWidth: binSize + 'px' }" @changeFilter="changeFilter"
-          @changeCurrentQueryList="changeCurrentQueryList" :settingArr="settingQueryList" />
+        <FiltrationCom ref="filtrationComRef" :filterConfig="filterConfig" :filterArr="filterArr" class="oneLine-left" :style="{ height: FiltrationComHeight, maxWidth: binSize + 'px' }" @changeFilter="changeFilter" @changeCurrentQueryList="changeCurrentQueryList" :settingArr="settingQueryList" />
         <div class="advancedQuery-rightBtn">
           <el-button type="primary" @click="searchBtn">
             <el-icon color="#fff" :size="20">
@@ -33,9 +30,7 @@
                 </el-icon>
               </el-button>
             </template>
-            <SettingFilter ref="settingFilterRef" :filterConfig="filterConfig" :filterArr="filterArr"
-              @changeCondition="changeCondition" @resetCondition="resetCondition" @delFilterArr="delFilterArr"
-              @changeFilter="changeFilter" @changeCurrentQueryList="settingChangeCurrentQueryList" />
+            <SettingFilter ref="settingFilterRef" :filterConfig="filterConfig" :filterArr="filterArr" @changeCondition="changeCondition" @resetCondition="resetCondition" @delFilterArr="delFilterArr" @changeFilter="changeFilter" @changeCurrentQueryList="settingChangeCurrentQueryList" />
             <el-divider />
             <div class="tr">
               <el-button @click="clostPopver" size="mini">取消</el-button>
@@ -45,8 +40,7 @@
           <div class="ml10 mr10 btnStyle" @click="clickSavePlan">保存</div>
           <div class="btnStyle">重置</div>
           <template v-if="filterArr.length > 1">
-            <el-icon color="#0055ff" :size="15" class="ml10 cp foldOUnfoldIcon" @click="foldOUnfold(1)"
-              v-if="FiltrationComHeight == 'auto'">
+            <el-icon color="#0055ff" :size="15" class="ml10 cp foldOUnfoldIcon" @click="foldOUnfold(1)" v-if="FiltrationComHeight == 'auto'">
               <Icon icon="codicon:fold-up"></Icon>
             </el-icon>
             <el-icon color="#0055ff" :size="15" class="ml10 cp foldOUnfoldIcon" @click="foldOUnfold(0)" v-else>
@@ -60,8 +54,7 @@
       <!-- </div> -->
     </div>
 
-    <AllocationPlan :showModal="showModal" :leftList="myPlanList" @updateLeftList="getPlanList" ref="allocationPlanRef"
-      :filterConfig="filterConfig" @closeModal="closeShowModal"></AllocationPlan>
+    <AllocationPlan :showModal="showModal" :leftList="myPlanList" @updateLeftList="getPlanList" ref="allocationPlanRef" :filterConfig="filterConfig" @closeModal="closeShowModal"></AllocationPlan>
 
   </div>
 </template>
@@ -112,40 +105,40 @@ const filterArr = ref([]);
 const defaultFilterArr = ref([]);
 // 我的方案
 const chooseRadioVal = ref(null);
-const chooseRadioObj = ref({})
+const chooseRadioObj = ref({});
 const myPlanList = ref([]);
-const settingFilterRef=ref(null)
-const clickRadio = (item) => {
+const settingFilterRef = ref(null);
+const clickRadio = (item, type) => {
   chooseRadioVal.value = item?.BILLNO;
-  chooseRadioObj.value = item
+  chooseRadioObj.value = item;
   let query = {
     ...MenuID.value,
     PKBILLNO: item?.BILLNO,
-    VTYPE: '0'
+    VTYPE: "0",
   };
   // 查询方案里面的值
   axiosGet("/sys/queryprogUserDtl/getSubList", query).then((res) => {
-    filterArr.value = res.RESULT
+    filterArr.value = res.RESULT;
 
     querySaveList.value = JSON.parse(JSON.stringify(res.RESULT));
     settingQueryList.value = JSON.parse(JSON.stringify(res.RESULT));
 
-
-    settingFilterRef.value && settingFilterRef.value.updateCurrentQueryList(res.RESULT)
-
+    settingFilterRef.value &&
+      settingFilterRef.value.updateCurrentQueryList(res.RESULT);
   });
-
-  emit("handleCustomPlan", {
-    type: "1",
-    PROGRAMID: chooseRadioVal.value,
-  });
+  if (type == 1) {
+    emit("handleCustomPlan", {
+      type: "1",
+      PROGRAMID: chooseRadioVal.value,
+    });
+  }
 };
 // 查询按钮事件
 function searchBtn() {
-  clickStatus.value = 1
-  let QUERYS = []
+  clickStatus.value = 1;
+  let QUERYS = [];
   if (clickStatus.value == 1) {
-    QUERYS = querySaveList.value.map(ele => {
+    QUERYS = querySaveList.value.map((ele) => {
       return {
         FIELD: ele.FIELD,
         QUERYTYPE: ele.QUERYTYPE,
@@ -156,10 +149,10 @@ function searchBtn() {
         QRYCONT: ele.QRYCONT,
         QRYPRE: ele.QRYPRE,
         QRYSUF: ele.QRYSUF,
-      }
-    })
+      };
+    });
   } else {
-    QUERYS = settingQueryList.value.map(ele => {
+    QUERYS = settingQueryList.value.map((ele) => {
       return {
         FIELD: ele.FIELD,
         QUERYTYPE: ele.QUERYTYPE,
@@ -170,15 +163,14 @@ function searchBtn() {
         QRYCONT: ele.QRYCONT,
         QRYPRE: ele.QRYPRE,
         QRYSUF: ele.QRYSUF,
-      }
-    })
+      };
+    });
   }
-
 
   emit("handleCustomPlan", {
     type: "2",
     PROGRAMID: chooseRadioVal.value,
-    QUERYS: QUERYS
+    QUERYS: QUERYS,
   });
 }
 
@@ -206,7 +198,6 @@ const filterConfig = ref({
   ],
 });
 
-
 watch(
   () => props.queryConfig,
   (value) => {
@@ -218,12 +209,12 @@ watch(
   },
   { immediate: true }
 );
-const popoverRef = ref(null)
-const visible = ref(false)
+const popoverRef = ref(null);
+const visible = ref(false);
 const clostPopver = () => {
   // popoverRef.value.hide()
-  visible.value = false
-}
+  visible.value = false;
+};
 
 const querySaveList = ref([]);
 const changeCurrentQueryList = (val) => {
@@ -231,13 +222,12 @@ const changeCurrentQueryList = (val) => {
   querySaveList.value = JSON.parse(JSON.stringify(val));
 };
 const settingQueryList = ref([]);
-const filtrationComRef = ref(null)
+const filtrationComRef = ref(null);
 const settingChangeCurrentQueryList = (val) => {
   clickStatus.value = 2;
   settingQueryList.value = JSON.parse(JSON.stringify(val));
   // querySaveList.value = JSON.parse(JSON.stringify(val));
-  filtrationComRef.value && filtrationComRef.value.updateCurrentQueryList(val)
-
+  filtrationComRef.value && filtrationComRef.value.updateCurrentQueryList(val);
 };
 
 const allocationPlanRef = ref(null);
@@ -251,7 +241,7 @@ const clickSavePlan = () => {
 
 // 调用保存方案
 const callAddition = () => {
-  let QUERYS = []
+  let QUERYS = [];
   QUERYS = querySaveList.value.map((ele, index) => {
     return {
       FIELD: ele.FIELD,
@@ -264,9 +254,9 @@ const callAddition = () => {
       QRYPRE: ele.QRYPRE,
       QRYSUF: ele.QRYSUF,
       SORTCODE: index,
-      VTYPE: '0',
-    }
-  })
+      VTYPE: "0",
+    };
+  });
 
   const protData = {
     BILLNO: chooseRadioVal.value, // 方案主键
@@ -297,12 +287,10 @@ const getPlanList = () => {
       if (!chooseRadioVal.value) {
         chooseRadioVal.value = newArr.length
           ? newArr[0].BILLNO
-          : myPlanList.value[0].BILLNO
+          : myPlanList.value[0].BILLNO;
 
-        clickRadio(newArr.length ? newArr[0] : myPlanList.value[0])
+        clickRadio(newArr.length ? newArr[0] : myPlanList.value[0], 0);
       }
-
-
     }
   });
 };
@@ -323,11 +311,8 @@ const changeFilter = (val, item, index) => {
 };
 
 const changeCondition = (e) => {
-
   filterArr.value.push(e);
-  filterArr.value = JSON.parse(JSON.stringify(filterArr.value));  // 重新更新下数据 不然视图有问题
-
-
+  filterArr.value = JSON.parse(JSON.stringify(filterArr.value)); // 重新更新下数据 不然视图有问题
 };
 const resetCondition = () => {
   filterArr.value = JSON.parse(JSON.stringify(defaultFilterArr.value));
@@ -340,7 +325,7 @@ const delFilterArr = (index) => {
 
 defineExpose({
   openShowModal,
-  clostPopver
+  clostPopver,
 });
 
 onMounted(() => {
@@ -474,7 +459,7 @@ onMounted(() => {
     }
   }
 
-  .el-input__suffix-inner> :first-child {
+  .el-input__suffix-inner > :first-child {
     margin: 5px;
   }
 }

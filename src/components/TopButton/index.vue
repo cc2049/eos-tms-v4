@@ -2,7 +2,7 @@
  * @Author: cc2049
  * @Date: 2024-04-28 15:12:29
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-06-12 17:56:00
+ * @LastEditTime: 2024-06-21 17:26:27
  * @Description: 简介
 -->
 
@@ -37,7 +37,7 @@
             <template #dropdown>
               <el-dropdown-menu>
                 <template v-for="itemBtnS in itemBtn.CHILDREN" :key="itemBtnS.BILLNO">
-                  <el-dropdown-item :command="itemBtnS" v-if=" setShowBtn(itemBtnS)">
+                  <el-dropdown-item :command="itemBtnS" v-if="setShowBtn(itemBtnS)" @click="handleEvent(itemBtnS)">
                     {{ itemBtnS.VNAME }}
                   </el-dropdown-item>
                 </template>
@@ -99,9 +99,25 @@
         </span>
       </template>
       <template #default>
-        <FormPage :menuID="formID" :currentData="currentData2" @closeModal="closeModal" @refreshTable="refreshTable" :isGetDetail :activeBtn :topButton :isDetail />
+        <template v-if="modalConfig.modalType == 'vtable' "> 
+          <TablePage ref="TablePageRef" :menuID="formID" dbClickType="emit" @dbClick="TablePagedbClick" />
+        </template>
+
+        <template v-else>
+          <FormPage :menuID="formID" :currentData="currentData2" @closeModal="closeModal" @refreshTable="refreshTable" :isGetDetail :activeBtn :topButton :isDetail />
+        </template>
       </template>
     </vxe-modal>
+
+    <!-- <eos-modal ref="modalRef">
+        <template #default>
+          <TablePage ref="TablePageRef" :menuID="modalConfig?.page" dbClickType="emit" @dbClick="TablePagedbClick" />
+        </template>
+        <template #footer>
+          <el-button type="info" size="default" @click="closeModal">取消</el-button>
+          <el-button type="primary" size="default" @click="handleConfirm">确定</el-button>
+        </template>
+      </eos-modal> -->
 
   </div>
 
@@ -112,6 +128,7 @@ import { ElMessageBox } from "element-plus";
 import { axiosGet } from "#/common";
 import { inject, reactive } from "vue";
 import { getUrlParams } from "@/utils";
+import TablePage from "@/views/table/components/SingleTable/index.vue";
 
 import FormPage from "@/views/formPage/index.vue";
 
@@ -154,6 +171,7 @@ const modalConfig = reactive({
   modalW: 1000,
   modalH: 600,
   pageTitle: "提示",
+  modalType:'form',
 });
 
 // 打开按钮
@@ -261,7 +279,7 @@ function handleEvent(data, row) {
   if (data.RATIO) {
     let WWHH =
       data.RATIO != 1 ? data.RATIO.split("*") : data.PAGEPATH.split("*");
-  } 
+  }
 
   // 验证是否需要选择数据
   if (data.ISCHOOSE && data.ISCHOOSE * 1 > 0 && !selectRecords.length) {
@@ -319,7 +337,17 @@ function handleEvent(data, row) {
     } else {
       submitByBtn(data, { ...queryJson.value, CHOOSE: dataChoose });
     }
-  } else if (data.VTYPE == 7 && data.ACTION == "QRY") {
+  } else if (data.VTYPE == 7 ) {
+    // 表格弹窗
+    currentData2.value = selectRecords;
+    modalConfig.modalVisible = true;
+    modalConfig.pageTitle = data.VNAME;
+    modalConfig.modalType = 'vtable';
+
+    formID.value = {
+      MODULEID: data.PK_MODULE,
+      PAGEID: data.PK_PAGE,
+    };
   } else if (data.VTYPE == 13) {
     //  文件流下载 导出
     let chooseData = currentData.value
@@ -360,14 +388,20 @@ function handleEvent(data, row) {
       Bid = "-";
     }
 
-    let newPath = data.ACTIONADDRESS.includes(":id")
-      ? data.ACTIONADDRESS.replace(":id", Bid)
-      : data.ACTIONADDRESS;
-    newPath = newPath.includes(":type")
-      ? newPath.replace(":type", doType)
-      : newPath;
+    let setPath = route.fullPath.split('/') ;
+
+    setPath[setPath.length-1] = data.PK_PAGE 
+    setPath = setPath.join('/') 
+
+    // let newPath = setPath.includes(":id")
+    //   ? setPath.replace(":id", Bid)
+    //   : data.ACTIONADDRESS;
+    // newPath = newPath.includes(":type")
+    //   ? newPath.replace(":type", doType)
+    //   : newPath;
+      console.log(333 ,setPath );
     router.push({
-      path: newPath,
+      path: setPath,
       // query: { billno: orderNos },
     });
   }
