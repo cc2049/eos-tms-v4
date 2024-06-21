@@ -8,7 +8,7 @@
           </div>
           <div class="head-container">
             <el-scrollbar :height="treeHeight" class="tree-border">
-              <el-tree :data="menuOptions" accordion :props="{ label: 'LABEL', children: 'CHILDREN' }" node-key="VALUE" default-expand-all :filter-node-method="filterNode" ref="treeRef" highlight-current @node-click="handleNodeClick" />
+              <el-tree :data="menuOptions" accordion :props="{ label: 'LABEL', children: 'CHILDREN' }" node-key="VALUE" :default-expanded-keys="treeDefaultExpandedKeys" :filter-node-method="filterNode" ref="treeRef" highlight-current @node-click="handleNodeClick" />
             </el-scrollbar>
           </div>
         </div>
@@ -56,6 +56,12 @@
             <div class="tabs-content" v-loading="loading">
               <!-- <Form v-if="configForm.formColumns.length > 0 && configForm.formValue.GROUPNO != 'QRY' && configForm.formValue.GROUPNO != 'BTN'" ref="TableForm" class="marg10" v-model:formData="configForm.formValue" :formConfig="configForm.formColumns" :rules="configForm.formRules" labelWidth="65px" /> -->
               <Etable ref="ETableRef" :tableCFG="tableCFG" v-model:tableData="tableData" :validRules="tableRules" :actionBarWidth="110" @change="tableChange" @headerClick="headerClick">
+                <template #default_TERMINALTYPE="{ row, config }">
+                  <popOver v-model="row.TERMINALTYPE" :config="config" width="100px" />
+                </template>
+                <template #default_FUNCTYPE="{ row, config }">
+                  <popOver v-model="row.FUNCTYPE" :config="config" width="100px" />
+                </template>
                 <template #edit_PK_PAGE="{ row }">
                   <el-select v-model="row.PK_PAGE" :teleported="false">
                     <el-option v-for="item in selectTabList" :key="item.BILLNO" :label="item.VNAME" :value="item.BILLNO" />
@@ -100,11 +106,9 @@
               </Etable>
             </div>
           </template>
-
           <el-empty v-else :image="emptyImg" description="很抱歉，暂时没有相关数据~" :image-size="200">
             <el-button @click="plusTabs">去新建</el-button>
           </el-empty>
-
         </div>
       </el-col>
     </el-row>
@@ -115,6 +119,12 @@
       </template>
       <template #default>
         <eos-form ref="formRef" v-model="formConfig.formValue" :config="formConfig.formColumns" :detail="false">
+          <template #TERMINALTYPE="{ data, config }">
+            <popOver v-model="data.TERMINALTYPE" :config="config" width="100px" />
+          </template>
+          <template #FUNCTYPE="{ data, config }">
+            <popOver v-model="data.FUNCTYPE" :config="config" width="100px" />
+          </template>
           <template #PK_PARENT="{ data }">
             <el-select v-model="data.PK_PARENT" :teleported="false">
               <el-option v-for="item in selectTabList" :key="item.BILLNO" :label="item.VNAME" :value="item.BILLNO" />
@@ -170,8 +180,8 @@ import {
   FormConfig,
   delMenuBtn,
 } from "#/system/config";
+import popOver from "./popover"
 import Etable from "@/components/Vxtable/edit";
-// import Form from "@/components/Form";
 import copyMenuComponent from "./copyMenu";
 import { getFormValue, getFormRule, deepClone } from "@/utils";
 import {
@@ -186,6 +196,7 @@ import {
 import screenfull from "screenfull";
 import PinyinMatch from "pinyin-match";
 import Vtable from "@/components/Vxtable";
+
 const { proxy } = getCurrentInstance();
 const keyword = ref("");
 watch(keyword, (val) => {
@@ -194,14 +205,16 @@ watch(keyword, (val) => {
 const menuOptions = ref([]);
 const emptyImg = proxy.getAssetsFile("icon_task_NoData.png");
 
-const treeHeight = window.innerHeight - 162;
+const treeHeight = window.innerHeight - 150;
 // 左侧树
 const treeRef = ref();
+const treeDefaultExpandedKeys = ref([])
 const TreeActive = ref();
 const getMenuList = () => {
   let query = { KEYWORD: keyword.value };
   TreeMenu(query).then((res) => {
     menuOptions.value = res.RESULT;
+    treeDefaultExpandedKeys.value = [res.RESULT[0].VALUE]
   });
 };
 getMenuList();
@@ -245,15 +258,12 @@ watch(activeTab, () => {
 const beforeTabsChange = (val, oldval) => {
   return new Promise((resolve, reject) => {
     if (EditTableData()) {
-      proxy.$modal
-        .confirm("是否切换页面？系统可能不会保存您所做的更改")
-        .then(() => {
-          tableCheck.value = [];
-          resolve();
-        })
-        .catch(() => {
-          reject();
-        });
+      proxy.$modal.confirm("是否切换页面？系统可能不会保存您所做的更改").then(() => {
+        tableCheck.value = [];
+        resolve();
+      }).catch(() => {
+        reject();
+      });
     } else {
       resolve();
     }
@@ -297,43 +307,26 @@ const DelTabs = () => {
 };
 
 // 根据 页面类型-GROUP 切换 表格配置
-const setTableConfig = () => {
+const setTableConfig = async () => {
   let { GROUPNO } = activeTabRow.value;
   tableCFG.hasCheck = true;
   switch (GROUPNO) {
     case "FM":
       tableCFG.tableColumns = TableConfig_Form;
-      BaseRowData.value = JSON.parse(
-        JSON.stringify(getFormValue(TableConfig_Form))
-      );
-      tableRules.value = getFormRule(TableConfig_Form);
-      tableCFG.height = window.innerHeight - 220;
       break;
     case "QRY":
       tableCFG.tableColumns = TableConfig_Qty;
-      BaseRowData.value = JSON.parse(
-        JSON.stringify(getFormValue(TableConfig_Qty))
-      );
-      tableRules.value = getFormRule(TableConfig_Qty);
-      tableCFG.height = window.innerHeight - 220;
       break;
     case "TAB":
       tableCFG.tableColumns = TableConfig_Table;
-      BaseRowData.value = JSON.parse(
-        JSON.stringify(getFormValue(TableConfig_Table))
-      );
-      tableRules.value = getFormRule(TableConfig_Table);
-      tableCFG.height = window.innerHeight - 220;
       break;
     case "BTN":
       tableCFG.tableColumns = TableConfig_Btn;
-      BaseRowData.value = JSON.parse(
-        JSON.stringify(getFormValue(TableConfig_Btn))
-      );
-      tableRules.value = getFormRule(TableConfig_Btn);
-      tableCFG.height = window.innerHeight - 220;
       break;
   }
+  BaseRowData.value = JSON.parse(JSON.stringify(getFormValue(tableCFG.tableColumns)));
+  tableRules.value = getFormRule(tableCFG.tableColumns);
+  tableCFG.height = window.innerHeight - 150;
 };
 
 // 一键生成配置
@@ -417,8 +410,7 @@ const tableCFG = reactive({
 });
 const tableRules = ref({});
 const EditTableData = () => {
-  let { insertRecords, updateRecords, removeRecords } =
-    ETableRef.value.xEditTable.getRecordset();
+  let { insertRecords, updateRecords, removeRecords } = ETableRef.value.xEditTable.getRecordset();
   return insertRecords.length + updateRecords.length + removeRecords.length > 0;
 };
 const getTabsName = (id) => {

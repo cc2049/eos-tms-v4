@@ -8,7 +8,7 @@
         <vxe-column :field="Ci.FIELD" :title="Ci.LABEL" :edit-render="{}" :width="Ci.WIDTH" v-if="Ci.ISEDIT == '1' || Ci.EDITTABLE == 1" :fixed="Ci.FIXED" :align="Ci.ALIGN == '' ? 'center' : Ci.ALIGN" :sortable="Ci.ISSORT == 1">
           <template #edit="{ row, rowIndex }">
             <!-- slot 只允许本地配置使用 -->
-            <slot v-if="Ci.CONTROLS == 'slot'" :name="`edit_${Ci.FIELD}`" :rowIndex="rowIndex" :row="row"></slot>
+            <slot v-if="Ci.CONTROLS == 'slot'" :name="`edit_${Ci.FIELD}`" :rowIndex="rowIndex" :row="row" :config="Ci"></slot>
 
             <!--ExModalIcon 图标 -->
             <el-input v-else-if="Ci.CONTROLS == 'ExModalIcon' && Ci.OTHER == 'type:icon'" v-model="row[Ci.FIELD]" type="text" :disabled="calcDISABLED(Ci,rowIndex)" placeholder="请输入" style="width: 100%" @click="openFont">
@@ -144,9 +144,9 @@
             </div>
           </template>
 
-          <template #default="{ row }">
+          <template #default="{ row, rowIndex }">
             <!-- slot 只允许本地配置使用 -->
-            <slot v-if="Ci.CONTROLS == 'slot'" :name="`default_${Ci.FIELD}`" :rowIndex="rowIndex" :row="row"></slot>
+            <slot v-if="Ci.CONTROLS == 'slot'" :name="`default_${Ci.FIELD}`" :rowIndex="rowIndex" :row="row" :config="Ci">></slot>
             <!-- 多选 -->
             <template v-else-if="Ci.CONTROLS == 'ExSelect' || Ci.CONTROLS == 'ExRadio'">
               {{ DictLabel(EnumData[Ci.FIELD], row[Ci.FIELD]) }}
@@ -189,7 +189,8 @@
 
         <vxe-column :field="Ci.FIELD" :title="Ci.LABEL" :width="Ci.WIDTH" :align="Ci.ALIGN == '' ? 'center' : Ci.ALIGN" :fixed="Ci.FIXED" :sortable="Ci.ISSORT == 1" v-else>
           <template #default="{ row }">
-            <template v-if="Ci.CONTROLS == 'ExSelect' || Ci.CONTROLS == 'ExRadio'">
+            <slot v-if="Ci.CONTROLS == 'slot'" :name="`default_${Ci.FIELD}`" :rowIndex="rowIndex" :row="row" :config="Ci">></slot>
+            <template v-else-if="Ci.CONTROLS == 'ExSelect' || Ci.CONTROLS == 'ExRadio'">
               {{ DictLabel(EnumData[Ci.FIELD], row[Ci.FIELD]) }}
             </template>
             <template v-else-if="Ci.CONTROLS == 'ExSelectMultiple' || Ci.CONTROLS == 'ExCheckbox'">
@@ -226,6 +227,8 @@
           </template>
         </vxe-column>
       </template>
+
+      <slot />
 
       <vxe-column title="操作" :width="actionBarWidth" fixed="right" v-if="tableCFG?.tableButtons.length > 0" align="center">
         <template #default="{ row, rowIndex }">

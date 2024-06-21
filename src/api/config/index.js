@@ -383,6 +383,7 @@ export const TABLESTYLEoptions = [
   { LABEL: "卡片", VALUE: "2" },
 ]
 
+// 页码数据
 export const pageSizeOptions = [
   { LABEL: "10", VALUE: "10" },
   { LABEL: "20", VALUE: "20" },
@@ -393,6 +394,7 @@ export const pageSizeOptions = [
   { LABEL: "1000", VALUE: "1000" },
 ]
 
+//  未找到 使用 暂不导出
 const heightOptions = [
   { LABEL: "3", VALUE: "3" },
   { LABEL: "5", VALUE: "5" },
@@ -416,16 +418,16 @@ export const IsRefresh = [
 
 // 终端类型
 export const TERMINALOptions = [
-  { LABEL: "PC", VALUE: "2" },
-  { LABEL: "APP", VALUE: "3" },
-  { LABEL: "小程序", VALUE: "4" },
-  { LABEL: "手持机", VALUE: "5" },
+  { LABEL: "PC", VALUE: "1" },
+  { LABEL: "APP", VALUE: "2" },
+  { LABEL: "小程序", VALUE: "3" },
+  { LABEL: "手持机", VALUE: "4" },
 ]
 
 // 功能类型
 export const FUNCTIONTYPEOptions = [
-  { LABEL: "新增", VALUE: "2" },
-  { LABEL: "编辑", VALUE: "3" },
-  { LABEL: "详情", VALUE: "4" },
-  { LABEL: "审核", VALUE: "5" },
+  { LABEL: "新增", VALUE: "1" },
+  { LABEL: "编辑", VALUE: "2" },
+  { LABEL: "详情", VALUE: "3" },
+  { LABEL: "审核", VALUE: "4" },
 ]
