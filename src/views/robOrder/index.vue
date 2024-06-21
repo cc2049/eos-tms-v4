@@ -85,7 +85,7 @@
                                         <div class="card-header-tag-text">
                                             <!-- {{ BILLSTATUSList[detailNoDynamic.BILLSTATUS] || '暂无状态' }} -->
                                             <!-- {{ queryLeftForm.BILLSTATUS == 6 ? detailNoDynamic.STATUSNAME : detailNoDynamic.STATUSNAME }} -->
-                                            {{ chooseLeftData.STATUSNAME }}
+                                            {{ chooseLeftData.RESIDUETIME }}
                                         </div>
                                     </div>
                                     <countDown ref="countDownRef" :time="detailNoDynamic.ROBEDTIME" />
@@ -142,7 +142,7 @@
                                                 <div v-for="item in detailNoDynamic.SUBLIST" :key="item.BILLNO"
                                                     class="disflex">
                                                     <div>{{ item.MATERIALNAME }}/</div>
-                                                    <div>{{ item.SPNUM }}</div>
+                                                    <div>{{ item.ROBNUM }}</div>
                                                     <div>{{ item.VUNIT }}</div>
                                                 </div>
                                             </div>
@@ -266,8 +266,8 @@
                                             label="抢单时间" />
                                         <el-table-column prop="BILLSTATUS" show-overflow-tooltip label="中标">
                                             <template #default="scope">
-                                                <span> {{ scope.row.BILLSTATUS == 0 ? '待确认' : scope.row.BILLSTATUS ==
-                1 ? '成功' : scope.row.BILLSTATUS == 2 ? '失败' : '' }} </span>
+                                                <span> {{ scope.row.BILLSTATUS == 0 ? '否' : scope.row.BILLSTATUS ==
+                1 ? '成功' : scope.row.BILLSTATUS ==1 ? '是' : '' }} </span>
                                             </template>
                                         </el-table-column>
                                         <el-table-column prop="ROBWEIGHT" label="出量" />

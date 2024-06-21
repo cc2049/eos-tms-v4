@@ -148,7 +148,7 @@ const MenuID = inject("menuID");
 const formID = ref(null);
 const { proxy } = getCurrentInstance();
 // const emit = defineEmits(["handleTopBtn", "reloadTableData"]);
-const emit = defineEmits(["reloadTableData", "quitPage", "handleBtnEvent"]);
+const emit = defineEmits(["reloadTableData", "quitPage", "handleBtnEvent","currentBtn"]);
 
 const modalConfig = reactive({
   modalW: 1000,
@@ -343,6 +343,7 @@ function handleEvent(data, row) {
     downFilesByUrl(data);
   } else if (data.VTYPE == 21) {
     console.log(selectRecords);
+    emit('currentBtn')
   }
   //打开菜单
   if (data.VTYPE == 16) {

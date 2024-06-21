@@ -9,10 +9,27 @@ export function getModule(data) {
 }
 
 export function getButton(data) {
-    return request({
-      url: "/sys/button/getListByRole",
-      method: "post",
-      data
-    })
-  }
+  return request({
+    url: "/sys/button/getListByRole",
+    method: "post",
+    data
+  })
+}
+
+export function getListRole(data) {
+  return request({
+    url: "/sys/role/getList",
+    method: "post",
+    data
+  })
+}
+
+export function authorized(data) {
+  return request({
+    url: "/sys/role/authorized",
+    method: "post",
+    data
+  })
+}
+
 

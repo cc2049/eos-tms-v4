@@ -522,6 +522,7 @@ function checkboxChange({ checked, row, rowIndex }) {
     data: selectRecords,
     checked,
     rowIndex,
+    row,
   };
 
   proxy.$emit("change", giveParentData);
@@ -828,7 +829,6 @@ const openLinkByHtml = (row, bid) => {
   let cf = { OTHER: bid, VTYPE: "", REVERFIELD: "" };
   openLink(cf, row);
 };
-
 // 单元格拼接方法
 const formatHTML = (row, config) => {
   let html = config.OTHER;

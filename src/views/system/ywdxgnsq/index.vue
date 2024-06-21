@@ -6,10 +6,18 @@
 -->
 <template>
     <div class="ywdxgnsq">
+        <TopButton ref="topBtnRef" :topButton="allPageCon.BUTTON" @currentBtn="currentBtn">
+        </TopButton>
         <div class="mt-20 disflex headerSearch">
             <div class="subjectColor mr-5">授予角色</div>
-            <div class="mr-20"></div>
-            <div class=""> <el-checkbox v-model="showAllObj" true-value="1" false-value="0" label="" size="large" />
+            <div class="mr-20">
+                <el-select v-model="roleValue" filterable placeholder="请搜索" size="small" style="width: 200px"
+                    @change="changeRoleValue">
+                    <el-option v-for="item in roleList" :key="item.VALUE" :label="item.LABEL" :value="item.VALUE" />
+                </el-select>
+            </div>
+            <div class=""> <el-checkbox @change="changeISENABL" v-model="leftQueryParams.ISENABL" :true-value="true"
+                    :false-value="false" label="" size="large" />
             </div>
             <div class="mr-20">显示全部业务对象</div>
             <!-- <div>角色类型</div> -->
@@ -29,8 +37,9 @@
                             </el-row>
                             </template> -->
                     </VTable>
-                    <vxe-pager size="mini" :page-size="leftQueryParams.PAGESIZE" :page-sizes="[10, 20, 30, 50, 100,]"
-                        :current-page="leftQueryParams.PAGENUM" :total="leftQueryParams.total"
+                    <vxe-pager v-if="leftQueryParams.ISENABL == true" size="mini" :page-size="leftQueryParams.PAGESIZE"
+                        :page-sizes="[10, 20, 30, 50, 100,]" :current-page="leftQueryParams.PAGENUM"
+                        :total="leftQueryParams.total"
                         :layouts="['Total', 'PrevPage', 'JumpNumber', 'NextPage', 'Sizes']"
                         @page-change="handlePageChange">
                     </vxe-pager>
@@ -38,7 +47,7 @@
                 <el-col :span="14">
                     <EosTabs :tabsList="topMenuList" @change="changeTab" />
                     <ETable ref="tableFormRef" :tableCFG="tableFormConfig" v-model:tableData="form"
-                        :validRules="tableRules" :actionBarWidth="80">
+                        @select="etableSelect" :validRules="tableRules" :actionBarWidth="80">
                     </ETable>
                 </el-col>
             </el-row>
@@ -52,7 +61,11 @@ import ETable from "@/components/Vxtable/edit";
 import VTable from "@/components/Vxtable";
 import EosTabs from "@/components/EosTabs/index.vue";
 import { ref } from "vue";
-import { getModule, getButton } from "#/system/ywdxgnsq"
+import { getModule, getButton, getListRole, authorized } from "#/system/ywdxgnsq"
+import TopButton from "@/components/TopButton";
+import { getPageConfig, getTableData } from "@/api/system/page";
+const route = useRoute();
+const pageInfo = computed(() => route.meta)
 
 const { proxy } = getCurrentInstance();
 
@@ -73,10 +86,55 @@ const changeTab = (val) => {
     }
 }
 
-const showAllObj = ref('')
+const roleList = ref([])
+const roleValue = ref('')
+
+const getgetListRole = () => {
+    const protData = {
+        KEYWORD: ''
+    }
+    getListRole(protData).then(res => {
+        roleList.value = res.RESULT
+    }).finally(() => {
+
+    })
+}
+const changeRoleValue = () => {
+    getgetModule()
+}
+const changeISENABL = () => {
+    getgetModule()
+
+}
+
+const allPageCon = ref({})
+
+const getPageConfigs = () => {
+    getPageConfig({
+        MODULEID: pageInfo.value.BILLNO,
+        PAGEID: pageInfo.value.ACTION,
+    }).then(res => {
+        allPageCon.value = res.RESULT
+    }).catch(err => {
+
+    })
+}
+
+const currentBtn = () => {
+    let LIST = lastLeftData.value.map(ele => ele.BILLNO)
+    const protData = {
+        "BILLNO": roleValue.value,
+        "VTYPE": "1",     // 0 按钮 1 菜单
+        LIST
+    }
+    authorized(protData).then(res => {
+        proxy.$modal.msgSuccess(res.MESSAGE || "操作成功");
+        getgetModule()
+    })
+}
 
 
-
+// ========================================================
 // 左侧列表
 const tableRef = ref(null)
 const TableConfig = ref([
@@ -94,25 +152,33 @@ const tableConfig = ref({
     loading: false,
     hasFill: true,
     hasEmpty: false,
-    height: window.innerHeight - 200,
+    height: window.innerHeight - 260,
 })
 const leftQueryParams = ref({
     PAGENUM: 1,
     PAGESIZE: 15,
     VNAME: '',
-    total: ''
+    total: '',
+    ISENABL: false,
     // MODULEID: route.meta.BILLNO,
     // PAGEID: route.meta.PBILLNO,
 })
 const dataList = ref([])
 
 const getgetModule = () => {
+    leftQueryParams.value.PK_ROLE = roleValue.value
+    leftQueryParams.value.PAGESIZE = leftQueryParams.value.ISENABL == true ? 15 : 999
     getModule(leftQueryParams.value).then(res => {
         dataList.value = res.RESULT.records
         leftQueryParams.value.total = res.RESULT.total;
 
-    }).finally(() => {
+        let newArr = dataList.value.filter(ele => ele.ISCHOOSE == 1)
 
+        setTimeout(() => {
+            if (newArr.length) {
+                tableRef.value.xEditTable.setCheckboxRow(newArr, true)
+            }
+        }, 300);
     })
 }
 const handlePageChange = ({ currentPage, pageSize }) => {
@@ -121,8 +187,20 @@ const handlePageChange = ({ currentPage, pageSize }) => {
     getgetModule();
 };
 const chooseLeftData = ref({})
+const lastLeftData = ref([])
 const tableChange = (e) => {
+    console.log("🚀 ~ tableChange ~ e:", e)
     chooseLeftData.value = e
+    if (lastLeftData.value && e.row) {
+        let newIndex = lastLeftData.value.findIndex(ele => ele.BILLNO == e.row.BILLNO)
+        if (newIndex == -1) {
+            lastLeftData.value.push(e.row)
+        } else {
+            lastLeftData.value.splice(newIndex, 1)
+        }
+    }
+
+
     getgetButton()
 }
 
@@ -162,23 +240,31 @@ const tableFormConfig = reactive({
 const form = ref()
 const tableRules = ref({})
 
-
-
 const getgetButton = () => {
-    console.log(dataList.value)
-    console.log(dataList.value)
     const protData = {
-        "BILLNO": "10",
-        "PK_MODULE": dataList.value[chooseLeftData.value.rowIndex].BILLNO
+        "BILLNO": roleValue.value,
+        "PK_MODULE": chooseLeftData.value.row ? chooseLeftData.value.row.BILLNO : dataList.value[chooseLeftData.value.rowIndex]?.BILLNO
     }
     getButton(protData).then(res => {
-        console.log("🚀 ~ getModule ~ res:", res)
         form.value = res.RESULT
     }).finally(() => {
 
     })
 }
 
+const etableSelect = (data) => {
+    let LIST = [form.value[data.rowIndex].BILLNO]
+    const protData = {
+        "BILLNO": roleValue.value,
+        "VTYPE": "0",     // 0 按钮 1 菜单
+        ISENABL: Number(data.value),
+        LIST
+    }
+    authorized(protData).then(res => {
+        proxy.$modal.msgSuccess(res.MESSAGE || "操作成功");
+        getgetButton()
+    })
+}
 
 
 
@@ -188,7 +274,9 @@ const getgetButton = () => {
 
 
 onMounted(() => {
+    getPageConfigs()
     getgetModule()
+    getgetListRole()
 })
 
 </script>
