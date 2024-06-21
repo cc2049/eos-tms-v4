@@ -372,3 +372,60 @@ export const COMPONENT = [
   { "LABEL": "我的/手机", "VALUE": "Mine" },
   { "LABEL": "自定义", "VALUE": "999" }
 ]
+
+// 栅格数据
+export const GRID = [{ LABEL: "5-5", VALUE: "5:5" }, { LABEL: "6-4", VALUE: "6:4" }, { LABEL: "7-3", VALUE: "7:3" }]
+
+// 页面中表单配置
+export const TABLESTYLEoptions = [
+  { LABEL: "默认", VALUE: "0" },
+  { LABEL: "线型", VALUE: "1" },
+  { LABEL: "卡片", VALUE: "2" },
+]
+
+export const pageSizeOptions = [
+  { LABEL: "10", VALUE: "10" },
+  { LABEL: "20", VALUE: "20" },
+  { LABEL: "30", VALUE: "30" },
+  { LABEL: "50", VALUE: "50" },
+  { LABEL: "100", VALUE: "100" },
+  { LABEL: "500", VALUE: "500" },
+  { LABEL: "1000", VALUE: "1000" },
+]
+
+const heightOptions = [
+  { LABEL: "3", VALUE: "3" },
+  { LABEL: "5", VALUE: "5" },
+  { LABEL: "10", VALUE: "10" },
+  { LABEL: "20", VALUE: "20" },
+]
+
+// 展示类型
+export const SWTP = [
+  { LABEL: "全部展示", VALUE: "ABCD" },
+  { LABEL: "企业客户承运商展示", VALUE: "ABC" },
+  { LABEL: "企业客户展示", VALUE: "AB" },
+  { LABEL: "企业展示", VALUE: "A" },
+]
+// 刷新方式
+export const IsRefresh = [
+  { LABEL: "刷新页面", VALUE: "0" },
+  { LABEL: "刷新当前数据", VALUE: "1" },
+  { LABEL: "不刷新", VALUE: "2" },
+]
+
+// 终端类型
+export const TERMINALOptions = [
+  { LABEL: "PC", VALUE: "2" },
+  { LABEL: "APP", VALUE: "3" },
+  { LABEL: "小程序", VALUE: "4" },
+  { LABEL: "手持机", VALUE: "5" },
+]
+
+// 功能类型
+export const FUNCTIONTYPEOptions = [
+  { LABEL: "新增", VALUE: "2" },
+  { LABEL: "编辑", VALUE: "3" },
+  { LABEL: "详情", VALUE: "4" },
+  { LABEL: "审核", VALUE: "5" },
+]

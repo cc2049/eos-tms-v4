@@ -1,5 +1,5 @@
 import request from '@/utils/request'
-import { CONTROLS, ISSHOW, TableCONTROLS, BUSSTYPE, QUERYTYPE, ALIGN, ENCRY, RULES, TOTAL, VTYPE, FIXED, BtnEventOptions, BtnColors, BtnChooseType, BtnPosion, BtnActionType, SLOT, modalSizes } from "./../config"
+import { CONTROLS, ISSHOW, TableCONTROLS, BUSSTYPE, QUERYTYPE, ALIGN, ENCRY, RULES, TOTAL, VTYPE, FIXED, BtnEventOptions, BtnColors, BtnChooseType, BtnPosion, BtnActionType, SLOT, modalSizes, GRID, TABLESTYLEoptions, pageSizeOptions, SWTP, IsRefresh, TERMINALOptions, FUNCTIONTYPEOptions } from "@/api/config"
 
 // 菜单树
 export function TreeMenu(data) {
@@ -139,28 +139,17 @@ export function createdConfig(data) {
   })
 }
 
-// 展示类型
-const SWTP = [
-  { LABEL: "全部展示", VALUE: "ABCD" },
-  { LABEL: "企业客户承运商展示", VALUE: "ABC" },
-  { LABEL: "企业客户展示", VALUE: "AB" },
-  { LABEL: "企业展示", VALUE: "A" },
-]
-// 刷新方式
-const IsRefresh = [
-  { LABEL: "刷新页面", VALUE: "0" },
-  { LABEL: "刷新当前数据", VALUE: "1" },
-  { LABEL: "不刷新", VALUE: "2" },
-]
-
 // 页面中表格配置
 export const TableConfig_Form = [
-  { FIELD: "LABEL", LABEL: "名称", WIDTH: "120", ALIGN: "left",ISFIXED: "left", CONTROLS: "ExTextBox", ISREQUIRE: 1, EDITTABLE: 1, FIXED: "left", ISSHOW: 1, COL: 8 },
-  { FIELD: "FIELD", LABEL: "主键", WIDTH: "120", ALIGN: "left",ISFIXED: "left", CONTROLS: "ExTextBox", ISREQUIRE: 1, EDITTABLE: 1, FIXED: "left", ISSHOW: 1, COL: 8 },
+  { FIELD: "LABEL", LABEL: "名称", WIDTH: "120", ALIGN: "left", ISFIXED: "left", CONTROLS: "ExTextBox", ISREQUIRE: 1, EDITTABLE: 1, FIXED: "left", ISSHOW: 1, COL: 8 },
+  { FIELD: "FIELD", LABEL: "主键", WIDTH: "120", ALIGN: "left", ISFIXED: "left", CONTROLS: "ExTextBox", ISREQUIRE: 1, EDITTABLE: 1, FIXED: "left", ISSHOW: 1, COL: 8 },
   { FIELD: "SORTCODE", LABEL: "排序", WIDTH: "100", ALIGN: "center", CONTROLS: "ExNumber", EDITTABLE: 1, DEFAULTVAL: "", ISSHOW: 1, COL: 8, ISSORT: 1, ISREQUIRE: 1, LINKAGE: "{\"POINT\":\"0\"}" },
   { FIELD: "CONTROLS", LABEL: "控件", WIDTH: "100", ALIGN: "left", CONTROLS: "ExSelect", OTHER: JSON.stringify(CONTROLS), EDITTABLE: 1, DEFAULTVAL: "", ISREQUIRE: 1, ISSHOW: 1, COL: 8 },
-  { FIELD: "ISSHOW", LABEL: "显示", WIDTH: "80", ALIGN: "", CONTROLS: "ExSelect", OTHER: JSON.stringify(ISSHOW), EDITTABLE: 1, DEFAULTVAL: "1", ISSHOW: 1, COL: 8, ISSORT: 1, SLOT: "tags" },
+  { FIELD: "TERMINALTYPE", LABEL: "终端", WIDTH: "80", ALIGN: "center", CONTROLS: "slot", OTHER: JSON.stringify(TERMINALOptions), EDITTABLE: 0, DEFAULTVAL: "91111", ISSHOW: 1, COL: 8, ISSORT: 1 },
+  { FIELD: "FUNCTYPE", LABEL: "功能", WIDTH: "80", ALIGN: "center", CONTROLS: "slot", OTHER: JSON.stringify(FUNCTIONTYPEOptions), EDITTABLE: 0, DEFAULTVAL: "91111", ISSHOW: 1, COL: 8, ISSORT: 1 },
+  { FIELD: "ISSHOW", LABEL: "显示", WIDTH: "80", ALIGN: "", CONTROLS: "ExSelect", OTHER: JSON.stringify(ISSHOW), EDITTABLE: 1, DEFAULTVAL: "1", ISSHOW: 1, COL: 8, ISSORT: 1 },
   { FIELD: "COL", LABEL: "列数", WIDTH: "80", ALIGN: "left", CONTROLS: "ExNumber", EDITTABLE: 1, DEFAULTVAL: "12", MAXLENGTH: 24, ISSHOW: 1, ISREQUIRE: 1, COL: 8 },
+  { FIELD: "WIDTH", LABEL: "宽度", WIDTH: "80", ALIGN: "left", CONTROLS: "ExNumber", EDITTABLE: 1, MAXLENGHT: "9999", DEFAULTVAL: "100", ISREQUIRE: 1, ISSHOW: 1, COL: 8 },
   { FIELD: "ISREQUIRE", LABEL: "必填", WIDTH: "80", ALIGN: "", CONTROLS: "ExSwitch", EDITTABLE: 1, DEFAULTVAL: "0", ISSHOW: 1, COL: 8 },
   { FIELD: "DEFAULTVAL", LABEL: "默认值", WIDTH: "100", ALIGN: "left", CONTROLS: "ExTextBox", EDITTABLE: 1, DEFAULTVAL: "", ISSHOW: 1, COL: 8 },
   { FIELD: "MAXLENGTH", LABEL: "最大长度", WIDTH: "100", ALIGN: "left", CONTROLS: "ExNumber", EDITTABLE: 1, OTHER: "", DEFAULTVAL: "100", ISSHOW: 1, COL: 8, },
@@ -174,11 +163,10 @@ export const TableConfig_Form = [
   { FIELD: "RULESREG", LABEL: "自定义规则", WIDTH: "150", ALIGN: "", CONTROLS: "ExTextBox", EDITTABLE: 1, ISSHOW: 1, COL: 8 },
   { FIELD: "SUFFIX", LABEL: "后缀", WIDTH: "100", ALIGN: "", CONTROLS: "ExTextBox", EDITTABLE: 1, ISSHOW: 1, COL: 8 },
   { FIELD: "LABELDESC", LABEL: "标题描述", WIDTH: "100", ALIGN: "", CONTROLS: "ExTextBox", EDITTABLE: 1, ISSHOW: 1, COL: 8 },
-
 ]
 export const TableConfig_Qty = [
-  { FIELD: "LABEL", LABEL: "名称", WIDTH: "120", ALIGN: "left",ISFIXED: "left", CONTROLS: "ExTextBox", ISREQUIRE: 1, EDITTABLE: 1, FIXED: "left", ISSHOW: 1, COL: 8 },
-  { FIELD: "FIELD", LABEL: "主键", WIDTH: "120", ALIGN: "left",ISFIXED: "left", CONTROLS: "ExTextBox", ISREQUIRE: 1, EDITTABLE: 1, FIXED: "left", ISSHOW: 1, COL: 8 },
+  { FIELD: "LABEL", LABEL: "名称", WIDTH: "120", ALIGN: "left", ISFIXED: "left", CONTROLS: "ExTextBox", ISREQUIRE: 1, EDITTABLE: 1, FIXED: "left", ISSHOW: 1, COL: 8 },
+  { FIELD: "FIELD", LABEL: "主键", WIDTH: "120", ALIGN: "left", ISFIXED: "left", CONTROLS: "ExTextBox", ISREQUIRE: 1, EDITTABLE: 1, FIXED: "left", ISSHOW: 1, COL: 8 },
   { FIELD: "SORTCODE", LABEL: "排序", WIDTH: "100", ALIGN: "center", CONTROLS: "ExNumber", EDITTABLE: 1, DEFAULTVAL: "", ISSHOW: 1, COL: 8, ISSORT: 1, ISREQUIRE: 1, LINKAGE: "{\"POINT\":\"0\"}" },
   { FIELD: "QUERYSORTCODE", LABEL: "查询排序", WIDTH: "100", ALIGN: "center", CONTROLS: "ExNumber", EDITTABLE: 1, DEFAULTVAL: "", ISSHOW: 1, COL: 8, ISSORT: 1, ISREQUIRE: 0, LINKAGE: "{\"POINT\":\"0\"}" },
   { FIELD: "CONTROLS", LABEL: "控件", WIDTH: "100", ALIGN: "left", CONTROLS: "ExSelect", OTHER: JSON.stringify(CONTROLS), EDITTABLE: 1, ISREQUIRE: 1, DEFAULTVAL: "", ISSHOW: 1, COL: 8 },
@@ -197,13 +185,12 @@ export const TableConfig_Qty = [
   { FIELD: "SLOTCFG", LABEL: "插槽配置", WIDTH: "100", ALIGN: "left", CONTROLS: "ExTextBox", EDITTABLE: 1, DEFAULTVAL: "", ISSHOW: 1, COL: 8 },
 ]
 export const TableConfig_Table = [
-  { FIELD: "LABEL", LABEL: "名称", WIDTH: "120", ALIGN: "left",ISFIXED: "left", CONTROLS: "ExTextBox", ISREQUIRE: 1, EDITTABLE: 1, FIXED: "left", ISSHOW: 1, COL: 8 },
-  { FIELD: "FIELD", LABEL: "主键", WIDTH: "120", ALIGN: "left",ISFIXED: "left", CONTROLS: "ExTextBox", ISREQUIRE: 0, EDITTABLE: 1, FIXED: "left", ISSHOW: 1, COL: 8 },
+  { FIELD: "LABEL", LABEL: "名称", WIDTH: "120", ALIGN: "left", ISFIXED: "left", CONTROLS: "ExTextBox", ISREQUIRE: 1, EDITTABLE: 1, FIXED: "left", ISSHOW: 1, COL: 8 },
+  { FIELD: "FIELD", LABEL: "主键", WIDTH: "120", ALIGN: "left", ISFIXED: "left", CONTROLS: "ExTextBox", ISREQUIRE: 0, EDITTABLE: 1, FIXED: "left", ISSHOW: 1, COL: 8 },
   { FIELD: "SORTCODE", LABEL: "排序", WIDTH: "100", ALIGN: "center", CONTROLS: "ExNumber", EDITTABLE: 1, DEFAULTVAL: "", ISSHOW: 1, COL: 8, ISSORT: 1, ISREQUIRE: 1, LINKAGE: "{\"POINT\":\"0\"}" },
   { FIELD: "WIDTH", LABEL: "宽度", WIDTH: "80", ALIGN: "left", CONTROLS: "ExNumber", EDITTABLE: 1, MAXLENGHT: "9999", DEFAULTVAL: "100", ISREQUIRE: 1, ISSHOW: 1, COL: 8 },
   // { FIELD: "VTYPE", LABEL: "类型", WIDTH: "80", ALIGN: "left", VTYPE: "exNum", CONTROLS: "ExSelect", VTYPE: "exNum", OTHER: JSON.stringify(VTYPE), EDITTABLE: 1, DEFAULTVAL: "0", ISREQUIRE: 1, ISSHOW: 1, COL: 8 },
   { FIELD: "VTYPE", LABEL: "类型", WIDTH: "80", ALIGN: "left", VTYPE: "exNum", CONTROLS: "ExSelect", VTYPE: "exNum", OTHER: "${COLTYPE}", EDITTABLE: 1, DEFAULTVAL: "0", ISREQUIRE: 1, ISSHOW: 1, COL: 8 },
-
   { FIELD: "ISSHOW", LABEL: "显示", WIDTH: "80", ALIGN: "", CONTROLS: "ExSelect", OTHER: JSON.stringify(ISSHOW), EDITTABLE: 1, DEFAULTVAL: "1", ISSHOW: 1, COL: 8, ISSORT: 1, SLOT: "tags" },
   { FIELD: "ISEDIT", LABEL: "编辑", WIDTH: "80", ALIGN: "", CONTROLS: "ExSwitch", EDITTABLE: 1, DEFAULTVAL: "0", ISSHOW: 1, COL: 8 },
   { FIELD: "CONTROLS", LABEL: "控件", WIDTH: "100", ALIGN: "left", CONTROLS: "ExSelect", OTHER: JSON.stringify(TableCONTROLS), EDITTABLE: 1, ISREQUIRE: 1, DEFAULTVAL: "ExReadCard", ISSHOW: 1, COL: 8 },
@@ -234,8 +221,8 @@ export const TableConfig_Table = [
   // { FIELD: "CARDSTYLE", LABEL: "卡片风格", WIDTH: "200", ALIGN: "left", CONTROLS: "ExTextBox", EDITTABLE: 1, DEFAULTVAL: "", ISSHOW: 1, COL: 8 },
 ]
 export const TableConfig_Btn = [
-  { FIELD: "VNAME", LABEL: "名称", ALIGN: "left",ISFIXED: "left", WIDTH: "120", EDITTABLE: 1, CONTROLS: "ExTextBox", ISSHOW: 1, COL: 8, FIXED: "left", ISREQUIRE: 1, },
-  { FIELD: "VTYPE", LABEL: "类型", ALIGN: "left",ISFIXED: "left", WIDTH: "120", EDITTABLE: 1, CONTROLS: "ExSelect", OTHER: JSON.stringify(BtnEventOptions), ISSHOW: 1, COL: 8, FIXED: "left", ISREQUIRE: 1, },
+  { FIELD: "VNAME", LABEL: "名称", ALIGN: "left", ISFIXED: "left", WIDTH: "120", EDITTABLE: 1, CONTROLS: "ExTextBox", ISSHOW: 1, COL: 8, FIXED: "left", ISREQUIRE: 1, },
+  { FIELD: "VTYPE", LABEL: "类型", ALIGN: "left", ISFIXED: "left", WIDTH: "120", EDITTABLE: 1, CONTROLS: "ExSelect", OTHER: JSON.stringify(BtnEventOptions), ISSHOW: 1, COL: 8, FIXED: "left", ISREQUIRE: 1, },
   { FIELD: "BILLNO", LABEL: "编号", WIDTH: "120", ALIGN: "", CONTROLS: "", ISREQUIRE: 0, EDITTABLE: 0, ISSHOW: 1, COL: 8 },
   { FIELD: "SORTCODE", LABEL: "排序", WIDTH: "80", ALIGN: "", EDITTABLE: 1, CONTROLS: "ExNumber", ISSHOW: 1, COL: 8, ISREQUIRE: 1, },
   { FIELD: "COLOR", LABEL: "颜色", ALIGN: "", WIDTH: "80", EDITTABLE: 1, CONTROLS: "ExSelect", OTHER: JSON.stringify(BtnColors), ISSHOW: 1, COL: 8 },
@@ -259,33 +246,6 @@ export const TableConfig_Btn = [
   { FIELD: "CHOOSE2SUB", LABEL: "选中数据给子表", WIDTH: "150", ALIGN: "left", EDITTABLE: 1, CONTROLS: "ExTextBox", ISSHOW: 1, COL: 8, },
 ];
 
-const GRID = [{ LABEL: "5-5", VALUE: "5:5" }, { LABEL: "6-4", VALUE: "6:4" }, { LABEL: "7-3", VALUE: "7:3" }]
-
-// 页面中表单配置
-
-const TABLESTYLEoptions = [
-  { LABEL: "默认", VALUE: "0" },
-  { LABEL: "线型", VALUE: "1" },
-  { LABEL: "卡片", VALUE: "2" },
-]
-
-const pageSizeOptions = [
-  { LABEL: "10", VALUE: "10" },
-  { LABEL: "20", VALUE: "20" },
-  { LABEL: "30", VALUE: "30" },
-  { LABEL: "50", VALUE: "50" },
-  { LABEL: "100", VALUE: "100" },
-  { LABEL: "500", VALUE: "500" },
-  { LABEL: "1000", VALUE: "1000" },
-]
-
-const heightOptions = [
-  { LABEL: "3", VALUE: "3" },
-  { LABEL: "5", VALUE: "5" },
-  { LABEL: "10", VALUE: "10" },
-  { LABEL: "20", VALUE: "20" },
-]
-
 export const FormConfig = [
   { SORTCODE: 1, FIELD: "PK_MODULE", LABEL: "菜单", COL: 8, CONTROLS: "ExSelectGroup", ISREQUIRE: 1, ISSHOW: 1, OTHER: "/sys/module/getTreeList???MODULENAME=LABEL", REVERFIELD: "MODULENAME" },
   { SORTCODE: 2, FIELD: "VNAME", LABEL: "名称", COL: 8, CONTROLS: "ExTextBox", ISREQUIRE: 1, ISSHOW: 1, OTHER: "" },
@@ -301,10 +261,8 @@ export const FormConfig = [
   { FIELD: "ISTBSELECT", LABEL: "表头筛选", COL: 4, CONTROLS: "ExSwitch", ISSHOW: "2", DEFAULTVAL: "1", LINKAGE: "{\"ISSHOW\":\"Data.GROUPNO=='TAB'\"}" },
   { FIELD: "ISADAPTION", LABEL: "列宽自适应", COL: 4, CONTROLS: "ExSwitch", ISSHOW: "2", DEFAULTVAL: "1", LINKAGE: "{\"ISSHOW\":\"Data.GROUPNO=='TAB'\"}" },
   { FIELD: "ISSONTABLE", LABEL: "批量编辑", COL: 4, CONTROLS: "ExSwitch", ISSHOW: "2", DEFAULTVAL: "1", LINKAGE: "{\"ISSHOW\":\"Data.GROUPNO=='TAB'\"}" },
-
   { FIELD: "CONVERMENU", LABEL: "转菜单", COL: 4, CONTROLS: "ExSwitch", ISSHOW: "1", DEFAULTVAL: "0", },
   { FIELD: "ISHIDE", LABEL: "菜单隐藏", COL: 4, CONTROLS: "ExSwitch", ISSHOW: "1", DEFAULTVAL: "0", },
-  
   { FIELD: "EDITMODAL", LABEL: "编辑模式", COL: 8, CONTROLS: "ExTextBox", ISSHOW: "2", LINKAGE: "{\"ISSHOW\":\"Data.GROUPNO=='TAB'\"}", LABELDESC: "可编辑表格的模式支持： row,form,modal" },
   { FIELD: "PAGETITLE", LABEL: "页面标题", COL: 8, CONTROLS: "ExTextBox", ISSHOW: "1", DEFAULTVAL: "", LINKAGE: "" },
   { FIELD: "TABLESTYLE", LABEL: "表格风格", COL: 8, CONTROLS: "ExSelect", ISSHOW: "2", OTHER: JSON.stringify(TABLESTYLEoptions), DEFAULTVAL: "1", LINKAGE: "{\"ISSHOW\":\"Data.GROUPNO=='TAB'\"}" },
