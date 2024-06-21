@@ -196,7 +196,7 @@ import {
 import screenfull from "screenfull";
 import PinyinMatch from "pinyin-match";
 import Vtable from "@/components/Vxtable";
-import { nextTick } from "vue";
+
 const { proxy } = getCurrentInstance();
 const keyword = ref("");
 watch(keyword, (val) => {
