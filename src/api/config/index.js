@@ -308,9 +308,6 @@ export const BtnActionType = [
   { LABEL: "船运查看", VALUE: "shipCheck" },
   { LABEL: "获取统计", VALUE: "GETCOUNT" },
   { LABEL: "全选提交", VALUE: "ALLSUBMIT" },
-
-
-
 ]
 
 // 状态

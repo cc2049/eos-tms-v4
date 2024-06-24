@@ -2,7 +2,7 @@
  * @Author: cc2049
  * @Date: 2024-04-28 13:10:44
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-06-21 15:15:06
+ * @LastEditTime: 2024-06-24 16:09:27
  * @Description: 简介
 -->
 <template v-if="pageConfig">
@@ -71,14 +71,11 @@
 
 
 <script setup>
-import Vxtable from "@/components/Vxtable";
-import TopButton from "@/components/TopButton";
 import AdvanceQuery from "@/components/AdvancedQuery/index";
 import Ztree from "./../Ztree";
 import useTableConifg from "@/hooks/useTableConifg";
 import { axiosGet } from "#/common";
 import { getUrlParams } from "@/utils";
-import EosTabs from "@/components/EosTabs/index.vue";
 import SubTable from "./SubTable.vue";
 const emit = defineEmits(["openCustemPage", "dbClick"]);
 const { proxy } = getCurrentInstance();
