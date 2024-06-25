@@ -137,3 +137,12 @@ docker-compose restart etmsnginx
   <Icon icon="uiw:setting" />
 </el-icon>
 ```
+
+
+## 菜单功能的终端类型说明
+
+```
+菜单添加字段：TERMINALTYPE   适配终端类型 900000 第一位默认是9固定 
+后面5位代表不同的终端 0-不适配 1-适配  第二位 PC第三位 APP第四位 小程序第五位 手持机
+
+```

@@ -59,7 +59,13 @@
                 <template #default_TERMINALTYPE="{ row, config }">
                   <popOver v-model="row.TERMINALTYPE" :config="config" width="100px" />
                 </template>
+                <template #edit_TERMINALTYPE="{ row, config }">
+                  <popOver v-model="row.TERMINALTYPE" :config="config" width="100px" />
+                </template>
                 <template #default_FUNCTYPE="{ row, config }">
+                  <popOver v-model="row.FUNCTYPE" :config="config" width="100px" />
+                </template>
+                <template #edit_FUNCTYPE="{ row, config }">
                   <popOver v-model="row.FUNCTYPE" :config="config" width="100px" />
                 </template>
                 <template #edit_PK_PAGE="{ row }">

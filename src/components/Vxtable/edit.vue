@@ -146,7 +146,7 @@
 
           <template #default="{ row, rowIndex }">
             <!-- slot 只允许本地配置使用 -->
-            <slot v-if="Ci.CONTROLS == 'slot'" :name="`default_${Ci.FIELD}`" :rowIndex="rowIndex" :row="row" :config="Ci">></slot>
+            <slot v-if="Ci.CONTROLS == 'slot'" :name="`default_${Ci.FIELD}`" :rowIndex="rowIndex" :row="row" :config="Ci"></slot>
             <!-- 多选 -->
             <template v-else-if="Ci.CONTROLS == 'ExSelect' || Ci.CONTROLS == 'ExRadio'">
               {{ DictLabel(EnumData[Ci.FIELD], row[Ci.FIELD]) }}

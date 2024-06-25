@@ -1,8 +1,8 @@
 <!--
  * @Author: cc2049
  * @Date: 2024-05-27 17:02:11
- * @LastEditors: PiPin 33947354+p1Master@users.noreply.github.com
- * @LastEditTime: 2024-06-12 09:27:43
+ * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2024-06-25 11:36:49
  * @Description: 简介
 -->
 <template>
@@ -78,6 +78,7 @@ const menuParams = computed(() => {
   return {
     MODULEID: btnConfig.value.PK_MODULE || "-",
     PAGEID: btnConfig.value.PK_PAGE || "-",
+    ACTION: btnConfig.value.ACTION || "-",
   };
 });
 const pageCFG = computed(() => {
