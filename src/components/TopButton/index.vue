@@ -2,7 +2,7 @@
  * @Author: cc2049
  * @Date: 2024-04-28 15:12:29
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-06-21 17:26:27
+ * @LastEditTime: 2024-06-25 11:30:50
  * @Description: 简介
 -->
 
@@ -310,6 +310,7 @@ function handleEvent(data, row) {
     formID.value = {
       MODULEID: data.PK_MODULE,
       PAGEID: data.PK_PAGE,
+      ACTION: data.ACTION
     };
   } else if (data.VTYPE == 3) {
     //  选中数据并提交

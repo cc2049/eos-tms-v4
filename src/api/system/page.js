@@ -1,8 +1,8 @@
 /*
  * @Author: cc2049
  * @Date: 2024-04-25 17:39:07
- * @LastEditors: PiPin 33947354+p1Master@users.noreply.github.com
- * @LastEditTime: 2024-05-23 18:32:29
+ * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2024-06-25 11:33:36
  * @Description: 获取菜单配置相关
  */
 
@@ -20,7 +20,7 @@ let PageCache = null; // 是否开启本地数据库缓存
 export async function getPageConfig(data) {
   let localKey = data.MODULEID + data.PAGEID
   // PageCache = Cookies.get('PageCache') || null
-  // console.log('PageCache', PageCache);
+  console.log('PageCache', data);
   try {
     const localData = await localforage.getItem(localKey);
     let configData = null;

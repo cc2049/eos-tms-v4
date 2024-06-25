@@ -52,6 +52,7 @@ service.interceptors.request.use(config => {
     PAGEID: axiosData ? (config.data.PAGEID || '') : '',
     PARENTPAGE: axiosData ? (config.data.PARENTPAGE) || '' : '',
     PROGRAMID: axiosData ? (config.data.PROGRAMID) || '' : '',
+    CLIENTTYPE:"PC",
     VERSION: ""
   }
   if (config.url?.includes('ISRSA=1')) {
