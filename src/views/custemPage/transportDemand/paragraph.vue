@@ -168,7 +168,6 @@ const props = defineProps({
   currentData: Array,
   config: Object
 })
-console.log(props)
 const form = ref({})
 
 const rows = computed(() => props.currentData[0])
@@ -187,7 +186,6 @@ const calculatedValue = () => {
       // detailObj.value.SUBLIST[index].ALLOWNUM = detailObj.value.SUBLIST[index - 1].ALLOWNUM - (detailObj.value.SUBLIST[index - 1].ALLOCATEDNUM || 0)
     }
   })
-  console.log("🚀 ~ detailObj.value.SUBLIST.forEach ~ detailObj.value.SUBLIST:", detailObj.value.SUBLIST)
 }
 
 const ALLOCATEDNUMBlur = () => {
@@ -199,7 +197,6 @@ const addList = () => {
   //     ALLOCATEDNUM: '',
   //     ALLOWNUM: ''
   // })
-  console.log(detailObj.value.SUBLIST)
   let newData = JSON.parse(JSON.stringify(detailObj.value.SUBLIST[0]))
   newData.forEach(item => {
     item.ALLOCATEDNUM = ''
@@ -225,16 +222,13 @@ const changeDate = (val, index) => {
   }
 }
 const confirm = () => {
-  console.log(detailObj.value.SUBLIST)
   let TRANSTYPE = ''
   detailObj.value.SUBLIST.forEach((item, index) => {
     // item.TRANSTYPE?TRANSTYPE = TRANSTYPE.concat(`${item.TRANSTYPE},`):''
-    console.log(item.TRANSTYPE)
     if (item.TRANSTYPE) {
       TRANSTYPE = index != detailObj.value.SUBLIST.length-1 ? TRANSTYPE.concat(`${item.TRANSTYPE},`):TRANSTYPE.concat(`${item.TRANSTYPE}`)
     }
   })
-  console.log("🚀 ~ confirm ~ TRANSTYPE:", TRANSTYPE)
 
   // let ROADLIST = []
   let ROADLIST = detailObj.value.SUBLIST.map((ele, eleIndex) => {
