@@ -2,7 +2,7 @@
  * @Author: cc2049
  * @Date: 2024-04-28 13:10:44
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-06-24 16:09:27
+ * @LastEditTime: 2024-06-26 18:31:39
  * @Description: 简介
 -->
 <template v-if="pageConfig">
@@ -227,7 +227,7 @@ function handleTopBtn(data) {
     advanceQueryRef.value.clostPopver(); // 关闭设置的弹窗
     advanceQueryRef.value.openShowModal();
   } else if (data.type == "openCustemPage") {
-    console.log("handleTopBtn", data , currentData.value);
+    // console.log("handleTopBtn", data , currentData.value);
     emit("openCustemPage", {
       data: data,
       path: data.btnConf.PAGEPATH,
@@ -278,7 +278,7 @@ const ztreeQUERYS = ref({
 });
 
 const getTableData = () => {
-  console.log(999, pageConfig.value);
+  // console.log(999, pageConfig.value);
  //  tableCFG.value.loading = true;
   queryJSON.value.PAGENUM = pageInfo.currentPage;
   queryJSON.value.SORTNAME = pageInfo.sortName;

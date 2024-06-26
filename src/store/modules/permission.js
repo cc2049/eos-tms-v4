@@ -193,7 +193,7 @@ function filterChildren(childrenMap, lastRouter = false, parentPath) {
           c.fullPath = parentPath + '/' + el.PATH + "/" + c.PATH
           c.COVERMENULIST = c.META.COVERMENULIST
           if (c.COVERMENULIST && c.COVERMENULIST.length) {
-            margetBtnMenu = margetBtnMenu.concat(getCOVERMENULIST(c, parentPath))
+            margetBtnMenu = margetBtnMenu.concat(getCOVERMENULIST(c,  c.fullPath))
           }
           if (c.CHILDREN && c.CHILDREN.length) {
             children = children.concat(filterChildren(c.CHILDREN, c, c.fullPath));
@@ -217,6 +217,8 @@ function filterChildren(childrenMap, lastRouter = false, parentPath) {
 function getCOVERMENULIST(routerItem, parentPath) {
   let margeBtnRoute = []
   routerItem.COVERMENULIST.forEach(al => {
+    let params = al.ISRELATEID == 1 ? '/:type/:id' :''
+    let newPath = `${parentPath}/${al.ACTION}${params}`
     const margetBtnMenuItem = {
       ...al,
       META: {
@@ -224,11 +226,11 @@ function getCOVERMENULIST(routerItem, parentPath) {
         VIMG: "",
         ISCACHE: routerItem.META.ISCACHE
       },
-      PATH: al.ACTION,
-      path: al.ACTION,
+      PATH: al.ACTION + params ,
+      path: al.ACTION + params ,
       NAME: `${routerItem.NAME}-${al.PAGENAME}`,
       name: `${routerItem.NAME}-${al.PAGENAME}`,
-      fullPath: `${parentPath}/${al.ACTION}`
+      fullPath: newPath
     }
     margeBtnRoute.push(margetBtnMenuItem)
     BaseMargeBtnMenuRoute.push(margetBtnMenuItem)
