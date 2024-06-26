@@ -29,7 +29,34 @@
                         {{ index + 1 }}
                     </div>
                     <div class="resolution-right">
-                        <div class="">{{ detailObj.SUBLIST[0].MATERIALNAME }}（{{ detailObj.SUBLIST[0].ROWLYWEIGHT }} {{
+                        <div class="disflex">
+                            <div v-for="(materialItem, materialIndex) in item" :key="materialIndex" class="">
+                                {{ materialIndex != 0 ? '/' : '' }}
+                                {{
+            materialItem.MATERIALNAME }}（{{ materialItem.ROWLYWEIGHT }}
+                                {{
+            materialItem.VUNIT }} ）</div>
+                        </div>
+                        <el-divider border-style="dashed" />
+
+                        <div class="disflex ">
+                            <div class="disflex mr-10" v-for="(materialItem, materialIndex) in item"
+                                :key="materialIndex">
+                                {{ materialIndex != 0 ? '/' : '' }} 剩余{{ materialItem.ALLOWNUM }}
+                            </div>
+                        </div>
+
+                        <el-divider border-style="dashed" />
+                        <div class="disflex">
+                            <el-input v-for="(materialItem, materialIndex) in item" :key="materialIndex" class=" mr-10"
+                                v-model="materialItem.ALLOCATEDNUM" type="number" size="small" @blur="ALLOCATEDNUMBlur"
+                                placeholder="输入委托量"></el-input>
+                        </div>
+
+
+
+
+                        <!-- <div class="">{{ detailObj.SUBLIST[0].MATERIALNAME }}（{{ detailObj.SUBLIST[0].ROWLYWEIGHT }} {{
             detailObj.SUBLIST[0].VUNIT }} ）</div>
                         <el-divider border-style="dashed" />
                         <div class="disflex ">剩余{{ item.ALLOWNUM }}</div>
@@ -37,7 +64,9 @@
                         <div>
                             <el-input v-model="item.ALLOCATEDNUM" type="number" size="small" @blur="ALLOCATEDNUMBlur"
                                 placeholder="输入委托量"></el-input>
-                        </div>
+                        </div> -->
+
+
                     </div>
                 </div>
             </div>
@@ -154,13 +183,13 @@ const calculatedValue = () => {
 
     detailObj.value.SUBLIST.forEach((item, index) => {
         if (index != 0) {
-            detailObj.value.SUBLIST[index].ALLOWNUM = detailObj.value.SUBLIST[index - 1].ALLOWNUM - (detailObj.value.SUBLIST[index - 1].ALLOCATEDNUM || 0)
+            item.forEach((items, indexs) => {
+                detailObj.value.SUBLIST[index][indexs].ALLOWNUM = detailObj.value.SUBLIST[index - 1][indexs].ALLOWNUM - (detailObj.value.SUBLIST[index - 1][indexs].ALLOCATEDNUM || 0)
+            })
+            // detailObj.value.SUBLIST[index].ALLOWNUM = detailObj.value.SUBLIST[index - 1].ALLOWNUM - (detailObj.value.SUBLIST[index - 1].ALLOCATEDNUM || 0)
         }
     })
     console.log("🚀 ~ detailObj.value.SUBLIST.forEach ~ detailObj.value.SUBLIST:", detailObj.value.SUBLIST)
-
-
-
 }
 
 const ALLOCATEDNUMBlur = () => {
@@ -168,10 +197,16 @@ const ALLOCATEDNUMBlur = () => {
 }
 
 const addList = () => {
-    detailObj.value.SUBLIST.push({
-        ALLOCATEDNUM: '',
-        ALLOWNUM: ''
+    // detailObj.value.SUBLIST.push({
+    //     ALLOCATEDNUM: '',
+    //     ALLOWNUM: ''
+    // })
+    console.log(detailObj.value.SUBLIST)
+    let newData = JSON.parse(JSON.stringify(detailObj.value.SUBLIST[0]))
+    newData.forEach(item => {
+        item.ALLOCATEDNUM = ''
     })
+    detailObj.value.SUBLIST.push(newData)
     calculatedValue()
 }
 
@@ -185,13 +220,23 @@ const cancel = () => {
 
 }
 const confirm = () => {
-    let SUBLIST = detailObj.value.SUBLIST.map(ele => {
-        return {
-            BILLNO: ele.BILLNO,
-            ALLOCATEDNUM: Number(ele.ALLOCATEDNUM),
-            ALLOWNUM: ele.ALLOWNUM
-        }
+    let SUBLIST = []
+    detailObj.value.SUBLIST.forEach((ele,eleIndex) => {
+        console.log("🚀 ~ SUBLIST ~ ele:", ele)
+        ele.forEach((item,index) => {
+            // return {
+            //     BILLNO: item.BILLNO,
+            //     ALLOCATEDNUM: Number(item.ALLOCATEDNUM),
+            //     ALLOWNUM: item.ALLOWNUM
+            // }
+            SUBLIST[eleIndex]?'':SUBLIST[eleIndex] = []
+            SUBLIST[eleIndex][index]?'':SUBLIST[eleIndex][index] = {}
+            SUBLIST[eleIndex][index].BILLNO = item.BILLNO
+            SUBLIST[eleIndex][index].ALLOCATEDNUM = item.ALLOCATEDNUM
+            SUBLIST[eleIndex][index].ALLOWNUM = item.ALLOWNUM
+        })
     })
+    console.log("🚀 ~ SUBLIST ~ SUBLIST:", SUBLIST)
     let protData = {
         BILLNO: rows.value.BILLNO,
         "MODE": "NUM",
