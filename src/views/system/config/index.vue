@@ -217,7 +217,7 @@ const treeRef = ref();
 const treeDefaultExpandedKeys = ref([])
 const TreeActive = ref();
 const getMenuList = () => {
-  let query = { KEYWORD: keyword.value };
+  let query = { KEYWORD: keyword.value , ISRELATE: 1 };
   TreeMenu(query).then((res) => {
     menuOptions.value = res.RESULT;
     treeDefaultExpandedKeys.value = [res.RESULT[0].VALUE]

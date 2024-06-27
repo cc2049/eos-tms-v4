@@ -1,13 +1,14 @@
 /*
  * @Author: cc2049
  * @Date: 2024-04-19 09:01:33
- * @LastEditors: 
- * @LastEditTime: 2024-06-24 16:01:01
+ * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2024-06-27 14:50:52
  * @Description: 简介
  */
 import vue from '@vitejs/plugin-vue'
 
 import createAutoImport from './auto-import'
+import createLazyImport from './lazy-import'
 import createSvgIcon from './svg-icon'
 import createCompression from './compression'
 import createComponents from './components'
@@ -16,6 +17,7 @@ import createSetupExtend from './setup-extend'
 export default function createVitePlugins(viteEnv, isBuild = false) {
     const vitePlugins = [vue()]
     vitePlugins.push(createAutoImport())
+    vitePlugins.push(createLazyImport())
 	vitePlugins.push(createSetupExtend())
     vitePlugins.push(createComponents())
     vitePlugins.push(createSvgIcon(isBuild))

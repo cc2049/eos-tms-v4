@@ -1,26 +1,31 @@
+<!--
+ * @Author: cc2049
+ * @Date: 2024-05-08 15:10:32
+ * @LastEditors: 
+ * @LastEditTime: 2024-06-27 14:33:32
+ * @Description: 简介
+-->
 <template>
-  <el-tooltip :disabled="isShowTooltip" :content="content" effect="light">
-    <div class="ellipsis" @mouseover="onMouseOver">
-      <span ref="textRef">{{ content }}</span>
-    </div>
-  </el-tooltip>
+  <div class="ellipsis" @mouseover="onMouseOver" :title="content">
+    <span ref="textRef">{{ content }}</span>
+  </div>
 </template>
 
 <script setup>
 const props = defineProps({
-  content: String
-})
+  content: String,
+});
 
-const isShowTooltip = ref(true)
-const textRef = ref(null)
+const isShowTooltip = ref(true);
+const textRef = ref(null);
 
-const onMouseOver = () => { // 内容超出，显示文字提示内容
-  const tag = textRef.value
-  const parentWidth = tag.parentNode.offsetWidth // 获取元素父级可视宽度
-  const contentWidth = tag.offsetWidth // 获取元素可视宽度
-  isShowTooltip.value = contentWidth <= parentWidth
-}
-
+const onMouseOver = () => {
+  // 内容超出，显示文字提示内容
+  const tag = textRef.value;
+  const parentWidth = tag.parentNode.offsetWidth; // 获取元素父级可视宽度
+  const contentWidth = tag.offsetWidth; // 获取元素可视宽度
+  isShowTooltip.value = contentWidth <= parentWidth;
+};
 </script>
 <style lang="scss" scoped>
 .ellipsis {
