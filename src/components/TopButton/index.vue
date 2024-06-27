@@ -2,7 +2,7 @@
  * @Author: cc2049
  * @Date: 2024-04-28 15:12:29
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-06-25 11:30:50
+ * @LastEditTime: 2024-06-26 18:01:53
  * @Description: 简介
 -->
 
@@ -99,7 +99,7 @@
         </span>
       </template>
       <template #default>
-        <template v-if="modalConfig.modalType == 'vtable' "> 
+        <template v-if="modalConfig.modalType == 'vtable' ">
           <TablePage ref="TablePageRef" :menuID="formID" dbClickType="emit" @dbClick="TablePagedbClick" />
         </template>
 
@@ -129,6 +129,11 @@ import { axiosGet } from "#/common";
 import { inject, reactive } from "vue";
 import { getUrlParams } from "@/utils";
 import TablePage from "@/views/table/components/SingleTable/index.vue";
+
+import usePermissionStore from "@/store/modules/permission";
+const permissionStore = usePermissionStore();
+
+const btnMenuRouters = computed(() => permissionStore.btnMenuRouters);
 
 import FormPage from "@/views/formPage/index.vue";
 
@@ -165,13 +170,18 @@ const MenuID = inject("menuID");
 const formID = ref(null);
 const { proxy } = getCurrentInstance();
 // const emit = defineEmits(["handleTopBtn", "reloadTableData"]);
-const emit = defineEmits(["reloadTableData", "quitPage", "handleBtnEvent","currentBtn"]);
+const emit = defineEmits([
+  "reloadTableData",
+  "quitPage",
+  "handleBtnEvent",
+  "currentBtn",
+]);
 
 const modalConfig = reactive({
   modalW: 1000,
   modalH: 600,
   pageTitle: "提示",
-  modalType:'form',
+  modalType: "form",
 });
 
 // 打开按钮
@@ -310,7 +320,7 @@ function handleEvent(data, row) {
     formID.value = {
       MODULEID: data.PK_MODULE,
       PAGEID: data.PK_PAGE,
-      ACTION: data.ACTION
+      ACTION: data.ACTION,
     };
   } else if (data.VTYPE == 3) {
     //  选中数据并提交
@@ -338,12 +348,12 @@ function handleEvent(data, row) {
     } else {
       submitByBtn(data, { ...queryJson.value, CHOOSE: dataChoose });
     }
-  } else if (data.VTYPE == 7 ) {
+  } else if (data.VTYPE == 7) {
     // 表格弹窗
     currentData2.value = selectRecords;
     modalConfig.modalVisible = true;
     modalConfig.pageTitle = data.VNAME;
-    modalConfig.modalType = 'vtable';
+    modalConfig.modalType = "vtable";
 
     formID.value = {
       MODULEID: data.PK_MODULE,
@@ -372,37 +382,39 @@ function handleEvent(data, row) {
     downFilesByUrl(data);
   } else if (data.VTYPE == 21) {
     console.log(selectRecords);
-    emit('currentBtn')
+    emit("currentBtn");
   }
   //打开菜单
   if (data.VTYPE == 16) {
-    let doType = 0,
+    let doType = null,
       Bid = "-";
-    if (data.ACTION == "EDIT") {
+    if (data.ACTION == "ADD") {
+      doType = 0;
+      Bid = "-";
+    } else if (data.ACTION == "EDIT") {
       doType = 1;
       Bid = selectRecords[0].BILLNO;
     } else if (data.ACTION == "DTL") {
       doType = 2;
       Bid = selectRecords[0].BILLNO;
-    } else {
-      doType = 0;
-      Bid = "-";
     }
-
-    let setPath = route.fullPath.split('/') ;
-
-    setPath[setPath.length-1] = data.PK_PAGE 
-    setPath = setPath.join('/') 
-
-    // let newPath = setPath.includes(":id")
-    //   ? setPath.replace(":id", Bid)
-    //   : data.ACTIONADDRESS;
-    // newPath = newPath.includes(":type")
-    //   ? newPath.replace(":type", doType)
-    //   : newPath;
-      console.log(333 ,setPath );
+    let btnMenuItem = btnMenuRouters.value.filter((i) =>
+      i.fullPath.includes(data.PK_PAGE)
+    );
+    console.log(333, btnMenuRouters.value, btnMenuItem);
+    if (!btnMenuItem.length) {
+      return proxy.$modal.msgError("打开的菜单不存在");
+    }
+    let setPath = btnMenuItem[0].fullPath;
+    let newPath = setPath.includes(":id")
+      ? setPath.replace(":id", Bid)
+      : data.ACTIONADDRESS;
+    newPath = newPath.includes(":type")
+      ? newPath.replace(":type", doType)
+      : newPath;
+    console.log(44, newPath);
     router.push({
-      path: setPath,
+      path: newPath,
       // query: { billno: orderNos },
     });
   }

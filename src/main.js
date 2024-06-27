@@ -1,8 +1,8 @@
 /*
  * @Author: cc2049
  * @Date: 2024-04-19 09:01:33
- * @LastEditors: PiPin 33947354+p1Master@users.noreply.github.com
- * @LastEditTime: 2024-05-23 18:08:01
+ * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2024-06-27 14:57:54
  * @Description: 简介
  */
 import { createApp } from 'vue'
@@ -65,6 +65,10 @@ import DictTag from '@/components/DictTag'
 
 import VXETable from 'vxe-table'
 import 'vxe-table/lib/style.css'
+
+import VxeUI from 'vxe-pc-ui'
+import 'vxe-pc-ui/lib/style.css'
+
 import VXETablePluginElement from "vxe-table-plugin-element";
 VXETable.use(VXETablePluginElement);
 
@@ -96,7 +100,9 @@ app.component('Icon', Icon)
 app.use(router)
 app.use(store)
 app.use(plugins)
+app.use(VxeUI)
 app.use(VXETable)
+
 
 app.use(elementIcons)
 app.component('svg-icon', SvgIcon)

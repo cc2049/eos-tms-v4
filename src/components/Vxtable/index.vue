@@ -1,11 +1,11 @@
 <template>
   <div class="val_table bg-white">
 
-    <vxe-table class="mytable-scrollbar mytable-footer" resizable round show-overflow ref="xTable" size="mini" highlight-hover-row width="100%" :show-footer="tableCFG.mergeCFG && tableCFG.mergeCFG.length" border :loading="tableCFG.loading" :cell-class-name="cellClassName" :height="tableCFG.height" :scroll-y="{enabled: true, gt: 0}" :column-config="{ isCurrent: false, isHover: true }" :row-config="{
+    <vxe-table class="mytable-scrollbar mytable-footer" resizable round show-overflow="title" ref="xTable" size="mini" highlight-hover-row width="100%" :show-footer="tableCFG.mergeCFG && tableCFG.mergeCFG.length" border :loading="tableCFG.loading" :cell-class-name="cellClassName" :height="tableCFG.height" :scroll-y="{enabled: true, gt: 0}" :column-config="{ isCurrent: false, isHover: true }" :row-config="{
         isCurrent: true,
         isHover: true,
         height:  34 ,
-      }" :data="tableData" :span-method="mergeRowMethod" :checkbox-config="{highlight: true}" :sort-config="{ showIcon: false }" :footer-method="footerMethod" :row-class-name="rowClassName" :tree-config="tableCFG.treeID" footer-row-class-name="footerRowClassName" footer-cell-class-name="footerCellClassName" @toggle-row-expand="toggleExpandChangeEvent" @sort-change="sortChange" @radio-change="radioChangeEvent" @checkbox-change="checkboxChange" @checkbox-all="checkboxChange" @custom="toolbarCustomEvent" @cell-click="rowClick" @cell-dblclick="
+      }" :data="tableData" :mouse-config="{selected: true}" :span-method="mergeRowMethod" :checkbox-config="{highlight: true}" :sort-config="{ showIcon: false }" :footer-method="footerMethod" :row-class-name="rowClassName" :tree-config="tableCFG.treeID" footer-row-class-name="footerRowClassName" footer-cell-class-name="footerCellClassName" @toggle-row-expand="toggleExpandChangeEvent" @sort-change="sortChange" @radio-change="radioChangeEvent" @checkbox-change="checkboxChange" @checkbox-all="checkboxChange" @custom="toolbarCustomEvent" @cell-click="rowClick" @cell-dblclick="
         (e) => {
           openDetail(e.row);
         }
@@ -152,13 +152,13 @@ const rowHeight = ref(40);
 const selectRow = ref();
 const selectColumn = ref();
 const cellClassName = ({ row, column }) => {
-  if (row === selectRow.value && column === selectColumn.value) {
-    return "cell-active";
-  }
-  const hasCellClass = proxy.tableCFG.tableColumns.filter(el => el.FIELD == column.field && el.SLOT && el.SLOT == 'cellBg')
-  if (hasCellClass.length == 0) return ""
-  let DATA = row
-  if (DATA && eval(hasCellClass[0].SLOTCFG)) return "cell-red"
+  // if (row === selectRow.value && column === selectColumn.value) {
+  //   return "cell-active";
+  // }
+  // const hasCellClass = proxy.tableCFG.tableColumns.filter(el => el.FIELD == column.field && el.SLOT && el.SLOT == 'cellBg')
+  // if (hasCellClass.length == 0) return ""
+  // let DATA = row
+  // if (DATA && eval(hasCellClass[0].SLOTCFG)) return "cell-red"
   return null;
 };
 
@@ -1120,6 +1120,13 @@ defineExpose({
 :deep(.mytable-scrollbar .vxe-body--row .cell-active) {
   box-shadow: inset 0 0 0 2px var(--vxe-primary-color);
 }
+
+:deep(.vxe-table--render-default .vxe-body--column.col--selected) {
+  box-shadow: inset 0 0 0 2px var(--vxe-primary-color) !important;
+}
+
+
+
 .mytable-scrollbar:deep() .footerRowClassName {
   background-color: #f5f5f5 !important;
 }
