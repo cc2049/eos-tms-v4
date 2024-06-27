@@ -58,7 +58,7 @@
               <div class="disflex">
                 <el-select v-model="item.PK_SENDADDR" clearable placeholder="请选择" style="width: 100%"
                   @change="val => changeDate(val, index)">
-                  <el-option v-for="selectItem in selectList" :key="selectItem.VALUE" :label="selectItem.VNAME"
+                  <el-option v-for="selectItem in selectList" :key="selectItem.VALUE" :label="selectItem.LABEL"
                     :value="selectItem.VALUE" />
                 </el-select>
 
