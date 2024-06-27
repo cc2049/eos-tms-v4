@@ -49,8 +49,8 @@
               <el-divider border-style="dashed" />
               <div class="disflex ">
                 <el-date-picker value-format="YYYY-MM-DD" v-model="item.YQSTDATE" type="date" placeholder="请选择"
-                  style="width: 100%;" class="mr-10" />
-                <el-date-picker value-format="YYYY-MM-DD" v-if="index != 0 && index != detailObj.SUBLIST.length - 1"
+                  style="width: 100%;"/>
+                <el-date-picker value-format="YYYY-MM-DD" class="ml-10"  v-if="index != 0 && index != detailObj.SUBLIST.length - 1"
                   v-model="item.YQSDDATE" type="date" placeholder="请选择" style="width: 100%;" />
               </div>
 
