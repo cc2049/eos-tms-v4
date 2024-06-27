@@ -1,6 +1,6 @@
 <template>
   <div class="edit_table">
-    <vxe-table ref="xEditTable" size="mini" border show-overflow keep-source width="100%" :loading="tableCFG.loading" :row-config="{ isCurrent: true, isHover: true , height:  36 }" :height="tableCFG.height" :column-config="{ resizable: true }" v-model:data="tableData" :show-footer="tableCFG.mergeCFG && tableCFG.mergeCFG.length" :footer-method="footerMethod" class="mytable-scrollbar mytable-footer" @header-cell-click="headerCellClickEvent" @header-cell-dblclick="headColDbClickEvent" :edit-rules="validRules" :edit-config="{trigger: 'click',mode: 'cell'}" :sort-config="{ showIcon: false }" :checkbox-config="!tableCFG.SelectType || tableCFG.SelectType != 'radio'? {highlight: true,}: null" @checkbox-all="checkboxChange" @checkbox-change="checkboxChange" @edit-closed="editClose">
+    <vxe-table ref="xEditTable" size="mini" border show-overflow keep-source width="100%" :loading="tableCFG.loading" :row-config="{ isCurrent: true, isHover: true , height:  36 }" :height="tableCFG.height" :column-config="{ resizable: true }" v-model:data="tableData" :show-footer="tableCFG.mergeCFG && tableCFG.mergeCFG.length" :footer-method="footerMethod" class="mytable-scrollbar mytable-footer" @header-cell-click="headerCellClickEvent" @header-cell-dblclick="headColDbClickEvent" @cell-click="rowClick" :edit-rules="validRules" :edit-config="{trigger: 'click',mode: 'cell'}" :sort-config="{ showIcon: false }" :checkbox-config="!tableCFG.SelectType || tableCFG.SelectType != 'radio'? {highlight: true,}: null" @checkbox-all="checkboxChange" @checkbox-change="checkboxChange" @edit-closed="editClose">
       <vxe-column v-if="tableCFG?.hasSeq" title="" width="50" type="seq" align="center" fixed="left"></vxe-column>
       <vxe-column v-if="tableCFG?.hasCheck" type="checkbox" align="center" width="50" fixed="left"></vxe-column>
 
@@ -132,7 +132,7 @@
             <TableFileUpload v-else-if="Ci.CONTROLS == 'ExUploadFile'" v-model="row[Ci.FIELD]" :filelist="row[Ci.FIELD+'Arr']" :data="uploadData" :ajaxUrl="Ci.OTHER" :limit="Ci.MAXLENGTH == '' ? 5 : Ci.MAXLENGTH * 1" :fileType="Ci.SLOTCFG" style="width: 100%" @change="val=>setUploadFile(val,row,Ci)" />
 
             <!-- ExSwitch 开关 -->
-            <el-switch v-else-if="Ci.CONTROLS == 'ExSwitch'" v-model="row[Ci.FIELD]" :disabled="calcDISABLED(Ci,rowIndex)" inline-prompt active-text="是" inactive-text="否" active-value="1" inactive-value="0" />
+            <el-switch v-else-if="Ci.CONTROLS == 'ExSwitch'" v-model="row[Ci.FIELD]" :disabled="calcDISABLED(Ci,rowIndex)" inline-prompt active-text="是" inactive-text="否" active-value="1" inactive-value="0" @change="val=>switchChange(val,row)" />
 
             <div class="content read" v-else>
               <!-- ExShowImage 图片预览 -->
@@ -320,12 +320,13 @@ const props = defineProps({
 });
 const { tableCFG, tableData, validRules, loading, actionBarWidth } = toRefs(props);
 
-const emit = defineEmits(["change", "select", "headerClick"]);
+const emit = defineEmits(["change", "select", "headerClick","switchChange"]);
 const { proxy } = getCurrentInstance();
 const xEditTable = ref();
 const router = useRouter();
 const MENUID = router.currentRoute.value.meta.BILLNO;
 const emptyImg = proxy.getAssetsFile("icon_task_NoData.png");
+const key17Status = inject("key17Status");
 
 const checkboxChange = ({ records }) => emit("change", records)
 
@@ -333,7 +334,8 @@ const defaultTime = [
   new Date(2000, 1, 1, 0, 0, 0),
   new Date(2000, 2, 1, 23, 59, 59),
 ];
-
+const selectRow = ref();
+const selectColumn = ref();
 const DropdownRefIndex = ref([]);
 const DropdownRef = ref();
 
@@ -621,6 +623,13 @@ function treeFind(tree, func) {
     }
   }
   return null;
+}
+
+const switchChange=(e,row)=>{
+  emit("switchChange", {
+    value:e,
+    row:row
+  });
 }
 
 // 多选组件 回写值
@@ -1290,6 +1299,44 @@ function footerMethod({ columns }) {
     }),
   ];
   return footerData;
+}
+
+const rowClickIndex = ref(null)
+function rowClick({ row, column, triggerCheckbox, rowIndex }) {
+  selectRow.value = row;
+  selectColumn.value = column;
+  if (props.tableCFG.treeID?.transform) {
+    return;
+  }
+  if (proxy.tableCFG.SelectType == "radio") return;
+  let selectRecords = proxy.$refs.xEditTable.getCheckboxRecords(),
+    checked = false;
+  if (selectRecords.length == 0) {
+    rowClickIndex.value = null;
+  }
+  if (!triggerCheckbox) {
+    !key17Status || !key17Status.value ? proxy.$refs.xEditTable?.clearCheckboxRow() : null;
+    if (rowClickIndex.value != rowIndex) {
+      rowClickIndex.value = rowIndex;
+      checked = true;
+      proxy.$refs.xEditTable.toggleCheckboxRow(row);
+    }
+    let giveParentData = {
+      clicktype: "checkbox",
+      data: checked ? proxy.$refs.xEditTable.getCheckboxRecords() : [],
+      checked: checked,
+      rowIndex,
+    };
+
+    // 判断当前展开的是否是选中的数据，否则关闭所有展开
+    let expandRow = proxy.$refs.xEditTable.getRowExpandRecords();
+    if (expandRow.length) {
+      if (expandRow[0].BILLNO != row.BILLNO) {
+        proxy.$refs.xEditTable.clearRowExpand();
+      }
+    }
+    proxy.$emit("change", giveParentData);
+  }
 }
 
 defineExpose({ type: "table", xEditTable, resetSUM });
