@@ -138,6 +138,7 @@ const currentBtn = () => {
 // 左侧列表
 const tableRef = ref(null)
 const TableConfig = ref([
+    { FIELD: "ISCHOOSE", LABEL: "是否授权", WIDTH: 80, ALIGN: "left", ISSHOW: 1, SELECTEDFLAG: 1, VTYPE: "exNum", OTHER: '[{"LABEL":"是","VALUE":"1"},{"LABEL":"否","VALUE":"0"}]', },
     { FIELD: "VNAME", LABEL: "菜单名称", VTYPE: 'checkbox', WIDTH: 50, ALIGN: "left", ISSHOW: 1, SELECTEDFLAG: 1 },
     { FIELD: "PRIMARYMENU", LABEL: "一级菜单名称", WIDTH: 100, ALIGN: "left", ISSHOW: 1, SELECTEDFLAG: 1 },
     { FIELD: "SECONDARYMENU", LABEL: "二级菜单名称", WIDTH: 100, ALIGN: "left", ISSHOW: 1, SELECTEDFLAG: 1 },
@@ -173,7 +174,7 @@ const getgetModule = () => {
         leftQueryParams.value.total = res.RESULT.total;
 
         let newArr = dataList.value.filter(ele => ele.ISCHOOSE == 1)
-
+        lastLeftData.value = newArr
         setTimeout(() => {
             if (newArr.length) {
                 tableRef.value.xEditTable.setCheckboxRow(newArr, true)
@@ -193,13 +194,16 @@ const tableChange = (e) => {
     chooseLeftData.value = e
     if (lastLeftData.value && e.row) {
         let newIndex = lastLeftData.value.findIndex(ele => ele.BILLNO == e.row.BILLNO)
-        if (newIndex == -1) {
+        if (newIndex == -1 || e.checked) {
             lastLeftData.value.push(e.row)
         } else {
             lastLeftData.value.splice(newIndex, 1)
         }
+    } else {
+        lastLeftData.value = e.data
     }
 
+    console.log("🚀 ~ tableChange ~ lastLeftData.value:", lastLeftData.value)
 
     getgetButton()
 }

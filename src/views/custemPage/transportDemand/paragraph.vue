@@ -29,7 +29,7 @@
             style="width: 100px">
             <el-option label="汽运" value="1" />
             <el-option label="船运" value="2" />
-            <el-option label="铁运" value="3" />
+            <el-option label="铁运" value="4" />
           </el-select>
           <div class="colorLumpMun">
             <div class="colorLump resolution-left">
