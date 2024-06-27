@@ -2,20 +2,24 @@
  * @Author: cc2049
  * @Date: 2024-02-20 09:00:04
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-06-11 15:11:20
+ * @LastEditTime: 2024-06-27 16:21:20
  * @Description: 简介
 -->
 
 <template>
-  <div class="custom-head" @contextmenu.prevent="fnResourcesRightClick($event, column)">
+  <div class="custom-head" @contextmenu.prevent="fnResourcesRightClick($event, column)" >
 
-    <span class="custom-head-title" @click="handleSort(column)" :title="column.title">
+    <span class="custom-head-title" @click.stop="handleSort(column)" :title="column.title">
       {{ column.title || '' }}
       <el-icon :size="20" class="sort-icon" v-if=" column.field == sortCFG.sortBy ">
         <CaretBottom v-if=" sortCFG.sort == 'desc' " />
         <CaretTop v-else />
       </el-icon>
     </span>
+
+    <!-- <div class="dblclick-wrrap" @dblclick="dblclickHeader">
+
+    </div> -->
 
     <div class="right-menu" v-show="showRightMenu && sortCFG.activeID == column.field" @click.stop.prevent="rightClick(column)" extmenu.stop.prevent>
       <div class="right-menu-item bottom">
@@ -100,6 +104,7 @@
 import PinyinMatch from "pinyin-match";
 import TextOverflow from "@/components/TextOverflow/index.vue";
 import { axiosGet } from "#/common";
+import { onMounted } from "vue";
 
 const props = defineProps({
   column: {
@@ -317,6 +322,16 @@ function fixedEvent(e, t) {
   let data = { id: e.field, isShow: "", isFixed: t ? "left" : "" };
   emit("setColShowEvent", data);
 }
+
+
+function dblclickHeader(){
+  console.log(9995);
+}
+
+// onMounted(()=>{
+//   document.getElementByClassName('vxe-resizable').addEventListener('dblclick',dblclickHeader)
+// })
+
 </script>
 
 <style lang="scss" scoped>
@@ -395,6 +410,15 @@ $border-color-jdy: #ceced2;
         top: 8px;
       }
     }
+  }
+
+  .dblclick-wrrap{
+    width: 10px;
+    height: 20px;
+    background: red;
+    position: absolute;
+    right: -10px;
+    z-index: 10000;
   }
 }
 

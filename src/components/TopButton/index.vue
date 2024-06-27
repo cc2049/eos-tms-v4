@@ -2,7 +2,7 @@
  * @Author: cc2049
  * @Date: 2024-04-28 15:12:29
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-06-26 18:01:53
+ * @LastEditTime: 2024-06-27 18:38:39
  * @Description: 简介
 -->
 
@@ -381,16 +381,15 @@ function handleEvent(data, row) {
     // 文件路径下载
     downFilesByUrl(data);
   } else if (data.VTYPE == 21) {
-    console.log(selectRecords);
     emit("currentBtn");
   }
   //打开菜单
   if (data.VTYPE == 16) {
     let doType = null,
-      Bid = "-";
+      Bid = "&";
     if (data.ACTION == "ADD") {
       doType = 0;
-      Bid = "-";
+      Bid = "&";
     } else if (data.ACTION == "EDIT") {
       doType = 1;
       Bid = selectRecords[0].BILLNO;

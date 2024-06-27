@@ -5,7 +5,10 @@
         isCurrent: true,
         isHover: true,
         height:  34 ,
-      }" :data="tableData" :mouse-config="{selected: true}" :span-method="mergeRowMethod" :checkbox-config="{highlight: true}" :sort-config="{ showIcon: false }" :footer-method="footerMethod" :row-class-name="rowClassName" :tree-config="tableCFG.treeID" footer-row-class-name="footerRowClassName" footer-cell-class-name="footerCellClassName" @toggle-row-expand="toggleExpandChangeEvent" @sort-change="sortChange" @radio-change="radioChangeEvent" @checkbox-change="checkboxChange" @checkbox-all="checkboxChange" @custom="toolbarCustomEvent" @cell-click="rowClick" @cell-dblclick="
+      }" :data="tableData" :mouse-config="{selected: true}" :span-method="mergeRowMethod" :checkbox-config="{highlight: true}" :sort-config="{ showIcon: false }" :footer-method="footerMethod" :row-class-name="rowClassName" :tree-config="tableCFG.treeID" footer-row-class-name="footerRowClassName" footer-cell-class-name="footerCellClassName" @toggle-row-expand="toggleExpandChangeEvent" @sort-change="sortChange" @radio-change="radioChangeEvent" @checkbox-change="checkboxChange" @checkbox-all="checkboxChange" @custom="toolbarCustomEvent" @cell-click="rowClick" 
+      
+      @resizable-change="resizableChange"
+      @cell-dblclick="
         (e) => {
           openDetail(e.row);
         }
@@ -582,7 +585,9 @@ function openDrawer() {
   proxy.$emit("change", giveParentData);
 }
 
-
+function resizableChange(e){
+  console.log(99, e);
+}
 
 const rowClickIndex = ref(null)
 function rowClick({ row, column, triggerCheckbox, rowIndex }) {

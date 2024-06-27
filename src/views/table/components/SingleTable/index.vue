@@ -2,7 +2,7 @@
  * @Author: cc2049
  * @Date: 2024-04-28 13:10:44
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-06-26 18:31:39
+ * @LastEditTime: 2024-06-27 18:41:38
  * @Description: 简介
 -->
 <template v-if="pageConfig">
@@ -255,7 +255,6 @@ function filterNameEvent(data) {
     return checkList.includes(item[id]);
   });
   tableData.value = newTableData;
-  pageInfo.totalResult = newTableData.length;
 }
 
 // 分页点击
