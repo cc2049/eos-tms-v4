@@ -38,7 +38,7 @@
                             </template> -->
                     </VTable>
                     <vxe-pager v-if="leftQueryParams.ISENABL == true" size="mini" :page-size="leftQueryParams.PAGESIZE"
-                        :page-sizes="[10, 20, 30, 50, 100,]" :current-page="leftQueryParams.PAGENUM"
+                        :page-sizes="[10,15, 20, 30, 50,]" :current-page="leftQueryParams.PAGENUM"
                         :total="leftQueryParams.total"
                         :layouts="['Total', 'PrevPage', 'JumpNumber', 'NextPage', 'Sizes']"
                         @page-change="handlePageChange">
@@ -158,6 +158,7 @@ const tableConfig = ref({
 const leftQueryParams = ref({
     PAGENUM: 1,
     PAGESIZE: 15,
+    PAGESIZES:15,
     VNAME: '',
     total: '',
     ISENABL: false,
@@ -168,7 +169,7 @@ const dataList = ref([])
 
 const getgetModule = () => {
     leftQueryParams.value.PK_ROLE = roleValue.value
-    leftQueryParams.value.PAGESIZE = leftQueryParams.value.ISENABL == true ? 15 : 999
+    leftQueryParams.value.PAGESIZE = leftQueryParams.value.ISENABL == true ? leftQueryParams.value.PAGESIZES : 999
     getModule(leftQueryParams.value).then(res => {
         dataList.value = res.RESULT.records
         leftQueryParams.value.total = res.RESULT.total;
@@ -185,6 +186,7 @@ const getgetModule = () => {
 const handlePageChange = ({ currentPage, pageSize }) => {
     leftQueryParams.value.PAGENUM = currentPage;
     leftQueryParams.value.PAGESIZE = pageSize;
+    leftQueryParams.value.PAGESIZES = pageSize;
     getgetModule();
 };
 const chooseLeftData = ref({})
