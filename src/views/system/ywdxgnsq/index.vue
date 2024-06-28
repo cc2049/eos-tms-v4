@@ -138,7 +138,7 @@ const currentBtn = (e) => {
     let LIST = [e.row.BILLNO]
     const protData = {
         "BILLNO": roleValue.value,
-        "VTYPE": "0",     // 0 按钮 1 菜单
+        "VTYPE": "1",     // 0 按钮 1 菜单
         ISENABL: Number(e.value),
         LIST
     }
@@ -218,7 +218,7 @@ const lastLeftData = ref([])
 
 const tableChange = (e) => {
     console.log("🚀 ~ tableChange ~ e:", e)
-    chooseLeftData.value = e
+    e.data.length?chooseLeftData.value = e:''
     // if (lastLeftData.value && e.row) {
     //     let newIndex = lastLeftData.value.findIndex(ele => ele.BILLNO == e.row.BILLNO)
     //     if (newIndex == -1 || e.checked) {
@@ -265,6 +265,7 @@ const form = ref()
 const tableRules = ref({})
 
 const getgetButton = () => {
+    console.log(chooseLeftData.value)
     const protData = {
         "BILLNO": roleValue.value,
         // "PK_MODULE": chooseLeftData.value.row ? chooseLeftData.value.row.BILLNO : dataList.value[chooseLeftData.value.rowIndex]?.BILLNO
