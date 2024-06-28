@@ -124,7 +124,6 @@ const getPageConfigs = () => {
 const chooseLeftData = ref({})
 
 const switchChange = (e) => {
-    console.log("🚀 ~ switchChange ~ e:", e)
     chooseLeftData.value.data = [e.row]
     currentBtn(e)
 }
@@ -138,7 +137,7 @@ const currentBtn = (e) => {
     let LIST = [e.row.BILLNO]
     const protData = {
         "BILLNO": roleValue.value,
-        "VTYPE": "0",     // 0 按钮 1 菜单
+        "VTYPE": "1",     // 0 按钮 1 菜单
         ISENABL: Number(e.value),
         LIST
     }
@@ -217,8 +216,7 @@ const lastLeftData = ref([])
 
 
 const tableChange = (e) => {
-    console.log("🚀 ~ tableChange ~ e:", e)
-    chooseLeftData.value = e
+    e.data.length?chooseLeftData.value = e:''
     // if (lastLeftData.value && e.row) {
     //     let newIndex = lastLeftData.value.findIndex(ele => ele.BILLNO == e.row.BILLNO)
     //     if (newIndex == -1 || e.checked) {
@@ -279,8 +277,6 @@ const getgetButton = () => {
 }
 
 const etableSelect = (data) => {
-    console.log("🚀 ~ etableSelect ~ data:", data)
-
 
     // let LIST = [form.value[data.rowIndex].BILLNO]
     // const protData = {
