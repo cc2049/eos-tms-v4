@@ -8,7 +8,7 @@ import { saveAs } from 'file-saver'
 import useUserStore from '@/store/modules/user'
 // import useFileDownStore from "@/store/modules/filedown"
 
-import { aesEncrypt , aesDEncrypt } from '@/utils/aes.js'
+import { aesEncrypt, aesDEncrypt } from '@/utils/aes.js'
 
 let downloadLoadingInstance;
 // 是否显示重新登录
@@ -52,12 +52,12 @@ service.interceptors.request.use(config => {
     PAGEID: axiosData ? (config.data.PAGEID || '') : '',
     PARENTPAGE: axiosData ? (config.data.PARENTPAGE) || '' : '',
     PROGRAMID: axiosData ? (config.data.PROGRAMID) || '' : '',
-    CLIENTTYPE:"PC",
+    CLIENTTYPE: "PC",
     VERSION: ""
   }
   if (config.url?.includes('ISRSA=1')) {
-    const {aesKey , aesData  } = aesEncrypt( config.data.DATA)
-    const newRsaData = { KEY: aesKey, SECRETDATA: aesData}
+    const { aesKey, aesData } = aesEncrypt(config.data.DATA)
+    const newRsaData = { KEY: aesKey, SECRETDATA: aesData }
     // config.data.KEY = aesKey
     // config.data.SECRETDATA = aesData
     config.data = newRsaData
@@ -125,11 +125,9 @@ service.interceptors.response.use(res => {
       KMData = KMData ? JSON.parse(aesDEncrypt(res.data)) : null
       res.data.RESULT = KMData
     }
-
     // if(!res.data.RESULT){
     //   return Promise.reject(res.data)
     // }
-
     return Promise.resolve(res.data)
   }
 },
@@ -138,11 +136,9 @@ service.interceptors.response.use(res => {
     let { message } = error;
     if (message == "Network Error") {
       message = "服务器连接失败";
-    }
-    else if (message.includes("timeout")) {
+    }else if (message.includes("timeout")) {
       message = "系统接口请求超时";
-    }
-    else if (message.includes("Request failed with status code")) {
+    }else if (message.includes("Request failed with status code")) {
       message = "系统接口" + message.substr(message.length - 3) + "异常";
     }
     ElNotification.closeAll()

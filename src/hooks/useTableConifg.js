@@ -2,7 +2,7 @@
  * @Author: cc2049
  * @Date: 2024-04-25 17:34:36
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-06-13 10:00:44
+ * @LastEditTime: 2024-06-28 12:14:07
  * @Description: 获取动态配置
  */
 
@@ -52,6 +52,7 @@ const useTableConifg = (menu) => {
         hasEmpty: false,
         height: 500,
         treeID: null,
+        inputSearch: false , //  表头关键字查询 VDEF3 
         rowClassEval: "", // 行加背景色的条件
         mergeCFG: [], // 表尾合计的配置  字段
         mergeRowField: [], // 需要合并的字段
@@ -147,6 +148,7 @@ const useTableConifg = (menu) => {
             ISTBSELECT,
             ISTREE,
             VMEMO,
+            VDEF3,
         } = data
         // 设置表格配置
         let copyTableCFG = JSON.parse(JSON.stringify(tableCFG));
@@ -157,7 +159,9 @@ const useTableConifg = (menu) => {
         copyTableCFG.tableColumns = getShowCFG(COLUMNS);
         copyTableCFG.allColumns = COLUMNS
         copyTableCFG.pagerConfig.pageSize = PAGESIZE || 20
+        copyTableCFG.inputSearch = VDEF3 == 1
 
+        
         //  是否存在树形表格
         if (ISTREE) {
             try {
