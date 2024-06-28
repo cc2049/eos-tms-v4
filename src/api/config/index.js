@@ -137,6 +137,7 @@ export const ENCRY = [
   { LABEL: "解密", VALUE: "2" },
   { LABEL: "解密且脱敏", VALUE: "3" },
   { LABEL: "脱敏", VALUE: "4" },
+  { LABEL: "加密且脱敏", VALUE: "5" },
 ]
 
 // 验证规则

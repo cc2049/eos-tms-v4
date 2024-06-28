@@ -54,7 +54,7 @@
               </el-tab-pane>
             </el-tabs>
             <div class="tabs-content" v-loading="loading">
-              <eos-form class="pageForm" v-if="configForm.formColumns.length > 0 && configForm.formValue.GROUPNO != 'QRY' && configForm.formValue.GROUPNO != 'BTN'" ref="TableForm" v-model="configForm.formValue" :config="configForm.formColumns" labelWidth="auto" />
+              <eos-form v-if="configForm.formColumns.length > 0 && configForm.formValue.GROUPNO != 'QRY' && configForm.formValue.GROUPNO != 'BTN'" ref="TableForm" v-model="configForm.formValue" :config="configForm.formColumns" labelWidth="auto" />
               <Etable ref="ETableRef" :tableCFG="tableCFG" v-model:tableData="tableData" :validRules="tableRules" :actionBarWidth="110" @change="tableChange" @headerClick="headerClick">
                 <template #default_TERMINALTYPE="{ row, config }">
                   <popOver v-model="row.TERMINALTYPE" :config="config" width="100px" />
@@ -523,7 +523,7 @@ function headerClick(id) {
 const SubmitConfig = () => {
   if (TableForm.value) {
     // 表单 表格 查询
-    TableForm.value.submitForm().then((valid) => {
+    TableForm.value.validate().then((valid) => {
       if (!valid) return;
       ETableRef.value.xEditTable.validate(true).then((valid) => {
         if (valid != undefined) return;
