@@ -2,100 +2,100 @@
  * @Author: cc2049
  * @Date: 2024-02-20 09:00:04
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-06-27 16:21:20
+ * @LastEditTime: 2024-06-28 12:15:20
  * @Description: 简介
 -->
 
 <template>
-  <div class="custom-head" @contextmenu.prevent="fnResourcesRightClick($event, column)" >
+  <div class="custom-head" @contextmenu.prevent="fnResourcesRightClick($event, column)">
 
-    <span class="custom-head-title" @click.stop="handleSort(column)" :title="column.title">
-      {{ column.title || '' }}
-      <el-icon :size="20" class="sort-icon" v-if=" column.field == sortCFG.sortBy ">
-        <CaretBottom v-if=" sortCFG.sort == 'desc' " />
-        <CaretTop v-else />
-      </el-icon>
-    </span>
-
-    <!-- <div class="dblclick-wrrap" @dblclick="dblclickHeader">
-
-    </div> -->
-
-    <div class="right-menu" v-show="showRightMenu && sortCFG.activeID == column.field" @click.stop.prevent="rightClick(column)" extmenu.stop.prevent>
-      <div class="right-menu-item bottom">
-        <el-popover placement="right" :width="126">
-          <template #reference>
-            <div>
-              <el-icon :size="16" color="#606875">
-                <Icon icon="ic:round-view-column" />
-              </el-icon>
-              <span>
-                列显示隐藏
-              </span>
-              <el-icon :size="12" color="#606875" class="arrow-icon">
-                <ArrowRightBold />
-              </el-icon>
-            </div>
-          </template>
-          <vxe-checkbox-group v-model="checkList" class="column-list" @change="checkboxChange" style="display: flex;flex-direction: column;junt-content: flex-start;">
-            <vxe-checkbox style="margin-left:0;margin-bottom:10px" :content="itemCol.LABEL" :label="itemCol.FIELD" :key="itemCol.BILLNO" v-for="itemCol in tableCFG.tableColumns" />
-          </vxe-checkbox-group>
-        </el-popover>
-
-      </div>
-      <div class="right-menu-item" @click="fixedEvent(column, 1)">
-        <el-icon :size="16" color="#606875">
-          <Icon icon="mdi:lock" />
+    <div class="custom-head-top">
+      <span class="custom-head-title" @click.stop="handleSort(column)" :title="column.title">
+        {{ column.title || '' }}
+        <el-icon :size="20" class="sort-icon" v-if=" column.field == sortCFG.sortBy ">
+          <CaretBottom v-if=" sortCFG.sort == 'desc' " />
+          <CaretTop v-else />
         </el-icon>
-        <span>
-          冻结列 {{ column.defaultFixed }}
-        </span>
-      </div>
-
-      <div class="right-menu-item" @click="fixedEvent(column, 0)">
-        <el-icon :size="16" color="#606875">
-          <Icon icon="mdi:unlocked-variant" />
-        </el-icon>
-        <span>
-          取消冻结列
-        </span>
-      </div>
-
-    </div>
-
-    <vxe-pulldown ref="pulldownRef" destroy-on-close transfer popup-class-name="custom-pulldown">
-      <template #default>
-        <div class="filter-icon" @click="openPulldown(column)">
-          <el-icon color="#606875" :size="20">
-            <Icon icon="material-symbols-light:filter-alt"></Icon>
-          </el-icon>
-        </div>
-      </template>
-      <template #dropdown>
-        <div class="my-dropdown3">
-          <el-input v-model="searchValue" class="mb-10" size="small" placeholder="搜索" @input="searchEvent" />
-          <el-scrollbar :height="260">
-            <vxe-checkbox-group v-model="checkColList" class="column-list" @change="checkboxColChange" style="display: flex;flex-direction: column;junt-content: flex-start;">
-              <vxe-checkbox style="margin-left:0;margin-bottom:10px" content="全选" label="全选" />
-              <template v-for="item in colData" :key="item">
-                <vxe-checkbox style="margin-left:0;margin-bottom:10px" :label="item">
-                  {{ item }}
-                </vxe-checkbox>
-              </template>
+      </span>
+      <div class="right-menu" v-show="showRightMenu && sortCFG.activeID == column.field" @click.stop.prevent="rightClick(column)" extmenu.stop.prevent>
+        <div class="right-menu-item bottom">
+          <el-popover placement="right" :width="126">
+            <template #reference>
+              <div>
+                <el-icon :size="16" color="#606875">
+                  <Icon icon="ic:round-view-column" />
+                </el-icon>
+                <span>
+                  列显示隐藏
+                </span>
+                <el-icon :size="12" color="#606875" class="arrow-icon">
+                  <ArrowRightBold />
+                </el-icon>
+              </div>
+            </template>
+            <vxe-checkbox-group v-model="checkList" class="column-list" @change="checkboxChange" style="display: flex;flex-direction: column;junt-content: flex-start;">
+              <vxe-checkbox style="margin-left:0;margin-bottom:10px" :content="itemCol.LABEL" :label="itemCol.FIELD" :key="itemCol.BILLNO" v-for="itemCol in tableCFG.tableColumns" />
             </vxe-checkbox-group>
-          </el-scrollbar>
-          <div class="footer">
-            <div class="num-wra font-800">
-              已选{{ checkColList.length }}项
-            </div>
-            <div class="footer-btn flex mt-6">
-              <el-button type="primary" class="" size="small" @click="colFilterEvent">确定</el-button>
-              <el-button size="small" @click="colFilterEvent(1)">清除</el-button>
+          </el-popover>
+
+        </div>
+        <div class="right-menu-item" @click="fixedEvent(column, 1)">
+          <el-icon :size="16" color="#606875">
+            <Icon icon="mdi:lock" />
+          </el-icon>
+          <span>
+            冻结列 {{ column.defaultFixed }}
+          </span>
+        </div>
+
+        <div class="right-menu-item" @click="fixedEvent(column, 0)">
+          <el-icon :size="16" color="#606875">
+            <Icon icon="mdi:unlocked-variant" />
+          </el-icon>
+          <span>
+            取消冻结列
+          </span>
+        </div>
+
+      </div>
+      <vxe-pulldown ref="pulldownRef" destroy-on-close transfer popup-class-name="custom-pulldown">
+        <template #default>
+          <div class="filter-icon" @click="openPulldown(column)">
+            <el-icon color="#606875" :size="20">
+              <Icon icon="material-symbols-light:filter-alt"></Icon>
+            </el-icon>
+          </div>
+        </template>
+        <template #dropdown>
+          <div class="my-dropdown3">
+            <el-input v-model="searchValue" class="mb-10" size="small" placeholder="搜索" @input="searchEvent" />
+            <el-scrollbar :height="260">
+              <vxe-checkbox-group v-model="checkColList" class="column-list" @change="checkboxColChange" style="display: flex;flex-direction: column;junt-content: flex-start;">
+                <vxe-checkbox style="margin-left:0;margin-bottom:10px" content="全选" label="全选" />
+                <template v-for="item in colData" :key="item">
+                  <vxe-checkbox style="margin-left:0;margin-bottom:10px" :label="item">
+                    {{ item }}
+                  </vxe-checkbox>
+                </template>
+              </vxe-checkbox-group>
+            </el-scrollbar>
+            <div class="footer">
+              <div class="num-wra font-800">
+                已选{{ checkColList.length }}项
+              </div>
+              <div class="footer-btn flex mt-6">
+                <el-button type="primary" class="" size="small" @click="colFilterEvent">确定</el-button>
+                <el-button size="small" @click="colFilterEvent(1)">清除</el-button>
+              </div>
             </div>
           </div>
-        </div>
-      </template>
-    </vxe-pulldown>
+        </template>
+      </vxe-pulldown>
+    </div>
+
+    <div class="input-filter" v-if="tableCFG.inputSearch">
+      <el-input  v-model="inputValue" @keydown.enter="confirmFilterEvent" type="text" placeholder="过滤条件" @enter="confirmFilterEvent" size="small" clearable> </el-input>
+    </div>
   </div>
 
 </template>
@@ -147,6 +147,10 @@ const pulldownRef = ref(null);
 const colData = ref([]);
 const sourceColData = ref([]);
 
+
+const inputValue = ref("");
+
+
 /* 过滤事件 */
 
 function searchEvent() {
@@ -181,7 +185,7 @@ const colFilterEvent = (type) => {
   if (type == 1) {
     return (checkColList.value = []);
   }
-  emit("filterEvent", { config: props.config, checkList: checkColList.value });
+  emit("filterEvent", { type:'1' ,  config: props.config, checkList: checkColList.value });
   const $pulldown = pulldownRef.value;
   if ($pulldown) {
     $pulldown.hidePanel();
@@ -318,20 +322,21 @@ function checkboxColChange(e) {
 }
 
 function fixedEvent(e, t) {
-  console.log(e, t);
   let data = { id: e.field, isShow: "", isFixed: t ? "left" : "" };
   emit("setColShowEvent", data);
 }
 
+function confirmFilterEvent(e) {
 
-function dblclickHeader(){
-  console.log(9995);
+  console.log(props.tableCFG);
+  emit("filterEvent", { type:'2' ,  config: props.config, checkList: [] , keyword: inputValue.value });
 }
+
+
 
 // onMounted(()=>{
 //   document.getElementByClassName('vxe-resizable').addEventListener('dblclick',dblclickHeader)
 // })
-
 </script>
 
 <style lang="scss" scoped>
@@ -346,11 +351,17 @@ function dblclickHeader(){
 }
 $border-color-jdy: #ceced2;
 .custom-head {
-  width: 100%;
-  display: flex;
-  position: relative;
-  cursor: pointer;
-  text-align: center;
+  // flex-direction: column;
+
+  &-top {
+    display: flex;
+    width: 100%;
+    display: flex;
+    position: relative;
+    cursor: pointer;
+    text-align: center;
+  }
+
   &-title {
     width: calc(100% - 10px);
     overflow: hidden;
@@ -412,13 +423,20 @@ $border-color-jdy: #ceced2;
     }
   }
 
-  .dblclick-wrrap{
+  .dblclick-wrrap {
     width: 10px;
     height: 20px;
     background: red;
     position: absolute;
     right: -10px;
     z-index: 10000;
+  }
+
+  .input-filter {
+    width: 100%;
+    input {
+      width: 100%;
+    }
   }
 }
 

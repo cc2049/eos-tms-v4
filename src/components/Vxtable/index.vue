@@ -740,12 +740,13 @@ const selectCtrl = ref("ExSelect");
 const searchCtrl = ref("ExSelectSearch");
 const DateCtrl = ref("ExDate,ExDateTime,ExTime");
 
-// 过滤事件
-// const filterNameMethod = ({ value, row }) => {
-//   proxy.$emit("queryEvent");
-//   return row;
-// };
 
+/*
+* type 1 本地的过滤   2 输入框关键字的查询
+* config  列的配置
+* keyword  输入框的关键字
+* checkList 选中的下拉框中的数组
+*/
 const filterEvent = (data) => {
   proxy.$emit("filterNameEvent", data);
 };

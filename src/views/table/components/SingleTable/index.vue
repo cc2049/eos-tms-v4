@@ -2,7 +2,7 @@
  * @Author: cc2049
  * @Date: 2024-04-28 13:10:44
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-06-27 18:41:38
+ * @LastEditTime: 2024-06-28 12:00:23
  * @Description: 简介
 -->
 <template v-if="pageConfig">
@@ -196,7 +196,7 @@ function tableChange(data) {
       return i.BILLNO == data.linkCFG;
     });
     getLinkBtn.length
-      ? topButtonRef.value.handleEvent( getLinkBtn[0],  currentData.value)
+      ? topButtonRef.value.handleEvent(getLinkBtn[0], currentData.value)
       : null;
   }
   // if (data.clicktype == "openDrawer") {
@@ -246,15 +246,25 @@ function treeClick(data) {
   getTableData();
 }
 
+/*
+ * type 1 本地的过滤   2 输入框关键字的查询
+ * config  列的配置
+ * keyword  输入框的关键字
+ * checkList 选中的下拉框中的数组
+ */
+
 function filterNameEvent(data) {
   let copyTableData = JSON.parse(JSON.stringify(sourceTableData.value));
   let id = data.config.FIELD,
     checkList = data.checkList;
-
-  let newTableData = copyTableData.filter((item) => {
-    return checkList.includes(item[id]);
-  });
-  tableData.value = newTableData;
+  if (data.type == 1) {
+    let newTableData = copyTableData.filter((item) => {
+      return checkList.includes(item[id]);
+    });
+    tableData.value = newTableData;
+  } else {
+    console.log("关键字查询", data);
+  }
 }
 
 // 分页点击
@@ -278,7 +288,7 @@ const ztreeQUERYS = ref({
 
 const getTableData = () => {
   // console.log(999, pageConfig.value);
- //  tableCFG.value.loading = true;
+  //  tableCFG.value.loading = true;
   queryJSON.value.PAGENUM = pageInfo.currentPage;
   queryJSON.value.SORTNAME = pageInfo.sortName;
   queryJSON.value.REVERSE = pageInfo.sortOrder;
@@ -429,7 +439,8 @@ function queryHeight() {
 function handleCustomPlan(data) {
   queryJSON.value.PROGRAMID = data.PROGRAMID;
   queryJSON.value.QUERYS = data.QUERYS || [];
-  pageConfig.value?.hasTree ? getTreeData() : getTableData();
+  getTableData();
+  // pageConfig.value?.hasTree ? getTreeData() : getTableData();
 }
 
 function resetConfig(data) {
