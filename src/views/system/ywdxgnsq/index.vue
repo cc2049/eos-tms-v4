@@ -124,7 +124,6 @@ const getPageConfigs = () => {
 const chooseLeftData = ref({})
 
 const switchChange = (e) => {
-    console.log("🚀 ~ switchChange ~ e:", e)
     chooseLeftData.value.data = [e.row]
     currentBtn(e)
 }
@@ -217,7 +216,6 @@ const lastLeftData = ref([])
 
 
 const tableChange = (e) => {
-    console.log("🚀 ~ tableChange ~ e:", e)
     e.data.length?chooseLeftData.value = e:''
     // if (lastLeftData.value && e.row) {
     //     let newIndex = lastLeftData.value.findIndex(ele => ele.BILLNO == e.row.BILLNO)
@@ -265,7 +263,6 @@ const form = ref()
 const tableRules = ref({})
 
 const getgetButton = () => {
-    console.log(chooseLeftData.value)
     const protData = {
         "BILLNO": roleValue.value,
         // "PK_MODULE": chooseLeftData.value.row ? chooseLeftData.value.row.BILLNO : dataList.value[chooseLeftData.value.rowIndex]?.BILLNO
@@ -280,8 +277,6 @@ const getgetButton = () => {
 }
 
 const etableSelect = (data) => {
-    console.log("🚀 ~ etableSelect ~ data:", data)
-
 
     // let LIST = [form.value[data.rowIndex].BILLNO]
     // const protData = {
