@@ -188,7 +188,7 @@
         </vxe-column>
 
         <vxe-column :field="Ci.FIELD" :title="Ci.LABEL" :width="Ci.WIDTH" :align="Ci.ALIGN == '' ? 'center' : Ci.ALIGN" :fixed="Ci.FIXED" :sortable="Ci.ISSORT == 1" v-else>
-          <template #default="{ row }">
+          <template #default="{ row, rowIndex }">
             <slot v-if="Ci.CONTROLS == 'slot'" :name="`default_${Ci.FIELD}`" :rowIndex="rowIndex" :row="row" :config="Ci">></slot>
             <template v-else-if="Ci.CONTROLS == 'ExSelect' || Ci.CONTROLS == 'ExRadio'">
               {{ DictLabel(EnumData[Ci.FIELD], row[Ci.FIELD]) }}
@@ -320,7 +320,7 @@ const props = defineProps({
 });
 const { tableCFG, tableData, validRules, loading, actionBarWidth } = toRefs(props);
 
-const emit = defineEmits(["change", "select", "headerClick","switchChange"]);
+const emit = defineEmits(["change", "select", "headerClick", "switchChange"]);
 const { proxy } = getCurrentInstance();
 const xEditTable = ref();
 const router = useRouter();
@@ -347,7 +347,6 @@ const mapEnumData = () => {
   EnumData.value = { ...data.EnumData, ...data._getDICT };
   BaseRowData.value = JSON.parse(JSON.stringify(data));
 };
-
 
 // 给需要Arr数组的 控件 赋值
 const setDataArrs = () => {
@@ -625,10 +624,10 @@ function treeFind(tree, func) {
   return null;
 }
 
-const switchChange=(e,row)=>{
+const switchChange = (e, row) => {
   emit("switchChange", {
-    value:e,
-    row:row
+    value: e,
+    row: row
   });
 }
 

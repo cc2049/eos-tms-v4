@@ -54,7 +54,7 @@
               </el-tab-pane>
             </el-tabs>
             <div class="tabs-content" v-loading="loading">
-              <!-- <Form v-if="configForm.formColumns.length > 0 && configForm.formValue.GROUPNO != 'QRY' && configForm.formValue.GROUPNO != 'BTN'" ref="TableForm" class="marg10" v-model:formData="configForm.formValue" :formConfig="configForm.formColumns" :rules="configForm.formRules" labelWidth="65px" /> -->
+              <eos-form class="pageForm" v-if="configForm.formColumns.length > 0 && configForm.formValue.GROUPNO != 'QRY' && configForm.formValue.GROUPNO != 'BTN'" ref="TableForm" v-model="configForm.formValue" :config="configForm.formColumns" labelWidth="auto" />
               <Etable ref="ETableRef" :tableCFG="tableCFG" v-model:tableData="tableData" :validRules="tableRules" :actionBarWidth="110" @change="tableChange" @headerClick="headerClick">
                 <template #default_TERMINALTYPE="{ row, config }">
                   <popOver v-model="row.TERMINALTYPE" :config="config" width="100px" />
@@ -211,13 +211,13 @@ watch(keyword, (val) => {
 const menuOptions = ref([]);
 const emptyImg = proxy.getAssetsFile("icon_task_NoData.png");
 
-const treeHeight = window.innerHeight - 150;
+const treeHeight = window.innerHeight - 135;
 // 左侧树
 const treeRef = ref();
 const treeDefaultExpandedKeys = ref([])
 const TreeActive = ref();
 const getMenuList = () => {
-  let query = { KEYWORD: keyword.value , ISRELATE: 1 };
+  let query = { KEYWORD: keyword.value, ISRELATE: 1 };
   TreeMenu(query).then((res) => {
     menuOptions.value = res.RESULT;
     treeDefaultExpandedKeys.value = [res.RESULT[0].VALUE]
@@ -332,7 +332,7 @@ const setTableConfig = async () => {
   }
   BaseRowData.value = JSON.parse(JSON.stringify(getFormValue(tableCFG.tableColumns)));
   tableRules.value = getFormRule(tableCFG.tableColumns);
-  tableCFG.height = window.innerHeight - 150;
+  tableCFG.height = window.innerHeight - 195;
 };
 
 // 一键生成配置
@@ -412,8 +412,9 @@ const tableCFG = reactive({
   hasSeq: false,
   toolsConfig: [],
   loading: false,
-  height: window.innerHeight - 193,
+  height: window.innerHeight - 195,
 });
+console.log(tableCFG);
 const tableRules = ref({});
 const EditTableData = () => {
   let { insertRecords, updateRecords, removeRecords } = ETableRef.value.xEditTable.getRecordset();
@@ -598,10 +599,10 @@ const previw = () => {
 const bigTable = () => {
   const ele = document.getElementById("screen"); //指定全屏区域元素
   screenfull.on("change", () => {
-    if (!screenfull.isFullscreen) tableCFG.height = window.innerHeight - 210;
+    if (!screenfull.isFullscreen) tableCFG.height = window.innerHeight - 195;
   });
   if (screenfull.isEnabled) {
-    tableCFG.height = window.innerHeight;
+    tableCFG.height = window.innerHeight - 30;
     screenfull.toggle(ele);
   }
 };
@@ -758,5 +759,10 @@ const DictLabel = (arr, data) => {
   left: 50%;
   transform: translate(-50%, -50%);
   margin: 0 auto;
+}
+:deep(.eos-form) {
+  .form-group-no-title {
+    padding-top: 0;
+  }
 }
 </style>
