@@ -1,24 +1,26 @@
 <template>
   <div class="workflow-form">
-    <MasterForm v-model="formConfig.formValue" :formConfig="formConfig.formColumns" :tableConfig="SubTableConfig" detail />
-    <template v-if="workflowDetail">
-      <h3>审批意见</h3>
-      <el-form ref="auditRef" :model="form">
-        <el-form-item required prop="COMMENTS" :rules="[{ required: true, message: '审批意见不可为空' }]">
-          <el-input type="textarea" v-model="form.COMMENTS" :rows="3" placeholder="审批意见"></el-input>
-        </el-form-item>
-        <el-form-item>
-          <el-row>
-            <el-col :span="1.5" style="margin-right:20px">
-              <el-button type="primary" @click="submitAudit('1')">同意</el-button>
-            </el-col>
-            <el-col :span="1.5">
-              <el-button @click="submitAudit('0')">驳回</el-button>
-            </el-col>
-          </el-row>
-        </el-form-item>
-      </el-form>
-    </template>
+    <el-scrollbar :height="formHeight">
+      <MasterForm v-model="formConfig.formValue" :formConfig="formConfig.formColumns" :tableConfig="SubTableConfig" detail :loading="formConfig.isloading" />
+      <template v-if="workflowDetail">
+        <h3>审批意见</h3>
+        <el-form ref="auditRef" :model="form">
+          <el-form-item required prop="COMMENTS" :rules="[{ required: true, message: '审批意见不可为空' }]">
+            <el-input type="textarea" v-model="form.COMMENTS" :rows="3" placeholder="审批意见" maxlength="200"></el-input>
+          </el-form-item>
+          <el-form-item>
+            <el-row>
+              <el-col :span="1.5" style="margin-right:20px">
+                <el-button type="primary" @click="submitAudit('1')">同意</el-button>
+              </el-col>
+              <el-col :span="1.5">
+                <el-button @click="submitAudit('0')">驳回</el-button>
+              </el-col>
+            </el-row>
+          </el-form-item>
+        </el-form>
+      </template>
+    </el-scrollbar>
   </div>
 </template>
 
@@ -32,30 +34,37 @@ const props = defineProps({
   currentData: Array,
   config: Object
 })
-console.log("workflwo-audit:props: 调试勿删", props)
 
 const { proxy } = getCurrentInstance();
 const emits = defineEmits(['close'])
+
+const formHeight = computed(() => {
+  const windowScrollHeight = window.innerHeight - 125
+  return `${windowScrollHeight}px`
+});
 
 const auditRef = ref(null)
 const workflowDetail = computed(() => {
   return props.config.ACTION != 'DTL'
 })
 
-const formConfig = reactive({
+const formConfig = ref({
   formValue: {}, // form数据
   formColumns: [], // form配置(已过滤显示)
   isloading: true
 });
 const SubTableConfig = ref([])
 
-const form = ref({})
+const form = ref({
+  TASKID: "",
+  COMMENTS: ""
+})
 const initForm = () => {
   if (props.currentData.length == 0) return false
-  form.value = {
+  Object.assign(form.value, {
     TASKID: props.currentData[0].TASKID,
     COMMENTS: "",
-  }
+  })
 }
 // 获取菜单
 const getMENU = computed(() => {
@@ -69,7 +78,7 @@ const getConfig = async () => {
   return new Promise(async (resolve, reject) => {
     const config = await getPageConfig(getMENU.value)
     let { SLOTCFG, COLUMNS, SUBTABLE } = config.RESULT
-    formConfig.formColumns = COLUMNS;
+    formConfig.value.formColumns = COLUMNS;
     SubTableConfig.value = SUBTABLE;
     getDataURL.value = SLOTCFG || props.config.ACTIONADDRESS
     resolve(1)
@@ -78,6 +87,7 @@ const getConfig = async () => {
 // 获取数据
 const getDataURL = ref("")
 const getData = () => {
+  if (!getDataURL.value) return proxy.$modal.error("未配置数据接口")
   const row = props.currentData[0]
   const data = {
     BILLNO: row.BUSINESSKEY,
@@ -90,8 +100,8 @@ const getData = () => {
     method: "post",
     data
   }).then(res => {
-    formConfig.formValue = res.RESULT
-    formConfig.isloading = false
+    formConfig.value.formValue = res.RESULT
+    formConfig.value.isloading = false
     initForm()
   })
 }
