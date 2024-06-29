@@ -61,6 +61,7 @@ import { ref } from "vue";
 import { getModule, getButton, getListRole, authorized } from "#/system/ywdxgnsq"
 import TopButton from "@/components/TopButton";
 import { getPageConfig, getTableData } from "@/api/system/page";
+// import { jsx } from "vue/jsx-runtime";
 const route = useRoute();
 const pageInfo = computed(() => route.meta)
 
@@ -124,23 +125,34 @@ const getPageConfigs = () => {
 const chooseLeftData = ref({})
 
 const switchChange = (e) => {
-    chooseLeftData.value.data = [e.row]
+    // chooseLeftData.value.data = [e.row]
+    console.log(e)
+
+    console.log(lastLeftData.value)
+
+    let newIndex = lastLeftData.value.findIndex(ele => ele.BILLNO == e.row.BILLNO)
+    if (newIndex == -1 && e.value == 1) {
+        lastLeftData.value.push(e.row)
+    } else {
+        lastLeftData.value.splice(newIndex,1)
+    }
+
     currentBtn(e)
 }
 const currentBtn = (e) => {
-    // let LIST = lastLeftData.value.map(ele => ele.BILLNO)
-    // const protData = {
-    //     "BILLNO": roleValue.value,
-    //     "VTYPE": "1",     // 0 按钮 1 菜单
-    //     LIST
-    // }
-    let LIST = [e.row.BILLNO]
+    let LIST = lastLeftData.value.map(ele => ele.BILLNO)
     const protData = {
         "BILLNO": roleValue.value,
         "VTYPE": "1",     // 0 按钮 1 菜单
-        ISENABL: Number(e.value),
         LIST
     }
+    // let LIST = [e.row.BILLNO]
+    // const protData = {
+    //     "BILLNO": roleValue.value,
+    //     "VTYPE": "1",     // 0 按钮 1 菜单
+    //     ISENABL: Number(e.value),
+    //     LIST
+    // }
     authorized(protData).then(res => {
         proxy.$modal.msgSuccess(res.MESSAGE || "操作成功");
         getgetModule()
@@ -188,6 +200,7 @@ const leftQueryParams = ref({
     // PAGEID: route.meta.PBILLNO,
 })
 const dataList = ref([])
+const lastLeftData = ref([])
 
 const getgetModule = () => {
     leftQueryParams.value.PK_ROLE = roleValue.value
@@ -197,8 +210,10 @@ const getgetModule = () => {
         dataList.value = res.RESULT.records
         leftQueryParams.value.total = res.RESULT.total;
 
-        let newArr = dataList.value.filter(ele => ele.ISCHOOSE == 1)
-        lastLeftData.value = newArr
+        let newArr = dataList.value.filter(ele => ele.ISAUTHORIZED == 1)
+        if (leftQueryParams.value.ISENABL == false) {   // 如果不是全部的数据，就是它自己全部授权的数据
+            lastLeftData.value = JSON.parse(JSON.stringify(newArr))
+        }
         setTimeout(() => {
             if (newArr.length) {
                 tableRef.value.xEditTable.setCheckboxRow(newArr, true)
@@ -212,11 +227,10 @@ const handlePageChange = ({ currentPage, pageSize }) => {
     leftQueryParams.value.PAGESIZES = pageSize;
     getgetModule();
 };
-const lastLeftData = ref([])
 
 
 const tableChange = (e) => {
-    e.data.length?chooseLeftData.value = e:''
+    e.data.length ? chooseLeftData.value = e : ''
     // if (lastLeftData.value && e.row) {
     //     let newIndex = lastLeftData.value.findIndex(ele => ele.BILLNO == e.row.BILLNO)
     //     if (newIndex == -1 || e.checked) {
