@@ -7,6 +7,8 @@ import ParentView from "@/components/ParentView";
 // 匹配views里面所有的.vue文件
 const modules = import.meta.glob("./../../views/**/*.vue");
 import VTable from "@/views/table/index"
+import VForm from "@/views/formPage/home"
+
 
 let BaseMargeBtnMenuRoute = []
 
@@ -127,17 +129,15 @@ function filterAsyncRouter(asyncRouterMap, lastRouter = false, type = false, par
         // route.component = () => import('@/views/sontable/sontable');
         route.component = () => import('@/views/table/index');
       } else if (route.COMPONENT === "VForm" || route.COMPONENT === "FM") {
-        route.component = () => import('@/views/formPage/home');
+        route.component = createCustomComponent(route.name, VForm);
       } else if (route.COMPONENT === "Link") {
         route.component = () => import('@/views/table/index');
       } else if (route.COMPONENT === "dashboard") {
         route.component = () => import('@/views/table/index');
       } else if (route.COMPONENT === "999") {
-        // route.component = AsyncImport(route.VURL)
-        route.component = loadView(route.VURL)
+        route.component =  createCustomComponent(route.name, AsyncImport(route.VURL)); 
       } else {
         route.component = AsyncImport(route.COMPONENT)
-        // route.component = loadView(route.COMPONENT)
       }
     }
     if (route.children != null && route.children && route.children.length) {
