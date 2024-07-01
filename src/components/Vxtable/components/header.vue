@@ -2,7 +2,7 @@
  * @Author: cc2049
  * @Date: 2024-02-20 09:00:04
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-06-28 12:15:20
+ * @LastEditTime: 2024-06-29 16:48:41
  * @Description: 简介
 -->
 
@@ -11,7 +11,7 @@
 
     <div class="custom-head-top">
       <span class="custom-head-title" @click.stop="handleSort(column)" :title="column.title">
-        {{ column.title || '' }}
+        {{ column.title || '' }} 
         <el-icon :size="20" class="sort-icon" v-if=" column.field == sortCFG.sortBy ">
           <CaretBottom v-if=" sortCFG.sort == 'desc' " />
           <CaretTop v-else />

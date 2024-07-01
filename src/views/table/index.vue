@@ -38,6 +38,7 @@ const visibleFormPage = ref(false);
 
 const activeBtn = ref({})
 const backEvent = () => {
+  console.log(44444);
   // 目前不行，这样的话 财旺写的组件会报错
   visibleFormPage.value = false;
 };

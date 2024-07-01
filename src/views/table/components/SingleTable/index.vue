@@ -2,7 +2,7 @@
  * @Author: cc2049
  * @Date: 2024-04-28 13:10:44
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-06-28 12:00:23
+ * @LastEditTime: 2024-06-29 15:31:59
  * @Description: 简介
 -->
 <template v-if="pageConfig">
@@ -443,16 +443,28 @@ function handleCustomPlan(data) {
   // pageConfig.value?.hasTree ? getTreeData() : getTableData();
 }
 
-function resetConfig(data) {
+/* 修改表格的配置， 双击列的中间线时
+ * type 1 修改指定的某一列   2 全局替换
+ * index  列的配置所在下标
+ * data  替换后的值
+ *
+ */
+
+function resetConfig(configData) {
+  const { type, index, data } = configData;
   // let index = tableCFG.value.tableColumns.findIndex((i) => i.FIELD == data.id);
   // tableCFG.value.tableColumns[index] = data.isShow
 
-  // let newTableCol = JSON.parse(JSON.stringify(tableCFG.value.tableColumns)) ;
+  let newTableCol = JSON.parse(JSON.stringify(tableCFG.value.tableColumns));
+
   // tableCFG.value.tableColumns = [];
   // tableCFG.value.tableColumns = newTableCol;
-
-  // VxtableRef.value.refreshColumn();
-  console.log("resetConfig", tableCFG.value.tableColumns);
+  if (type == 1) {
+    newTableCol[index] = data;
+    tableCFG.value.tableColumns = newTableCol;
+  }
+  console.log("resetConfig11", index, tableCFG.value.tableColumns[index]);
+  VxtableRef.value.refreshColumn();
 }
 
 /*

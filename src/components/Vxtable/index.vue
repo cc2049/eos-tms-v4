@@ -1,14 +1,14 @@
 <template>
   <div class="val_table bg-white">
 
-    <vxe-table class="mytable-scrollbar mytable-footer" resizable round show-overflow="title" ref="xTable" size="mini" highlight-hover-row width="100%" :show-footer="tableCFG.mergeCFG && tableCFG.mergeCFG.length" border :loading="tableCFG.loading" :cell-class-name="cellClassName" :height="tableCFG.height" :scroll-y="{enabled: true, gt: 0}" :column-config="{ isCurrent: false, isHover: true }" :row-config="{
+    <vxe-table :key="tableKey" class="mytable-scrollbar mytable-footer" resizable round auto-resize show-overflow="title" ref="xTable" size="mini" highlight-hover-row width="100%" :show-footer="tableCFG.mergeCFG && tableCFG.mergeCFG.length" border :loading="tableCFG.loading" :cell-class-name="cellClassName"
+      :height="tableCFG.height" :scroll-y="{enabled: true, gt: 0}" :column-config="{ isCurrent: false, isHover: true }" :row-config="{
         isCurrent: true,
         isHover: true,
         height:  34 ,
-      }" :data="tableData" :mouse-config="{selected: true}" :span-method="mergeRowMethod" :checkbox-config="{highlight: true}" :sort-config="{ showIcon: false }" :footer-method="footerMethod" :row-class-name="rowClassName" :tree-config="tableCFG.treeID" footer-row-class-name="footerRowClassName" footer-cell-class-name="footerCellClassName" @toggle-row-expand="toggleExpandChangeEvent" @sort-change="sortChange" @radio-change="radioChangeEvent" @checkbox-change="checkboxChange" @checkbox-all="checkboxChange" @custom="toolbarCustomEvent" @cell-click="rowClick" 
-      
-      @resizable-change="resizableChange"
-      @cell-dblclick="
+      }" :data="tableData" :mouse-config="{selected: true}" :span-method="mergeRowMethod" :checkbox-config="{highlight: true}" :sort-config="{ showIcon: false }" :footer-method="footerMethod" :row-class-name="rowClassName" :tree-config="tableCFG.treeID" footer-row-class-name="footerRowClassName"
+      footer-cell-class-name="footerCellClassName" @toggle-row-expand="toggleExpandChangeEvent" @sort-change="sortChange" @radio-change="radioChangeEvent" @checkbox-change="checkboxChange" @checkbox-all="checkboxChange" @custom="toolbarCustomEvent" @cell-click="rowClick"
+      @resizable-change="resizableChange" @cell-dblclick="
         (e) => {
           openDetail(e.row);
         }
@@ -30,7 +30,8 @@
         </template>
 
         <template v-else>
-          <vxe-column :field="config.FIELD" :align="config.ALIGN" :width="setColWidth(config)" :title=" setColTitle(config)  " :fixed="config.ISFIXED=='left'?'left':null" :height="30" :resizable="true" :key="i" :tree-node=" tableCFG.treeID?.treenodeId == config.FIELD " :visible="setTableColShow(config)" :sortable="config.ISSORT == 1">
+          <vxe-column :field="config.FIELD" :align="config.ALIGN" :width="setColWidth(config)" :title=" setColTitle(config)  " :fixed="config.ISFIXED=='left'?'left':null" :height="30" :resizable="true" :key="i" :tree-node=" tableCFG.treeID?.treenodeId == config.FIELD "
+            :visible="setTableColShow(config)" :sortable="config.ISSORT == 1">
             <template #header="{ column }">
               <Header :column="column" :config="config" :tableData="sourceTableData" :sortCFG :tableCFG="tableCFG" @filterEvent="filterEvent" @handleSortEvent="headerCellClickEvent" @rightClick="rightClickEvent" @setColShowEvent="setColShowEvent" />
             </template>
@@ -239,6 +240,7 @@ const clickGrade = (row, config) => {
 };
 
 const xTable = ref(null);
+const tableKey = ref(Math.random());
 
 const emptyImg = proxy.getAssetsFile("icon_task_NoData.png");
 
@@ -274,12 +276,12 @@ const setStatusNodes = computed((config, val) => {
           newArr[0].COLOR == "info"
             ? "#909399"
             : newArr[0].COLOR == "primary"
-              ? "#409EFF"
-              : newArr[0].COLOR == "success"
-                ? "#67C23A"
-                : newArr[0].COLOR == "danger"
-                  ? "#F56C6C"
-                  : "#E6A23C";
+            ? "#409EFF"
+            : newArr[0].COLOR == "success"
+            ? "#67C23A"
+            : newArr[0].COLOR == "danger"
+            ? "#F56C6C"
+            : "#E6A23C";
         let LABEL = newArr[0].LABEL;
         let VALUE = newArr[0].VALUE;
         return { color, LABEL, VALUE };
@@ -309,8 +311,7 @@ const sortCFG = reactive({
 });
 
 function refreshColumn() {
-  console.log("refreshColumn");
-  proxy.$refs.xTable.refreshColumn();
+  tableKey.value = Math.random()
 }
 // 刷新表格数据
 function reloadTableData(data) {
@@ -351,12 +352,12 @@ const setColTitle = computed((config) => {
 const setColWidth = computed((config) => {
   return (config) => {
     try {
-      if (props.tableStyle == 1) {
-        let html = config.LINESTYLE;
-        let obgJson = JSON.parse(html);
-        if (!html) return obgJson.width;
-        return obgJson.width || config.WIDTH;
-      }
+      // if (props.tableStyle == 1) {
+      //   let html = config.LINESTYLE;
+      //   let obgJson = JSON.parse(html);
+      //   if (!html) return obgJson.width;
+      //   return obgJson.width || config.WIDTH;
+      // }
       if (props.tableCFG.autoWidth == 1) {
         return "";
       }
@@ -585,11 +586,50 @@ function openDrawer() {
   proxy.$emit("change", giveParentData);
 }
 
-function resizableChange(e){
-  console.log(99, e);
+const resizableCol = ref(null);
+
+function resizableChange(e) {
+  let col = {
+    field: e.column.field,
+    width: e.resizeWidth,
+  };
+  if (!resizableCol.value) {
+    resizableCol.value = col;
+  }
+  if (col.field == resizableCol.value.field) {
+    setColData(col.field);
+  } else {
+    resizableCol.value = col;
+  }
+  // console.log("拖拽事件宽度", e.resizeWidth);
 }
 
-const rowClickIndex = ref(null)
+/* 修改表格的配置， 双击列的中间线时
+ * type 1 修改指定的某一列   2 全局替换
+ * index  列的配置所在下标
+ * data  替换后的值
+ *
+ */
+
+const setColData = (id) => {
+  let findIndex = props.tableCFG.tableColumns.findIndex((i) => i.FIELD == id);
+  let colItem = props.tableCFG.tableColumns[findIndex];
+  let newArr = props.tableData.map((i) => {
+    return i[id] ? i[id].length : 0;
+  });
+  const max = Math.max(...newArr);
+  colItem.WIDTH = max * 13 + 8 + "";
+
+  const resetColConfg = {
+    type: 1,
+    index: findIndex,
+    data: colItem,
+  };
+  emit("resetConfig", resetColConfg);
+  // console.log("99", findIndex, newArr, max, colItem.WIDTH);
+};
+
+const rowClickIndex = ref(null);
 function rowClick({ row, column, triggerCheckbox, rowIndex }) {
   selectRow.value = row;
   selectColumn.value = column;
@@ -603,7 +643,9 @@ function rowClick({ row, column, triggerCheckbox, rowIndex }) {
     rowClickIndex.value = null;
   }
   if (!triggerCheckbox) {
-    !key17Status || !key17Status.value ? proxy.$refs.xTable?.clearCheckboxRow() : null;
+    !key17Status || !key17Status.value
+      ? proxy.$refs.xTable?.clearCheckboxRow()
+      : null;
     if (rowClickIndex.value != rowIndex) {
       rowClickIndex.value = rowIndex;
       checked = true;
@@ -628,7 +670,7 @@ function rowClick({ row, column, triggerCheckbox, rowIndex }) {
 }
 // 点击超链接事件
 function openLink(data) {
-  const { cf, row } = data
+  const { cf, row } = data;
   if (cf.OTHER) {
     let giveParentData = {
       clicktype: "openLink",
@@ -740,13 +782,12 @@ const selectCtrl = ref("ExSelect");
 const searchCtrl = ref("ExSelectSearch");
 const DateCtrl = ref("ExDate,ExDateTime,ExTime");
 
-
 /*
-* type 1 本地的过滤   2 输入框关键字的查询
-* config  列的配置
-* keyword  输入框的关键字
-* checkList 选中的下拉框中的数组
-*/
+ * type 1 本地的过滤   2 输入框关键字的查询
+ * config  列的配置
+ * keyword  输入框的关键字
+ * checkList 选中的下拉框中的数组
+ */
 const filterEvent = (data) => {
   proxy.$emit("filterNameEvent", data);
 };
@@ -1130,8 +1171,6 @@ defineExpose({
 :deep(.vxe-table--render-default .vxe-body--column.col--selected) {
   box-shadow: inset 0 0 0 2px var(--vxe-primary-color) !important;
 }
-
-
 
 .mytable-scrollbar:deep() .footerRowClassName {
   background-color: #f5f5f5 !important;

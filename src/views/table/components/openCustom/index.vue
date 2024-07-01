@@ -2,7 +2,7 @@
  * @Author: cc2049
  * @Date: 2024-05-27 17:02:11
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-06-25 11:36:49
+ * @LastEditTime: 2024-06-29 11:24:51
  * @Description: 简介
 -->
 <template>
@@ -109,11 +109,7 @@ onMounted(() => {
 });
 
 function backEvent() {
-  // treeKeyword.value = "";
-  // visibleFormPage.value = false;
-  // formConfig.showDetail = false;
-  // formConfig.formValue = {};
-  // currentData.value = [];
+  console.log(123 ,  999);
   emit("backEvents");
 }
 </script>

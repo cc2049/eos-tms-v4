@@ -135,11 +135,11 @@ service.interceptors.response.use(res => {
     console.error('Err:' + error)
     let { message } = error;
     if (message == "Network Error") {
-      message = "服务器连接失败";
+      message = "服务器网络故障，请稍后重试";
     }else if (message.includes("timeout")) {
       message = "系统接口请求超时";
-    }else if (message.includes("Request failed with status code")) {
-      message = "系统接口" + message.substr(message.length - 3) + "异常";
+    } else if (message.includes("Request failed with status code")) {
+      message = "服务运维中，请稍后重试";
     }
     ElNotification.closeAll()
     ElNotification.error({
