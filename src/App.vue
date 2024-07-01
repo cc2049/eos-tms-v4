@@ -2,7 +2,7 @@
  * @Author: cc2049
  * @Date: 2024-04-19 09:01:33
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-05-15 08:50:36
+ * @LastEditTime: 2024-07-01 12:52:39
  * @Description: 简介
 -->
 <template>
@@ -12,11 +12,13 @@
 <script setup>
 import useSettingsStore from '@/store/modules/settings'
 import { handleThemeStyle } from '@/utils/theme'
+import {updateVersion } from '@/utils/upVersion'
 
 onMounted(() => {
   nextTick(() => {
     // 初始化主题样式
     handleThemeStyle(useSettingsStore().theme)
+    import.meta.env.MODE === "development" ? updateVersion() : null
   })
 })
 
