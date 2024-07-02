@@ -8,6 +8,8 @@ import ParentView from "@/components/ParentView";
 const modules = import.meta.glob("./../../views/**/*.vue");
 import VTable from "@/views/table/index"
 import VForm from "@/views/formPage/home"
+import GridReport from "@/views/gridReport/index"
+
 
 
 let BaseMargeBtnMenuRoute = []
@@ -128,7 +130,9 @@ function filterAsyncRouter(asyncRouterMap, lastRouter = false, type = false, par
       } else if (route.COMPONENT === "SonTable") {
         // route.component = () => import('@/views/sontable/sontable');
         route.component = () => import('@/views/table/index');
-      } else if (route.COMPONENT === "VForm" || route.COMPONENT === "FM") {
+      }  else if (route.COMPONENT === "GridReport") {
+        route.component = createCustomComponent(route.name, GridReport);
+      }else if (route.COMPONENT === "VForm" || route.COMPONENT === "FM") {
         route.component = createCustomComponent(route.name, VForm);
       } else if (route.COMPONENT === "Link") {
         route.component = () => import('@/views/table/index');
@@ -228,8 +232,8 @@ function getCOVERMENULIST(routerItem, parentPath) {
       },
       PATH: al.ACTION + params ,
       path: al.ACTION + params ,
-      NAME: `${routerItem.NAME}-${al.PAGENAME}`,
-      name: `${routerItem.NAME}-${al.PAGENAME}`,
+      NAME: `${routerItem.NAME}`,
+      name: `${routerItem.NAME}`,
       fullPath: newPath
     }
     margeBtnRoute.push(margetBtnMenuItem)

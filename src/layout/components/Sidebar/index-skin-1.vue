@@ -2,7 +2,7 @@
  * @Author: cc2049
  * @Date: 2024-04-25 14:41:35
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-06-06 12:40:32
+ * @LastEditTime: 2024-07-01 11:11:38
  * @Description: 简介
 -->
 <template>
@@ -165,6 +165,8 @@ const sideTheme = computed(() => settingsStore.sideTheme);
 const systemConfig = computed(() => settingsStore.systemConfig);
 const topNav = computed(() => settingsStore.topNav);
 const sideBarWidth = ref(230);
+
+const sidebarHeight = ref(window.innerHeight - 78)
 // 系统顶部左侧logo
 const avatarUrl = ref(proxy.getAssetsFile("scm/menu/logo.png"));
 if (systemConfig.value && systemConfig.value.baseUrl) {
