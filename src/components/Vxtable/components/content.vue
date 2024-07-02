@@ -2,7 +2,7 @@
  * @Author: cc2049
  * @Date: 2024-06-03 15:39:57
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-06-12 17:43:47
+ * @LastEditTime: 2024-07-02 11:30:37
  * @Description: 简介
 -->
 
@@ -61,8 +61,9 @@
 </template>
 
 <script setup>
-import { setSuffix } from "@/utils";
+import { setSuffix , toThousands } from "@/utils";
 import { selectDictLabel } from "@/utils/ruoyi";
+
 const { proxy } = getCurrentInstance();
 const props = defineProps({
   config: {

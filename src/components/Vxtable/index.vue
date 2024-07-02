@@ -614,19 +614,21 @@ function resizableChange(e) {
 const setColData = (id) => {
   let findIndex = props.tableCFG.tableColumns.findIndex((i) => i.FIELD == id);
   let colItem = props.tableCFG.tableColumns[findIndex];
+  // console.log("99", colItem );
+  if(colItem.VTYPE =='exNum' || colItem.VNAME.includes('日期')){
+      return ;
+  }
   let newArr = props.tableData.map((i) => {
-    return i[id] ? i[id].length : 0;
+    return i[id] ? String(i[id]).length : 0;
   });
   const max = Math.max(...newArr);
   colItem.WIDTH = max * 13 + 8 + "";
-
   const resetColConfg = {
     type: 1,
     index: findIndex,
     data: colItem,
   };
   emit("resetConfig", resetColConfg);
-  // console.log("99", findIndex, newArr, max, colItem.WIDTH);
 };
 
 const rowClickIndex = ref(null);
@@ -1069,28 +1071,6 @@ const numberBlur = (config, row) => {
   }
 };
 
-/** 拖拽功能 */
-let sortable1;
-const rowDrop = () => {
-  const $table = xTable.value;
-  sortable1 = new Sortable.create(
-    $table.$el.querySelector(".body--wrapper>.vxe-table--body tbody"),
-    {
-      handle: ".drag-btn",
-      onEnd: (sortableEvent) => {
-        const newIndex = sortableEvent.newIndex;
-        const oldIndex = sortableEvent.oldIndex;
-        const currRow = props.tableData.splice(oldIndex, 1)[0];
-        props.tableData.splice(newIndex, 0, currRow);
-        emit("dragRow", {
-          row: currRow,
-          oldIndex,
-          newIndex,
-        });
-      },
-    }
-  );
-};
 
 const router = useRouter();
 const MENUID = router.currentRoute.value.meta.BILLNO;
@@ -1123,16 +1103,15 @@ function ConvertData(obj) {
 let initTime;
 nextTick(() => {
   // 加载完成之后在绑定拖动事件
-  initTime = setTimeout(() => {
-    rowDrop();
-  }, 300);
+  // initTime = setTimeout(() => {
+  // }, 300);
 });
-onUnmounted(() => {
-  clearTimeout(initTime);
-  if (sortable1) {
-    sortable1.destroy();
-  }
-});
+// onUnmounted(() => {
+//   clearTimeout(initTime);
+//   if (sortable1) {
+//     sortable1.destroy();
+//   }
+// });
 
 // 页面离开后
 onDeactivated(() => {

@@ -1,8 +1,8 @@
 <!--
  * @Author: cc2049
  * @Date: 2024-04-23 11:35:41
- * @LastEditors: PiPin 33947354+p1Master@users.noreply.github.com
- * @LastEditTime: 2024-06-21 16:20:53
+ * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2024-07-02 11:01:44
  * @Description: 大表单组件
 -->
 
@@ -24,7 +24,6 @@ import MasterForm from "@/components/MasterForm/index.vue";
 import { getPageConfig } from "#/system/page.js";
 import { getFormValue, getQueryUrl, getUrlParams } from "@/utils";
 import { axiosGet } from "#/common";
-import { nextTick, onMounted } from "vue";
 
 const props = defineProps({
   menuID: {
