@@ -165,11 +165,11 @@ const currentBtn = (e) => {
 const tableRef = ref(null)
 const TableConfig = ref([
     // { FIELD: "VNAME", LABEL: "菜单名称", VTYPE: 'checkbox', WIDTH: 50, ALIGN: "left", ISSHOW: 1, SELECTEDFLAG: 1 },
-    { FIELD: "ISAUTHORIZED", LABEL: "是否授权", EDITTABLE: 1, WIDTH: 80, ALIGN: "left", ISSHOW: 1, SELECTEDFLAG: 1, CONTROLS: "ExSwitch" },
-    { FIELD: "PRIMARYMENU", LABEL: "一级菜单名称", WIDTH: 100, ALIGN: "left", ISSHOW: 1, SELECTEDFLAG: 1 },
-    { FIELD: "SECONDARYMENU", LABEL: "二级菜单名称", WIDTH: 100, ALIGN: "left", ISSHOW: 1, SELECTEDFLAG: 1 },
-    { FIELD: "TERTIARYMENU", LABEL: "三级菜单名称", WIDTH: 100, ALIGN: "left", ISSHOW: 1, SELECTEDFLAG: 1 },
-    { FIELD: "QUATERNARYMENU", LABEL: "四级菜单名称", WIDTH: 100, ALIGN: "left", ISSHOW: 1, SELECTEDFLAG: 1 },
+    { FIELD: "ISAUTHORIZED", LABEL: "是否授权", EDITTABLE: 1, WIDTH: 80, ALIGN: "center", ISSHOW: 1, SELECTEDFLAG: 1, CONTROLS: "ExSwitch" },
+    { FIELD: "PRIMARYMENU", LABEL: "一级菜单名称", WIDTH: 100, ALIGN: "center", ISSHOW: 1, SELECTEDFLAG: 1 },
+    { FIELD: "SECONDARYMENU", LABEL: "二级菜单名称", WIDTH: 100, ALIGN: "center", ISSHOW: 1, SELECTEDFLAG: 1 },
+    { FIELD: "TERTIARYMENU", LABEL: "三级菜单名称", WIDTH: 100, ALIGN: "center", ISSHOW: 1, SELECTEDFLAG: 1 },
+    { FIELD: "QUATERNARYMENU", LABEL: "四级菜单名称", WIDTH: 100, ALIGN: "center", ISSHOW: 1, SELECTEDFLAG: 1 },
 ])
 const tableConfig = ref({
     // tableColumns: TableConfig,
@@ -261,7 +261,7 @@ const TableConfig_Form = [
     { FIELD: "GROUPNAME", LABEL: "组名称", WIDTH: "120", ALIGN: "", CONTROLS: "ExTextBox", EDITTABLE: 0, ISSHOW: 1, COL: 8 },
     { FIELD: "VNAME", LABEL: "按钮名称", WIDTH: "150", ALIGN: "", CONTROLS: "ExTextBox", EDITTABLE: 0, ISSHOW: 1, COL: 8 },
     // { FIELD: "ISAUTHORIZED", LABEL: "是否授权", WIDTH: "100", ALIGN: "", CONTROLS: "ExSelect", OTHER: JSON.stringify(ISAUTHORIZEDDict), EDITTABLE: 1, DEFAULTVAL: "0", ISSHOW: 1, COL: 8 },
-    { FIELD: "ISAUTHORIZED", LABEL: "是否授权", EDITTABLE: 1, WIDTH: 80, ALIGN: "left", ISSHOW: 1, SELECTEDFLAG: 1, CONTROLS: "ExSwitch" },
+    { FIELD: "ISAUTHORIZED", LABEL: "是否授权", EDITTABLE: 1, WIDTH: 80, ALIGN: "center", ISSHOW: 1, SELECTEDFLAG: 1, CONTROLS: "ExSwitch" },
 ]
 const tableFormConfig = reactive({
     tableColumns: TableConfig_Form,
