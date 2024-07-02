@@ -105,14 +105,20 @@
                 </el-dropdown-item>
               </router-link>
 
-              <router-link to="/PLAT_YW/help/wtzsk">
+              <!-- <router-link to="/PLAT_YW/help/wtzsk">
                 <el-dropdown-item>
                   <el-icon>
                     <Service />
                   </el-icon>
                   <span>帮助中心</span>
                 </el-dropdown-item>
-              </router-link>
+              </router-link> -->
+              <el-dropdown-item command="helpCenter">
+                  <el-icon>
+                    <Service />
+                  </el-icon>
+                  <span>帮助中心</span>
+                </el-dropdown-item>
 
               <el-dropdown-item divided command="logout">
                 <el-icon>
@@ -125,6 +131,7 @@
         </el-dropdown>
       </div>
     </div>
+    <HelpCenter  v-model:helpDrawer="helpDrawer" @clickMoreContent="clickMoreContent" />
   </div>
 </template>
 
@@ -141,6 +148,8 @@ import useAppStore from "@/store/modules/app";
 import useUserStore from "@/store/modules/user";
 import useSettingsStore from "@/store/modules/settings";
 
+import HelpCenter from "./HelpCenter.vue";
+
 const appStore = useAppStore();
 const userStore = useUserStore();
 const settingsStore = useSettingsStore();
@@ -148,6 +157,12 @@ const { proxy } = getCurrentInstance();
 const logoUrl = proxy.getAssetsFile("logo.png");
 const avatarUrl = proxy.getAssetsFile("user.png");
 const userInfo = computed(() => userStore.userInfo);
+
+const helpDrawer=ref(false)
+const clickMoreContent=()=>{
+  helpDrawer.value = false
+}
+
 
 function toggleSideBar() {
   appStore.toggleSideBar();
@@ -161,9 +176,19 @@ function handleCommand(command) {
     case "logout":
       logout();
       break;
+    case "helpCenter":
+      clickHelpCenter()
+      break;
     default:
       break;
   }
+}
+
+function clickHelpCenter(){
+
+  helpDrawer.value = true
+
+
 }
 
 function logout() {
@@ -334,4 +359,5 @@ function setLayout() {
     font-size: 18px;
   }
 }
+
 </style>
