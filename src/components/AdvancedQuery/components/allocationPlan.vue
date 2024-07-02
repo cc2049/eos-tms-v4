@@ -88,7 +88,7 @@
                             <div class="rightBorder"></div>
                         </div>
                         <el-checkbox v-model="checked1" label="共享给他人" size="large" />
-                        <el-checkbox v-model="checked12" label="系统预设" size="large" />
+                        <el-checkbox v-model="VTYPE" true-value="1" false-value="0" label="系统预设" size="large" />
 
                         <el-radio-group v-model="radio2" class="ml-4">
                             <el-radio value="1">共享所有用户</el-radio>
@@ -145,6 +145,7 @@ const rightMenu = ref([
 ])
 
 const checked12 = ref(null)
+const VTYPE=ref(0)
 const props = defineProps({
     showModal: {
         type: Boolean,
@@ -250,7 +251,8 @@ const savePlanLeft = () => {
             QRYPRE: ele.QRYPRE,
             QRYSUF: ele.QRYSUF,
             SORTCODE: index,
-            VTYPE: '0',
+            // VTYPE: '0',
+            VTYPE:VTYPE.value
         }
     })
 
@@ -263,10 +265,10 @@ const savePlanLeft = () => {
         // ISDEFAULT: 1,
         ...saveAsForm.value,
         ...MenuID.value,
+        VTYPE:VTYPE.value,
         // QUERYS: addConditionList.value,  // 如果外面没有方案，那么保存时候会走新增方案，把外层方案传过来
         QUERYS
     }
-
     if (saveAsForm.value.BILLNO) {
         updatePlan(protData).then((res) => {
             saveAsModal.value = false
