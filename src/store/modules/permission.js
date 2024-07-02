@@ -232,8 +232,8 @@ function getCOVERMENULIST(routerItem, parentPath) {
       },
       PATH: al.ACTION + params ,
       path: al.ACTION + params ,
-      NAME: `${routerItem.NAME}-${al.PAGENAME}`,
-      name: `${routerItem.NAME}-${al.PAGENAME}`,
+      NAME: `${routerItem.NAME}`,
+      name: `${routerItem.NAME}`,
       fullPath: newPath
     }
     margeBtnRoute.push(margetBtnMenuItem)

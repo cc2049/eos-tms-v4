@@ -2,7 +2,7 @@
  * @Author: cc2049
  * @Date: 2024-04-24 18:52:34
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-06-05 14:37:33
+ * @LastEditTime: 2024-07-01 18:22:39
  * @Description: 简介
 -->
 <!--
@@ -99,12 +99,15 @@ const resetTitle = (tag) => {
     if (type == 0 || type == ':type' ) {
       return newTitle + "-新增";
     } else if (type == 1) {
-      return newTitle + "-编辑";
+      return newTitle + "-修改";
     } else if (type == 2) {
       return newTitle + "-详情";
-    }else{
+    } else if (type == 3) {
+      return newTitle + "-审核";
+    } else{
       return tag.title;
     }
+   
   } else {
     return tag.title;
   }
@@ -301,10 +304,11 @@ function handleScroll() {
       cursor: pointer;
       height: 30px;
       line-height: 30px;
-      color: #495060;
+      color: #666666;
       padding: 0 16px;
       font-size: 15px;
       margin-left: 5px;
+      font-weight: bold;
       &:first-of-type {
         margin-left: 15px;
       }

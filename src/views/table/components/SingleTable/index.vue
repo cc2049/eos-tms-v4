@@ -2,11 +2,11 @@
  * @Author: cc2049
  * @Date: 2024-04-28 13:10:44
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-06-29 15:31:59
+ * @LastEditTime: 2024-07-01 16:35:09
  * @Description: 简介
 -->
 <template v-if="pageConfig">
-  <TopButton ref="topButtonRef" v-model:topButton="topButton" :currentData="currentData" @handleTopBtn="handleTopBtn" @reloadTableData="reloadTableData" />
+  <TopButton ref="topButtonRef" v-model:topButton="topButton" :currentData="currentData" :tableData="tableData" @handleTopBtn="handleTopBtn" @reloadTableData="reloadTableData" />
   <div class="custom-query" ref="AdvancedQuery">
     <AdvanceQuery :queryConfig="pageConfig?.queryConfig" @updateHeight="queryHeight" :customPlan ref="advanceQueryRef" @handleCustomPlan="handleCustomPlan" />
   </div>
@@ -501,7 +501,6 @@ function dbClickTable(data) {
   } else {
     emit("dbClick", data);
   }
-  console.log("dbClickTable", props.dbClickType, data);
 }
 
 function getCheckRows() {

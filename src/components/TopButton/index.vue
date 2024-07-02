@@ -2,7 +2,7 @@
  * @Author: cc2049
  * @Date: 2024-04-28 15:12:29
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-06-27 18:38:39
+ * @LastEditTime: 2024-07-01 16:36:26
  * @Description: 简介
 -->
 
@@ -155,6 +155,9 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
+  tableData:{
+    type: Array,
+  }
 });
 const isDetail = ref(false);
 const isGetDetail = ref(false);
@@ -414,7 +417,7 @@ function handleEvent(data, row) {
     console.log(44, newPath);
     router.push({
       path: newPath,
-      // query: { billno: orderNos },
+      params: { billno: 888 },
     });
   }
 }
