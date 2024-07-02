@@ -231,10 +231,12 @@ const cancle = () => {
 
 :deep(.el-input__inner) {
     color: #12151a;
+  font-size: 12px;
 }
 
 :deep(.el-input__inner::placeholder) {
     color: #767476;
+  font-size: 12px;
 }
 
 :deep(.el-input__suffix) {
@@ -270,5 +272,13 @@ const cancle = () => {
     min-height: auto;
     box-shadow: 0 0 0 1px #949eb5 inset;
     border-radius: 2px !important;
+  font-size: 12px;
+
+}
+:deep(.el-select__placeholder){
+  color: #12151A !important;
+}
+:deep(.el-select__placeholder.is-transparent){
+  color: #535B6A !important;
 }
 </style>

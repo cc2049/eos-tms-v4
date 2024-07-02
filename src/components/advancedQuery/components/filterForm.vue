@@ -8,7 +8,7 @@
   <div class="filterForm">
 
     <div class="firstSelect ml10 mr10" v-if="isCondition">
-      <el-select v-model="formData.QRYPRE" placeholder="" style="width: 50px" :size="commonSize">
+      <el-select teleported="false" v-model="formData.QRYPRE" placeholder="" style="width: 50px" :size="commonSize">
         <el-option label="(" value="(" />
         <el-option label="((" value="((" />
         <el-option label="(((" value="(((" />
@@ -531,5 +531,13 @@ onMounted(() => {
   min-height: auto;
   box-shadow: 0 0 0 1px #949eb5 inset;
   border-radius: 2px !important;
+  font-size: 12px;
+  color: #12151A;
+}
+:deep(.el-select__placeholder){
+  color: #12151A !important;
+}
+:deep(.el-select__placeholder.is-transparent){
+  color: #535B6A !important;
 }
 </style>
