@@ -3,19 +3,35 @@
     <router-view v-slot="{ Component, route }">
       <transition name="fade-transform" mode="out-in">
         <keep-alive :include="tagsViewStore.cachedViews">
-          <component v-if="!route.meta.link" :is="Component" :key="route.path"/>
+          <component v-if="!route.meta.link" :is="Component" :key="route.path" />
         </keep-alive>
       </transition>
     </router-view>
     <iframe-toggle />
+
+    <div class="eos-alert" v-if="alertStore.show">
+      <el-alert show-icon :type="alertStore.type" :closable="false">
+        <template #title>
+          {{  alertStore.title }}
+        </template>
+        <template #default>
+          <el-button size="small" @click="alertStore.close()">
+            确定
+          </el-button>
+        </template>
+      </el-alert>
+    </div>
+
   </section>
 </template>
 
 <script setup>
-import iframeToggle from "./IframeToggle/index"
-import useTagsViewStore from '@/store/modules/tagsView'
+import iframeToggle from "./IframeToggle/index";
+import useTagsViewStore from "@/store/modules/tagsView";
+import useAlertStore from '@/store/modules/alert'
 
-const tagsViewStore = useTagsViewStore()
+const tagsViewStore = useTagsViewStore();
+const alertStore = useAlertStore()
 </script>
 
 <style lang="scss" scoped>
@@ -25,6 +41,16 @@ const tagsViewStore = useTagsViewStore()
   width: 100%;
   position: relative;
   overflow: hidden;
+}
+
+.eos-alert{
+  width: calc(100% - 40px);
+  height: 60vh;
+  position: fixed;
+  top: 130px;
+  left: 20px;
+  background-color: rgba($color: #000000, $alpha: .6);
+  z-index: 99;
 }
 
 .fixed-header + .app-main {

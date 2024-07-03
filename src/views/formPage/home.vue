@@ -2,12 +2,12 @@
  * @Author: cc2049
  * @Date: 2024-06-03 20:55:06
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-07-02 11:05:33
+ * @LastEditTime: 2024-07-03 14:57:24
  * @Description: 简介
 -->
 <template>
   <div class="home">
-    <FormPage :menuID="menuParams" :currentData @closeModal="closeModal" @refreshTable="refreshTable" :isGetDetail :activeBtn :topButton :isDetail />
+    <FormPage :menuID="menuParams" :currentData @closeModal="closeModal" @refreshTable="refreshTable" :isGetDetail  :topButton :isDetail />
   </div>
 </template>
 
@@ -31,7 +31,8 @@ const actionType = {
   0:"ADD",
   1:"EDIT",
   2:"DTL",
-  3:"AUDIT"
+  3:"AUDIT",
+  4:"ADD"
 }
 
 

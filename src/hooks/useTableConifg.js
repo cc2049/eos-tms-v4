@@ -2,7 +2,7 @@
  * @Author: cc2049
  * @Date: 2024-04-25 17:34:36
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-06-28 12:14:07
+ * @LastEditTime: 2024-07-03 09:53:25
  * @Description: 获取动态配置
  */
 
@@ -10,7 +10,7 @@ import { getPageConfig } from '#/system/page.js'
 
 import { getQueryUrl, resetColConfig } from './utils'
 
-import { getFormValue, getShowCFG, percentageToNumber } from '@/utils'
+import { getFormValue, getShowCFG, percentageToNumber , resetTopButton } from '@/utils'
 
 const useTableConifg = (menu) => {
     const pageConfig = reactive({
@@ -113,7 +113,7 @@ const useTableConifg = (menu) => {
         copyPageConfig.customPlan = CUSTOMPLAN;
         copyPageConfig.queryConfig = QUERY;
         copyPageConfig.pageShow = VDEF1 == "1"; // 控制列表是否展示分页功能
-        copyPageConfig.topButton = BUTTON.filter(item => item.VTYPE != 20);
+        copyPageConfig.topButton = resetTopButton(BUTTON) // BUTTON.filter(item => item.VTYPE != 20);
         copyPageConfig.treeButton = BUTTON.filter(item => item.VTYPE == 20);
         copyPageConfig.queryUrl = SLOTCFG ? SLOTCFG : getQueryUrl(BUTTON);
         copyPageConfig.treeQueryUrl = getQueryUrl(BUTTON, "tree") || '';

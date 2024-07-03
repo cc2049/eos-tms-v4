@@ -2,7 +2,7 @@
  * @Author: cc2049
  * @Date: 2024-04-28 13:10:44
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-07-01 16:35:09
+ * @LastEditTime: 2024-07-03 14:22:40
  * @Description: 简介
 -->
 <template v-if="pageConfig">
@@ -10,6 +10,8 @@
   <div class="custom-query" ref="AdvancedQuery">
     <AdvanceQuery :queryConfig="pageConfig?.queryConfig" @updateHeight="queryHeight" :customPlan ref="advanceQueryRef" @handleCustomPlan="handleCustomPlan" />
   </div>
+
+
 
   <div class="table-content">
     <!-- 左侧树模块 -->
@@ -67,9 +69,6 @@
     </div>
   </div>
 </template>
-
-
-
 <script setup>
 import AdvanceQuery from "@/components/AdvancedQuery/index";
 import Ztree from "./../Ztree";
@@ -77,11 +76,13 @@ import useTableConifg from "@/hooks/useTableConifg";
 import { axiosGet } from "#/common";
 import { getUrlParams } from "@/utils";
 import SubTable from "./SubTable.vue";
+import useAlertStore from '@/store/modules/alert'
+const alertStore = useAlertStore()
 const emit = defineEmits(["openCustemPage", "dbClick"]);
 const { proxy } = getCurrentInstance();
 
 const showTablePage = ref(true);
-
+const showError =ref(false)
 const props = defineProps({
   menuID: {
     type: [String, Object],
@@ -515,12 +516,12 @@ onMounted(() => {
   };
 });
 </script>
-
-
 <style lang="scss" scoped>
 .vxe-page-wrap {
   background-color: #fafcff;
 }
+
+
 
 .splitbar-wrap {
   position: relative;

@@ -2,7 +2,7 @@
  * @Author: cc2049
  * @Date: 2024-04-19 09:01:33
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-04-23 15:28:28
+ * @LastEditTime: 2024-07-02 14:13:12
  * @Description: 简介
  */
 import { login, logout, getInfo } from "@/api/login";
@@ -27,17 +27,7 @@ const useUserStore = defineStore("user", {
   actions: {
     // 登录
     login(userInfo) {
-      console.log("🚀 ~ login ~ userInfo:", userInfo)
       let saveData = {}
-      // {
-      //   PASSWORD: md5(userInfo.password || userInfo.PASSWORD),
-      //   APASSWORD: "",
-      //   USERNAME: userInfo.username || userInfo.USERNAME,
-      //   LOGINTYPE: userInfo.LOGINTYPE || "captcha",
-      //   TYPE: "WEB",
-      //   USERTYPE: "0",
-      //   MOBILE:userInfo.mobile || ''
-      // };
       if(userInfo.LOGINTYPE == 'captcha'){
         saveData = {
           PASSWORD: md5(userInfo.password || userInfo.PASSWORD),

@@ -2,7 +2,7 @@
  * @Author: cc2049
  * @Date: 2024-04-25 14:41:35
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-07-01 11:11:38
+ * @LastEditTime: 2024-07-03 08:57:16
  * @Description: 简介
 -->
 <template>
@@ -287,8 +287,8 @@ function handleSelect(key, menu) {
 
 const jionStart = (data, type) => {
   let url = type
-    ? "/sys/ba-menu-collection/add"
-    : "/sys/ba-menu-collection/deleteBatchIds";
+    ? "/sys/menu/collection/add"
+    : "/sys/menu/collection/deleteBatchIds";
   let saveData = {
     MENUNAME: data.NAME,
     PK_MENU: data.BILLNO,
@@ -326,7 +326,7 @@ function resetPath(a, b, c) {
 // 获取快捷菜单入口
 getMyStart();
 function getMyStart() {
-  setMyStart({ url: "/sys/ba-menu-collection/getPageList", data: {} }).then(
+  setMyStart({ url: "/sys/menu/collection/getPageList", data: {} }).then(
     (res) => {
       let RECORDS = res.RESULT ? res.RESULT.RECORDS : [];
       myStartMenu.value = RECORDS;

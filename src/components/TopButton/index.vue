@@ -2,10 +2,9 @@
  * @Author: cc2049
  * @Date: 2024-04-28 15:12:29
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-07-01 16:36:26
+ * @LastEditTime: 2024-07-03 17:52:42
  * @Description: 简介
 -->
-
 <template>
   <div class="button-wrap">
 
@@ -25,9 +24,8 @@
           <div class="buttom-item" @click="handleEvent(itemBtn)" :title="itemBtn.BTNTITLE " v-if="setShowBtn(itemBtn) ">
             {{ itemBtn.VNAME }}
           </div>
-
-          <el-dropdown v-else-if="itemBtn.CHILDREN?.length" style="margin: 0 6px" @command="handelEvent" size="large">
-            <div class="buttom-item ">
+          <el-dropdown v-else-if="itemBtn.CHILDREN?.length" style="margin: 0 6px" @command="handelEvent" size="default">
+            <div class="buttom-item " @click="handleEvent(itemBtn)">
               {{ itemBtn.VNAME }}
               <el-icon class="el-icon--right">
                 <arrow-down />
@@ -37,14 +35,14 @@
             <template #dropdown>
               <el-dropdown-menu>
                 <template v-for="itemBtnS in itemBtn.CHILDREN" :key="itemBtnS.BILLNO">
-                  <el-dropdown-item :command="itemBtnS" v-if="setShowBtn(itemBtnS)" @click="handleEvent(itemBtnS)">
+                  <el-dropdown-item class="dropdown-item" :command="itemBtnS" v-if="setShowBtn(itemBtnS)" @click="handleEvent(itemBtnS)">
                     {{ itemBtnS.VNAME }}
                   </el-dropdown-item>
                 </template>
               </el-dropdown-menu>
             </template>
           </el-dropdown>
-
+          <el-divider direction="vertical" v-if="itemBtn.divider" />
         </template>
 
         <el-divider direction="vertical" />
@@ -81,7 +79,6 @@
                   </template>
                 </vxe-checkbox-group>
               </el-scrollbar>
-
             </div>
           </template>
         </vxe-pulldown>
@@ -129,9 +126,10 @@ import { axiosGet } from "#/common";
 import { inject, reactive } from "vue";
 import { getUrlParams } from "@/utils";
 import TablePage from "@/views/table/components/SingleTable/index.vue";
-
+import useAlertStore from "@/store/modules/alert";
 import usePermissionStore from "@/store/modules/permission";
 const permissionStore = usePermissionStore();
+const alertStore = useAlertStore();
 
 const btnMenuRouters = computed(() => permissionStore.btnMenuRouters);
 
@@ -155,9 +153,9 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
-  tableData:{
+  tableData: {
     type: Array,
-  }
+  },
 });
 const isDetail = ref(false);
 const isGetDetail = ref(false);
@@ -259,6 +257,40 @@ const setShowBtn = (btn) => {
   }
 };
 
+// 条件成立是禁用
+const getButtonStatus = (btn, data) => {
+  try {
+    let DATA = data;
+    if (btn.ISCHOOSE == 1) {
+      DATA = data[0];
+      if (eval(btn.SCRNCONDITION)) {
+        return true;
+      }
+    }else if (btn.ISCHOOSE == 2) {
+      if(checkDataSetBtn(btn.SCRNCONDITION,data)){
+        return true;
+      }
+    }
+  } catch (e) {
+    return false;
+  }
+};
+
+// 按钮是多选按钮，对多条数据进行判断条件是否成立
+function checkDataSetBtn(tj, data) {
+  for (let i = 0, TNTlength = data.length; i < TNTlength; i++) {
+    try {
+      let DATA = data[i];
+      if (eval(tj)) {
+        return true;
+      }
+    } catch (e) {
+      return false;
+    }
+  }
+  return false;
+}
+
 function leftHandleEvent(type) {
   switch (type) {
     case 1:
@@ -282,21 +314,34 @@ function handleEvent(data, row) {
   let selectRecords = row?.length ? row : props.currentData;
   activeBtn.value = data;
   console.log("handelEvent22", data, selectRecords);
-
   // 表单中的按钮事件直接调
   if (props.sourceType == 2) {
     return emit("handleBtnEvent", data);
+  }
+
+  // 验证是否需要选择数据
+  if (data.ISCHOOSE && data.ISCHOOSE * 1 > 0 && !selectRecords.length) {
+    return alertStore.setAlert({
+      show: true,
+      title: "没有选择任何数据，请先选择数据！",
+      content: "",
+      type: "warning",
+    });
+  }
+
+  if (data.SCRNCONDITION && getButtonStatus(data, selectRecords)) {
+    return alertStore.setAlert({
+      show: true,
+      title: `已选中的数据不允许操作。`,
+      content: "",
+      type: "warning",
+    });
   }
 
   // 如果弹窗大小的值存在就进行设置弹窗大小  VTYPE =2  7  是开弹窗
   if (data.RATIO) {
     let WWHH =
       data.RATIO != 1 ? data.RATIO.split("*") : data.PAGEPATH.split("*");
-  }
-
-  // 验证是否需要选择数据
-  if (data.ISCHOOSE && data.ISCHOOSE * 1 > 0 && !selectRecords.length) {
-    return proxy.$modal.msgError("请先选择数据再操作");
   }
 
   if (data.VTYPE == 1) {
@@ -309,7 +354,12 @@ function handleEvent(data, row) {
   ) {
     if (data.ACTION == "EDIT" || data.ACTION == "DTL") {
       if (!selectRecords.length) {
-        return proxy.$modal.msgError("请先选择数据再操作");
+        return alertStore.setAlert({
+          show: true,
+          title: "没有选择任何数据，请先选择数据！",
+          content: "",
+          type: "warning",
+        });
       }
       isGetDetail.value = true;
     } else {
@@ -330,7 +380,12 @@ function handleEvent(data, row) {
     let dataChoose = selectRecords;
 
     if (!dataChoose || !dataChoose.length) {
-      return proxy.$modal.msgError("请先选择数据再操作");
+      return alertStore.setAlert({
+        show: true,
+        title: "没有选择任何数据，请先选择数据！",
+        content: "",
+        type: "warning",
+      });
     }
 
     if (data.ISTWOSURE == 1) {
@@ -399,14 +454,18 @@ function handleEvent(data, row) {
     } else if (data.ACTION == "DTL") {
       doType = 2;
       Bid = selectRecords[0].BILLNO;
+    } else if (data.ACTION == "COPY") {
+      doType = 4;
+      Bid = selectRecords[0].BILLNO;
     }
+
     let btnMenuItem = btnMenuRouters.value.filter((i) =>
       i.fullPath.includes(data.PK_PAGE)
     );
-    console.log(333, btnMenuRouters.value, btnMenuItem);
     if (!btnMenuItem.length) {
       return proxy.$modal.msgError("打开的菜单不存在");
     }
+
     let setPath = btnMenuItem[0].fullPath;
     let newPath = setPath.includes(":id")
       ? setPath.replace(":id", Bid)
@@ -414,10 +473,12 @@ function handleEvent(data, row) {
     newPath = newPath.includes(":type")
       ? newPath.replace(":type", doType)
       : newPath;
-    console.log(44, newPath);
+    // console.log(999, btnMenuRouters.value );
+    let billnoArr = props.tableData.map((i) => i.BILLNO);
     router.push({
       path: newPath,
-      params: { billno: 888 },
+      // name: btnMenuItem[0].name ,
+      // params: {  type: doType , id: Bid ,  billno: billnoArr , parentPath: route.fullPath },
     });
   }
 }
@@ -520,6 +581,12 @@ defineExpose({ openDeatil, handleEvent });
   line-height: 46px;
   background: #fff;
   box-shadow: 0px 3px 7px 0px rgba(17, 50, 130, 0.09);
+
+  .el-icon--right {
+    position: relative;
+    top: 2px;
+  }
+
   &-right {
     cursor: pointer;
     display: flex;

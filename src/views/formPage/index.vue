@@ -2,7 +2,7 @@
  * @Author: cc2049
  * @Date: 2024-04-23 11:35:41
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-07-02 11:01:44
+ * @LastEditTime: 2024-07-03 16:45:55
  * @Description: 大表单组件
 -->
 
@@ -22,9 +22,11 @@
 import TopButton from "@/components/TopButton";
 import MasterForm from "@/components/MasterForm/index.vue";
 import { getPageConfig } from "#/system/page.js";
-import { getFormValue, getQueryUrl, getUrlParams } from "@/utils";
+import { getFormValue, getQueryUrl, getUrlParams , eosObjAssign } from "@/utils";
 import { axiosGet } from "#/common";
-
+const route = useRoute();
+const routerParams = route.meta;
+console.log('route',  route);
 const props = defineProps({
   menuID: {
     type: [String, Object],
@@ -114,8 +116,14 @@ function getDetail(URL) {
   } else {
     let queryDetail = { ...props.menuID, ...props.currentData[0] };
     axiosGet(URL, queryDetail).then((res) => {
-      formData.value = Object.assign(formData.value, res.RESULT);
+      formData.value = eosObjAssign(formData.value, res.RESULT);
       formLoading.value = false;
+      if (route.params && Object.keys(route.params).length) {
+         let { type } = route.params;
+         if(type == '4'){
+          delete formData.value.BILLNO
+         }
+      }
     });
   }
 }
