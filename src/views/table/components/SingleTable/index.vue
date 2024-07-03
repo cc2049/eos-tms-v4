@@ -2,7 +2,7 @@
  * @Author: cc2049
  * @Date: 2024-04-28 13:10:44
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-07-03 14:22:40
+ * @LastEditTime: 2024-07-03 17:58:43
  * @Description: 简介
 -->
 <template v-if="pageConfig">
@@ -193,7 +193,7 @@ function tableChange(data) {
   // 超链接点击事件
   if (data.clicktype == "openLink") {
     currentData.value = [data.data];
-    let getLinkBtn = topButton.value.filter((i) => {
+    let getLinkBtn = initButton.value.filter((i) => {
       return i.BILLNO == data.linkCFG;
     });
     getLinkBtn.length
@@ -355,6 +355,7 @@ function getTreeData() {
 const queryURL = ref(null);
 const queryJSON = ref({});
 const topButton = ref([]);
+const initButton = ref([]);
 const treeButton = ref([]);
 const multiMainTable = ref([]);
 
@@ -364,6 +365,7 @@ const { getConfig } = useTableConifg(props.menuID);
 
 const setPageConfig = () => {
   topButton.value = pageConfig.value.topButton;
+  initButton.value = pageConfig.value.initButton;
   treeButton.value = pageConfig.value.treeButton;
   queryURL.value = pageConfig.value.queryUrl;
   queryJSON.value = pageConfig.value.queryJson;

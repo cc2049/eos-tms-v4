@@ -2,7 +2,7 @@
  * @Author: cc2049
  * @Date: 2024-04-28 15:12:29
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-07-03 17:52:42
+ * @LastEditTime: 2024-07-03 18:04:59
  * @Description: 简介
 -->
 <template>
@@ -259,6 +259,7 @@ const setShowBtn = (btn) => {
 
 // 条件成立是禁用
 const getButtonStatus = (btn, data) => {
+  if(btn.ACTION == 'EDIT') return false;
   try {
     let DATA = data;
     if (btn.ISCHOOSE == 1) {
@@ -457,6 +458,13 @@ function handleEvent(data, row) {
     } else if (data.ACTION == "COPY") {
       doType = 4;
       Bid = selectRecords[0].BILLNO;
+    }
+
+    if(data.ACTION == "EDIT" && data.SCRNCONDITION){
+      let DATA = selectRecords[0];
+      if (eval(data.SCRNCONDITION)) {
+         doType = 2;
+      }
     }
 
     let btnMenuItem = btnMenuRouters.value.filter((i) =>
