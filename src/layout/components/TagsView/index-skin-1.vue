@@ -2,7 +2,7 @@
  * @Author: cc2049
  * @Date: 2024-04-24 18:52:34
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-07-01 18:22:39
+ * @LastEditTime: 2024-07-03 14:49:43
  * @Description: 简介
 -->
 <!--
@@ -96,7 +96,7 @@ const resetTitle = (tag) => {
   if (tag.params && tag.params.type) {
     const { type } = tag.params;
     let newTitle = removeWords(tag.title);
-    if (type == 0 || type == ':type' ) {
+    if (type == 0 || type == ":type" || type == 4) {
       return newTitle + "-新增";
     } else if (type == 1) {
       return newTitle + "-修改";
@@ -104,10 +104,9 @@ const resetTitle = (tag) => {
       return newTitle + "-详情";
     } else if (type == 3) {
       return newTitle + "-审核";
-    } else{
+    } else {
       return tag.title;
     }
-   
   } else {
     return tag.title;
   }
@@ -283,7 +282,7 @@ function closeMenu() {
 }
 
 function handleMenu(e) {
-  console.log('点击页签', e);
+  console.log("点击页签", e);
   emit("closeAllMenu");
 }
 function handleScroll() {

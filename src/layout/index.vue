@@ -1,10 +1,11 @@
 <!--
  * @Author: cc2049
- * @Date: 2024-04-19 09:01:33
- * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-04-25 11:18:24
- * @Description: 主题入口
+ * @Date: 2024-04-24 19:03:54
+ * @LastEditors: 
+ * @LastEditTime: 2024-07-03 14:25:45
+ * @Description: 简介
 -->
+
 <template>
   <skin1 v-if="menuStyle==1"></skin1>
   <skin2 v-else></skin2>

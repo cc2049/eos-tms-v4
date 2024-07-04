@@ -3,13 +3,12 @@ import { ElNotification, ElMessageBox, ElMessage, ElLoading } from 'element-plus
 import { getToken } from '@/utils/auth'
 import errorCode from '@/utils/errorCode'
 import { tansParams, blobValidate } from '@/utils/ruoyi'
-import cache from '@/plugins/cache'
 import { saveAs } from 'file-saver'
 import useUserStore from '@/store/modules/user'
-// import useFileDownStore from "@/store/modules/filedown"
+import useAlertStore from "@/store/modules/alert";
 
 import { aesEncrypt, aesDEncrypt } from '@/utils/aes.js'
-
+// const alertStore = useAlertStore();
 let downloadLoadingInstance;
 // 是否显示重新登录
 export let isRelogin = { show: false };
@@ -114,10 +113,16 @@ service.interceptors.response.use(res => {
   } else if (code === 205) {   // 登录判断密码复杂度的返回状态
     return Promise.reject(res.data)
   } else if (code !== 200) {
-    ElNotification.closeAll()
-    ElNotification.error({
-      title: msg
-    })
+    // ElNotification.closeAll()
+    // ElNotification.error({
+    //   title: msg
+    // })
+    useAlertStore().setAlert({
+      show: true,
+      title: msg,
+      content: "",
+      type: "error",
+    });
     return Promise.reject(res.data)
   } else {
     if (res.data && res.data.KEY) {
@@ -125,9 +130,7 @@ service.interceptors.response.use(res => {
       KMData = KMData ? JSON.parse(aesDEncrypt(res.data)) : null
       res.data.RESULT = KMData
     }
-    // if(!res.data.RESULT){
-    //   return Promise.reject(res.data)
-    // }
+    
     return Promise.resolve(res.data)
   }
 },

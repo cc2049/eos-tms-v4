@@ -2,7 +2,7 @@
  * @Author: cc2049
  * @Date: 2024-07-01 11:25:49
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-07-01 12:52:49
+ * @LastEditTime: 2024-07-02 19:05:05
  * @Description: 简介
  */
 
@@ -26,7 +26,9 @@ function updateNotice() {
     ).then(() => {
         window.location.reload();
     }).catch(() => {
-
+        setTimeout(() => {
+            updateVersion();
+        }, 1000 * 60 * 5)
     });
 }
 

@@ -976,3 +976,55 @@ export const getQueryUrl = (data, t) => {
     return a.length ? a[0].ACTIONADDRESS : "";
   }
 }
+
+//  重置表格顶部的操作按钮
+export function resetTopButton(data) {
+  let newData = data.filter(item => item.VTYPE != 20 && item.ISSHOW == 1);
+  let copyNewData = JSON.parse(JSON.stringify(newData));
+  let rmoveAudit = data.filter(item => item.ACTION == 'REMOVEAUDIT');
+  let unAudit = data.filter(item => item.ACTION == 'UNAUDIT');
+  let copyButton = data.filter(item => item.ACTION == 'COPY');
+  let arr = [], bsBtn = [];
+  copyNewData.forEach(item => {
+    let copyItem = JSON.parse(JSON.stringify(item));
+    switch (item.ACTION) {
+      case 'ADD':
+        let newAddArr = [item, ...copyButton]
+        copyItem.CHILDREN = newAddArr
+        arr.push(copyItem)
+        break;
+      case 'DELETE':
+        arr.push(item)
+        break;
+      case 'SAVEAUDIT':
+        let newAddArr2 = [item, ...rmoveAudit]
+        copyItem.CHILDREN = newAddArr2
+        arr.push(copyItem)
+        break;
+      case 'AUDIT':
+        let newAddArr3 = [item, ...unAudit]
+        copyItem.CHILDREN = newAddArr3
+        arr.push(copyItem)
+        break;
+      case 'REMOVEAUDIT':
+      case 'UNAUDIT':
+      case 'COPY':
+        break;
+      default:
+        bsBtn.push(item)
+        break;
+    }
+  })
+  arr[arr.length - 1].divider = true
+  let newArr = [...arr, ...bsBtn];
+  return newArr;
+}
+
+
+// 对象合并, 只给第一个对象的属性赋值
+export function eosObjAssign(obj1, obj2){
+  for(let key in obj1){
+    obj1[key] = obj2[key] || obj1[key];
+  }
+  return obj1;
+}
