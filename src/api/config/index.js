@@ -175,11 +175,10 @@ export const VTYPE = [
   { LABEL: "拖拽", VALUE: "drag" },
   { LABEL: "枚举", VALUE: "exNum" },
   { LABEL: "枚举图标", VALUE: "ExSelectIcon" },
-  { LABEL: "数字/千分号", VALUE: "ExNumberTh" },
+  { LABEL: "数字", VALUE: "ExNumberTh" },
   { LABEL: "图片", VALUE: "ExImg" },
   { LABEL: "拼接", VALUE: "ExJoint" },
   { LABEL: "富文本", VALUE: "ExEditor" },
-
   { LABEL: "超链接", VALUE: "link" },
   { LABEL: "枚举超链接", VALUE: "exNumLink" },
   { LABEL: "进度条", VALUE: "progressBar" },
@@ -195,9 +194,6 @@ export const VTYPE = [
   { LABEL: "视频/手机", VALUE: "ExVideo" },
   { LABEL: "数字录入/手机", VALUE: "ExNumber" },
   { LABEL: "常规数字输入框/手机", VALUE: "ExTextBox" },
-
-
-
 ]
 
 // 定位

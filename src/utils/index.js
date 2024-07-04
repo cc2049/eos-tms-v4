@@ -993,6 +993,9 @@ export function resetTopButton(data) {
         copyItem.CHILDREN = newAddArr
         arr.push(copyItem)
         break;
+      case 'EDIT':
+        arr.push(item)
+        break;
       case 'DELETE':
         arr.push(item)
         break;
@@ -1015,15 +1018,14 @@ export function resetTopButton(data) {
         break;
     }
   })
-  arr[arr.length - 1].divider = true
-  let newArr = [...arr, ...bsBtn];
-  return newArr;
+  arr.length ? (arr[arr.length - 1].divider = true) : null
+  return [...arr, ...bsBtn];
 }
 
 
 // 对象合并, 只给第一个对象的属性赋值
-export function eosObjAssign(obj1, obj2){
-  for(let key in obj1){
+export function eosObjAssign(obj1, obj2) {
+  for (let key in obj1) {
     obj1[key] = obj2[key] || obj1[key];
   }
   return obj1;
