@@ -167,7 +167,7 @@
 
 <script setup name="">
 import { Search, ArrowDown } from "@element-plus/icons-vue";
-import { dict2name, setSuffix } from "@/utils"
+import { dict2name, setSuffix , evalFun } from "@/utils"
 // import VTable from "@/components/Tables"
 import ModalTable from "@/components/Form/modal.vue"
 import { getPageConfig, getTableData } from "@/api/system/page";
@@ -401,7 +401,7 @@ const numberBlur = (config, row) => {
 function calcNUM(row, equ) {
   try {
     const Data = row
-    return eval(equ)
+    return evalFun(Data,equ)
   } catch (err) {
     console.warn("Err:运算错误", err);
   }

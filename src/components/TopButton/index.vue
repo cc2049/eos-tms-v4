@@ -2,7 +2,7 @@
  * @Author: cc2049
  * @Date: 2024-04-28 15:12:29
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-07-03 18:04:59
+ * @LastEditTime: 2024-07-04 08:59:12
  * @Description: 简介
 -->
 <template>
@@ -124,7 +124,7 @@
 import { ElMessageBox } from "element-plus";
 import { axiosGet } from "#/common";
 import { inject, reactive } from "vue";
-import { getUrlParams } from "@/utils";
+import { getUrlParams , evalFun } from "@/utils";
 import TablePage from "@/views/table/components/SingleTable/index.vue";
 import useAlertStore from "@/store/modules/alert";
 import usePermissionStore from "@/store/modules/permission";
@@ -264,7 +264,7 @@ const getButtonStatus = (btn, data) => {
     let DATA = data;
     if (btn.ISCHOOSE == 1) {
       DATA = data[0];
-      if (eval(btn.SCRNCONDITION)) {
+      if (evalFun( DATA ,btn.SCRNCONDITION)) {
         return true;
       }
     }else if (btn.ISCHOOSE == 2) {
@@ -282,7 +282,7 @@ function checkDataSetBtn(tj, data) {
   for (let i = 0, TNTlength = data.length; i < TNTlength; i++) {
     try {
       let DATA = data[i];
-      if (eval(tj)) {
+      if (evalFun(DATA, tj)) {
         return true;
       }
     } catch (e) {
@@ -462,7 +462,7 @@ function handleEvent(data, row) {
 
     if(data.ACTION == "EDIT" && data.SCRNCONDITION){
       let DATA = selectRecords[0];
-      if (eval(data.SCRNCONDITION)) {
+      if (evalFun(DATA , data.SCRNCONDITION)) {
          doType = 2;
       }
     }
