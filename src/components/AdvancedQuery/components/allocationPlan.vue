@@ -88,7 +88,7 @@
                             <div class="rightBorder"></div>
                         </div>
                         <el-checkbox v-model="checked1" label="共享给他人" size="large" />
-                        <el-checkbox v-model="VTYPE" true-value="1" false-value="0" label="系统预设" size="large" />
+                        <el-checkbox v-model="VTYPE" true-value="0" false-value="1" label="系统预设" size="large" />
 
                         <el-radio-group v-model="radio2" class="ml-4">
                             <el-radio value="1">共享所有用户</el-radio>
@@ -145,7 +145,7 @@ const rightMenu = ref([
 ])
 
 const checked12 = ref(null)
-const VTYPE=ref(0)
+const VTYPE=ref('1')
 const props = defineProps({
     showModal: {
         type: Boolean,
