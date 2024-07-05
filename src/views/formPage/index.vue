@@ -1,8 +1,8 @@
 <!--
  * @Author: cc2049
  * @Date: 2024-04-23 11:35:41
- * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-07-03 16:45:55
+ * @LastEditors: PiPin 33947354+p1Master@users.noreply.github.com
+ * @LastEditTime: 2024-07-05 14:38:48
  * @Description: 大表单组件
 -->
 
@@ -13,7 +13,7 @@
       <div id="eos-form-tabs"></div>
     </div>
     <el-scrollbar :height="formHeight" class="eos-scrollbar">
-      <MasterForm ref="eosFormRef" v-model="formData" :formConfig="formConfig" :detail="isDetail" :tableConfig="tableConfig" :loading="formLoading" @labelClick="LabelClick" />
+      <MasterForm ref="eosFormRef" v-model="formData" :formConfig="formConfig" :labelWidth :ctrlWidth :detail="isDetail" :tableConfig="tableConfig" :loading="formLoading" @labelClick="LabelClick" />
     </el-scrollbar>
   </div>
 </template>
@@ -22,11 +22,11 @@
 import TopButton from "@/components/TopButton";
 import MasterForm from "@/components/MasterForm/index.vue";
 import { getPageConfig } from "#/system/page.js";
-import { getFormValue, getQueryUrl, getUrlParams , eosObjAssign } from "@/utils";
+import { getFormValue, getQueryUrl, getUrlParams, eosObjAssign } from "@/utils";
 import { axiosGet } from "#/common";
 const route = useRoute();
 const routerParams = route.meta;
-console.log('route',  route);
+console.log('route', route);
 const props = defineProps({
   menuID: {
     type: [String, Object],
@@ -55,6 +55,7 @@ const formConfig = ref([]);
 const formData = ref({});
 const detail = ref(false);
 const labelWidth = ref("100px");
+const ctrlWidth = ref("")
 const tableConfig = ref([]);
 const formHeight = computed(() => {
   if (formBoxRef.value) {
@@ -70,11 +71,12 @@ watch(
   (value) => {
     if (value) {
       getPageConfig(props.menuID).then((res) => {
-        const { COLUMNS, VDEF2, BUTTON, SLOTCFG, SUBTABLE } = res.RESULT;
+        const { COLUMNS, LABELWIDTH, FIELDWIDTH, BUTTON, SLOTCFG, SUBTABLE } = res.RESULT;
         topButton.value = resetButton(BUTTON);
         formConfig.value = COLUMNS;
         formData.value = getFormValue(COLUMNS);
-        labelWidth.value = VDEF2 || "100px";
+        labelWidth.value = LABELWIDTH || "100px";
+        ctrlWidth.value = FIELDWIDTH
         tableConfig.value = SUBTABLE;
         formLoading.value = true;
         if (props.isGetDetail) {
@@ -119,10 +121,10 @@ function getDetail(URL) {
       formData.value = eosObjAssign(formData.value, res.RESULT);
       formLoading.value = false;
       if (route.params && Object.keys(route.params).length) {
-         let { type } = route.params;
-         if(type == '4'){
+        let { type } = route.params;
+        if (type == '4') {
           delete formData.value.BILLNO
-         }
+        }
       }
     });
   }

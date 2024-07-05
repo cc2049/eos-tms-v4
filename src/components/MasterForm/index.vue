@@ -1,7 +1,7 @@
 <template>
   <el-skeleton :rows="15" :loading="loading" :throttle="20" animated>
     <div class="master-form">
-      <eos-form ref="FormRef" v-model="formData" :config="formConfig" :detail="detail" @openModal="openModal" @labelClick="LabelClick">
+      <eos-form ref="FormRef" v-model="formData" :config="formConfig" :labelWidth="labelWidth" :ctrlWidth="ctrlWidth" :detail="detail" @openModal="openModal" @labelClick="LabelClick">
         <template #SubTable="{ config }" v-if="tableConfig.length > 0">
           <div class="formTable" :style="`margin-left:-${labelWidth};width:calc(100% + ${labelWidth})`">
             <SubTableCom :ref="config.FIELD+'Ref'" :key="config.FIELD" :detail="detail || config.ISDISABLED == '1'" :title="config.LABEL" :config="GET_TableConfig(config)" v-model="formData[config.FIELD]" v-model:mainFormData="formData" :othConfig="othConfig" @EtbaleLinkChange="EtbaleLinkChange" @updateTableData="UPDATA_TableData" @openModal="openModal">
@@ -58,6 +58,14 @@ const props = defineProps({
   labelWidth: {
     type: [String, Number],
     default: "100px",
+  },
+  ctrlWidth: {
+    type: [String, Number],
+    default: "",
+  },
+  othConfig: {
+    type: Object,
+    default: () => { },
   },
   tableConfig: {
     type: Array,
