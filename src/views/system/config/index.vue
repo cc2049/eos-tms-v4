@@ -96,16 +96,16 @@
                 <template #actionBar="{ row, rowIndex }">
                   <el-row :gutter="10">
                     <el-col :span="1.5">
-                      <el-link :icon="Plus" @click="plusConfig(rowIndex)" />
+                      <el-link :icon="Plus" @click.stop="plusConfig(rowIndex)" />
                     </el-col>
                     <el-col :span="1.5">
-                      <el-link :icon="Delete" @click="delConfig(row)" />
+                      <el-link :icon="Delete" @click.stop="delConfig(row)" />
                     </el-col>
                     <el-col :span="1.5">
-                      <el-link :icon="Notification" @click="editConfig(row)" />
+                      <el-link :icon="Notification" @click.stop="editConfig(row)" />
                     </el-col>
                     <el-col :span="1.5">
-                      <el-link :icon="CopyDocument" @click="copyConfig(rowIndex)" />
+                      <el-link :icon="CopyDocument" @click.stop="copyConfig(rowIndex)" />
                     </el-col>
                   </el-row>
                 </template>
@@ -764,5 +764,9 @@ const DictLabel = (arr, data) => {
   .form-group-no-title {
     padding-top: 0;
   }
+}
+
+.page-config{
+  padding: 0 10px;
 }
 </style>
