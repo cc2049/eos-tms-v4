@@ -2,7 +2,7 @@
  * @Author: cc2049
  * @Date: 2024-04-28 15:12:29
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-07-04 08:59:12
+ * @LastEditTime: 2024-07-05 15:01:42
  * @Description: 简介
 -->
 <template>
@@ -486,7 +486,7 @@ function handleEvent(data, row) {
     router.push({
       path: newPath,
       // name: btnMenuItem[0].name ,
-      // params: {  type: doType , id: Bid ,  billno: billnoArr , parentPath: route.fullPath },
+      params: {  arr: billnoArr , parentPath: route.fullPath },
     });
   }
 }

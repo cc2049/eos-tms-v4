@@ -221,7 +221,7 @@ function filterChildren(childrenMap, lastRouter = false, parentPath) {
 function getCOVERMENULIST(routerItem, parentPath) {
   let margeBtnRoute = []
   routerItem.COVERMENULIST.forEach(al => {
-    let params = al.ISRELATEID == 1 ? '/:type/:id' :''
+    let params = al.ISRELATEID == 1 ? '/:type/:id' : ''
     let newPath = `${parentPath}/${al.ACTION}${params}`
     const margetBtnMenuItem = {
       ...al,
