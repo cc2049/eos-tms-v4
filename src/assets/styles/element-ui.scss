@@ -69,7 +69,7 @@
 // dropdown
 .el-dropdown-menu {
   a {
-    display: block
+    display: block;
   }
 }
 
@@ -83,7 +83,11 @@
   box-sizing: content-box;
 }
 
-.el-menu--collapse>div>.el-submenu>.el-submenu__title .el-submenu__icon-arrow {
+.el-menu--collapse
+  > div
+  > .el-submenu
+  > .el-submenu__title
+  .el-submenu__icon-arrow {
   display: none;
 }
 
@@ -123,3 +127,32 @@
     /* 推荐用于其他浏览器 */
   }
 }
+
+.el-select-dropdown__item {
+  &.is-hovering,
+  &.is-selected {
+    color: var(--el-color-primary) !important;
+    background-color: var(--el-color-primary-light-9) !important;
+  }
+}
+.el-tree {
+  --el-fill-color-light: var(--el-color-primary-light-9) !important;
+  --el-tree-node-content-height: 28px !important;
+  ---el-tree-node-hover-bg-color: var(--el-color-primary-light-9) !important;
+}
+
+.select-options {
+  &.el-poper {
+    top: -10px !important;
+  }
+  .el-popper__arrow {
+    display: none !important;
+    opacity: 1;
+  }
+}
+.el-popper__arrow {
+  display: none !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+}
+
