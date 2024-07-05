@@ -2,7 +2,7 @@
  * @Author: cc2049
  * @Date: 2024-04-28 15:12:29
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-07-05 15:01:42
+ * @LastEditTime: 2024-07-05 18:39:43
  * @Description: 简介
 -->
 <template>
@@ -124,10 +124,13 @@
 import { ElMessageBox } from "element-plus";
 import { axiosGet } from "#/common";
 import { inject, reactive } from "vue";
-import { getUrlParams , evalFun } from "@/utils";
+import { getUrlParams, evalFun } from "@/utils";
 import TablePage from "@/views/table/components/SingleTable/index.vue";
 import useAlertStore from "@/store/modules/alert";
 import usePermissionStore from "@/store/modules/permission";
+import usePageParamsStore from "@/store/modules/page";
+
+const pageParamsStore = usePageParamsStore();
 const permissionStore = usePermissionStore();
 const alertStore = useAlertStore();
 
@@ -259,16 +262,16 @@ const setShowBtn = (btn) => {
 
 // 条件成立是禁用
 const getButtonStatus = (btn, data) => {
-  if(btn.ACTION == 'EDIT') return false;
+  if (btn.ACTION == "EDIT") return false;
   try {
     let DATA = data;
     if (btn.ISCHOOSE == 1) {
       DATA = data[0];
-      if (evalFun( DATA ,btn.SCRNCONDITION)) {
+      if (evalFun(DATA, btn.SCRNCONDITION)) {
         return true;
       }
-    }else if (btn.ISCHOOSE == 2) {
-      if(checkDataSetBtn(btn.SCRNCONDITION,data)){
+    } else if (btn.ISCHOOSE == 2) {
+      if (checkDataSetBtn(btn.SCRNCONDITION, data)) {
         return true;
       }
     }
@@ -460,10 +463,10 @@ function handleEvent(data, row) {
       Bid = selectRecords[0].BILLNO;
     }
 
-    if(data.ACTION == "EDIT" && data.SCRNCONDITION){
+    if (data.ACTION == "EDIT" && data.SCRNCONDITION) {
       let DATA = selectRecords[0];
-      if (evalFun(DATA , data.SCRNCONDITION)) {
-         doType = 2;
+      if (evalFun(DATA, data.SCRNCONDITION)) {
+        doType = 2;
       }
     }
 
@@ -481,12 +484,21 @@ function handleEvent(data, row) {
     newPath = newPath.includes(":type")
       ? newPath.replace(":type", doType)
       : newPath;
-    // console.log(999, btnMenuRouters.value );
+    // console.log(999, route);
     let billnoArr = props.tableData.map((i) => i.BILLNO);
+
+    pageParamsStore.setPageBillNo({
+      menuPath: newPath,
+      menuParams: {
+        billnoArr: billnoArr,
+        parentPath: route.fullPath,
+      },
+    });
+
     router.push({
       path: newPath,
       // name: btnMenuItem[0].name ,
-      params: {  arr: billnoArr , parentPath: route.fullPath },
+      // params: {  arr: billnoArr , parentPath: route.fullPath },
     });
   }
 }

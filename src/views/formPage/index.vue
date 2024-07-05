@@ -1,8 +1,8 @@
 <!--
  * @Author: cc2049
  * @Date: 2024-04-23 11:35:41
- * @LastEditors: PiPin 33947354+p1Master@users.noreply.github.com
- * @LastEditTime: 2024-07-05 14:54:28
+ * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2024-07-05 18:56:08
  * @Description: 大表单组件
 -->
 
@@ -27,7 +27,7 @@ import { axiosGet } from "#/common";
 import { nextTick } from "vue";
 const route = useRoute();
 const routerParams = route.meta;
-console.log('route', route);
+console.log("route", route);
 const props = defineProps({
   menuID: {
     type: [String, Object],
@@ -56,16 +56,18 @@ const formConfig = ref([]);
 const formData = ref({});
 const detail = ref(false);
 const labelWidth = ref("100px");
-const ctrlWidth = ref("")
+const ctrlWidth = ref("");
 const tableConfig = ref([]);
 const pageHeight = computed(() => {
-  return formBoxRef.value.parentNode.clientHeight
-})
+  return formBoxRef.value.parentNode.clientHeight;
+});
 const formHeight = computed(() => {
   if (formBoxRef.value) {
-    const formScrollHeight = pageHeight.value - affixRef.value.clientHeight - 10
-    const windowScrollHeight = window.innerHeight - 80 - affixRef.value.clientHeight
-    return `${formScrollHeight < 0 ? windowScrollHeight : formScrollHeight}px`
+    const formScrollHeight =
+      pageHeight.value - affixRef.value.clientHeight - 10;
+    const windowScrollHeight =
+      window.innerHeight - 80 - affixRef.value.clientHeight;
+    return `${formScrollHeight < 0 ? windowScrollHeight : formScrollHeight}px`;
   }
 });
 const formLoading = ref(false);
@@ -75,12 +77,13 @@ watch(
   (value) => {
     if (value) {
       getPageConfig(props.menuID).then((res) => {
-        const { COLUMNS, LABELWIDTH, FIELDWIDTH, BUTTON, SLOTCFG, SUBTABLE } = res.RESULT;
+        const { COLUMNS, LABELWIDTH, FIELDWIDTH, BUTTON, SLOTCFG, SUBTABLE } =
+          res.RESULT;
         topButton.value = resetButton(BUTTON);
         formConfig.value = COLUMNS;
         formData.value = getFormValue(COLUMNS);
         labelWidth.value = LABELWIDTH || "100px";
-        ctrlWidth.value = FIELDWIDTH
+        ctrlWidth.value = FIELDWIDTH;
         tableConfig.value = SUBTABLE;
         formLoading.value = true;
         if (props.isGetDetail) {
@@ -97,21 +100,79 @@ watch(
   }
 );
 
+const upNextBtn = [
+  {
+    ACTION: "",
+    VNAME: "前一",
+    CHILDREN: [
+      {
+        ACTION: "",
+        VNAME: "前一",
+      },
+      {
+        ACTION: "",
+        VNAME: "首张",
+      },
+    ],
+  },
+  {
+    ACTION: "",
+    VNAME: "后一",
+    CHILDREN: [
+      {
+        ACTION: "",
+        VNAME: "后一",
+      },
+      {
+        ACTION: "",
+        VNAME: "末张",
+      },
+    ],
+  },
+  {
+    ACTION: "",
+    VNAME: "列表",
+    CHILDREN: [],
+  },
+  {
+    ACTION: "",
+    VNAME: "选项",
+    CHILDREN: [
+      {
+        ACTION: "",
+        VNAME: "选项",
+      },
+      {
+        ACTION: "",
+        VNAME: "附件",
+      },
+    ],
+  },
+];
+
 function resetButton(arr) {
+  let resButton = [];
   if (arr.length) {
-    return arr;
+    resButton = arr;
   } else if (!props.activeBtn) {
-    return [];
+    resButton = [];
+  } else {
+    let copyBtn = JSON.parse(JSON.stringify(props.activeBtn));
+    try {
+      let customCF = JSON.parse(copyBtn.PAGEPATH);
+      copyBtn.VNAME = customCF.sName;
+    } catch (error) {}
+    resButton = [copyBtn];
   }
 
-  let copyBtn = JSON.parse(JSON.stringify(props.activeBtn));
-  try {
-    let customCF = JSON.parse(copyBtn.PAGEPATH);
-    copyBtn.VNAME = customCF.sName;
-  } catch (error) { }
+  if (props.menuID.ACTION != "ADD") {
+    resButton[resButton.length - 1].divider = true;
+    resButton = [...resButton, ...upNextBtn];
+  }
 
-  let newBtn = [copyBtn];
-  return newBtn;
+  console.log(999, resButton, props.menuID);
+
+  return resButton;
 }
 
 const detailBtn = ref(null);
@@ -126,8 +187,8 @@ function getDetail(URL) {
       formLoading.value = false;
       if (route.params && Object.keys(route.params).length) {
         let { type } = route.params;
-        if (type == '4') {
-          delete formData.value.BILLNO
+        if (type == "4") {
+          delete formData.value.BILLNO;
         }
       }
     });
@@ -135,17 +196,24 @@ function getDetail(URL) {
 }
 
 const quitPage = () => {
-  emit('closeModal')
-}
+  emit("closeModal");
+};
 
 function handleBtnEvent(btn) {
   let URL = btn.ACTIONADDRESS;
-  let params = getUrlParams(URL)
+  let params = getUrlParams(URL);
   let MenuID = { MODULEID: btn.PK_MODULE, PAGEID: btn.PK_PAGE };
   eosFormRef.value.validate().then((valid) => {
     if (valid) {
-      if (btn.BTNTITLE == 'getCurrentData') {  // 竞价大厅货主端的发布公告中提交按钮要的参数
-        let sdata = { ...formData.value, ...MenuID, ...params, PK_PROJECT: props.currentData[0].BILLNO, PROJECTNAME: props.currentData[0].VNAME };
+      if (btn.BTNTITLE == "getCurrentData") {
+        // 竞价大厅货主端的发布公告中提交按钮要的参数
+        let sdata = {
+          ...formData.value,
+          ...MenuID,
+          ...params,
+          PK_PROJECT: props.currentData[0].BILLNO,
+          PROJECTNAME: props.currentData[0].VNAME,
+        };
         submitEvent(URL, sdata);
       } else {
         let sdata = { ...formData.value, ...MenuID, ...params };
@@ -173,8 +241,6 @@ function submitEvent(URL, sdata) {
     }
   });
 }
-
-
 </script>
 
 <style lang="scss" scoped>
