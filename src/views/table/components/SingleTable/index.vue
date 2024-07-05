@@ -2,7 +2,7 @@
  * @Author: cc2049
  * @Date: 2024-04-28 13:10:44
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-07-03 17:58:43
+ * @LastEditTime: 2024-07-05 08:47:30
  * @Description: 简介
 -->
 <template v-if="pageConfig">
@@ -289,7 +289,7 @@ const ztreeQUERYS = ref({
 
 const getTableData = () => {
   // console.log(999, pageConfig.value);
-  //  tableCFG.value.loading = true;
+   tableCFG.value.loading = true;
   queryJSON.value.PAGENUM = pageInfo.currentPage;
   queryJSON.value.SORTNAME = pageInfo.sortName;
   queryJSON.value.REVERSE = pageInfo.sortOrder;
