@@ -2,7 +2,7 @@
  * @Author: cc2049
  * @Date: 2024-04-23 11:35:41
  * @LastEditors: PiPin 33947354+p1Master@users.noreply.github.com
- * @LastEditTime: 2024-07-05 14:38:48
+ * @LastEditTime: 2024-07-05 14:54:28
  * @Description: 大表单组件
 -->
 
@@ -24,6 +24,7 @@ import MasterForm from "@/components/MasterForm/index.vue";
 import { getPageConfig } from "#/system/page.js";
 import { getFormValue, getQueryUrl, getUrlParams, eosObjAssign } from "@/utils";
 import { axiosGet } from "#/common";
+import { nextTick } from "vue";
 const route = useRoute();
 const routerParams = route.meta;
 console.log('route', route);
@@ -57,10 +58,13 @@ const detail = ref(false);
 const labelWidth = ref("100px");
 const ctrlWidth = ref("")
 const tableConfig = ref([]);
+const pageHeight = computed(() => {
+  return formBoxRef.value.parentNode.clientHeight
+})
 const formHeight = computed(() => {
   if (formBoxRef.value) {
-    const formScrollHeight = formBoxRef.value.clientHeight - affixRef.value.clientHeight - 10
-    const windowScrollHeight = window.innerHeight - 115 - affixRef.value.clientHeight
+    const formScrollHeight = pageHeight.value - affixRef.value.clientHeight - 10
+    const windowScrollHeight = window.innerHeight - 80 - affixRef.value.clientHeight
     return `${formScrollHeight < 0 ? windowScrollHeight : formScrollHeight}px`
   }
 });
