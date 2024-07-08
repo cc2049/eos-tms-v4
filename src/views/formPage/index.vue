@@ -2,7 +2,7 @@
  * @Author: cc2049
  * @Date: 2024-04-23 11:35:41
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-07-05 18:56:08
+ * @LastEditTime: 2024-07-08 18:17:13
  * @Description: 大表单组件
 -->
 
@@ -13,7 +13,8 @@
       <div id="eos-form-tabs"></div>
     </div>
     <el-scrollbar :height="formHeight" class="eos-scrollbar">
-      <MasterForm ref="eosFormRef" v-model="formData" :formConfig="formConfig" :labelWidth :ctrlWidth :detail="isDetail" :tableConfig="tableConfig" :loading="formLoading" @labelClick="LabelClick" />
+      <MasterForm ref="eosFormRef" v-model="formData" :formConfig="formConfig" :labelWidth :ctrlWidth :detail="isDetail"
+        :tableConfig="tableConfig" :loading="formLoading" @labelClick="LabelClick" />
     </el-scrollbar>
   </div>
 </template>
@@ -21,13 +22,18 @@
 <script setup>
 import TopButton from "@/components/TopButton";
 import MasterForm from "@/components/MasterForm/index.vue";
-import { getPageConfig } from "#/system/page.js";
+import { getPageConfig , upNextBtn } from "#/system/page.js";
 import { getFormValue, getQueryUrl, getUrlParams, eosObjAssign } from "@/utils";
 import { axiosGet } from "#/common";
-import { nextTick } from "vue";
+import usePageParamsStore from "@/store/modules/page";
+const pageParamsStore = usePageParamsStore();
+const tableBillNo = computed(() => {
+  return pageParamsStore.pageBillNo;
+});
+
+const router = useRouter();
 const route = useRoute();
 const routerParams = route.meta;
-console.log("route", route);
 const props = defineProps({
   menuID: {
     type: [String, Object],
@@ -71,6 +77,9 @@ const formHeight = computed(() => {
   }
 });
 const formLoading = ref(false);
+const detailURL = ref("");
+const detailID = ref(null);
+
 
 watch(
   () => props.menuID,
@@ -87,8 +96,9 @@ watch(
         tableConfig.value = SUBTABLE;
         formLoading.value = true;
         if (props.isGetDetail) {
-          let detailURL = SLOTCFG || getQueryUrl(props.topButton);
-          detailURL ? getDetail(detailURL) : null;
+          detailURL.value = SLOTCFG || getQueryUrl(props.topButton);
+          detailID.value = props.currentData[0].BILLNO;
+          detailURL.value ? getDetail() : null;
         } else {
           formLoading.value = false;
         }
@@ -100,55 +110,6 @@ watch(
   }
 );
 
-const upNextBtn = [
-  {
-    ACTION: "",
-    VNAME: "前一",
-    CHILDREN: [
-      {
-        ACTION: "",
-        VNAME: "前一",
-      },
-      {
-        ACTION: "",
-        VNAME: "首张",
-      },
-    ],
-  },
-  {
-    ACTION: "",
-    VNAME: "后一",
-    CHILDREN: [
-      {
-        ACTION: "",
-        VNAME: "后一",
-      },
-      {
-        ACTION: "",
-        VNAME: "末张",
-      },
-    ],
-  },
-  {
-    ACTION: "",
-    VNAME: "列表",
-    CHILDREN: [],
-  },
-  {
-    ACTION: "",
-    VNAME: "选项",
-    CHILDREN: [
-      {
-        ACTION: "",
-        VNAME: "选项",
-      },
-      {
-        ACTION: "",
-        VNAME: "附件",
-      },
-    ],
-  },
-];
 
 function resetButton(arr) {
   let resButton = [];
@@ -161,28 +122,23 @@ function resetButton(arr) {
     try {
       let customCF = JSON.parse(copyBtn.PAGEPATH);
       copyBtn.VNAME = customCF.sName;
-    } catch (error) {}
+    } catch (error) { }
     resButton = [copyBtn];
   }
-
   if (props.menuID.ACTION != "ADD") {
     resButton[resButton.length - 1].divider = true;
     resButton = [...resButton, ...upNextBtn];
   }
-
-  console.log(999, resButton, props.menuID);
-
   return resButton;
 }
 
-const detailBtn = ref(null);
-
-function getDetail(URL) {
-  if (URL == "CurrentData") {
+function getDetail() {
+  if (detailURL.value == "CurrentData") {
     formData.value = Object.assign(formData.value, props.currentData[0]);
   } else {
-    let queryDetail = { ...props.menuID, ...props.currentData[0] };
-    axiosGet(URL, queryDetail).then((res) => {
+    let urlParams = getUrlParams(detailURL.value)
+    let queryDetail = { ...props.menuID, BILLNO: detailID.value, ...urlParams };
+    axiosGet(detailURL.value, queryDetail).then((res) => {
       formData.value = eosObjAssign(formData.value, res.RESULT);
       formLoading.value = false;
       if (route.params && Object.keys(route.params).length) {
@@ -199,7 +155,14 @@ const quitPage = () => {
   emit("closeModal");
 };
 
+
+const formBtnAct = ['PREV', 'FIRST', 'NEXT', 'FINAL', 'LIST',]
+
+
 function handleBtnEvent(btn) {
+  if (formBtnAct.includes(btn.ACTION)) {
+    return CustomEvent(btn)
+  }
   let URL = btn.ACTIONADDRESS;
   let params = getUrlParams(URL);
   let MenuID = { MODULEID: btn.PK_MODULE, PAGEID: btn.PK_PAGE };
@@ -221,6 +184,35 @@ function handleBtnEvent(btn) {
       }
     }
   });
+}
+
+
+function CustomEvent(btn) {
+  let { ACTION } = btn;
+  let newID = tableBillNo.value[route.fullPath].billnoArr
+  let currentIDIndex = newID.findIndex((item) => item == detailID.value);
+
+  if(currentIDIndex==0 && ACTION == "PREV"){
+    return proxy.$modal.msgError("当前为第一条数据，无法切换");
+  }else if(currentIDIndex== newID.length-1 && ACTION == "NEXT"){
+    return proxy.$modal.msgError("当前为最后一条数据，无法切换");
+  }
+
+  console.log(newID, currentIDIndex) ;
+  if (ACTION == "PREV") {
+    detailID.value = newID[currentIDIndex - 1]
+  } else if (ACTION == "FIRST") {
+    detailID.value = newID[0]
+  } else if (ACTION == "NEXT") {
+    detailID.value = newID[currentIDIndex + 1]
+  } else if (ACTION == "FINAL") {
+    detailID.value = newID[newID.length - 1]
+  } else if (ACTION == "LIST") {
+    router.push({
+      path: tableBillNo.value[route.fullPath].parentPath
+    })
+  }
+  getDetail();
 }
 
 function LabelClick(val) {

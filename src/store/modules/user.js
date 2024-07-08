@@ -2,7 +2,7 @@
  * @Author: cc2049
  * @Date: 2024-04-19 09:01:33
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-07-02 14:13:12
+ * @LastEditTime: 2024-07-08 17:58:52
  * @Description: 简介
  */
 import { login, logout, getInfo } from "@/api/login";
@@ -85,7 +85,6 @@ const useUserStore = defineStore("user", {
       });
     },
     cleanUserInfo() {
-      console.log('cleanUserInfo');
       this.token = "";
       this.roles = [];
       this.permissions = [];

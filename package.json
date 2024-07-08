@@ -35,6 +35,7 @@
     "mathjs": "^12.4.2",
     "nprogress": "0.2.0",
     "pinia": "2.1.7",
+    "pinia-plugin-persist": "^1.0.0",
     "pinyin-match": "^1.2.5",
     "screenfull": "^6.0.2",
     "sortablejs": "^1.15.2",

@@ -2,7 +2,7 @@
  * @Author: cc2049
  * @Date: 2024-04-25 17:39:07
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-06-25 11:33:36
+ * @LastEditTime: 2024-07-08 17:23:33
  * @Description: 获取菜单配置相关
  */
 
@@ -72,4 +72,55 @@ export function restClick(data) {
     data: data,
   });
 }
+
+// 表单中的前一，后一按钮
+export const upNextBtn = [
+  {
+    ACTION: "PREV",
+    VNAME: "前一",
+    CHILDREN: [
+      {
+        ACTION: "PREV",
+        VNAME: "前一",
+      },
+      {
+        ACTION: "FIRST",
+        VNAME: "首张",
+      },
+    ],
+  },
+  {
+    ACTION: "NEXT",
+    VNAME: "后一",
+    CHILDREN: [
+      {
+        ACTION: "NEXT",
+        VNAME: "后一",
+      },
+      {
+        ACTION: "FINAL",
+        VNAME: "末张",
+      },
+    ],
+  },
+  {
+    ACTION: "LIST",
+    VNAME: "列表",
+    CHILDREN: [],
+  },
+  {
+    ACTION: "",
+    VNAME: "选项",
+    CHILDREN: [
+      {
+        ACTION: "",
+        VNAME: "选项",
+      },
+      {
+        ACTION: "",
+        VNAME: "附件",
+      },
+    ],
+  },
+];
 

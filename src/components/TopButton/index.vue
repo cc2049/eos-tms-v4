@@ -2,7 +2,7 @@
  * @Author: cc2049
  * @Date: 2024-04-28 15:12:29
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-07-05 18:39:43
+ * @LastEditTime: 2024-07-08 16:34:33
  * @Description: 简介
 -->
 <template>
@@ -24,7 +24,7 @@
           <div class="buttom-item" @click="handleEvent(itemBtn)" :title="itemBtn.BTNTITLE " v-if="setShowBtn(itemBtn) ">
             {{ itemBtn.VNAME }}
           </div>
-          <el-dropdown v-else-if="itemBtn.CHILDREN?.length" style="margin: 0 6px" @command="handelEvent" size="default">
+          <el-dropdown v-else-if="itemBtn.CHILDREN?.length" style="margin: 0 6px" @command="handelEvent" size="default" :popper-options="popOptions">
             <div class="buttom-item " @click="handleEvent(itemBtn)">
               {{ itemBtn.VNAME }}
               <el-icon class="el-icon--right">
@@ -137,8 +137,6 @@ const alertStore = useAlertStore();
 const btnMenuRouters = computed(() => permissionStore.btnMenuRouters);
 
 import FormPage from "@/views/formPage/index.vue";
-
-import Workflow from "@/views/workflow/index.vue";
 const router = useRouter();
 const route = useRoute();
 const topButton = defineModel("topButton");
@@ -160,6 +158,17 @@ const props = defineProps({
     type: Array,
   },
 });
+
+/* popper 配置  */
+const popOptions = {
+  modifiers: [{
+    name: 'offset',
+    options: {
+      offset: [0, 0]
+    }
+  }]
+}
+
 const isDetail = ref(false);
 const isGetDetail = ref(false);
 const activeBtn = ref(null);
