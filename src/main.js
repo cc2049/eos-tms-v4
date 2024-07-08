@@ -1,8 +1,8 @@
 /*
  * @Author: cc2049
  * @Date: 2024-04-19 09:01:33
- * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-07-01 14:32:47
+ * @LastEditors: PiPin 33947354+p1Master@users.noreply.github.com
+ * @LastEditTime: 2024-07-08 09:19:31
  * @Description: 简介
  */
 import { createApp } from 'vue'
@@ -83,8 +83,8 @@ app.config.globalProperties.useDict = useDict
 // app.config.globalProperties.addDateRange = addDateRange
 app.config.globalProperties.selectDictLabel = selectDictLabel
 app.config.globalProperties.selectDictLabels = selectDictLabels
-
 app.config.globalProperties.getAssetsFile = getAssetsFile;
+app.config.globalProperties.request = request;
 
 // 全局组件挂载
 // app.component('DictTag', DictTag)
