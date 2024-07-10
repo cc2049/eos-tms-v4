@@ -38,7 +38,7 @@
             </div>
           </el-popover>
           <div class="ml10 mr10 btnStyle" @click="clickSavePlan">保存</div>
-          <div class="btnStyle">重置</div>
+          <div class="btnStyle" @click="resetForm">重置</div>
           <template v-if="filterArr.length > 1">
             <el-icon color="#0055ff" :size="15" class="ml10 cp foldOUnfoldIcon" @click="foldOUnfold(1)" v-if="FiltrationComHeight == 'auto'">
               <Icon icon="codicon:fold-up"></Icon>
@@ -238,7 +238,9 @@ const clickSavePlan = () => {
     allocationPlanRef.value.showSaveAs(querySaveList.value);
   }
 };
-
+const resetForm=()=>{
+  clickRadio(chooseRadioObj.value,1)
+}
 // 调用保存方案
 const callAddition = () => {
   let QUERYS = [];
