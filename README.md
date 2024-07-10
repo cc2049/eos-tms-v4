@@ -147,7 +147,7 @@ docker-compose restart etmsnginx
 
 ```
 
-### OTHER  的配置
+### OTHER  的配置  JSON化的 OTHER 只支持 url,params,relyOn,importantData,setvaue
 
 ```
 {

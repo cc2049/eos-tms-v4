@@ -27,9 +27,6 @@
       <template v-if="appStore.device !== 'mobile'">
         <el-space size="large">
           <header-search id="header-search" class="right-menu-item" />
-          <!-- <el-icon color="#fff" :size="20">
-            <Icon icon="iconamoon:search"></Icon>
-          </el-icon> -->
           <el-icon :size="20">
             <Icon icon="bi:bell"></Icon>
           </el-icon>
