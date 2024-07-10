@@ -33,7 +33,7 @@
           <el-icon :size="20">
             <Icon icon="bi:bell"></Icon>
           </el-icon>
-          <el-icon color="#fff" :size="20">
+          <el-icon color="#fff" :size="20" @click="clickHelpCenter">
             <Icon icon="ant-design:question-circle-outlined"></Icon>
           </el-icon>
         </el-space>

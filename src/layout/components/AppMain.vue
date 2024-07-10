@@ -8,7 +8,6 @@
       </transition>
     </router-view>
     <iframe-toggle />
-
     <div class="eos-alert" v-if="alertStore.show">
       <el-alert show-icon :type="alertStore.type" :closable="false">
         <template #title>
@@ -21,7 +20,6 @@
         </template>
       </el-alert>
     </div>
-
   </section>
 </template>
 
@@ -50,7 +48,7 @@ const alertStore = useAlertStore()
   top: 130px;
   left: 20px;
   background-color: rgba($color: #000000, $alpha: .6);
-  z-index: 99;
+  z-index: 101;
 }
 
 .fixed-header + .app-main {

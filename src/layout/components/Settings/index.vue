@@ -57,7 +57,7 @@
         <span>字体配置</span>
       </div>
       <div class="setting-drawer-block-checbox">
-        <el-slider v-model="font" :min="12" :max="18" />
+        <el-slider v-model="font" :min="12" :max="16" />
       </div>
       <el-divider />
 

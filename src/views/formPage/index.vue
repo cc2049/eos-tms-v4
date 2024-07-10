@@ -2,7 +2,7 @@
  * @Author: cc2049
  * @Date: 2024-04-23 11:35:41
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-07-08 18:17:13
+ * @LastEditTime: 2024-07-09 16:17:11
  * @Description: 大表单组件
 -->
 
@@ -33,7 +33,7 @@ const tableBillNo = computed(() => {
 
 const router = useRouter();
 const route = useRoute();
-const routerParams = route.meta;
+
 const props = defineProps({
   menuID: {
     type: [String, Object],
@@ -191,14 +191,11 @@ function CustomEvent(btn) {
   let { ACTION } = btn;
   let newID = tableBillNo.value[route.fullPath].billnoArr
   let currentIDIndex = newID.findIndex((item) => item == detailID.value);
-
   if(currentIDIndex==0 && ACTION == "PREV"){
     return proxy.$modal.msgError("当前为第一条数据，无法切换");
   }else if(currentIDIndex== newID.length-1 && ACTION == "NEXT"){
     return proxy.$modal.msgError("当前为最后一条数据，无法切换");
   }
-
-  console.log(newID, currentIDIndex) ;
   if (ACTION == "PREV") {
     detailID.value = newID[currentIDIndex - 1]
   } else if (ACTION == "FIRST") {
@@ -208,7 +205,7 @@ function CustomEvent(btn) {
   } else if (ACTION == "FINAL") {
     detailID.value = newID[newID.length - 1]
   } else if (ACTION == "LIST") {
-    router.push({
+    return router.push({
       path: tableBillNo.value[route.fullPath].parentPath
     })
   }

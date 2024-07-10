@@ -2,7 +2,7 @@
  * @Author: cc2049
  * @Date: 2024-04-28 15:12:29
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-07-08 16:34:33
+ * @LastEditTime: 2024-07-10 14:17:58
  * @Description: 简介
 -->
 <template>
@@ -313,7 +313,7 @@ function leftHandleEvent(type) {
       emit("reloadTableData");
       break;
     case 3:
-      emit("quitPage");
+     closeSelectedTag(route)
       break;
   }
 }
@@ -512,6 +512,30 @@ function handleEvent(data, row) {
   }
 }
 
+// 退出页签
+function closeSelectedTag(view) {
+  console.log("openDeatil", view);
+  proxy.$tab.closePage(view).then(({ visitedViews }) => {
+    toLastView(visitedViews, view);
+  });
+}
+
+function toLastView(visitedViews, view) {
+  const latestView = visitedViews.slice(-1)[0];
+  if (latestView) {
+    router.push(latestView.fullPath);
+  } else {
+    // now the default is to redirect to the home page if there is no tags-view,
+    // you can adjust it according to your needs.
+    if (view.name === "Dashboard") {
+      // to reload home page
+      router.replace({ path: "/redirect" + view.fullPath });
+    } else {
+      router.push("/");
+    }
+  }
+}
+
 // 二次确认事件
 function needConfirm(data, selectRecords) {
   ElMessageBox.confirm(`您确定要执行${data.VNAME}吗?`, "确认提示", {
@@ -536,10 +560,8 @@ function submitByBtn(btn, data) {
     });
     sdata = { data: arr };
   } else {
-    // sdata = { ...data, ...params };
     sdata = {
       CHOOSEDATA: Array.isArray(data) ? data : [data],
-      // ...data,
       ...params,
     };
   }
@@ -567,7 +589,6 @@ function submitEvent(URL, sdata) {
 function openDeatil(data) {
   let detailBtn = props.topButton.filter((i) => i.ACTION == "DTL")[0];
   handleEvent(detailBtn, data);
-  console.log("openDeatil", data);
 }
 
 function evilFn(row, fn) {

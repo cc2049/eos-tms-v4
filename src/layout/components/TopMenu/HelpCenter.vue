@@ -48,7 +48,7 @@
 <script setup>
 import { getTableData } from "@/api/system/page";
 
-const emit = defineEmits(["update:helpDrawer","clickMoreContent"]);
+const emit = defineEmits(["update:helpDrawer", "clickMoreContent"]);
 
 const router = useRouter();
 
@@ -60,21 +60,20 @@ const props = defineProps({
 });
 const isShow = computed(() => props.helpDrawer);
 
-const clickMoreContent=()=>{
+const clickMoreContent = () => {
     // props.helpDrawer = false
     router.push({
-      path: '/PLAT_YW/help/wtzsk',
+        path: '/PLAT_YW/help/wtzsk',
     });
     emit("clickMoreContent")
 }
 
-const problemList=ref([])
+const problemList = ref([])
 const getProblem = () => {
     let portData =
         { "APPID": "", "DATA": { "TITLE": "", "PKBILLNO": "", "PAGESIZE": 6, "QUERYS": [{ "FIELD": "PK_CLASS", "QUERYTYPE": "EqualTo", "DEFAULTVAL": "CL230207761578", "SORTCODE": "" }], "PAGENUM": 1, "SORTNAME": "", "REVERSE": "", "PK_PARENT": "CL230207761578", "PK_CLASS": "CL230207761578" }, "KEY": "", "MODULEID": "MU230206997479", "PAGEID": "PG230206684914", "PARENTPAGE": "", "PROGRAMID": "", "CLIENTTYPE": "PC", "VERSION": "" }
     getTableData("/sys/help/wiki/getPageList", portData)
         .then((res) => {
-            console.log("🚀 ~ .then ~ res:", res)
             problemList.value = res.RESULT.RECORDS
         })
         .catch(() => {
@@ -112,23 +111,25 @@ onMounted(() => {
             padding: 6px;
         }
 
-        &-content{
+        &-content {
             padding: 6px;
-            &-left{
+
+            &-left {
                 background-color: #59b9bc;
                 padding: 2px;
                 color: #fff;
                 border-radius: 2px;
                 margin-right: 10px;
             }
-            &-right{
+
+            &-right {
                 white-space: nowrap;
                 text-overflow: ellipsis;
                 overflow: hidden;
             }
         }
 
-        &-footer{
+        &-footer {
             color: #3674c8;
             text-align: center;
             border-top: 1px solid #e2e2e2;

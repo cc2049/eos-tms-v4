@@ -2,12 +2,13 @@
  * @Author: cc2049
  * @Date: 2024-04-23 11:33:59
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-06-07 16:31:16
+ * @LastEditTime: 2024-07-09 17:12:10
  * @Description: 简介
 -->
 <template>
   <div class="page-container" :class="{ formBg: visibleFormPage }">
-    <SingleTable v-if="!visibleFormPage" ref="listTableRef" :menuID="menuParams" :compType="routerParams.COMP" @openCustemPage="openCustemPage" />
+    <SingleTable v-if="!visibleFormPage" ref="listTableRef" :menuID="menuParams" :compType="routerParams.COMP"
+      @openCustemPage="openCustemPage" />
 
     <template v-else>
       <OpenCustom :activeBtn :slotCustemPagePath="slotCustemPagePath" @backEvents="backEvent" />
@@ -18,7 +19,6 @@
 
 <script setup>
 import SingleTable from "./components/SingleTable/index.vue";
-import MultiTable from "./components/MultiTable/index.vue";
 import OpenCustom from "./components/openCustom/index.vue";
 
 import useKey17Status from "@/hooks/useKey17Status";
@@ -57,7 +57,12 @@ const openCustemPage = (data) => {
 provide("menuID", menuParams);
 provide("key17Status", key17Status);
 
-onMounted(() => {});
+onMounted(() => {
+  window.addEventListener('resize', () => {
+    // 窗口尺寸改变时触发事件
+    console.log('窗口尺寸改变');
+  })
+});
 </script>
 
 <style lang="scss" scoped>
@@ -68,8 +73,7 @@ onMounted(() => {});
 
 }
 
-.formBg{
-  background-color: #e8ecf6!important;
+.formBg {
+  background-color: #e8ecf6 !important;
 }
 </style>
-

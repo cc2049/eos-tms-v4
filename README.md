@@ -146,3 +146,19 @@ docker-compose restart etmsnginx
 后面5位代表不同的终端 0-不适配 1-适配  第二位 PC第三位 APP第四位 小程序第五位 手持机
 
 ```
+
+### OTHER  的配置
+
+```
+{
+    "url":"接口地址",
+    "params":"固定条件{TYPE:1}",
+    "relyOn":"依赖条件{PK_ORG:'ORGID'}",
+    "linkage":"联动关系",
+    "setvalue":"赋值条件{PK_ORG:'VALUE',A:'LABEL'}",
+    "clear":"A,B,C",
+    "calc":"计算条件",
+    "importantData":"",
+}
+
+```

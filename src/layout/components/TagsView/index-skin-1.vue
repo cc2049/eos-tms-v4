@@ -2,16 +2,10 @@
  * @Author: cc2049
  * @Date: 2024-04-24 18:52:34
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-07-03 14:49:43
+ * @LastEditTime: 2024-07-10 17:22:39
  * @Description: 简介
 -->
-<!--
- * @Author: cc2049
- * @Date: 2024-03-02 15:52:04
- * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-03-02 16:03:33
- * @Description: 简介
--->
+
 <template>
   <div id="tags-view-container" class="tags-view-container">
     <scroll-pane ref="scrollPaneRef" class="tags-view-wrapper" @scroll="handleScroll">
@@ -282,7 +276,6 @@ function closeMenu() {
 }
 
 function handleMenu(e) {
-  console.log("点击页签", e);
   emit("closeAllMenu");
 }
 function handleScroll() {

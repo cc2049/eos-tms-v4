@@ -2,7 +2,7 @@
  * @Author: cc2049
  * @Date: 2024-04-24 12:47:35
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-06-06 09:06:50
+ * @LastEditTime: 2024-07-10 15:39:25
  * @Description: 主题风格一 金蝶云
 -->
 <template>
@@ -26,9 +26,10 @@
             </div>
           </div>
           <div class="tags-view-right">
-            <el-icon color="#abb6cd" :size="20" class="darrow-down">
+            <!-- <el-icon color="#abb6cd" :size="20" class="darrow-down">
               <DArrowRight />
-            </el-icon>
+            </el-icon> -->
+            <tagsPulldown ></tagsPulldown>
             <screenfull id="screenfull" class="right-menu-item hover-effect" />
           </div>
         </div>
@@ -51,6 +52,7 @@ import Sidebar from "./components/Sidebar/index-skin-1.vue";
 import { AppMain, Navbar, Settings } from "./components";
 import defaultSettings from "@/settings";
 import TopMenu01 from "./components/TopMenu/index-skin-1.vue";
+import tagsPulldown from './components/TagsView/pulldown.vue'
 import Screenfull from "@/components/Screenfull";
 
 import TagsViewSkin1 from "./components/TagsView/index-skin-1.vue";
