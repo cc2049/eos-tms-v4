@@ -2,7 +2,7 @@
  * @Author: cc2049
  * @Date: 2024-04-25 17:39:07
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-07-08 17:23:33
+ * @LastEditTime: 2024-07-11 14:38:16
  * @Description: 获取菜单配置相关
  */
 
@@ -20,7 +20,7 @@ let PageCache = null; // 是否开启本地数据库缓存
 export async function getPageConfig(data) {
   let localKey = data.MODULEID + data.PAGEID
   // PageCache = Cookies.get('PageCache') || null
-  console.log('PageCache', data);
+  // console.log('PageCache', data);
   try {
     const localData = await localforage.getItem(localKey);
     let configData = null;

@@ -4,6 +4,7 @@
     :vertical="false"
     class="scroll-container"
     @wheel.prevent="handleScroll"
+    @scroll="scrollEvent"
   >
     <slot />
   </el-scrollbar>
@@ -84,8 +85,23 @@ function moveToTarget(currentTag) {
   }
 }
 
+const moveValue= ref(null)
+
+function scrollEvent(e){
+  moveValue.value = e.scrollLeft
+}
+
+function handleArrow(e){
+  let value = e == "left"? moveValue.value  -20 :  moveValue.value + 20
+  if(value < 0){
+    return
+  }
+  proxy.$refs.scrollContainer.setScrollLeft(value)
+}
+
 defineExpose({
   moveToTarget,
+  handleArrow
 })
 </script>
 
@@ -102,4 +118,6 @@ defineExpose({
     height: 39px;
   }
 }
+
+
 </style>
