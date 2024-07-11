@@ -126,6 +126,8 @@ import { axiosGet } from "#/common";
 import { inject, reactive } from "vue";
 import { getUrlParams, evalFun } from "@/utils";
 import TablePage from "@/views/table/components/SingleTable/index.vue";
+import FormPage from "@/views/formPage/index.vue";
+
 import useAlertStore from "@/store/modules/alert";
 import usePermissionStore from "@/store/modules/permission";
 import usePageParamsStore from "@/store/modules/page";
@@ -136,7 +138,6 @@ const alertStore = useAlertStore();
 
 const btnMenuRouters = computed(() => permissionStore.btnMenuRouters);
 
-import FormPage from "@/views/formPage/index.vue";
 const router = useRouter();
 const route = useRoute();
 const topButton = defineModel("topButton");

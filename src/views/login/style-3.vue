@@ -53,13 +53,10 @@ const props = defineProps({
 
 import { axiosGet, getDataByType } from "#/common";
 const LoginConfigs = computed(() => props.LoginConfig)
-console.log("🚀 ~ LoginConfigs:", LoginConfigs)
 
 const imgBaseUrl = computed(() => settingsStore.globalConfig.imgBaseUrl + '/');
 const backImg = computed(() => imgBaseUrl.value + LoginConfigs.value.banner)
 const styleType = computed(() => LoginConfigs.value.style)
-console.log("🚀 ~ styleType:", styleType)
-
 
 const forgetPasswordModel = ref(false)
 const forgetPassword = () => {

@@ -2,7 +2,7 @@
  * @Author: cc2049
  * @Date: 2024-04-23 11:35:41
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-07-11 17:11:17
+ * @LastEditTime: 2024-07-11 18:51:43
  * @Description: 大表单组件
 -->
 
@@ -222,7 +222,8 @@ function LabelClick(val) {
   let title = val.config.LABEL
   modalStore.setModal({
     title: title ,
-    config: val
+    config: val,
+    type:'vtable'
   })
 
 }

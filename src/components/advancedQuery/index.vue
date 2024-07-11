@@ -8,14 +8,17 @@
   <div class="advancedQuery">
     <div class="disflex advancedQuery-alone mb20">
       <div class="advancedQuery-title">我的方案</div>
-      <div class="currentRadio" :class="chooseRadioVal == item.BILLNO ? 'active' : ''" v-for="(item, index) in myPlanList" :key="index" @click="clickRadio(item ,1)"> {{ item.VNAME }}
+      <div class="currentRadio" :class="chooseRadioVal == item.BILLNO ? 'active' : ''"
+        v-for="(item, index) in myPlanList" :key="index" @click="clickRadio(item, 1)"> {{ item.VNAME }}
       </div>
     </div>
     <div class=" advancedQuery-alone ">
       <div class="advancedQuery-title">快捷过滤</div>
       <!-- <div style="width: calc(100% - 100px)"> -->
       <div class="oneLine">
-        <FiltrationCom ref="filtrationComRef" :filterConfig="filterConfig" :filterArr="filterArr" class="oneLine-left" :style="{ height: FiltrationComHeight, maxWidth: binSize + 'px' }" @changeFilter="changeFilter" @changeCurrentQueryList="changeCurrentQueryList" :settingArr="settingQueryList" />
+        <FiltrationCom ref="filtrationComRef" :filterConfig="filterConfig" :filterArr="filterArr" class="oneLine-left"
+          :style="{ height: FiltrationComHeight, maxWidth: binSize + 'px' }" @changeFilter="changeFilter"
+          @changeCurrentQueryList="changeCurrentQueryList" :settingArr="settingQueryList" />
         <div class="advancedQuery-rightBtn">
           <el-button type="primary" @click="searchBtn">
             <el-icon color="#fff" :size="20">
@@ -30,7 +33,9 @@
                 </el-icon>
               </el-button>
             </template>
-            <SettingFilter ref="settingFilterRef" :filterConfig="filterConfig" :filterArr="filterArr" @changeCondition="changeCondition" @resetCondition="resetCondition" @delFilterArr="delFilterArr" @changeFilter="changeFilter" @changeCurrentQueryList="settingChangeCurrentQueryList" />
+            <SettingFilter ref="settingFilterRef" :filterConfig="filterConfig" :filterArr="filterArr"
+              @changeCondition="changeCondition" @resetCondition="resetCondition" @delFilterArr="delFilterArr"
+              @changeFilter="changeFilter" @changeCurrentQueryList="settingChangeCurrentQueryList" />
             <el-divider />
             <div class="tr">
               <el-button @click="clostPopver" size="mini">取消</el-button>
@@ -40,7 +45,8 @@
           <div class="ml10 mr10 btnStyle" @click="clickSavePlan">保存</div>
           <div class="btnStyle" @click="resetForm">重置</div>
           <template v-if="filterArr.length > 1">
-            <el-icon color="#0055ff" :size="15" class="ml10 cp foldOUnfoldIcon" @click="foldOUnfold(1)" v-if="FiltrationComHeight == 'auto'">
+            <el-icon color="#0055ff" :size="15" class="ml10 cp foldOUnfoldIcon" @click="foldOUnfold(1)"
+              v-if="FiltrationComHeight == 'auto'">
               <Icon icon="codicon:fold-up"></Icon>
             </el-icon>
             <el-icon color="#0055ff" :size="15" class="ml10 cp foldOUnfoldIcon" @click="foldOUnfold(0)" v-else>
@@ -54,7 +60,8 @@
       <!-- </div> -->
     </div>
 
-    <AllocationPlan :showModal="showModal" :leftList="myPlanList" @updateLeftList="getPlanList" ref="allocationPlanRef" :filterConfig="filterConfig" @closeModal="closeShowModal"></AllocationPlan>
+    <AllocationPlan :showModal="showModal" :leftList="myPlanList" @updateLeftList="getPlanList" ref="allocationPlanRef"
+      :filterConfig="filterConfig" @closeModal="closeShowModal"></AllocationPlan>
 
   </div>
 </template>
@@ -68,7 +75,6 @@ const { proxy } = getCurrentInstance();
 
 import { axiosGet } from "#/common";
 
-const MenuID = inject("menuID");
 
 const emit = defineEmits("updateHeight", "handleCustomPlan");
 
@@ -77,11 +83,14 @@ const props = defineProps({
     type: Array,
     default: [],
   },
-  //   showModal: {
-  //     type: Boolean,
-  //     default: false,
-  //   },
+  menuID: {
+    type: Object,
+    default: () => { },
+  },
 });
+
+
+
 const showModal = ref(false);
 const binSize = computed(() => {
   const windowWidth = document.documentElement.clientWidth;
@@ -112,7 +121,7 @@ const clickRadio = (item, type) => {
   chooseRadioVal.value = item?.BILLNO;
   chooseRadioObj.value = item;
   let query = {
-    ...MenuID.value,
+    ...props.menuID,
     PKBILLNO: item?.BILLNO,
     VTYPE: "0",
   };
@@ -238,8 +247,8 @@ const clickSavePlan = () => {
     allocationPlanRef.value.showSaveAs(querySaveList.value);
   }
 };
-const resetForm=()=>{
-  clickRadio(chooseRadioObj.value,1)
+const resetForm = () => {
+  clickRadio(chooseRadioObj.value, 1)
 }
 // 调用保存方案
 const callAddition = () => {
@@ -264,20 +273,16 @@ const callAddition = () => {
     BILLNO: chooseRadioVal.value, // 方案主键
     // VTYPE:0,
     QUERYS,
-    ...MenuID.value,
+    ...props.menuID,
   };
-  // const protData = {
-  //   BILLNO: chooseRadioVal.value, // 方案主键
-  //   QUERYS: querySaveList.value,
-  //   ...MenuID.value,
-  // };
+
   savePlan(protData).then((res) => {
     proxy.$modal.msgSuccess("保存成功");
   });
 };
 
 const getPlanList = () => {
-  getList(MenuID.value).then((res) => {
+  getList(props.menuID).then((res) => {
     myPlanList.value = res.RESULT;
     if (myPlanList.value.length) {
       let newArr = myPlanList.value.filter((ele) => ele.ISDEFAULT == 1);
@@ -463,7 +468,7 @@ onMounted(() => {
     }
   }
 
-  .el-input__suffix-inner > :first-child {
+  .el-input__suffix-inner> :first-child {
     margin: 5px;
   }
 }
@@ -479,13 +484,12 @@ onMounted(() => {
   color: #12151A !important;
 
 }
-:deep(.el-select__placeholder){
+
+:deep(.el-select__placeholder) {
   color: #12151A !important;
 }
-:deep(.el-select__placeholder.is-transparent){
+
+:deep(.el-select__placeholder.is-transparent) {
   color: #535B6A !important;
 }
-
-
-
 </style>

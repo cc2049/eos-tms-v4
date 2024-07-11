@@ -56,7 +56,6 @@
 <script setup>
 import { getFieldList, updateFields } from "#/system/advancedQuery";
 import { inject, reactive } from "vue";
-// const MenuID = inject("menuID");
 const { proxy } = getCurrentInstance();
 
 const emit = defineEmits(["closeModal"]);

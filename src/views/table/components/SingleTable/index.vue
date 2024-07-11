@@ -2,13 +2,13 @@
  * @Author: cc2049
  * @Date: 2024-04-28 13:10:44
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-07-09 09:58:09
+ * @LastEditTime: 2024-07-11 19:15:08
  * @Description: 简介
 -->
 <template v-if="pageConfig">
   <TopButton ref="topButtonRef" v-model:topButton="topButton" :currentData="currentData" :tableData="tableData" @handleTopBtn="handleTopBtn" @reloadTableData="reloadTableData" />
   <div class="custom-query" ref="AdvancedQuery">
-    <AdvanceQuery :queryConfig="pageConfig?.queryConfig" @updateHeight="queryHeight" :customPlan ref="advanceQueryRef" @handleCustomPlan="handleCustomPlan" />
+    <AdvanceQuery :queryConfig="pageConfig?.queryConfig" @updateHeight="queryHeight" :customPlan :menuID ref="advanceQueryRef" @handleCustomPlan="handleCustomPlan" />
   </div>
 
 

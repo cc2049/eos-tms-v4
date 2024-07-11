@@ -67,13 +67,8 @@
 
 <script setup>
 import { getFieldList, updateSortFields, getSortFieldList } from "#/system/advancedQuery";
-import { inject, reactive } from "vue";
-const MenuID = inject("menuID");
-
 const { proxy } = getCurrentInstance();
-
 const emit = defineEmits(["closeModal"]);
-
 const props = defineProps({
     MenuID: {
         type: Object,
