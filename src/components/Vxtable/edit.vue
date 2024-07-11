@@ -423,7 +423,7 @@ const SelectFocus = (config, rowIndex) => {
 const SelectQuery = (keyword = undefined, config, rowIndex = 0) => {
   let { FIELD, OTHER } = config;
   if (OTHER == "") return;
-  let { url, data } = ParseOtherConfig(OTHER, rowIndex);
+  let { url, data, importantData } = ParseOtherConfig(OTHER, rowIndex);
   SelectLoading.value = true;
   proxy.request({
     url: url,
@@ -432,6 +432,7 @@ const SelectQuery = (keyword = undefined, config, rowIndex = 0) => {
       KEYWORD: keyword,
       MODULEID: MENUID,
       ...data,
+      ...importantData
     },
     headers: {
       repeatSubmit: false,
@@ -865,35 +866,70 @@ const DictLabels = (arr, data, jg = ",", label = "LABEL", value = "VALUE") => {
 
 // 解析 Other 配置
 function ParseOtherConfig(config, rowIndex) {
-  let paramsArr = config.split("?"),
-    url = "",
-    setQueryParam = {},
-    queryJson = {};
-  if (paramsArr.length == 0) {
-    url = config;
-    SelectValueTo.value = [];
-  } else if (paramsArr.length > 0) {
-    url = paramsArr[0];
-    if (paramsArr.length > 1)
-      queryJson = GetUrlParams("/a?" + paramsArr[1], "obj");
-    if (paramsArr.length > 2) {
-      setQueryParam = GetUrlParams("/a?" + paramsArr[2], "obj");
-      for (let ii in setQueryParam) {
-        let valueKey = setQueryParam[ii]
-        if (valueKey.includes("M$")) {
-          valueKey = calcHasMSKey(valueKey)
-          queryJson[ii] = props.mainFormData[valueKey] || "";
-        } else if (valueKey.includes("S$")) {
-          valueKey = calcHasMSKey(valueKey)
-          queryJson[ii] = props.tableData[rowIndex][valueKey] || "";
-        } else {
-          queryJson[ii] = props.tableData[rowIndex][valueKey] || "";
-        }
-      }
-    }
-    SelectValueTo.value = paramsArr[3] ? GetUrlParams("/a?" + paramsArr[3], "arr") : [];
+  if (!config) {
+    SelectValueTo.value = []
+    return { url: "", data: {}, importantData: {}, setvalue: [] };
   }
-  return { url, data: queryJson };
+  try {
+    let newConfig = Array.isArray(JSON.parse(config)) ? JSON.parse(config)[0] : JSON.parse(config)
+    let arr = []
+    if (newConfig.setvalue && JSON.stringify(newConfig.setvalue) != '{}') {
+      for (const key in newConfig.setvalue) {
+        arr.push({ k: key, v: newConfig.setvalue[key] })
+      }
+      SelectValueTo.value = arr
+    }
+    return { url: newConfig.url, data: { ...newConfig?.params, ...ConvertData(newConfig?.relyOn, rowIndex) }, importantData: newConfig?.importantData, setvalue: arr }
+  } catch (error) {
+    if (config.indexOf("/") == '0') {
+      let paramsArr = config.split("?"),
+        url = "",
+        setQueryParam = {},
+        queryJson = {},
+        setImportantParam = {},
+        importantData = {};
+      if (paramsArr.length == 0) {
+        url = config;
+        SelectValueTo.value = [];
+      } else if (paramsArr.length > 0) {
+        url = paramsArr[0];
+        if (paramsArr.length > 1) {
+          let { obj, importantObj } = GetUrlParams("a?" + paramsArr[1], "obj");
+          queryJson = obj
+          importantData = importantObj
+        }
+        if (paramsArr.length > 2) {
+          let { obj, importantObj } = GetUrlParams("a?" + paramsArr[2], "obj");
+          setQueryParam = obj
+          setImportantParam = importantObj
+          queryJson = { ...queryJson, ...ConvertData(setQueryParam, rowIndex) }
+          importantData = { ...importantData, ...ConvertData(setImportantParam, rowIndex) }
+        }
+        SelectValueTo.value = paramsArr[3] ? GetUrlParams("a?" + paramsArr[3], "arr") : []
+      }
+      return { url, data: queryJson, importantData, setvalue: SelectValueTo };
+    } else {
+      console.error("Err:etable:ParseOtherConfig", error);
+    } ƒ
+  }
+}
+
+/** 转换数据 */
+function ConvertData(obj, index) {
+  let data = {}
+  for (let ii in obj) {
+    let valueKey = obj[ii]
+    if (valueKey.includes("M$")) {
+      valueKey = calcHasMSKey(valueKey)
+      data[ii] = props.mainFormData[valueKey] || "";
+    } else if (valueKey.includes("S$")) {
+      valueKey = calcHasMSKey(valueKey)
+      data[ii] = props.tableData[rowIndex][valueKey] || "";
+    } else {
+      data[ii] = props.tableData[rowIndex][valueKey] || "";
+    }
+  }
+  return data
 }
 
 // 获取url 后面的参数
@@ -953,7 +989,7 @@ const getSelectTableData = (config, rowIndex) => {
 
   let { FIELD, OTHER, SLOTCFG, REVERFIELD } = config;
   if (SelectTableKey.value != FIELD) return getSelectTableConfig(config, rowIndex);
-  let { url, data: queryParams } = ParseOtherConfig(OTHER, rowIndex);
+  let { url, data: queryParams,importantData } = ParseOtherConfig(OTHER, rowIndex);
   let { PK_MODULE, BILLNO } = SelectTableConfig.value;
   let ids = SLOTCFG.split(",");
   if (ids.length < 2) return console.error("Error: 配置错误");
@@ -969,6 +1005,7 @@ const getSelectTableData = (config, rowIndex) => {
     MODULEID: PK_MODULE,
     PAGEID: BILLNO,
     ...queryParams,
+    ...importantData
   };
   getTableData(url, data)
     .then((res) => {
