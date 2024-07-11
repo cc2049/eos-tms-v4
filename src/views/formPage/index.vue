@@ -2,7 +2,7 @@
  * @Author: cc2049
  * @Date: 2024-04-23 11:35:41
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-07-09 16:17:11
+ * @LastEditTime: 2024-07-11 17:11:17
  * @Description: 大表单组件
 -->
 
@@ -25,8 +25,13 @@ import MasterForm from "@/components/MasterForm/index.vue";
 import { getPageConfig , upNextBtn } from "#/system/page.js";
 import { getFormValue, getQueryUrl, getUrlParams, eosObjAssign } from "@/utils";
 import { axiosGet } from "#/common";
+
+import useModalStore from "@/store/modules/modal";
 import usePageParamsStore from "@/store/modules/page";
+const modalStore = useModalStore();
 const pageParamsStore = usePageParamsStore();
+
+
 const tableBillNo = computed(() => {
   return pageParamsStore.pageBillNo;
 });
@@ -214,6 +219,12 @@ function CustomEvent(btn) {
 
 function LabelClick(val) {
   console.log("labelClick", val);
+  let title = val.config.LABEL
+  modalStore.setModal({
+    title: title ,
+    config: val
+  })
+
 }
 
 // 数据提交

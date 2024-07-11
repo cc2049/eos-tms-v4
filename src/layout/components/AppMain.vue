@@ -1,3 +1,10 @@
+<!--
+ * @Author: cc2049
+ * @Date: 2024-04-19 09:01:33
+ * @LastEditors: 
+ * @LastEditTime: 2024-07-11 16:26:51
+ * @Description: 简介
+-->
 <template>
   <section class="app-main">
     <router-view v-slot="{ Component, route }">
@@ -8,6 +15,7 @@
       </transition>
     </router-view>
     <iframe-toggle />
+
     <div class="eos-alert" v-if="alertStore.show">
       <el-alert show-icon :type="alertStore.type" :closable="false">
         <template #title>
@@ -20,6 +28,8 @@
         </template>
       </el-alert>
     </div>
+
+    <EosModal />
   </section>
 </template>
 
