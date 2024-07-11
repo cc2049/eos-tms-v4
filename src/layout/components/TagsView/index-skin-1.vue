@@ -2,22 +2,24 @@
  * @Author: cc2049
  * @Date: 2024-04-24 18:52:34
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-07-10 17:22:39
+ * @LastEditTime: 2024-07-11 14:36:53
  * @Description: 简介
 -->
 
 <template>
-  <div id="tags-view-container" class="tags-view-container">
+  <div id="tags-view-container" class="tags-view-container" ref="tagsContainerRef">
     <scroll-pane ref="scrollPaneRef" class="tags-view-wrapper" @scroll="handleScroll">
-      <slot name="tags-left">
-      </slot>
-      <router-link v-for="tag in visitedViews" :key="tag.path" :data-path="tag.path" :class="isActive(tag) ? 'active' : ''" :to="{ path: tag.path, query: tag.query, fullPath: tag.fullPath }" class="tags-view-item" @click.middle="!isAffix(tag) ? closeSelectedTag(tag) : ''"
-        @contextmenu.prevent="openMenu(tag, $event)" @click="handleMenu(tag)">
-        {{  resetTitle(tag) }}
-        <span v-if="!isAffix(tag)" @click.prevent.stop="closeSelectedTag(tag)">
-          <close class="el-icon-close" style="width: 1em; height: 1em;vertical-align: middle;" />
-        </span>
-      </router-link>
+      <span ref="tagsWrapRef" class="tags-wrap">
+        <router-link v-for="tag in visitedViews" :key="tag.path" :data-path="tag.path"
+          :class="isActive(tag) ? 'active' : ''" :to="{ path: tag.path, query: tag.query, fullPath: tag.fullPath }"
+          class="tags-view-item" @click.middle="!isAffix(tag) ? closeSelectedTag(tag) : ''"
+          @contextmenu.prevent="openMenu(tag, $event)" @click="handleMenu(tag)">
+          {{ resetTitle(tag) }}
+          <span v-if="!isAffix(tag)" @click.prevent.stop="closeSelectedTag(tag)">
+            <close class="el-icon-close" style="width: 1em; height: 1em;vertical-align: middle;" />
+          </span>
+        </router-link>
+      </span>
     </scroll-pane>
     <ul v-show="visible" :style="{ left: left + 'px', top: top + 'px' }" class="contextmenu">
       <li @click="refreshSelectedTag(selectedTag)">
@@ -55,6 +57,8 @@ const left = ref(0);
 const selectedTag = ref({});
 const affixTags = ref([]);
 const scrollPaneRef = ref(null);
+const tagsContainerRef = ref(null);
+const tagsWrapRef = ref(null);
 
 const { proxy } = getCurrentInstance();
 const route = useRoute();
@@ -64,7 +68,7 @@ const visitedViews = computed(() => useTagsViewStore().visitedViews);
 const routes = computed(() => usePermissionStore().routes);
 const theme = computed(() => useSettingsStore().theme);
 
-const emit = defineEmits(["closeAllMenu"]);
+const emit = defineEmits(["closeAllMenu", "setShowArrow"]);
 
 watch(route, () => {
   addTags();
@@ -182,6 +186,11 @@ function addTags() {
     if (route.meta.link) {
       useTagsViewStore().addIframeView(route);
     }
+    nextTick(() => {
+      let tagsWrapRefWidth = tagsWrapRef.value.offsetWidth, tagsBarWidth = tagsContainerRef.value.offsetWidth;
+      emit('setShowArrow', tagsWrapRefWidth > tagsBarWidth);
+    })
+
   }
   return false;
 }
@@ -226,7 +235,7 @@ function closeLeftTags() {
   });
 }
 function closeOthersTags() {
-  router.push(selectedTag.value).catch(() => {});
+  router.push(selectedTag.value).catch(() => { });
   proxy.$tab.closeOtherPage(selectedTag.value).then(() => {
     moveToCurrentTag();
   });
@@ -281,6 +290,15 @@ function handleMenu(e) {
 function handleScroll() {
   closeMenu();
 }
+
+function handleArrow(e) {
+  scrollPaneRef.value.handleArrow(e)
+}
+
+defineExpose({
+  handleArrow,
+})
+
 </script>
 
 <style lang='scss' scoped>
@@ -289,7 +307,17 @@ function handleScroll() {
   background: #f5f7fb;
   // border-bottom: 1px solid #d8dce5;
   position: relative;
+
   .tags-view-wrapper {
+    .tags-wrap {
+      display: block;
+      width: fit-content;
+      /*设置子元素的宽度自适应*/
+      width: -webkit-fit-content;
+      width: -moz-fit-content;
+
+    }
+
     .tags-view-item {
       display: inline-block;
       position: relative;
@@ -301,16 +329,20 @@ function handleScroll() {
       font-size: 15px;
       margin-left: 5px;
       font-weight: bold;
+
       &:first-of-type {
         margin-left: 15px;
       }
+
       &:last-of-type {
         margin-right: 15px;
       }
+
       &.active {
         color: var(--el-color-primary);
         border-bottom: 3px solid var(--el-color-primary);
         font-weight: bold;
+
         &::before {
           content: "";
           background: #fff;
@@ -323,6 +355,7 @@ function handleScroll() {
       }
     }
   }
+
   .contextmenu {
     margin: 0;
     background: #fff;
@@ -335,10 +368,12 @@ function handleScroll() {
     font-weight: 400;
     color: #333;
     box-shadow: 2px 2px 3px 0 rgba(0, 0, 0, 0.3);
+
     li {
       margin: 0;
       padding: 7px 16px;
       cursor: pointer;
+
       &:hover {
         background: #eee;
       }
@@ -348,6 +383,7 @@ function handleScroll() {
 
 .tags-left {
   padding-left: 20px;
+
   .el-icon {
     padding: 0 4px;
     display: inline-block;
@@ -375,11 +411,13 @@ function handleScroll() {
       text-align: center;
       transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
       transform-origin: 100% 50%;
+
       &:before {
         transform: scale(0.6);
         display: inline-block;
         vertical-align: -3px;
       }
+
       &:hover {
         background-color: #b4bccc;
         color: #fff;

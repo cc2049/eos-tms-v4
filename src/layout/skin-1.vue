@@ -2,7 +2,7 @@
  * @Author: cc2049
  * @Date: 2024-04-24 12:47:35
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-07-10 15:39:25
+ * @LastEditTime: 2024-07-11 14:35:04
  * @Description: 主题风格一 金蝶云
 -->
 <template>
@@ -22,13 +22,19 @@
               </el-icon>
             </span>
             <div class="tags-content">
-              <TagsViewSkin1 @closeAllMenu="closeMenu" />
+              <TagsViewSkin1 @closeAllMenu="closeMenu" ref="tagsViewSkinRef" @setShowArrow="setShowArrow" />
             </div>
           </div>
           <div class="tags-view-right">
-            <!-- <el-icon color="#abb6cd" :size="20" class="darrow-down">
-              <DArrowRight />
-            </el-icon> -->
+            <div class="tags-right-arrow" v-if="showArrow">
+              <el-icon color="#abb6cd" :size="18" @click="handleArrow('left')">
+                <CaretLeft />
+              </el-icon>
+              <el-icon color="#abb6cd" :size="18" @click="handleArrow('right')">
+                <CaretRight />
+              </el-icon>
+            </div>
+           
             <tagsPulldown ></tagsPulldown>
             <screenfull id="screenfull" class="right-menu-item hover-effect" />
           </div>
@@ -59,19 +65,23 @@ import TagsViewSkin1 from "./components/TagsView/index-skin-1.vue";
 
 import useAppStore from "@/store/modules/app";
 import useSettingsStore from "@/store/modules/settings";
-import { onMounted } from "vue";
+import { CaretRight } from "@element-plus/icons-vue";
+
 
 const settingsStore = useSettingsStore();
 const theme = computed(() => settingsStore.theme);
-const sideTheme = computed(() => settingsStore.sideTheme);
+
 const sidebar = computed(() => useAppStore().sidebar);
 const device = computed(() => useAppStore().device);
 const needTagsView = computed(() => settingsStore.tagsView);
-const fixedHeader = computed(() => settingsStore.fixedHeader);
-const menuStyle = computed(() => settingsStore.menuStyle);
+
 
 const { width, height } = useWindowSize();
 const WIDTH = 992; // refer to Bootstrap's responsive design
+
+const tagsViewSkinRef = ref(null)
+
+const showArrow = ref(false)
 
 watchEffect(() => {
   if (device.value === "mobile" && sidebar.value.opened) {
@@ -99,6 +109,17 @@ function closeMenu() {
 function openAllMenu() {
   showSidebar.value = !showSidebar.value;
 }
+
+function handleArrow(type){
+  tagsViewSkinRef.value.handleArrow(type)
+}
+
+function setShowArrow(show){
+  if(showArrow.value != show ){
+    showArrow.value = show
+  } 
+}
+
 </script>
 
 <style lang="scss" scoped>
